@@ -13,7 +13,7 @@ import java.util.Random;
 public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
-    
+
     private float xDelta = 100, yDelta = 100;
     private float xDir = 1f, yDir = 1f;
 
@@ -47,12 +47,14 @@ public class GamePanel extends JPanel {
 
     }
 
+    public void updatePanel() {
+        updateRectangle();
+    }
+
     // paintComponent is called whenever the JPanel needs to be redrawn
     public void paintComponent(Graphics g) {
         // calls JPanel's paintComponent method
         super.paintComponent(g);
-
-        updateRectangle();
 
         g.setColor(color);
         g.fillRect((int) xDelta, (int) yDelta, 100, 100);
