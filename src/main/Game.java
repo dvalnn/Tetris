@@ -46,6 +46,7 @@ public class Game implements Runnable {
 
         long lastCheck = System.currentTimeMillis();
 
+        // Game Loop
         while (true) {
             long currentTime = System.nanoTime();
 
@@ -53,12 +54,14 @@ public class Game implements Runnable {
             deltaUpdate += (currentTime - previousTime) / timePerUpdate;
             previousTime = currentTime;
 
+            // ensures that the game logic is updated at a constant rate
             if (deltaUpdate >= 1) {
                 update();
                 updates++;
                 deltaUpdate--;
             }
 
+            // ensures that the game is rendered at a constant rate
             if (deltaFrame >= 1) {
                 gamePanel.repaint();
                 frames++;
