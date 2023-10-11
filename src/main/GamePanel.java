@@ -2,86 +2,40 @@ package main;
 
 import javax.swing.JPanel;
 
+import gameElements.Tetromino;
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Random;
+import java.awt.Toolkit;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
 public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
-
-    private float xDelta = 100, yDelta = 100;
-    private float xDir = 1f, yDir = 1f;
-
-    private Color color = Color.CYAN;
-
-    private Random rand;
+    private Tetromino tetromino;
 
     public GamePanel() {
-        rand = new Random();
-
         addKeyListener(new KeyboardInputs(this));
 
         mouseInputs = new MouseInputs(this);
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
-    }
 
-    public void changeXDelta(int value) {
-        this.xDelta += value;
-
-    }
-
-    public void changeYDelta(int value) {
-        this.yDelta += value;
-
-    }
-
-    public void setRectPosition(int x, int y) {
-        this.xDelta = x;
-        this.yDelta = y;
-
+        tetromino = new Tetromino(400, 0, 800, 600);
     }
 
     public void updatePanel() {
-        updateRectangle();
+        tetromino.update();
     }
 
     // paintComponent is called whenever the JPanel needs to be redrawn
     public void paintComponent(Graphics g) {
         // calls JPanel's paintComponent method
         super.paintComponent(g);
-
-        g.setColor(color);
-        g.fillRect((int) xDelta, (int) yDelta, 100, 100);
+        tetromino.paintTetromino(g);
+        // c syncs the graphics state
+        // to avoid weird graphical glitches
+        Toolkit.getDefaultToolkit().sync();
     }
-
-    private void updateRectangle() {
-        xDelta += xDir;
-        yDelta += yDir;
-
-        if (xDelta >= 800 || xDelta <= 0) {
-            xDir *= -1;
-            color = getRandColor();
-        }
-
-        if (yDelta >= 600 || yDelta <= 0) {
-            yDir *= -1;
-            color = getRandColor();
-        }
-
-    }
-
-    private Color getRandColor() {
-        int r = rand.nextInt(255);
-        int g = rand.nextInt(255);
-        int b = rand.nextInt(255);
-
-        return new Color(r, g, b);
-    }
-
 }
