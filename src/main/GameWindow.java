@@ -15,9 +15,11 @@ public class GameWindow extends JFrame {
         jFrame = new JFrame("Tetris");
         jFrame.setSize(WIDTH, HEIGHT);
         jFrame.setResizable(false);
+
         // closes the window when the user clicks the close button
         // and terminates the program
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         // adds the GamePanel to the GameWindow
         jFrame.add(gamePanel);
 
