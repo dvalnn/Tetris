@@ -7,6 +7,7 @@ import inputs.KeyboardInputs;
 import inputs.MouseInputs;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 
@@ -22,6 +23,8 @@ public class GamePanel extends JPanel {
     private int gameBoardWidth = 10, gameBoardHeight = 20;
     private int gameBoardOffsetX = 0, gameBoardOffsetY = 0;
 
+    public static final int WIDTH = 445, HEIGHT = 630;
+
     public GamePanel() {
         addKeyListener(new KeyboardInputs(this));
 
@@ -29,8 +32,18 @@ public class GamePanel extends JPanel {
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
 
+        // sets the size of the JPanel
+        setPreferredPanelSize();
+
         gameBoard = new Board(gameSquareSize, gameBoardWidth, gameBoardHeight, gameBoardOffsetX, gameBoardOffsetY,
                 gameBakcgroundColor);
+    }
+
+    private void setPreferredPanelSize() {
+        Dimension size = new Dimension(gameBoardWidth * gameSquareSize, gameBoardHeight * gameSquareSize);
+        setMinimumSize(size);
+        setMaximumSize(size);
+        setPreferredSize(size);
     }
 
     public void updatePanel() {
