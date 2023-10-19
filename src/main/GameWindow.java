@@ -9,14 +9,15 @@ import javax.swing.JFrame;
 public class GameWindow extends JFrame {
     private JFrame jFrame;
 
-    public GameWindow(GamePanel gamePanel) {
-        jFrame = new JFrame("Game Window");
-        jFrame.setSize(800, 600);
+    public static final int WIDTH = 445, HEIGHT = 630;
 
+    public GameWindow(GamePanel gamePanel) {
+        jFrame = new JFrame("Tetris");
+        jFrame.setSize(WIDTH, HEIGHT);
+        jFrame.setResizable(false);
         // closes the window when the user clicks the close button
         // and terminates the program
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         // adds the GamePanel to the GameWindow
         jFrame.add(gamePanel);
 
