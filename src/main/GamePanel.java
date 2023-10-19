@@ -16,8 +16,8 @@ import static utils.Constants.GameConstants.*;
 // GamePanel is a JPanel -- a container for all visual elements in the game
 public class GamePanel extends JPanel {
 
-    private MouseInputs mouseInputs;
     private Board gameBoard;
+    private MouseInputs mouseInputs;
 
     private Color gameBakcgroundColor = Color.BLACK;
     private int gameSquareSize = 30;
@@ -58,5 +58,9 @@ public class GamePanel extends JPanel {
         // c syncs the graphics state
         // to avoid weird graphical glitches
         Toolkit.getDefaultToolkit().sync();
+    }
+
+    public Board getBoard() {
+        return gameBoard;
     }
 }
