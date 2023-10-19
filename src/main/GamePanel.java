@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 
+import static utils.Constants.GameConstants.*;
+
 // GamePanel is a JPanel -- a container for all visual elements in the game
 public class GamePanel extends JPanel {
 
@@ -20,10 +22,8 @@ public class GamePanel extends JPanel {
     private Color gameBakcgroundColor = Color.BLACK;
     private int gameSquareSize = 30;
     // Traditional Tetris is 10x20
-    private int gameBoardWidth = 10, gameBoardHeight = 20;
-    private int gameBoardOffsetX = 0, gameBoardOffsetY = 0;
 
-    public static final int WIDTH = 445, HEIGHT = 630;
+    private int gameBoardOffsetX = 0, gameBoardOffsetY = 0;
 
     public GamePanel() {
         addKeyListener(new KeyboardInputs(this));
@@ -35,12 +35,12 @@ public class GamePanel extends JPanel {
         // sets the size of the JPanel
         setPanelSize();
 
-        gameBoard = new Board(gameSquareSize, gameBoardWidth, gameBoardHeight, gameBoardOffsetX, gameBoardOffsetY,
+        gameBoard = new Board(gameSquareSize, gameBoardOffsetX, gameBoardOffsetY,
                 gameBakcgroundColor);
     }
 
     private void setPanelSize() {
-        Dimension size = new Dimension(gameBoardWidth * gameSquareSize, gameBoardHeight * gameSquareSize);
+        Dimension size = new Dimension(BOARD_WIDTH * gameSquareSize, BOARD_HEIGHT * gameSquareSize);
         setMinimumSize(size);
         setMaximumSize(size);
         setPreferredSize(size);

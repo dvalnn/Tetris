@@ -1,13 +1,12 @@
 package main;
 
+import static utils.Constants.GameConstants.*;
+
 public class Game implements Runnable {
 
-     // private GameWindow gameWindow;
+    // private GameWindow gameWindow;
     private GamePanel gamePanel;
     private Thread gameThread;
-
-    private final int FPS_SET = 60;
-    private final int UPS_SET = 100;
 
     public Game() {
         System.out.println("Hello Game!");
