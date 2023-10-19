@@ -33,13 +33,13 @@ public class GamePanel extends JPanel {
         addMouseMotionListener(mouseInputs);
 
         // sets the size of the JPanel
-        setPreferredPanelSize();
+        setPanelSize();
 
         gameBoard = new Board(gameSquareSize, gameBoardWidth, gameBoardHeight, gameBoardOffsetX, gameBoardOffsetY,
                 gameBakcgroundColor);
     }
 
-    private void setPreferredPanelSize() {
+    private void setPanelSize() {
         Dimension size = new Dimension(gameBoardWidth * gameSquareSize, gameBoardHeight * gameSquareSize);
         setMinimumSize(size);
         setMaximumSize(size);
