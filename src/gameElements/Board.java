@@ -53,6 +53,9 @@ public class Board {
             g.setColor(Color.WHITE);
             g.drawLine(col * squareSize, y0, col * squareSize, BOARD_HEIGHT * squareSize);
         }
+    }
 
+    public Tetromino getTetromino() {
+        return tetromino;
     }
 }
