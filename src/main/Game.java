@@ -2,7 +2,7 @@ package main;
 
 public class Game implements Runnable {
 
-    private GameWindow gameWindow;
+     // private GameWindow gameWindow;
     private GamePanel gamePanel;
     private Thread gameThread;
 
@@ -12,7 +12,8 @@ public class Game implements Runnable {
     public Game() {
         System.out.println("Hello Game!");
         gamePanel = new GamePanel();
-        gameWindow = new GameWindow(gamePanel);
+        // gameWindow = new GameWindow(gamePanel);
+        new GameWindow(gamePanel);
 
         // requests focus so that the GamePanel can receive keyboard inputs
         gamePanel.requestFocus();
