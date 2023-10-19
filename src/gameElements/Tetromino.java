@@ -15,24 +15,20 @@ public class Tetromino {
 
     private Random rand = new Random();
 
-    // 2D array representing the shape of the tetromino
     private int selectedShape;
+    // 2D array representing the shape of the tetromino
     private int[][] shape;
     private Color color;
 
-    // * move tick, move delay and move speed are used to control the speed of
-    // * the tetromino move tick will be incremented every time the update method
-    // * is called, this means that the moveTick will count at the same rate as the
-    // * UPS. move delay is the number of ticks that must pass before the tetromino
-    // * moves down one square. This is set to the UPS so that the tetromino moves
-    // * down one square every second, by default. By varying the move speed we
-    // * can change the number of ticks that must pass before the tetromino moves.
     private int moveTick = 0;
     private int moveSpeed = 1;
     private final int moveDelay = UPS_SET;
 
     private int board_pixel_width;
     private int board_pixel_height;
+    private boolean colision = false;
+
+    private int xDir;
 
     public Tetromino(int x, int y, int size) {
         this.x = x;
@@ -49,7 +45,7 @@ public class Tetromino {
         board_pixel_height = BOARD_HEIGHT * size;
     }
 
-    public void move(int dir) {
+    private void move(int dir) {
         switch (dir) {
             case (UP):
                 break;
@@ -63,11 +59,16 @@ public class Tetromino {
             case (DOWN):
                 if (!(y + size * (shape.length + 1) > board_pixel_height))
                     y += size;
+                else
+                    colision = true;
                 break;
 
             case (LEFT):
                 if (!(x - size < 0))
                     x -= size;
+                break;
+
+            default:
                 break;
         }
     }
@@ -80,17 +81,34 @@ public class Tetromino {
         return y;
     }
 
+    public void setDirX(int dir) {
+        if (dir == LEFT || dir == RIGHT)
+            xDir = dir;
+        else
+            xDir = -1;
+    }
+
     public void fastDrop() {
         moveSpeed = 100;
     }
 
+    // * move tick, move delay and move speed are used to control the speed of
+    // * the tetromino move tick will be incremented every time the update method
+    // * is called, this means that the moveTick will count at the same rate as the
+    // * UPS. move delay is the number of ticks that must pass before the tetromino
+    // * moves down one square. This is set to the UPS so that the tetromino moves
+    // * down one square every second, by default. By varying the move speed we
+    // * can change the number of ticks that must pass before the tetromino moves.
     public void update() {
+        if (colision)
+            return;
+
+        move(xDir);
+
         moveTick++;
         if (moveTick * moveSpeed >= moveDelay) {
             moveTick = 0;
-            if (y + size < board_pixel_height) {
-                move(DOWN);
-            }
+            move(DOWN);
         }
     }
 

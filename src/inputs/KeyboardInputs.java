@@ -28,7 +28,7 @@ public class KeyboardInputs implements KeyListener {
                 break;
             case (KeyEvent.VK_A):
             case (KeyEvent.VK_LEFT):
-                gamePanel.getBoard().getTetromino().move(LEFT);
+                gamePanel.getBoard().getTetromino().setDirX(LEFT);
                 break;
             case (KeyEvent.VK_S):
             case (KeyEvent.VK_DOWN):
@@ -36,7 +36,7 @@ public class KeyboardInputs implements KeyListener {
                 break;
             case (KeyEvent.VK_D):
             case (KeyEvent.VK_RIGHT):
-                gamePanel.getBoard().getTetromino().move(RIGHT);
+                gamePanel.getBoard().getTetromino().setDirX(RIGHT);
                 break;
         }
     }
