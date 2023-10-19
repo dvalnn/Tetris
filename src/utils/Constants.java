@@ -29,4 +29,11 @@ public class Constants {
 
         public static final int[][][] COLORS = { I_COLOR, J_COLOR, L_COLOR, O_COLOR, S_COLOR, T_COLOR, Z_COLOR };
     }
+
+    public static class Directions {
+        public static final int UP = 0;
+        public static final int RIGHT = 1;
+        public static final int DOWN = 2;
+        public static final int LEFT = 3;
+    }
 }
