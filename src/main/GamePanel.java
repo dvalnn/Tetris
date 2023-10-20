@@ -63,4 +63,8 @@ public class GamePanel extends JPanel {
     public Board getBoard() {
         return gameBoard;
     }
+
+    public void windowLostFocus() {
+        gameBoard.setPaused();
+    }
 }

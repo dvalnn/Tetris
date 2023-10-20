@@ -58,4 +58,11 @@ public class Board {
     public Tetromino getTetromino() {
         return tetromino;
     }
+
+    public void setPaused() {
+        tetromino.setDown(false);
+        tetromino.setLeft(false);
+        tetromino.setRight(false);
+        tetromino.setUp(false);
+    }
 }

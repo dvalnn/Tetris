@@ -1,5 +1,8 @@
 package main;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+
 import javax.swing.JFrame;
 
 // GameWindow is a JFrame -- a window for the game to be displayed in
@@ -22,7 +25,16 @@ public class GameWindow extends JFrame {
         jFrame.pack();
         // centers the GameWindow on the screen
         jFrame.setLocationRelativeTo(null);
+        jFrame.addWindowFocusListener(new WindowFocusListener() {
+            @Override
+            public void windowGainedFocus(WindowEvent arg0) {
+            }
 
+            @Override
+            public void windowLostFocus(WindowEvent arg0) {
+                gamePanel.windowLostFocus();
+            }
+        });
         // makes the GameWindow visible -- must be the last line of code
         jFrame.setVisible(true);
     }
