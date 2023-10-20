@@ -11,6 +11,10 @@ import static utils.Constants.Directions.*;
 public class Tetromino {
     private int x;
     private int y;
+
+    private int xSpawn;
+    private int ySpawn;
+
     private int size;
 
     private Random rand = new Random();
@@ -26,25 +30,44 @@ public class Tetromino {
     private int horizontalMoveSpeed = 20;
     private final int moveDelay = UPS_SET;
 
+    private final int DEFAULT_MOVE_SPEED = 1;
+    private final int FAST_MOVE_SPEED = 10;
+    private final int INTANT_DROP_SPEED = 5000;
+
     private int board_pixel_width;
     private int board_pixel_height;
     private boolean colision = false;
 
-    private boolean up, right, left, down;
+    private boolean up, right, left, down, drop;
 
-    public Tetromino(int x, int y, int size) {
-        this.x = x;
-        this.y = y;
+    private Board gameBoard;
+
+    public Tetromino(Board gameBoard, int x, int y, int size) {
+        this.xSpawn = x;
+        this.ySpawn = y;
         this.size = size;
+
+        initTetromino();
+
+        board_pixel_width = BOARD_WIDTH * size;
+        board_pixel_height = BOARD_HEIGHT * size;
+
+        this.gameBoard = gameBoard;
+    }
+
+    private void initTetromino() {
+        x = xSpawn;
+        y = ySpawn;
+
+        verticalMoveSpeed = DEFAULT_MOVE_SPEED;
+
         shapeIndex = rand.nextInt(SHAPES.length);
         shape = SHAPES[shapeIndex];
         color = new Color(
                 COLORS[shapeIndex][0][0],
                 COLORS[shapeIndex][0][1],
                 COLORS[shapeIndex][0][2]);
-
-        board_pixel_width = BOARD_WIDTH * size;
-        board_pixel_height = BOARD_HEIGHT * size;
+        colision = false;
     }
 
     private void move(int dir) {
@@ -87,8 +110,11 @@ public class Tetromino {
     // * down one square every second, by default. By varying the move speed we
     // * can change the number of ticks that must pass before the tetromino moves.
     public void update() {
-        if (colision)
+        if (colision) {
+            gameBoard.freezePieceOnBoard(this);
+            initTetromino();
             return;
+        }
 
         verticalMoveTick++;
         horizontalMoveTick++;
@@ -103,20 +129,29 @@ public class Tetromino {
             }
         }
 
+        if (drop)
+            verticalMoveSpeed = INTANT_DROP_SPEED;
+        else if (down && verticalMoveSpeed != INTANT_DROP_SPEED)
+            verticalMoveSpeed = FAST_MOVE_SPEED;
+        else if (verticalMoveSpeed != INTANT_DROP_SPEED)
+            verticalMoveSpeed = DEFAULT_MOVE_SPEED;
+
         if (verticalMoveTick * verticalMoveSpeed >= moveDelay) {
             verticalMoveTick = 0;
-            if (down)
-                verticalMoveSpeed = 100;
             move(DOWN);
         }
     }
 
     public void render(Graphics g) {
-        g.setColor(color);
         for (int row = 0; row < shape.length; row++) {
             for (int col = 0; col < shape[row].length; col++) {
                 if (shape[row][col] == 1) {
+                    // draw the cell color
+                    g.setColor(color);
                     g.fillRect(x + col * size, y + row * size, size, size);
+                    // draw the cell border -- which is white -- to make the grid
+                    g.setColor(Color.WHITE);
+                    g.drawRect(x + col * size, y + row * size, size, size);
                 }
             }
         }
@@ -161,6 +196,22 @@ public class Tetromino {
 
     public void setDown(boolean down) {
         this.down = down;
+    }
+
+    public boolean isDrop() {
+        return drop;
+    }
+
+    public void setDrop(boolean drop) {
+        this.drop = drop;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public int[][] getShape() {
+        return shape;
     }
 
 }

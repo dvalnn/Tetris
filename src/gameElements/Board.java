@@ -10,8 +10,8 @@ public class Board {
     private int squareSize;
     private int x0, y0;
 
-    // private int[][] grid = new int[BOARD_WIDTH][BOARD_WIDTH];
-    private Color bkgColor = Color.BLACK;
+    private Color[][] board = new Color[BOARD_WIDTH][BOARD_HEIGHT];
+    // private Color bkgColor = Color.BLACK;
 
     private Tetromino tetromino;
     // private Tetromino nextTetromino;
@@ -21,7 +21,7 @@ public class Board {
 
         this.x0 = offsetX;
         this.y0 = offsetY;
-        this.bkgColor = bkgColor;
+        // this.bkgColor = bkgColor;
 
         int tetroX = (offsetX + BOARD_WIDTH) / 2 * squareSize;
 
@@ -29,7 +29,14 @@ public class Board {
         // tetroX is the initial x position of the tetromino
         // offsetY is the initial y position of the tetromino
         // subtracting squareSize from tetroX centers the tetromino
-        this.tetromino = new Tetromino(tetroX - squareSize, offsetY, squareSize);
+        this.tetromino = new Tetromino(this, tetroX - squareSize, offsetY, squareSize);
+
+        // init the board with a black background
+        for (int row = 0; row < BOARD_HEIGHT; row++) {
+            for (int col = 0; col < BOARD_WIDTH; col++) {
+                board[col][row] = bkgColor;
+            }
+        }
     }
 
     public void update() {
@@ -37,21 +44,20 @@ public class Board {
     }
 
     public void render(Graphics g) {
-        // draws the background
-        g.setColor(bkgColor);
-        g.fillRect(x0, y0, BOARD_WIDTH * squareSize, BOARD_HEIGHT * squareSize);
-
-        // draws the tetromino
-        tetromino.render(g);
-
-        // draws the grid
         for (int row = 0; row < BOARD_HEIGHT; row++) {
-            g.setColor(Color.WHITE);
-            g.drawLine(x0, row * squareSize, BOARD_WIDTH * squareSize, row * squareSize);
-        }
-        for (int col = 0; col < BOARD_WIDTH; col++) {
-            g.setColor(Color.WHITE);
-            g.drawLine(col * squareSize, y0, col * squareSize, BOARD_HEIGHT * squareSize);
+            for (int col = 0; col < BOARD_WIDTH; col++) {
+                // draw the cell color
+                g.setColor(board[col][row]);
+                g.fillRect(x0 + col * squareSize, y0 + row * squareSize, squareSize, squareSize);
+
+                // draw the cell border -- which is white -- to make the grid
+                g.setColor(Color.WHITE);
+                g.drawRect(x0 + col * squareSize, y0 + row * squareSize, squareSize,
+                        squareSize);
+            }
+
+            // render the tetromino
+            tetromino.render(g);
         }
     }
 
@@ -64,5 +70,17 @@ public class Board {
         tetromino.setLeft(false);
         tetromino.setRight(false);
         tetromino.setUp(false);
+    }
+
+    public void freezePieceOnBoard(Tetromino tetromino) {
+        // set the backgound color of the grid to the color of the tetromino
+        for (int row = 0; row < tetromino.getShape().length; row++) {
+            for (int col = 0; col < tetromino.getShape()[row].length; col++) {
+                if (tetromino.getShape()[row][col] == 1) {
+                    board[tetromino.getX() / squareSize + col][tetromino.getY() / squareSize + row] = tetromino
+                            .getColor();
+                }
+            }
+        }
     }
 }
