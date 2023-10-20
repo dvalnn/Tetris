@@ -15,31 +15,33 @@ public class Tetromino {
 
     private Random rand = new Random();
 
-    private int selectedShape;
     // 2D array representing the shape of the tetromino
     private int[][] shape;
     private Color color;
+    private int shapeIndex;
 
-    private int moveTick = 0;
-    private int moveSpeed = 1;
+    private int verticalMoveTick = 0;
+    private int verticalMoveSpeed = 1;
+    private int horizontalMoveTick = 0;
+    private int horizontalMoveSpeed = 20;
     private final int moveDelay = UPS_SET;
 
     private int board_pixel_width;
     private int board_pixel_height;
     private boolean colision = false;
 
-    private int xDir;
+    private boolean up, right, left, down;
 
     public Tetromino(int x, int y, int size) {
         this.x = x;
         this.y = y;
         this.size = size;
-        selectedShape = rand.nextInt(SHAPES.length);
-        shape = SHAPES[selectedShape];
+        shapeIndex = rand.nextInt(SHAPES.length);
+        shape = SHAPES[shapeIndex];
         color = new Color(
-                COLORS[selectedShape][0][0],
-                COLORS[selectedShape][0][1],
-                COLORS[selectedShape][0][2]);
+                COLORS[shapeIndex][0][0],
+                COLORS[shapeIndex][0][1],
+                COLORS[shapeIndex][0][2]);
 
         board_pixel_width = BOARD_WIDTH * size;
         board_pixel_height = BOARD_HEIGHT * size;
@@ -47,6 +49,10 @@ public class Tetromino {
 
     private void move(int dir) {
         switch (dir) {
+
+            case (NONE):
+                break;
+
             case (UP):
                 break;
 
@@ -73,25 +79,6 @@ public class Tetromino {
         }
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setDirX(int dir) {
-        if (dir == LEFT || dir == RIGHT)
-            xDir = dir;
-        else
-            xDir = -1;
-    }
-
-    public void fastDrop() {
-        moveSpeed = 100;
-    }
-
     // * move tick, move delay and move speed are used to control the speed of
     // * the tetromino move tick will be incremented every time the update method
     // * is called, this means that the moveTick will count at the same rate as the
@@ -103,11 +90,23 @@ public class Tetromino {
         if (colision)
             return;
 
-        move(xDir);
+        verticalMoveTick++;
+        horizontalMoveTick++;
 
-        moveTick++;
-        if (moveTick * moveSpeed >= moveDelay) {
-            moveTick = 0;
+        if (horizontalMoveTick * horizontalMoveSpeed >= moveDelay) {
+            horizontalMoveTick = 0;
+
+            if (left && !right) {
+                move(LEFT);
+            } else if (right && !left) {
+                move(RIGHT);
+            }
+        }
+
+        if (verticalMoveTick * verticalMoveSpeed >= moveDelay) {
+            verticalMoveTick = 0;
+            if (down)
+                verticalMoveSpeed = 100;
             move(DOWN);
         }
     }
@@ -121,6 +120,47 @@ public class Tetromino {
                 }
             }
         }
+    }
+
+    // * GETTERS AND SETTERS
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public boolean isUp() {
+        return up;
+    }
+
+    public void setUp(boolean up) {
+        this.up = up;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    public boolean isDown() {
+        return down;
+    }
+
+    public void setDown(boolean down) {
+        this.down = down;
     }
 
 }
