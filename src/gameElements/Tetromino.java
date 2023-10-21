@@ -70,6 +70,39 @@ public class Tetromino {
         colision = false;
     }
 
+    private boolean checkVerticalColision() {
+        if ((y + size * (shape.length + 1) > board_pixel_height))
+            return true;
+
+        for (int row = 0; row < shape.length; row++) {
+            for (int col = 0; col < shape[row].length; col++) {
+                if (shape[row][col] == 1
+                        && gameBoard.getBoard()[y / size + row + 1][x / size + col] != Color.BLACK)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkHorizontalColision(int dir) {
+        if (dir == RIGHT && x + size * (shape[0].length + 1) > board_pixel_width)
+            return true;
+
+        if (dir == LEFT && x - size < 0)
+            return true;
+
+        int xDelta = dir == RIGHT ? 1 : -1;
+
+        for (int row = 0; row < shape.length; row++) {
+            for (int col = 0; col < shape[row].length; col++) {
+                if (gameBoard.getBoard()[y / size + row][x / size + col + xDelta] != Color.BLACK)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     private void move(int dir) {
         switch (dir) {
 
@@ -77,20 +110,18 @@ public class Tetromino {
                 break;
 
             case (RIGHT):
-                if (!(x + size * (shape[0].length + 1) > board_pixel_width)) {
+                if (!checkHorizontalColision(RIGHT))
                     x += size;
-                }
                 break;
 
             case (DOWN):
-                if (!(y + size * (shape.length + 1) > board_pixel_height))
+                colision = checkVerticalColision();
+                if (!colision)
                     y += size;
-                else
-                    colision = true;
                 break;
 
             case (LEFT):
-                if (!(x - size < 0))
+                if (!checkHorizontalColision(LEFT))
                     x -= size;
                 break;
 
@@ -147,7 +178,7 @@ public class Tetromino {
                     g.setColor(color);
                     g.fillRect(x + col * size, y + row * size, size, size);
                     // draw the tetromino outline
-                    g.setColor(Color.WHITE);
+                    g.setColor(Color.GRAY);
                     g.drawRect(x + col * size, y + row * size, size, size);
                 }
             }
