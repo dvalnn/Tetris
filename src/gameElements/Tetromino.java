@@ -67,6 +67,8 @@ public class Tetromino {
                 COLORS[shapeIndex][0][0],
                 COLORS[shapeIndex][0][1],
                 COLORS[shapeIndex][0][2]);
+
+        drop = false;
         colision = false;
     }
 
