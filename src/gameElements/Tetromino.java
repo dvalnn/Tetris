@@ -143,10 +143,10 @@ public class Tetromino {
         for (int row = 0; row < shape.length; row++) {
             for (int col = 0; col < shape[row].length; col++) {
                 if (shape[row][col] == 1) {
-                    // draw the cell color
+                    // draw the tetromino colors
                     g.setColor(color);
                     g.fillRect(x + col * size, y + row * size, size, size);
-                    // draw the cell border -- which is white -- to make the grid
+                    // draw the tetromino outline
                     g.setColor(Color.WHITE);
                     g.drawRect(x + col * size, y + row * size, size, size);
                 }
