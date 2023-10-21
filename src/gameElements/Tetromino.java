@@ -38,7 +38,7 @@ public class Tetromino {
     private int board_pixel_height;
     private boolean colision = false;
 
-    private boolean up, right, left, down, drop;
+    private boolean right, left, down, drop;
 
     private Board gameBoard;
 
@@ -74,9 +74,6 @@ public class Tetromino {
         switch (dir) {
 
             case (NONE):
-                break;
-
-            case (UP):
                 break;
 
             case (RIGHT):
@@ -166,40 +163,16 @@ public class Tetromino {
         return y;
     }
 
-    public boolean isUp() {
-        return up;
-    }
-
-    public void setUp(boolean up) {
-        this.up = up;
-    }
-
-    public boolean isRight() {
-        return right;
-    }
-
     public void setRight(boolean right) {
         this.right = right;
-    }
-
-    public boolean isLeft() {
-        return left;
     }
 
     public void setLeft(boolean left) {
         this.left = left;
     }
 
-    public boolean isDown() {
-        return down;
-    }
-
     public void setDown(boolean down) {
         this.down = down;
-    }
-
-    public boolean isDrop() {
-        return drop;
     }
 
     public void setDrop(boolean drop) {

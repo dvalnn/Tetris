@@ -69,7 +69,7 @@ public class Board {
         tetromino.setDown(false);
         tetromino.setLeft(false);
         tetromino.setRight(false);
-        tetromino.setUp(false);
+        tetromino.setDrop(false);
     }
 
     public void freezePieceOnBoard(Tetromino tetromino) {
