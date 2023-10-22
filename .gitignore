@@ -1,2 +1,6 @@
 .vscode 
 bin
+target
+.project
+.settings
+.classpath
