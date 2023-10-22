@@ -127,19 +127,20 @@ public class Tetromino {
   }
 
   // reverseColumns
-  private void reverseColumns(int[][] Matrix) {
-    for (int i = 0; i < Matrix[0].length; i++) {
-      int low = 0;
-      int high = Matrix.length - 1;
-      while (low < high) {
-        int temp = Matrix[low][i];
-        Matrix[low][i] = Matrix[high][i];
-        Matrix[high][i] = temp;
-        low++;
-        high--;
-      }
-    }
-  }
+  // private void reverseColumns(int[][] Matrix) {
+  //   for (int i = 0; i < Matrix[0].length; i++) {
+  //     int low = 0;
+  //     int high = Matrix.length - 1;
+  //     while (low < high) {
+  //       int temp = Matrix[low][i];
+  //       Matrix[low][i] = Matrix[high][i];
+  //       Matrix[high][i] = temp;
+  //       low++;
+  //       high--;
+  //     }
+  //   }
+  // }
+  //
 
   public void rotate() {
     int[][] rotatedShape = transposeMatrix(shape);
