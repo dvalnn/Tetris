@@ -22,7 +22,7 @@ public class KeyboardInputs implements KeyListener {
         switch (e.getKeyCode()) {
             case (KeyEvent.VK_W):
             case (KeyEvent.VK_UP):
-                //
+                gamePanel.getBoard().getTetromino().rotate();
                 break;
             case (KeyEvent.VK_A):
             case (KeyEvent.VK_LEFT):
