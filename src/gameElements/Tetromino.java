@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
+import utils.Constants.GameStates;
+
 import static utils.Constants.GameConstants.*;
 import static utils.Constants.TetrominoConstants.*;
 import static utils.Constants.Directions.*;
@@ -47,12 +49,13 @@ public class Tetromino {
     this.ySpawn = y;
     this.size = size;
 
+    this.gameBoard = gameBoard;
+
     initTetromino();
 
     board_pixel_width = BOARD_WIDTH * size;
     board_pixel_height = BOARD_HEIGHT * size;
 
-    this.gameBoard = gameBoard;
   }
 
   private void initTetromino() {
@@ -70,6 +73,13 @@ public class Tetromino {
 
     drop = false;
     colision = false;
+
+    if (shape != O_SHAPE && shape != I_SHAPE) {
+      int rotations = rand.nextInt(4);
+      for (int i = 0; i < rotations; i++) {
+        rotate(RIGHT);
+      }
+    }
   }
 
   private boolean checkVerticalColision() {
@@ -205,6 +215,12 @@ public class Tetromino {
   // * can change the number of ticks that must pass before the tetromino moves.
   public void update() {
     if (colision) {
+
+      if (y <= 0) {
+        GameStates.gameState = GameStates.GAME_OVER;
+        return;
+      }
+
       gameBoard.freezePieceOnBoard(this);
       initTetromino();
       return;
@@ -237,6 +253,9 @@ public class Tetromino {
   }
 
   public void render(Graphics g) {
+    if (GameStates.gameState == GameStates.GAME_OVER)
+      return;
+
     for (int row = 0; row < shape.length; row++) {
       for (int col = 0; col < shape[row].length; col++) {
         if (shape[row][col] == 1) {

@@ -1,6 +1,7 @@
 package main;
 
 import static utils.Constants.GameConstants.*;
+import utils.Constants.GameStates;
 
 public class Game implements Runnable {
 
@@ -76,6 +77,10 @@ public class Game implements Runnable {
                 updates = 0;
             }
 
+            if (GameStates.gameState == GameStates.GAME_OVER) {
+                System.out.println("Game Over!");
+                break;
+            }
         }
     }
 }

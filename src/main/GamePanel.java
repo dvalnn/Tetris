@@ -21,7 +21,6 @@ public class GamePanel extends JPanel {
 
     private Color gameBakcgroundColor = Color.BLACK;
     private int gameSquareSize = 30;
-    // Traditional Tetris is 10x20
 
     private int gameBoardOffsetX = 0, gameBoardOffsetY = 0;
 

@@ -37,4 +37,12 @@ public class Constants {
         public static final int DOWN = 2;
         public static final int LEFT = 3;
     }
+
+    public static class GameStates {
+        public static final int GAME_OVER = 0;
+        public static final int PLAYING = 1;
+        public static final int PAUSED = 2;
+
+        public static int gameState = PLAYING;
+    }
 }

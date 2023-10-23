@@ -11,10 +11,7 @@ public class Board {
   private int x0, y0;
 
   private Color[][] board = new Color[BOARD_HEIGHT][BOARD_WIDTH];
-  // private Color bkgColor = Color.BLACK;
-
   private Tetromino tetromino;
-  // private Tetromino nextTetromino;
 
   public Board(int squareSize, int offsetX, int offsetY, Color bkgColor) {
     this.squareSize = squareSize;
@@ -102,5 +99,4 @@ public class Board {
   public Color[][] getBoard() {
     return board;
   }
-
 }
