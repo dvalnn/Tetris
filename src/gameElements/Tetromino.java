@@ -105,64 +105,68 @@ public class Tetromino {
     return false;
   }
 
-  // transposeMatrix
-  private int[][] transposeMatrix(int[][] Matrix) {
-    int[][] temp = new int[Matrix[0].length][Matrix.length];
-    for (int row = 0; row < Matrix.length; row++) {
-      for (int col = 0; col < Matrix[0].length; col++) {
-        temp[col][row] = Matrix[row][col];
-      }
+  public void rotate(int dir) {
+    int[][] rotated;
+    switch (dir) {
+      case LEFT:
+        rotated = rotateCounterClockwise();
+        break;
+
+      case RIGHT:
+        rotated = rotateClockwise();
+        break;
+
+      default:
+        return;
     }
-    return temp;
-  }
-
-  // reverseRows
-  private void reverseRows(int[][] matrix) {
-    int middle = matrix.length / 2;
-    for (int row = 0; row < middle; row++) {
-      int[] temp = matrix[row];
-      matrix[row] = matrix[matrix.length - row - 1];
-      matrix[matrix.length - row - 1] = temp;
-    }
-  }
-
-  // reverseColumns
-  // private void reverseColumns(int[][] Matrix) {
-  //   for (int i = 0; i < Matrix[0].length; i++) {
-  //     int low = 0;
-  //     int high = Matrix.length - 1;
-  //     while (low < high) {
-  //       int temp = Matrix[low][i];
-  //       Matrix[low][i] = Matrix[high][i];
-  //       Matrix[high][i] = temp;
-  //       low++;
-  //       high--;
-  //     }
-  //   }
-  // }
-  //
-
-  public void rotate() {
-    int[][] rotatedShape = transposeMatrix(shape);
-    reverseRows(rotatedShape);
 
     int xCord = x / size;
     int yCord = y / size;
     // check if rotation is possible
-    if ((xCord + rotatedShape[0].length > BOARD_WIDTH) || (yCord + rotatedShape.length > BOARD_HEIGHT)) {
+    if ((xCord + rotated[0].length > BOARD_WIDTH) || (yCord +
+        rotated.length > BOARD_HEIGHT)) {
       return;
     }
 
     // check if rotation colides with other pieces
-    for (int row = 0; row < rotatedShape.length; row++) {
-      for (int col = 0; col < rotatedShape[row].length; col++) {
-        if ((rotatedShape[row][col] != 0) && (gameBoard.getBoard()[yCord + row][xCord + col] != Color.black)) {
-            return;
+    for (int row = 0; row < rotated.length; row++) {
+      for (int col = 0; col < rotated[row].length; col++) {
+        if ((rotated[row][col] != 0) && (gameBoard.getBoard()[yCord + row][xCord
+            + col] != Color.black)) {
+          return;
         }
       }
     }
 
-    shape = rotatedShape;
+    shape = rotated;
+  }
+
+  public int[][] rotateClockwise() {
+    int rows = shape.length;
+    int cols = shape[0].length;
+    int[][] rotated = new int[cols][rows];
+
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        rotated[j][rows - 1 - i] = shape[i][j];
+      }
+    }
+
+    return rotated;
+  }
+
+  public int[][] rotateCounterClockwise() {
+    int rows = shape.length;
+    int cols = shape[0].length;
+    int[][] rotated = new int[cols][rows];
+
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        rotated[cols - 1 - j][i] = shape[i][j];
+      }
+    }
+
+    return rotated;
   }
 
   private void move(int dir) {
