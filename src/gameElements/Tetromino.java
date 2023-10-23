@@ -107,7 +107,7 @@ public class Tetromino {
 
     for (int row = 0; row < shape.length; row++) {
       for (int col = 0; col < shape[row].length; col++) {
-        if (gameBoard.getBoard()[y / size + row][x / size + col + xDelta] != Color.BLACK)
+        if (shape[row][col] == 1 && gameBoard.getBoard()[y / size + row][x / size + col + xDelta] != Color.BLACK)
           return true;
       }
     }
