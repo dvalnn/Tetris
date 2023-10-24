@@ -30,6 +30,10 @@ public class Game implements Runnable {
     gamePanel.updatePanel();
   }
 
+  public void render() {
+    gamePanel.repaint();
+  }
+
   @Override
   public void run() {
 
@@ -64,7 +68,7 @@ public class Game implements Runnable {
 
       // ensures that the game is rendered at a constant rate
       if (deltaFrame >= 1) {
-        gamePanel.repaint();
+        render();
         frames++;
         deltaFrame--;
       }
@@ -77,7 +81,7 @@ public class Game implements Runnable {
         updates = 0;
       }
 
-      if (GameStates.gameState == GameStates.GAME_OVER) {
+      if (GameStates.gameState == GameStates.GAME_OVER_TMP) {
         System.out.println("Game Over!");
         break;
       }

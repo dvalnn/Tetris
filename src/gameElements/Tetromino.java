@@ -244,7 +244,7 @@ public class Tetromino {
     if (colision) {
 
       if (y <= 0) {
-        GameStates.gameState = GameStates.GAME_OVER;
+        GameStates.gameState = GameStates.GAME_OVER_TMP;
         return;
       }
 
@@ -282,7 +282,7 @@ public class Tetromino {
   }
 
   public void render(Graphics g) {
-    if (GameStates.gameState == GameStates.GAME_OVER)
+    if (GameStates.gameState == GameStates.GAME_OVER_TMP)
       return;
 
     for (int row = 0; row < shape.length; row++) {

@@ -39,10 +39,10 @@ public class Constants {
   }
 
   public static class GameStates {
-    public static final int GAME_OVER = 0;
-    public static final int PLAYING = 1;
-    public static final int PAUSED = 2;
+    public static final int GAME_OVER_TMP = 0;
+    public static final int PLAYING_TMP = 1;
+    public static final int PAUSED_TMP = 2;
 
-    public static int gameState = PLAYING;
+    public static int gameState = PLAYING_TMP;
   }
 }
