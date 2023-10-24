@@ -302,9 +302,8 @@ public class Tetromino {
           g.setColor(ghostColor);
           g.fillRect(ghostX + col * size, ghostY + row * size, size, size);
           // draw the ghost piece border
-          g.setColor(Color.GRAY);
-          g.drawRect(ghostX + col * size, ghostY + row * size, size, size);
-
+          // g.setColor(Color.GRAY);
+          // g.drawRect(ghostX + col * size, ghostY + row * size, size, size);
         }
       }
     }
