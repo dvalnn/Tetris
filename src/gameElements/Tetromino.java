@@ -14,6 +14,9 @@ public class Tetromino {
   private int x;
   private int y;
 
+  private int ghostX;
+  private int ghostY;
+
   private int xSpawn;
   private int ySpawn;
 
@@ -24,6 +27,7 @@ public class Tetromino {
   // 2D array representing the shape of the tetromino
   private int[][] shape;
   private Color color;
+  private Color ghostColor;
   private int shapeIndex;
 
   private int verticalMoveTick = 0;
@@ -71,6 +75,13 @@ public class Tetromino {
         COLORS[shapeIndex][0][1],
         COLORS[shapeIndex][0][2]);
 
+    // same color as the tetromino but with 100 alpha
+    ghostColor = new Color(
+        COLORS[shapeIndex][0][0],
+        COLORS[shapeIndex][0][1],
+        COLORS[shapeIndex][0][2],
+        100);
+
     drop = false;
     colision = false;
 
@@ -82,14 +93,14 @@ public class Tetromino {
     }
   }
 
-  private boolean checkVerticalColision() {
-    if ((y + size * (shape.length + 1) > board_pixel_height))
+  private boolean checkVerticalColision(int xCord, int yCord) {
+    if ((yCord + size * (shape.length + 1) > board_pixel_height))
       return true;
 
     for (int row = 0; row < shape.length; row++) {
       for (int col = 0; col < shape[row].length; col++) {
         if (shape[row][col] == 1
-            && gameBoard.getBoard()[y / size + row + 1][x / size + col] != Color.BLACK)
+            && gameBoard.getBoard()[yCord / size + row + 1][xCord / size + col] != Color.BLACK)
           return true;
       }
     }
@@ -191,7 +202,7 @@ public class Tetromino {
         break;
 
       case (DOWN):
-        colision = checkVerticalColision();
+        colision = checkVerticalColision(x, y);
         if (!colision)
           y += size;
         break;
@@ -203,6 +214,20 @@ public class Tetromino {
 
       default:
         break;
+    }
+  }
+
+  // calculate the ghost piece position
+  public void calculateGhostPiece() {
+    ghostX = x;
+    ghostY = y;
+
+    // first check on the current position
+    boolean ghostColision = checkVerticalColision(ghostX, ghostY);
+
+    while (!ghostColision) {
+      ghostY += size;
+      ghostColision = checkVerticalColision(ghostX, ghostY);
     }
   }
 
@@ -250,6 +275,8 @@ public class Tetromino {
       verticalMoveTick = 0;
       move(DOWN);
     }
+
+    calculateGhostPiece();
   }
 
   public void render(Graphics g) {
@@ -265,6 +292,13 @@ public class Tetromino {
           // draw the tetromino outline
           g.setColor(Color.GRAY);
           g.drawRect(x + col * size, y + row * size, size, size);
+
+          // draw the ghost piece
+          g.setColor(ghostColor);
+          g.fillRect(ghostX + col * size, ghostY + row * size, size, size);
+
+          g.setColor(Color.GRAY);
+          g.drawRect(ghostX + col * size, ghostY + row * size, size, size);
         }
       }
     }
