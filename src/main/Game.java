@@ -1,6 +1,8 @@
 package main;
 
 import static utils.Constants.GameConstants.*;
+
+import gameStates.GameState;
 import utils.Constants.GameStates;
 
 public class Game implements Runnable {
@@ -8,6 +10,7 @@ public class Game implements Runnable {
   // private GameWindow gameWindow;
   private GamePanel gamePanel;
   private Thread gameThread;
+  // temporary
 
   public Game() {
     System.out.println("Hello Game!");
@@ -27,11 +30,23 @@ public class Game implements Runnable {
   }
 
   public void update() {
-    gamePanel.updatePanel();
+    switch (GameState.state) {
+      case MENU:
+        break;
+      case PLAYING:
+        gamePanel.updatePanel();
+        break;
+    }
   }
 
   public void render() {
-    gamePanel.repaint();
+    switch (GameState.state) {
+      case MENU:
+        break;
+      case PLAYING:
+        gamePanel.repaint();
+        break;
+    }
   }
 
   @Override
