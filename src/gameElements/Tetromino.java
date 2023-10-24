@@ -76,11 +76,13 @@ public class Tetromino {
         COLORS[shapeIndex][0][2]);
 
     // same color as the tetromino but with 100 alpha
-    ghostColor = new Color(
-        COLORS[shapeIndex][0][0],
-        COLORS[shapeIndex][0][1],
-        COLORS[shapeIndex][0][2],
-        100);
+    // ghostColor = new Color(
+    // COLORS[shapeIndex][0][0],
+    // COLORS[shapeIndex][0][1],
+    // COLORS[shapeIndex][0][2],
+    // 50);
+
+    ghostColor = new Color(127, 127, 127);
 
     drop = false;
     colision = false;
@@ -286,19 +288,23 @@ public class Tetromino {
     for (int row = 0; row < shape.length; row++) {
       for (int col = 0; col < shape[row].length; col++) {
         if (shape[row][col] == 1) {
-          // draw the tetromino colors
+          // draw the tetromino block
           g.setColor(color);
           g.fillRect(x + col * size, y + row * size, size, size);
-          // draw the tetromino outline
+          // draw the tetromino block border
           g.setColor(Color.GRAY);
           g.drawRect(x + col * size, y + row * size, size, size);
+
+          if (ghostX == x && ghostY == y)
+            continue;
 
           // draw the ghost piece
           g.setColor(ghostColor);
           g.fillRect(ghostX + col * size, ghostY + row * size, size, size);
-
+          // draw the ghost piece border
           g.setColor(Color.GRAY);
           g.drawRect(ghostX + col * size, ghostY + row * size, size, size);
+
         }
       }
     }
