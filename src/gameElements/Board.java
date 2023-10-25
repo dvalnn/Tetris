@@ -14,11 +14,13 @@ public class Board {
   private Color[][] board = new Color[BOARD_HEIGHT][BOARD_WIDTH];
   private Tetromino tetromino;
 
+  private Color bkgColor;
+
   public Board(int squareSize, int offsetX, int offsetY, Color bkgColor) {
     this.squareSize = squareSize;
     origin = new Point(offsetX, offsetY);
 
-    // this.bkgColor = bkgColor;
+    this.bkgColor = bkgColor;
 
     // squareSize is the size of each square in the tetromino
     // tetroX is the initial x position of the tetromino
@@ -26,7 +28,7 @@ public class Board {
     // subtracting squareSize from tetroX centers the tetromino
     this.tetromino = new Tetromino(this, origin, squareSize);
 
-    // init the board with a black background
+    // init the board with the background color
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
         board[row][col] = bkgColor;
@@ -46,8 +48,8 @@ public class Board {
         g.setColor(board[row][col]);
         g.fillRect(origin.x + col * squareSize, origin.y + row * squareSize, squareSize, squareSize);
 
-        // draw the cell border -- which is white -- to make the grid
-        g.setColor(Color.WHITE);
+        // draw the cell border -- which is a high contrast color to the background
+        g.setColor(bkgColor.brighter());
         g.drawRect(origin.x + col * squareSize, origin.y + row * squareSize, squareSize,
             squareSize);
       }
@@ -85,7 +87,7 @@ public class Board {
     for (int topLine = bottomLine; topLine > 0; topLine--) {
       int count = 0;
       for (int col = 0; col < board[0].length; col++) {
-        if (board[topLine][col] != Color.black)
+        if (board[topLine][col] != bkgColor)
           count++;
         board[bottomLine][col] = board[topLine][col];
       }
@@ -96,5 +98,9 @@ public class Board {
 
   public Color[][] getBoard() {
     return board;
+  }
+
+  public Color getBackgroundColor() {
+    return bkgColor;
   }
 }

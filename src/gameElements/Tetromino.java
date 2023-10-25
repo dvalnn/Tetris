@@ -43,13 +43,13 @@ public class Tetromino {
 
   private boolean right, left, down, drop;
 
-  private Board gameBoard;
+  private Board board;
 
   public Tetromino(Board gameBoard, Point boardOrigin, int size) {
     this.boardOrigin = new Point(boardOrigin);
 
     this.size = size;
-    this.gameBoard = gameBoard;
+    this.board = gameBoard;
 
     initTetromino();
 
@@ -59,6 +59,7 @@ public class Tetromino {
 
   private void initTetromino() {
     position = new Point(BOARD_WIDTH / 2 - 1, 0);
+    ghostPos = new Point(position);
 
     verticalMoveSpeed = DEFAULT_MOVE_SPEED;
 
@@ -98,7 +99,7 @@ public class Tetromino {
     for (int row = 0; row < shape.length; row++) {
       for (int col = 0; col < shape[row].length; col++) {
         if (shape[row][col] == 1
-            && gameBoard.getBoard()[point.y + row + 1][point.x + col] != Color.BLACK)
+            && board.getBoard()[point.y + row + 1][point.x + col] != board.getBackgroundColor())
           return true;
       }
     }
@@ -117,7 +118,7 @@ public class Tetromino {
     for (int row = 0; row < shape.length; row++) {
       for (int col = 0; col < shape[row].length; col++) {
         if (shape[row][col] == 1
-            && gameBoard.getBoard()[point.y + row][point.x + col + xDelta] != Color.BLACK)
+            && board.getBoard()[point.y + row][point.x + col + xDelta] != board.getBackgroundColor())
           return true;
       }
     }
@@ -148,8 +149,8 @@ public class Tetromino {
     // check if rotation colides with other pieces
     for (int row = 0; row < rotated.length; row++) {
       for (int col = 0; col < rotated[row].length; col++) {
-        if ((rotated[row][col] != 0) && (gameBoard.getBoard()[position.y + row][position.x
-            + col] != Color.black)) {
+        if ((rotated[row][col] != 0) && (board.getBoard()[position.y + row][position.x
+            + col] != board.getBackgroundColor())) {
           return;
         }
       }
@@ -239,7 +240,7 @@ public class Tetromino {
         return;
       }
 
-      gameBoard.freezePieceOnBoard(this);
+      board.freezePieceOnBoard(this);
       initTetromino();
       return;
     }
@@ -294,7 +295,7 @@ public class Tetromino {
           g.fillRect((ghostPos.x + col) * size + boardOrigin.x, (ghostPos.y + row) * size + boardOrigin.y, size, size);
           // draw the ghost piece border
           // g.setColor(Color.GRAY);
-          // g.drawRect((ghostPos.x + col) * size + boardOrigin.x, (ghostPos.y + row) * size + boardOrigin.y, size, size);
+          // g.drawRect((ghostPos.x + col) * size + boardOrigin.x, (ghostPos.y + row) * size + boardOrigin.x, size, size);
         }
       }
     }

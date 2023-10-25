@@ -14,12 +14,10 @@ import static utils.Constants.Directions.*;
 public class Playing extends State implements StateMethods {
 
   private Board board;
-  private Color boardColor = Color.BLACK;
+  private Color boardColor = new Color(15, 18, 23);
 
-  // private final int X_OFFSET = GAME_WIDTH / 2 - BOARD_WIDTH * BOARD_SQUARE / 2;
-  // private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
-  private final int X_OFFSET = 0;
-  private final int Y_OFFSET = 0;
+  private final int X_OFFSET = GAME_WIDTH / 2 - BOARD_WIDTH * BOARD_SQUARE / 2;
+  private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
 
   public Playing(Game game) {
     super(game);
