@@ -21,17 +21,17 @@ public class Playing extends State implements StateMethods {
 
   public Playing(Game game) {
     super(game);
-    board = new Board(BOARD_SQUARE, X_OFFSET, Y_OFFSET, boardColor);
+    // board = new Board(BOARD_SQUARE, X_OFFSET, Y_OFFSET, boardColor);
   }
 
   @Override
   public void update() {
-    board.update();
+    // board.update();
   }
 
   @Override
   public void render(Graphics g) {
-    board.render(g);
+    // board.render(g);
   }
 
   @Override
@@ -54,27 +54,27 @@ public class Playing extends State implements StateMethods {
   public void keyPressed(KeyEvent e) {
      switch (e.getKeyCode()) {
       case (KeyEvent.VK_Z):
-        board.getTetromino().rotate(LEFT);
+        // board.getTetromino().rotate(LEFT);
         break;
 
       case (KeyEvent.VK_X):
-        board.getTetromino().rotate(RIGHT);
+        // board.getTetromino().rotate(RIGHT);
         break;
 
       case (KeyEvent.VK_LEFT):
-        board.getTetromino().setLeft(true);
+        // board.getTetromino().setLeft(true);
         break;
 
       case (KeyEvent.VK_DOWN):
-        board.getTetromino().setDown(true);
+        // board.getTetromino().setDown(true);
         break;
 
       case (KeyEvent.VK_RIGHT):
-        board.getTetromino().setRight(true);
+        // board.getTetromino().setRight(true);
         break;
 
       case (KeyEvent.VK_SPACE):
-        board.getTetromino().setDrop(true);
+        // board.getTetromino().setDrop(true);
         break;
 
       default:
@@ -86,18 +86,19 @@ public class Playing extends State implements StateMethods {
   public void keyReleased(KeyEvent e) {
    switch (e.getKeyCode()) {
       case (KeyEvent.VK_LEFT):
-        board.getTetromino().setLeft(false);
+        // board.getTetromino().setLeft(false);
         break;
-      case (KeyEvent.VK_DOWN):
-        board.getTetromino().setDown(false);
 
+      case (KeyEvent.VK_DOWN):
+        // board.getTetromino().setDown(false);
         break;
+
       case (KeyEvent.VK_RIGHT):
-        board.getTetromino().setRight(false);
+        // board.getTetromino().setRight(false);
         break;
 
       case (KeyEvent.VK_SPACE):
-        board.getTetromino().setDrop(false);
+        // board.getTetromino().setDrop(false);
         break;
 
       default:
@@ -107,7 +108,7 @@ public class Playing extends State implements StateMethods {
 
   @Override
   public void windowLostFocus() {
-    board.disableInputs();
+    // board.disableInputs();
   }
 
 }
