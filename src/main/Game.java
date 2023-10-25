@@ -2,26 +2,39 @@ package main;
 
 import static utils.Constants.GameConstants.*;
 
+import java.awt.Graphics;
+
 import gameStates.GameState;
-import utils.Constants.GameStates;
+import gameStates.Menu;
+import gameStates.Playing;
+import gameStates.GameOver;
 
 public class Game implements Runnable {
 
-  // private GameWindow gameWindow;
+  private GameWindow gameWindow;
   private GamePanel gamePanel;
   private Thread gameThread;
-  // temporary
+  private Playing playing;
+  private Menu menu;
+  private GameOver gameOver;
+
+  private boolean exit = false;
 
   public Game() {
-    System.out.println("Hello Game!");
-    gamePanel = new GamePanel();
-    // gameWindow = new GameWindow(gamePanel);
-    new GameWindow(gamePanel);
+    initClasses();
 
+    gamePanel = new GamePanel(this);
+    gameWindow = new GameWindow(gamePanel);
     // requests focus so that the GamePanel can receive keyboard inputs
     gamePanel.requestFocus();
 
     startGameLoop();
+  }
+
+  private void initClasses() {
+    menu = new Menu(this);
+    playing = new Playing(this);
+    gameOver = new GameOver(this);
   }
 
   private void startGameLoop() {
@@ -32,26 +45,48 @@ public class Game implements Runnable {
   public void update() {
     switch (GameState.state) {
       case MENU:
+        menu.update();
         break;
       case PLAYING:
-        gamePanel.updatePanel();
+        playing.update();
+        break;
+      case GAME_OVER:
+        gameOver.update();
         break;
     }
   }
 
-  public void render() {
+  public void render(Graphics g) {
     switch (GameState.state) {
       case MENU:
+        menu.render(g);
         break;
       case PLAYING:
-        gamePanel.repaint();
+        playing.render(g);
+        break;
+      case GAME_OVER:
+        gameOver.render(g);
+        break;
+    }
+  }
+
+  public void windowLostFocus() {
+    System.out.println("Game.windowLostFocus()");
+    switch (GameState.state) {
+      case MENU:
+        menu.windowLostFocus();
+        break;
+      case PLAYING:
+        playing.windowLostFocus();
+        break;
+      case GAME_OVER:
+        gameOver.windowLostFocus();
         break;
     }
   }
 
   @Override
   public void run() {
-
     // time per frame and time per update in nanoseconds
     double timePerFrame = 1000000000 / FPS_SET;
     double timePerUpdate = 1000000000 / UPS_SET;
@@ -83,7 +118,7 @@ public class Game implements Runnable {
 
       // ensures that the game is rendered at a constant rate
       if (deltaFrame >= 1) {
-        render();
+        gamePanel.repaint();
         frames++;
         deltaFrame--;
       }
@@ -96,10 +131,27 @@ public class Game implements Runnable {
         updates = 0;
       }
 
-      if (GameStates.gameState == GameStates.GAME_OVER_TMP) {
-        System.out.println("Game Over!");
+      if (exit)
         break;
-      }
     }
+
+    gameWindow.dispose();
+    System.exit(0);
+  }
+
+  public void exit() {
+    exit = true;
+  }
+
+  public Playing getPlaying() {
+    return playing;
+  }
+
+  public Menu getMenu() {
+    return menu;
+  }
+
+  public GameOver getGameOver() {
+    return gameOver;
   }
 }

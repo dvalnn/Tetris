@@ -23,8 +23,10 @@ public class GameWindow extends JFrame {
     // adds the GamePanel to the GameWindow
     jFrame.add(gamePanel);
     jFrame.pack();
+
     // centers the GameWindow on the screen
     jFrame.setLocationRelativeTo(null);
+
     jFrame.addWindowFocusListener(new WindowFocusListener() {
       @Override
       public void windowGainedFocus(WindowEvent arg0) {
@@ -32,7 +34,7 @@ public class GameWindow extends JFrame {
 
       @Override
       public void windowLostFocus(WindowEvent arg0) {
-        gamePanel.windowLostFocus();
+        gamePanel.getGame().windowLostFocus();
       }
     });
     // makes the GameWindow visible -- must be the last line of code

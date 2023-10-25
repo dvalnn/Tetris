@@ -5,17 +5,30 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import main.GamePanel;
+import gameStates.GameState;
 
 public class MouseInputs implements MouseListener, MouseMotionListener {
-  // private GamePanel gamePanel;
+  private GamePanel gamePanel;
 
   public MouseInputs(GamePanel gamePanel) {
-    // this.gamePanel = gamePanel;
+    this.gamePanel = gamePanel;
   }
 
   @Override
   public void mouseClicked(MouseEvent e) {
-    // System.out.println("Mouse Clicked");
+    switch (GameState.state) {
+      case MENU:
+        gamePanel.getGame().getMenu().mouseClicked(e);
+        break;
+
+      case PLAYING:
+        gamePanel.getGame().getPlaying().mouseClicked(e);
+        break;
+
+      case GAME_OVER:
+        gamePanel.getGame().getGameOver().mouseClicked(e);
+        break;
+    }
   }
 
   @Override

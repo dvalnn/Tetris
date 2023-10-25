@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
-import utils.Constants.GameStates;
-
 import static utils.Constants.GameConstants.*;
 import static utils.Constants.TetrominoConstants.*;
 import static utils.Constants.Directions.*;
+
+import gameStates.GameState;
 
 public class Tetromino {
   private int x;
@@ -244,7 +244,7 @@ public class Tetromino {
     if (colision) {
 
       if (y <= 0) {
-        GameStates.gameState = GameStates.GAME_OVER_TMP;
+        GameState.state = GameState.GAME_OVER;
         return;
       }
 
@@ -282,7 +282,7 @@ public class Tetromino {
   }
 
   public void render(Graphics g) {
-    if (GameStates.gameState == GameStates.GAME_OVER_TMP)
+    if (GameState.state == GameState.GAME_OVER)
       return;
 
     for (int row = 0; row < shape.length; row++) {

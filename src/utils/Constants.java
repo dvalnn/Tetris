@@ -6,6 +6,9 @@ public class Constants {
     public static final int UPS_SET = 100;
     public static final int BOARD_WIDTH = 10;
     public static final int BOARD_HEIGHT = 20;
+    public static final int BOARD_SQUARE = 30;
+    public static final int GAME_WIDTH = 1280;
+    public static final int GAME_HEIGHT = 720;
   }
 
   public static class TetrominoConstants {
@@ -38,11 +41,4 @@ public class Constants {
     public static final int LEFT = 3;
   }
 
-  public static class GameStates {
-    public static final int GAME_OVER_TMP = 0;
-    public static final int PLAYING_TMP = 1;
-    public static final int PAUSED_TMP = 2;
-
-    public static int gameState = PLAYING_TMP;
-  }
 }

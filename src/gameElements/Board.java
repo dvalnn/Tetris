@@ -63,7 +63,7 @@ public class Board {
     return tetromino;
   }
 
-  public void setPaused() {
+  public void disableInputs() {
     tetromino.setDown(false);
     tetromino.setLeft(false);
     tetromino.setRight(false);
