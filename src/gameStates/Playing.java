@@ -14,24 +14,24 @@ import static utils.Constants.Directions.*;
 public class Playing extends State implements StateMethods {
 
   private Board board;
-  private Color boardColor = new Color(15, 18, 23);
+  private Color boardColor = new Color(20, 20, 20);
 
   private final int X_OFFSET = GAME_WIDTH / 2 - BOARD_WIDTH * BOARD_SQUARE / 2;
   private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
 
   public Playing(Game game) {
     super(game);
-    // board = new Board(BOARD_SQUARE, X_OFFSET, Y_OFFSET, boardColor);
+    board = new Board(BOARD_SQUARE, X_OFFSET, Y_OFFSET, boardColor);
   }
 
   @Override
   public void update() {
-    // board.update();
+    board.update();
   }
 
   @Override
   public void render(Graphics g) {
-    // board.render(g);
+    board.render(g);
   }
 
   @Override
@@ -52,13 +52,13 @@ public class Playing extends State implements StateMethods {
 
   @Override
   public void keyPressed(KeyEvent e) {
-     switch (e.getKeyCode()) {
+    switch (e.getKeyCode()) {
       case (KeyEvent.VK_Z):
-        // board.getTetromino().rotate(LEFT);
+        board.getTetromino().rotate(LEFT);
         break;
 
       case (KeyEvent.VK_X):
-        // board.getTetromino().rotate(RIGHT);
+        board.getTetromino().rotate(RIGHT);
         break;
 
       case (KeyEvent.VK_LEFT):
@@ -84,7 +84,7 @@ public class Playing extends State implements StateMethods {
 
   @Override
   public void keyReleased(KeyEvent e) {
-   switch (e.getKeyCode()) {
+    switch (e.getKeyCode()) {
       case (KeyEvent.VK_LEFT):
         // board.getTetromino().setLeft(false);
         break;

@@ -12,16 +12,49 @@ public class Board {
   private Tetromino tetromino;
   private Color[][] board;
 
+  private Point2D origin;
+
   private int size;
-  private Color color = new Color(15, 18, 23);
+  private Color backgroundColor;
+  private Color gridColor;
 
   public Board(int size, int xOffset, int yOffset, Color color) {
     this.size = size;
+    this.origin = new Point(xOffset, yOffset);
     this.board = new Color[size][size];
+    this.backgroundColor = new Color(color.getRGB());
+    this.gridColor = new Color(backgroundColor.brighter().getRGB());
 
-    Point2D spawnPoint = new Point2D.Double(200, 200);
+    this.tetromino = new Tetromino(size, size, this.origin);
+  }
 
-    this.tetromino = new Tetromino(size, size, spawnPoint);
+  public void update() {
+    tetromino.update();
+  }
+
+  public void render(Graphics g) {
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+      for (int col = 0; col < BOARD_WIDTH; col++) {
+        g.setColor(backgroundColor);
+        g.fillRect(
+            (int) (col * size - size / 2) + (int) origin.getX(),
+            (int) (row * size - size / 2) + (int) origin.getY(),
+            size,
+            size);
+        g.setColor(gridColor);
+        g.drawRect(
+            (int) (col * size - size / 2) + (int) origin.getX(),
+            (int) (row * size - size / 2) + (int) origin.getY(),
+            size,
+            size);
+      }
+    }
+
+    tetromino.render(g);
+  }
+
+  public Tetromino getTetromino() {
+    return tetromino;
   }
 
 }

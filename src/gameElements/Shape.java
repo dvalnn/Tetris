@@ -10,14 +10,15 @@ public class Shape {
   protected Point2D[] points;
   protected Color color;
   protected int size;
-  protected int scale;
 
-  public Shape(Point2D center, Point2D[] points, Color color, int size, int scale) {
+  private Point2D renderOffset;
+
+  public Shape(Point2D center, Point2D[] points, Color color, int size, Point2D renderOffset) {
     this.center = center;
     this.points = points;
     this.color = color;
     this.size = size;
-    this.scale = scale;
+    this.renderOffset = renderOffset;
   }
 
   public void move(int x, int y) {
@@ -38,20 +39,26 @@ public class Shape {
   }
 
   public void render(Graphics g) {
+    System.out.println("Rendering shape");
+    System.out.println("Center: " + center);
     for (Point2D point : points) {
+      System.out.println("Point x: " + point);
       g.setColor(color);
       g.fillRect(
-          (int) (point.getX() - size / 2) * scale,
-          (int) (point.getY() - size / 2) * scale,
+          (int) (point.getX() * size - size / 2) + (int) renderOffset.getX(),
+          (int) (point.getY() * size - size / 2) + (int) renderOffset.getY(),
           size,
           size);
       g.setColor(color.brighter());
       g.drawRect(
-          (int) (point.getX() - size / 2) * scale,
-          (int) (point.getY() - size / 2) * scale,
+          (int) (point.getX() * size - size / 2) + (int) renderOffset.getX(),
+          (int) (point.getY() * size - size / 2) + (int) renderOffset.getY(),
           size,
           size);
     }
+    // System.out.println("Color: " + color);
+    // System.out.println("Size: " + size);
+    // System.out.println("End of shape");
 
   }
 

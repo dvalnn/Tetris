@@ -14,18 +14,23 @@ public class Tetromino {
 
   private Shape shape;
 
-  private int horizontalSpeed;
+  private int verticalMoveTick = 0;
+  private int horizontalMoveTick = 0;
+
+  private final int HORIZONTAL_SPEED = 20;
+  private final int VERTICAL_SLOW = 1;
+  private final int VERTICAL_FAST = 20;
+  private final int VERTICAL_INSTANT = 10000;
+
   private int verticalSpeed;
 
   public Tetromino(int size, int scale, Point2D spawnPoint) {
-    this.horizontalSpeed = 0;
-    this.verticalSpeed = 0;
-    this.shape = shapeFactory(size, scale);
-    this.shape.move((int) spawnPoint.getX(), (int) spawnPoint.getY());
+    this.verticalSpeed = VERTICAL_SLOW;
+    this.shape = shapeFactory(size, spawnPoint);
   }
 
-  private Shape shapeFactory(int size, int scale) {
-    return new IShape(size, scale);
+  private Shape shapeFactory(int renderSize, Point2D spawnPoint) {
+    return new IShape(renderSize, spawnPoint);
   }
 
   public void rotate(int direction) {
@@ -41,6 +46,28 @@ public class Tetromino {
     }
 
     shape.rotate(angle);
+  }
+
+  public void move(int direction) {
+    switch (direction) {
+      case LEFT:
+        shape.move(-1, 0);
+        break;
+      case RIGHT:
+        shape.move(1, 0);
+        break;
+      case DOWN:
+        shape.move(0, 1);
+        break;
+    }
+  }
+
+  public void update() {
+    verticalMoveTick++;
+    if (verticalMoveTick * verticalSpeed >= UPS_SET) {
+      verticalMoveTick = 0;
+      move(DOWN);
+    }
   }
 
   public void render(Graphics g) {
