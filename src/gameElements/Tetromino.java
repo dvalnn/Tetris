@@ -15,7 +15,7 @@ public class Tetromino {
 
   private Point position;
   private Point ghostPos;
-  private Point spawnPosition;
+  private Point boardOrigin;
 
   private int size;
 
@@ -45,8 +45,8 @@ public class Tetromino {
 
   private Board gameBoard;
 
-  public Tetromino(Board gameBoard, int x, int y, int size) {
-    spawnPosition = new Point(x, y);
+  public Tetromino(Board gameBoard, Point boardOrigin, int size) {
+    this.boardOrigin = new Point(boardOrigin);
 
     this.size = size;
     this.gameBoard = gameBoard;
@@ -58,7 +58,7 @@ public class Tetromino {
   }
 
   private void initTetromino() {
-    position = new Point(spawnPosition);
+    position = new Point(BOARD_WIDTH / 2 - 1, 0);
 
     verticalMoveSpeed = DEFAULT_MOVE_SPEED;
 
@@ -281,20 +281,20 @@ public class Tetromino {
         if (shape[row][col] == 1) {
           // draw the tetromino block
           g.setColor(color);
-          g.fillRect((position.x + col) * size, (position.y + row) * size, size, size);
+          g.fillRect((position.x + col) * size + boardOrigin.x, (position.y + row) * size + boardOrigin.y, size, size);
           // draw the tetromino block border
           g.setColor(Color.GRAY);
-          g.drawRect((position.x + col) * size, (position.y + row) * size, size, size);
+          g.drawRect((position.x + col) * size + boardOrigin.x, (position.y + row) * size + boardOrigin.y, size, size);
 
           if (ghostPos.equals(position))
             continue;
 
           // draw the ghost piece
           g.setColor(ghostColor);
-          g.fillRect((ghostPos.x + col) * size, (ghostPos.y + row) * size, size, size);
+          g.fillRect((ghostPos.x + col) * size + boardOrigin.x, (ghostPos.y + row) * size + boardOrigin.y, size, size);
           // draw the ghost piece border
           // g.setColor(Color.GRAY);
-          // g.drawRect((ghostPos.x + col) * size, (ghostPos.y + row) * size, size, size);
+          // g.drawRect((ghostPos.x + col) * size + boardOrigin.x, (ghostPos.y + row) * size + boardOrigin.y, size, size);
         }
       }
     }

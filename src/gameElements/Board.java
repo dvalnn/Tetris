@@ -16,16 +16,15 @@ public class Board {
 
   public Board(int squareSize, int offsetX, int offsetY, Color bkgColor) {
     this.squareSize = squareSize;
-    origin = new Point (offsetX, offsetY);
+    origin = new Point(offsetX, offsetY);
 
     // this.bkgColor = bkgColor;
-    // int tetroX = (offsetX + BOARD_WIDTH) / 2;
 
     // squareSize is the size of each square in the tetromino
     // tetroX is the initial x position of the tetromino
     // offsetY is the initial y position of the tetromino
     // subtracting squareSize from tetroX centers the tetromino
-    this.tetromino = new Tetromino(this, (int)(offsetX + BOARD_WIDTH)/2, offsetY, squareSize);
+    this.tetromino = new Tetromino(this, origin, squareSize);
 
     // init the board with a black background
     for (int row = 0; row < BOARD_HEIGHT; row++) {
