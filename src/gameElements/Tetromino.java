@@ -2,6 +2,7 @@ package gameElements;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.Random;
 
 import static utils.Constants.GameConstants.*;
@@ -11,14 +12,10 @@ import static utils.Constants.Directions.*;
 import gameStates.GameState;
 
 public class Tetromino {
-  private int x;
-  private int y;
 
-  private int ghostX;
-  private int ghostY;
-
-  private int xSpawn;
-  private int ySpawn;
+  private Point position;
+  private Point ghostPos;
+  private Point spawnPosition;
 
   private int size;
 
@@ -34,11 +31,11 @@ public class Tetromino {
   private int verticalMoveSpeed = 1;
   private int horizontalMoveTick = 0;
   private int horizontalMoveSpeed = 20;
-  private final int moveDelay = UPS_SET;
 
+  private final int moveDelay = UPS_SET;
   private final int DEFAULT_MOVE_SPEED = 1;
   private final int FAST_MOVE_SPEED = 10;
-  private final int INTANT_DROP_SPEED = 5000;
+  private final int INSTANT_DROP_SPEED = 5000;
 
   private int board_pixel_width;
   private int board_pixel_height;
@@ -49,22 +46,19 @@ public class Tetromino {
   private Board gameBoard;
 
   public Tetromino(Board gameBoard, int x, int y, int size) {
-    this.xSpawn = x;
-    this.ySpawn = y;
-    this.size = size;
+    spawnPosition = new Point(x, y);
 
+    this.size = size;
     this.gameBoard = gameBoard;
 
     initTetromino();
 
     board_pixel_width = BOARD_WIDTH * size;
     board_pixel_height = BOARD_HEIGHT * size;
-
   }
 
   private void initTetromino() {
-    x = xSpawn;
-    y = ySpawn;
+    position = new Point(spawnPosition);
 
     verticalMoveSpeed = DEFAULT_MOVE_SPEED;
 
@@ -93,34 +87,37 @@ public class Tetromino {
         rotate(RIGHT);
       }
     }
+
+    // System.out.println("Tetromino initialized on position: " + position.x + ", " + position.y);
   }
 
-  private boolean checkVerticalColision(int xCord, int yCord) {
-    if ((yCord + size * (shape.length + 1) > board_pixel_height))
+  private boolean checkVerticalColision(Point point) {
+    if ((size * (point.y + shape.length + 1) > board_pixel_height))
       return true;
 
     for (int row = 0; row < shape.length; row++) {
       for (int col = 0; col < shape[row].length; col++) {
         if (shape[row][col] == 1
-            && gameBoard.getBoard()[yCord / size + row + 1][xCord / size + col] != Color.BLACK)
+            && gameBoard.getBoard()[point.y + row + 1][point.x + col] != Color.BLACK)
           return true;
       }
     }
     return false;
   }
 
-  private boolean checkHorizontalColision(int dir) {
-    if (dir == RIGHT && x + size * (shape[0].length + 1) > board_pixel_width)
+  private boolean checkHorizontalColision(Point point, int dir) {
+    if (dir == RIGHT && size * (point.x + shape[0].length + 1) > board_pixel_width)
       return true;
 
-    if (dir == LEFT && x - size < 0)
+    if (dir == LEFT && size * (point.x - 1) < 0)
       return true;
 
     int xDelta = dir == RIGHT ? 1 : -1;
 
     for (int row = 0; row < shape.length; row++) {
       for (int col = 0; col < shape[row].length; col++) {
-        if (shape[row][col] == 1 && gameBoard.getBoard()[y / size + row][x / size + col + xDelta] != Color.BLACK)
+        if (shape[row][col] == 1
+            && gameBoard.getBoard()[point.y + row][point.x + col + xDelta] != Color.BLACK)
           return true;
       }
     }
@@ -143,10 +140,7 @@ public class Tetromino {
         return;
     }
 
-    int xCord = x / size;
-    int yCord = y / size;
-    // check if rotation is possible
-    if ((xCord + rotated[0].length > BOARD_WIDTH) || (yCord +
+    if ((position.x + rotated[0].length > BOARD_WIDTH) || (position.y +
         rotated.length > BOARD_HEIGHT)) {
       return;
     }
@@ -154,7 +148,7 @@ public class Tetromino {
     // check if rotation colides with other pieces
     for (int row = 0; row < rotated.length; row++) {
       for (int col = 0; col < rotated[row].length; col++) {
-        if ((rotated[row][col] != 0) && (gameBoard.getBoard()[yCord + row][xCord
+        if ((rotated[row][col] != 0) && (gameBoard.getBoard()[position.y + row][position.x
             + col] != Color.black)) {
           return;
         }
@@ -199,19 +193,19 @@ public class Tetromino {
         break;
 
       case (RIGHT):
-        if (!checkHorizontalColision(RIGHT))
-          x += size;
+        if (!checkHorizontalColision(position, RIGHT))
+          position.x += 1;
         break;
 
       case (DOWN):
-        colision = checkVerticalColision(x, y);
+        colision = checkVerticalColision(position);
         if (!colision)
-          y += size;
+          position.y += 1;
         break;
 
       case (LEFT):
-        if (!checkHorizontalColision(LEFT))
-          x -= size;
+        if (!checkHorizontalColision(position, LEFT))
+          position.x -= 1;
         break;
 
       default:
@@ -221,15 +215,10 @@ public class Tetromino {
 
   // calculate the ghost piece position
   public void calculateGhostPiece() {
-    ghostX = x;
-    ghostY = y;
+    ghostPos = new Point(position);
 
-    // first check on the current position
-    boolean ghostColision = checkVerticalColision(ghostX, ghostY);
-
-    while (!ghostColision) {
-      ghostY += size;
-      ghostColision = checkVerticalColision(ghostX, ghostY);
+    while (!checkVerticalColision(ghostPos)) {
+      ghostPos.y += 1;
     }
   }
 
@@ -243,7 +232,9 @@ public class Tetromino {
   public void update() {
     if (colision) {
 
-      if (y <= 0) {
+      // System.out.println("Tetromino colided on position: " + position.x + ", " + position.y);
+
+      if (position.y <= 0) {
         GameState.state = GameState.GAME_OVER;
         return;
       }
@@ -267,10 +258,10 @@ public class Tetromino {
     }
 
     if (drop)
-      verticalMoveSpeed = INTANT_DROP_SPEED;
-    else if (down && verticalMoveSpeed != INTANT_DROP_SPEED)
+      verticalMoveSpeed = INSTANT_DROP_SPEED;
+    else if (down && verticalMoveSpeed != INSTANT_DROP_SPEED)
       verticalMoveSpeed = FAST_MOVE_SPEED;
-    else if (verticalMoveSpeed != INTANT_DROP_SPEED)
+    else if (verticalMoveSpeed != INSTANT_DROP_SPEED)
       verticalMoveSpeed = DEFAULT_MOVE_SPEED;
 
     if (verticalMoveTick * verticalMoveSpeed >= moveDelay) {
@@ -290,20 +281,20 @@ public class Tetromino {
         if (shape[row][col] == 1) {
           // draw the tetromino block
           g.setColor(color);
-          g.fillRect(x + col * size, y + row * size, size, size);
+          g.fillRect((position.x + col) * size, (position.y + row) * size, size, size);
           // draw the tetromino block border
           g.setColor(Color.GRAY);
-          g.drawRect(x + col * size, y + row * size, size, size);
+          g.drawRect((position.x + col) * size, (position.y + row) * size, size, size);
 
-          if (ghostX == x && ghostY == y)
+          if (ghostPos.equals(position))
             continue;
 
           // draw the ghost piece
           g.setColor(ghostColor);
-          g.fillRect(ghostX + col * size, ghostY + row * size, size, size);
+          g.fillRect((ghostPos.x + col) * size, (ghostPos.y + row) * size, size, size);
           // draw the ghost piece border
           // g.setColor(Color.GRAY);
-          // g.drawRect(ghostX + col * size, ghostY + row * size, size, size);
+          // g.drawRect((ghostPos.x + col) * size, (ghostPos.y + row) * size, size, size);
         }
       }
     }
@@ -311,11 +302,11 @@ public class Tetromino {
 
   // * GETTERS AND SETTERS
   public int getX() {
-    return x;
+    return position.x;
   }
 
   public int getY() {
-    return y;
+    return position.y;
   }
 
   public void setRight(boolean right) {
