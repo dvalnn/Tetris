@@ -14,8 +14,10 @@ public class Game implements Runnable {
   private GameWindow gameWindow;
   private GamePanel gamePanel;
   private Thread gameThread;
-  private Playing playing;
+
+
   private Menu menu;
+  private Playing playing;
   private GameOver gameOver;
 
   private boolean exit = false;
