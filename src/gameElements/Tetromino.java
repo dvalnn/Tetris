@@ -24,6 +24,8 @@ public class Tetromino {
 
   private int verticalSpeed;
 
+  private boolean right, left, down, drop;
+
   public Tetromino(int size, int scale, Point2D spawnPoint) {
     this.verticalSpeed = VERTICAL_SLOW;
     this.shape = shapeFactory(size, spawnPoint);
@@ -68,10 +70,28 @@ public class Tetromino {
       verticalMoveTick = 0;
       move(DOWN);
     }
+
+    horizontalMoveTick++;
+    if (horizontalMoveTick * HORIZONTAL_SPEED >= UPS_SET) {
+      horizontalMoveTick = 0;
+      if (right && !left) {
+        move(RIGHT);
+      } else if (left && !right) {
+        move(LEFT);
+      }
+    }
   }
 
   public void render(Graphics g) {
     shape.render(g);
+  }
+
+  public void setRight(boolean right) {
+    this.right = right;
+  }
+
+  public void setLeft(boolean left) {
+    this.left = left;
   }
 
 }
