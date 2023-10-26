@@ -41,14 +41,17 @@ public class Shape {
   public void render(Graphics g) {
     // System.out.println("Rendering shape");
     // System.out.println("Center: " + center);
+
     for (Point2D point : body) {
       // System.out.println("Point x: " + point);
+
       g.setColor(color);
       g.fillRect(
           (int) (point.getX() * size - size / 2) + (int) renderOffset.getX(),
           (int) (point.getY() * size - size / 2) + (int) renderOffset.getY(),
           size,
           size);
+
       g.setColor(color.brighter());
       g.drawRect(
           (int) (point.getX() * size - size / 2) + (int) renderOffset.getX(),
