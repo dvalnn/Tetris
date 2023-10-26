@@ -26,7 +26,7 @@ public class Tetromino {
   private int verticalSpeed;
 
   private boolean right, left, down, drop;
-  private boolean canMove = true;
+  private boolean active = true;
 
   public Tetromino(int size, int scale, Point2D spawnPoint, Board board) {
     this.verticalSpeed = VERTICAL_SLOW;
@@ -58,7 +58,7 @@ public class Tetromino {
   }
 
   private boolean checkVerticalColision() {
-    canMove = false;
+    active = false;
 
     if (shape.getMaxY() + 1 >= BOARD_HEIGHT)
       return true;
@@ -71,7 +71,7 @@ public class Tetromino {
       }
     }
 
-    canMove = true;
+    active = true;
     return false;
   }
 
@@ -130,7 +130,7 @@ public class Tetromino {
   }
 
   public void update() {
-    if (!canMove)
+    if (!active)
       return;
 
     if (drop) {
@@ -178,8 +178,12 @@ public class Tetromino {
     this.drop = drop;
   }
 
-  public void setCanMove(boolean canMove) {
-    this.canMove = canMove;
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+  public boolean isActive() {
+    return active;
   }
 
   public Point2D[] getBody() {

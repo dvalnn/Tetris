@@ -30,6 +30,8 @@ public class Board {
 
   public void update() {
     tetromino.update();
+    if (!tetromino.isActive())
+      ;
   }
 
   public void render(Graphics g) {
