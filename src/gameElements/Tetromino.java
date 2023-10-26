@@ -49,7 +49,7 @@ public class Tetromino {
     for (Point2D point : shape.getBody()) {
       int x = (int) point.getX() + delta;
       int y = (int) point.getY();
-      if (board.getBoard()[y][x] != null) {
+      if (board.getBoard()[y][x] != board.getBackgroundColor()) {
         return true;
       }
     }
@@ -66,7 +66,7 @@ public class Tetromino {
     for (Point2D point : shape.getBody()) {
       int x = (int) point.getX();
       int y = (int) point.getY() + 1;
-      if (board.getBoard()[y][x] != null) {
+      if (board.getBoard()[y][x] != board.getBackgroundColor()) {
         return true;
       }
     }
@@ -85,8 +85,9 @@ public class Tetromino {
     for (Point2D point : shape.getBody()) {
       int x = (int) point.getX();
       int y = (int) point.getY();
-      if (board.getBoard()[y][x] != null)
+      if (board.getBoard()[y][x] != board.getBackgroundColor()) {
         return true;
+      }
     }
 
     return false;
@@ -106,7 +107,9 @@ public class Tetromino {
 
     shape.rotate(angle);
 
-    if (checkRotationColision())
+    boolean rotationBlocked = checkRotationColision();
+    System.out.println("Rotation blocked: " + rotationBlocked);
+    if (rotationBlocked)
       shape.rotate(-angle);
   }
 
@@ -186,8 +189,8 @@ public class Tetromino {
     return active;
   }
 
-  public Point2D[] getBody() {
-    return shape.getBody();
+  public Shape getShape() {
+    return shape;
   }
 
 }
