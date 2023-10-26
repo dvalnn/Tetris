@@ -25,6 +25,7 @@ public class Tetromino {
   private int verticalSpeed;
 
   private boolean right, left, down, drop;
+  private boolean canMove = true;
 
   public Tetromino(int size, int scale, Point2D spawnPoint) {
     this.verticalSpeed = VERTICAL_SLOW;
@@ -33,6 +34,15 @@ public class Tetromino {
 
   private Shape shapeFactory(int renderSize, Point2D spawnPoint) {
     return new IShape(renderSize, spawnPoint);
+  }
+
+  private boolean checkVerticalColision() {
+    for (Point2D point : shape.getBody()) {
+      if (point.getY() + 1 >= BOARD_HEIGHT) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public void rotate(int direction) {
@@ -65,10 +75,23 @@ public class Tetromino {
   }
 
   public void update() {
+    if (!canMove)
+      return;
+
+    if (drop) {
+      verticalSpeed = VERTICAL_INSTANT;
+    } else if (down && verticalSpeed != VERTICAL_INSTANT) {
+      verticalSpeed = VERTICAL_FAST;
+    } else if (verticalSpeed != VERTICAL_INSTANT) {
+      verticalSpeed = VERTICAL_SLOW;
+    }
+
     verticalMoveTick++;
     if (verticalMoveTick * verticalSpeed >= UPS_SET) {
       verticalMoveTick = 0;
-      move(DOWN);
+      canMove = !checkVerticalColision();
+      if (canMove)
+        move(DOWN);
     }
 
     horizontalMoveTick++;
@@ -92,6 +115,18 @@ public class Tetromino {
 
   public void setLeft(boolean left) {
     this.left = left;
+  }
+
+  public void setDown(boolean down) {
+    this.down = down;
+  }
+
+  public void setDrop(boolean drop) {
+    this.drop = drop;
+  }
+
+  public boolean isCanMove() {
+    return canMove;
   }
 
 }

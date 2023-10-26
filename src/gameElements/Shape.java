@@ -65,4 +65,8 @@ public class Shape {
 
   }
 
+  public Point2D[] getBody() {
+    return body;
+  }
+
 }

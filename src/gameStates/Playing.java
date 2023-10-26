@@ -66,7 +66,7 @@ public class Playing extends State implements StateMethods {
         break;
 
       case (KeyEvent.VK_DOWN):
-        // board.getTetromino().setDown(true);
+        board.getTetromino().setDown(true);
         break;
 
       case (KeyEvent.VK_RIGHT):
@@ -74,7 +74,7 @@ public class Playing extends State implements StateMethods {
         break;
 
       case (KeyEvent.VK_SPACE):
-        // board.getTetromino().setDrop(true);
+        board.getTetromino().setDrop(true);
         break;
 
       default:
@@ -90,7 +90,7 @@ public class Playing extends State implements StateMethods {
         break;
 
       case (KeyEvent.VK_DOWN):
-        // board.getTetromino().setDown(false);
+        board.getTetromino().setDown(false);
         break;
 
       case (KeyEvent.VK_RIGHT):
@@ -98,7 +98,7 @@ public class Playing extends State implements StateMethods {
         break;
 
       case (KeyEvent.VK_SPACE):
-        // board.getTetromino().setDrop(false);
+        board.getTetromino().setDrop(false);
         break;
 
       default:
