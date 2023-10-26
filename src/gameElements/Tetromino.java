@@ -5,7 +5,6 @@ import java.awt.geom.Point2D;
 import java.util.Random;
 
 import static utils.Constants.GameConstants.*;
-import static utils.Constants.TetrominoConstants.*;
 import static utils.Constants.Directions.*;
 
 import gameStates.GameState;
@@ -23,15 +22,17 @@ public class Tetromino {
   private final int VERTICAL_FAST = 20;
   private final int VERTICAL_INSTANT = 10000;
 
-  private int verticalSpeed;
+  private int verticalSpeed = VERTICAL_SLOW;
 
   private boolean right, left, down, drop;
   private boolean active = true;
 
-  public Tetromino(int size, int scale, Point2D spawnPoint, Board board) {
-    this.verticalSpeed = VERTICAL_SLOW;
-    this.shape = shapeFactory(size, spawnPoint);
+  public Tetromino(int renderSize, Point2D renderOrigin, Board board) {
     this.board = board;
+    shape = shapeFactory(renderSize, renderOrigin);
+
+    System.out.println("[Tetromino] Hello!");
+    System.out.println("[Tetromino] Shape: " + shape);
   }
 
   private Shape shapeFactory(int renderSize, Point2D spawnPoint) {
@@ -46,7 +47,7 @@ public class Tetromino {
     else if (dir == RIGHT && shape.getMaxX() + 1 >= BOARD_WIDTH)
       return true;
 
-    for (Point2D point : shape.getBody()) {
+    for (Point2D point : shape.getShape()) {
       int x = (int) point.getX() + delta;
       int y = (int) point.getY();
       if (board.getBoard()[y][x] != board.getBackgroundColor()) {
@@ -63,7 +64,7 @@ public class Tetromino {
     if (shape.getMaxY() + 1 >= BOARD_HEIGHT)
       return true;
 
-    for (Point2D point : shape.getBody()) {
+    for (Point2D point : shape.getShape()) {
       int x = (int) point.getX();
       int y = (int) point.getY() + 1;
       if (board.getBoard()[y][x] != board.getBackgroundColor()) {
@@ -82,7 +83,7 @@ public class Tetromino {
     if (shape.getMinX() < 0 || shape.getMaxX() >= BOARD_WIDTH)
       return true;
 
-    for (Point2D point : shape.getBody()) {
+    for (Point2D point : shape.getShape()) {
       int x = (int) point.getX();
       int y = (int) point.getY();
       if (board.getBoard()[y][x] != board.getBackgroundColor()) {
