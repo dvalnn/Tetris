@@ -34,7 +34,7 @@ public abstract class Shape {
       this.shape[i] = (Point2D) points[i].clone();
     }
 
-    this.color = color;
+    this.color = new Color(color.getRGB());
     this.renderSize = renderSize;
     this.renderOffset = renderOrigin;
 
