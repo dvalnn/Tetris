@@ -15,7 +15,6 @@ public class IShape extends Shape {
   private static final Point2D ORIGIN = new Point2D.Double(1.5, 0.5);
   private static final Color COLOR = new Color(0, 255, 255);
 
-  private boolean vertical = false;
   private boolean horizontal = true;
 
   public IShape(int renderSize, Point2D renderOffset) {
@@ -40,12 +39,8 @@ public class IShape extends Shape {
 
   @Override
   public void rotate(double angle) {
-
     rotatePoints(angle);
-
-    vertical = !vertical;
     horizontal = !horizontal;
-
     calculateMinMaxCoords();
   }
 }
