@@ -40,17 +40,6 @@ public class IShape extends Shape {
 
   @Override
   public void rotate(double angle) {
-    System.out.println("----------------------");
-    System.out.println("Before rotation");
-    System.out.println("isVertical: " + vertical);
-    System.out.println("isHorizontal: " + horizontal);
-    System.out.println("minX " + minX + " minY " + minY);
-    System.out.println("maxX " + maxX + " maxY " + maxY);
-    System.out.println("Points:");
-
-    for (Point2D point : body) {
-      System.out.println(point);
-    }
 
     rotatePoints(angle);
 
@@ -58,16 +47,5 @@ public class IShape extends Shape {
     horizontal = !horizontal;
 
     calculateMinMaxCoords();
-
-    System.out.println("\nAfter rotation");
-    System.out.println("isVertical: " + vertical);
-    System.out.println("isHorizontal: " + horizontal);
-    System.out.println("minX " + minX + " maxX " + maxX);
-    System.out.println("minY " + minY + " maxY " + maxY);
-    System.out.println("Points:");
-
-    for (Point2D point : body) {
-      System.out.println(point);
-    }
   }
 }
