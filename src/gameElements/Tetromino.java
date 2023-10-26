@@ -13,6 +13,7 @@ import gameStates.GameState;
 public class Tetromino {
 
   private Shape shape;
+  private Board board;
 
   private int verticalMoveTick = 0;
   private int horizontalMoveTick = 0;
@@ -27,13 +28,43 @@ public class Tetromino {
   private boolean right, left, down, drop;
   private boolean canMove = true;
 
-  public Tetromino(int size, int scale, Point2D spawnPoint) {
+  public Tetromino(int size, int scale, Point2D spawnPoint, Board board) {
     this.verticalSpeed = VERTICAL_SLOW;
     this.shape = shapeFactory(size, spawnPoint);
+    this.board = board;
   }
 
   private Shape shapeFactory(int renderSize, Point2D spawnPoint) {
     return new IShape(renderSize, spawnPoint);
+  }
+
+  private boolean checkHorizontalColision(int dir) {
+    int minBodyX = BOARD_WIDTH;
+    int maxBodyX = 0;
+    int delta = dir == LEFT ? -1 : 1;
+
+    for (Point2D point : shape.getBody()) {
+
+      // ! crashed here -- index out of bounds
+      if (board.getBoard()[(int) point.getY()][(int) point.getX() + delta] != null) {
+        return true;
+      }
+
+      if (point.getX() < minBodyX) {
+        minBodyX = (int) point.getX();
+      }
+      if (point.getX() > maxBodyX) {
+        maxBodyX = (int) point.getX();
+      }
+    }
+
+    if (dir == LEFT && minBodyX <= 0) {
+      return true;
+    } else if (dir == RIGHT && maxBodyX >= BOARD_WIDTH - 1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   private boolean checkVerticalColision() {
@@ -63,11 +94,15 @@ public class Tetromino {
   public void move(int direction) {
     switch (direction) {
       case LEFT:
-        shape.move(-1, 0);
+        if (!checkHorizontalColision(LEFT))
+          shape.move(-1, 0);
         break;
+
       case RIGHT:
-        shape.move(1, 0);
+        if (!checkHorizontalColision(RIGHT))
+          shape.move(1, 0);
         break;
+
       case DOWN:
         shape.move(0, 1);
         break;
@@ -125,8 +160,12 @@ public class Tetromino {
     this.drop = drop;
   }
 
-  public boolean isCanMove() {
-    return canMove;
+  public void setCanMove(boolean canMove) {
+    this.canMove = canMove;
+  }
+
+  public Point2D[] getBody() {
+    return shape.getBody();
   }
 
 }

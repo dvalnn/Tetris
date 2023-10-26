@@ -25,7 +25,7 @@ public class Board {
     this.backgroundColor = new Color(color.getRGB());
     this.gridColor = new Color(backgroundColor.brighter().getRGB());
 
-    this.tetromino = new Tetromino(size, size, this.origin);
+    this.tetromino = new Tetromino(size, size, this.origin, this);
   }
 
   public void update() {
@@ -55,6 +55,10 @@ public class Board {
 
   public Tetromino getTetromino() {
     return tetromino;
+  }
+
+  public Color[][] getBoard() {
+    return board;
   }
 
 }
