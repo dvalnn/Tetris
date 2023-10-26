@@ -29,7 +29,7 @@ public class Board {
   }
 
   public void update() {
-    // tetromino.update();
+    tetromino.update();
   }
 
   public void render(Graphics g) {
