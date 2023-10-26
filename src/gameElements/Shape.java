@@ -7,27 +7,37 @@ import java.awt.geom.Point2D;
 public abstract class Shape {
 
   protected Point2D center;
-  protected Point2D[] body;
+  protected Point2D[] shape;
   protected Color color;
-  protected int size;
 
   protected int minX, maxX, minY, maxY;
 
+  private int renderSize;
   private Point2D renderOffset;
-
-  public Shape(Point2D center, Point2D[] points, Color color, int size, Point2D renderOffset) {
-    this.center = center;
-    this.body = points;
-    this.color = color;
-    this.size = size;
-    this.renderOffset = renderOffset;
-  }
 
   protected abstract void calculateMinMaxCoords();
 
+  // * Shape specific way of rotating
+  // * can be used as rotatePoints() wrapper
+  public abstract void rotate(double angle);
+
+  public Shape(
+      Point2D center,
+      Point2D[] points,
+      Color color,
+      int renderSize,
+      Point2D renderOrigin) {
+
+    this.center = center;
+    this.shape = points;
+    this.color = color;
+    this.renderSize = renderSize;
+    this.renderOffset = renderOrigin;
+  }
+
   public void move(int x, int y) {
     center.setLocation(center.getX() + x, center.getY() + y);
-    for (Point2D point : body) {
+    for (Point2D point : shape) {
       point.setLocation(point.getX() + x, point.getY() + y);
     }
 
@@ -37,10 +47,8 @@ public abstract class Shape {
     maxY += y;
   }
 
-  public abstract void rotate(double angle);
-
   protected void rotatePoints(double angle) {
-    for (Point2D point : body) {
+    for (Point2D point : shape) {
       double x = point.getX() - center.getX();
       double y = point.getY() - center.getY();
       double newX = x * Math.cos(angle) - y * Math.sin(angle);
@@ -50,18 +58,18 @@ public abstract class Shape {
   }
 
   public void render(Graphics g) {
-    for (Point2D point : body) {
+    for (Point2D point : shape) {
       g.setColor(color);
       g.fillRect(
-          (int) (point.getX() * size - size / 2) + (int) renderOffset.getX(),
-          (int) (point.getY() * size - size / 2) + (int) renderOffset.getY(),
-          size,
-          size);
+          (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),
+          (int) (point.getY() * renderSize - renderSize / 2) + (int) renderOffset.getY(),
+          renderSize,
+          renderSize);
     }
   }
 
-  public Point2D[] getBody() {
-    return body;
+  public Point2D[] getShape() {
+    return shape;
   }
 
   public Color getColor() {
