@@ -7,27 +7,51 @@ import java.awt.geom.Point2D;
 public abstract class Shape {
 
   protected Point2D center;
-  protected Point2D[] body;
+  protected Point2D[] shape;
   protected Color color;
-  protected int size;
 
   protected int minX, maxX, minY, maxY;
 
+  private int renderSize;
   private Point2D renderOffset;
-
-  public Shape(Point2D center, Point2D[] points, Color color, int size, Point2D renderOffset) {
-    this.center = center;
-    this.body = points;
-    this.color = color;
-    this.size = size;
-    this.renderOffset = renderOffset;
-  }
 
   protected abstract void calculateMinMaxCoords();
 
+  // * Shape specific way of rotating
+  // * can be used as rotatePoints() wrapper
+  public abstract void rotate(double angle);
+
+  public Shape(
+      Point2D center,
+      Point2D[] points,
+      Color color,
+      int renderSize,
+      Point2D renderOrigin) {
+
+    this.center = (Point2D) center.clone();
+    this.shape = new Point2D[points.length];
+    for (int i = 0; i < points.length; i++) {
+      this.shape[i] = (Point2D) points[i].clone();
+    }
+
+    this.color = new Color(color.getRGB());
+    this.renderSize = renderSize;
+    this.renderOffset = renderOrigin;
+
+    // System.out.println("[Shape] Hello!");
+    // System.out.println("[Shape] Center: " + center);
+    // System.out.println("[Shape] Points: ");
+    // for (Point2D point : points) {
+    // System.out.println("\t" + point);
+    // }
+    // System.out.println("[Shape] Color: " + color);
+    // System.out.println("[Shape] Render size: " + renderSize);
+    // System.out.println("[Shape] Render origin: " + renderOrigin);
+  }
+
   public void move(int x, int y) {
     center.setLocation(center.getX() + x, center.getY() + y);
-    for (Point2D point : body) {
+    for (Point2D point : shape) {
       point.setLocation(point.getX() + x, point.getY() + y);
     }
 
@@ -37,47 +61,33 @@ public abstract class Shape {
     maxY += y;
   }
 
-  public abstract void rotate(double angle);
-
   protected void rotatePoints(double angle) {
-    for (Point2D point : body) {
+    for (Point2D point : shape) {
       double x = point.getX() - center.getX();
       double y = point.getY() - center.getY();
       double newX = x * Math.cos(angle) - y * Math.sin(angle);
       double newY = x * Math.sin(angle) + y * Math.cos(angle);
-      point.setLocation(newX + center.getX(), newY + center.getY());
+      point.setLocation(Math.round(newX + center.getX()), Math.round(newY + center.getY()));
     }
   }
 
   public void render(Graphics g) {
-    // System.out.println("Rendering shape");
-    // System.out.println("Center: " + center);
-
-    for (Point2D point : body) {
-      // System.out.println("Point x: " + point);
-
+    for (Point2D point : shape) {
       g.setColor(color);
       g.fillRect(
-          (int) (point.getX() * size - size / 2) + (int) renderOffset.getX(),
-          (int) (point.getY() * size - size / 2) + (int) renderOffset.getY(),
-          size,
-          size);
-
-      g.setColor(color.brighter());
-      g.drawRect(
-          (int) (point.getX() * size - size / 2) + (int) renderOffset.getX(),
-          (int) (point.getY() * size - size / 2) + (int) renderOffset.getY(),
-          size,
-          size);
+          (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),
+          (int) (point.getY() * renderSize - renderSize / 2) + (int) renderOffset.getY(),
+          renderSize,
+          renderSize);
     }
-    // System.out.println("Color: " + color);
-    // System.out.println("Size: " + size);
-    // System.out.println("End of shape");
-
   }
 
-  public Point2D[] getBody() {
-    return body;
+  public Point2D[] getShape() {
+    return shape;
+  }
+
+  public Color getColor() {
+    return color;
   }
 
   public int getMinX() {
