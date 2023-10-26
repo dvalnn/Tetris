@@ -28,11 +28,25 @@ public abstract class Shape {
       int renderSize,
       Point2D renderOrigin) {
 
-    this.center = center;
-    this.shape = points;
+    this.center = (Point2D) center.clone();
+    this.shape = new Point2D[points.length];
+    for (int i = 0; i < points.length; i++) {
+      this.shape[i] = (Point2D) points[i].clone();
+    }
+
     this.color = color;
     this.renderSize = renderSize;
     this.renderOffset = renderOrigin;
+
+    // System.out.println("[Shape] Hello!");
+    // System.out.println("[Shape] Center: " + center);
+    // System.out.println("[Shape] Points: ");
+    // for (Point2D point : points) {
+    // System.out.println("\t" + point);
+    // }
+    // System.out.println("[Shape] Color: " + color);
+    // System.out.println("[Shape] Render size: " + renderSize);
+    // System.out.println("[Shape] Render origin: " + renderOrigin);
   }
 
   public void move(int x, int y) {
