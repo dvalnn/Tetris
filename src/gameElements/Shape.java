@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
-public class Shape {
+public abstract class Shape {
 
   protected Point2D center;
   protected Point2D[] body;
   protected Color color;
   protected int size;
+
+  protected int minX, maxX, minY, maxY;
 
   private Point2D renderOffset;
 
@@ -21,14 +23,23 @@ public class Shape {
     this.renderOffset = renderOffset;
   }
 
+  protected abstract void calculateMinMaxCoords();
+
   public void move(int x, int y) {
     center.setLocation(center.getX() + x, center.getY() + y);
     for (Point2D point : body) {
       point.setLocation(point.getX() + x, point.getY() + y);
     }
+
+    minX += x;
+    maxX += x;
+    minY += y;
+    maxY += y;
   }
 
-  public void rotate(double angle) {
+  public abstract void rotate(double angle);
+
+  protected void rotatePoints(double angle) {
     for (Point2D point : body) {
       double x = point.getX() - center.getX();
       double y = point.getY() - center.getY();
@@ -67,6 +78,22 @@ public class Shape {
 
   public Point2D[] getBody() {
     return body;
+  }
+
+  public int getMinX() {
+    return minX;
+  }
+
+  public int getMaxX() {
+    return maxX;
+  }
+
+  public int getMinY() {
+    return minY;
+  }
+
+  public int getMaxY() {
+    return maxY;
   }
 
 }

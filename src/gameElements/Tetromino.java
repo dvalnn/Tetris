@@ -39,40 +39,42 @@ public class Tetromino {
   }
 
   private boolean checkHorizontalColision(int dir) {
-    int minBodyX = BOARD_WIDTH;
-    int maxBodyX = 0;
     int delta = dir == LEFT ? -1 : 1;
 
-    for (Point2D point : shape.getBody()) {
+    if (dir == LEFT && shape.getMinX() <= 0)
+      return true;
+    else if (dir == RIGHT && shape.getMaxX() >= BOARD_WIDTH)
+      return true;
 
-      // ! crashed here -- index out of bounds
-      if (board.getBoard()[(int) point.getY()][(int) point.getX() + delta] != null) {
+    for (Point2D point : shape.getBody()) {
+      int x = (int) point.getX() + delta;
+      int y = (int) point.getY();
+      if (board.getBoard()[y][x] != null) {
         return true;
       }
-
-      if (point.getX() < minBodyX) {
-        minBodyX = (int) point.getX();
-      }
-      if (point.getX() > maxBodyX) {
-        maxBodyX = (int) point.getX();
-      }
     }
 
-    if (dir == LEFT && minBodyX <= 0) {
-      return true;
-    } else if (dir == RIGHT && maxBodyX >= BOARD_WIDTH - 1) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
   }
 
   private boolean checkVerticalColision() {
+    if (shape.getMinY() <= 0)
+      return true;
+
+    canMove = false;
+
+    if (shape.getMaxY() >= BOARD_HEIGHT)
+      return true;
+
     for (Point2D point : shape.getBody()) {
-      if (point.getY() + 1 >= BOARD_HEIGHT) {
+      int x = (int) point.getX();
+      int y = (int) point.getY() + 1;
+      if (board.getBoard()[y][x] != null) {
         return true;
       }
     }
+
+    canMove = true;
     return false;
   }
 
@@ -89,6 +91,11 @@ public class Tetromino {
     }
 
     shape.rotate(angle);
+
+    if (checkHorizontalColision(LEFT) ||
+        checkHorizontalColision(RIGHT) ||
+        checkVerticalColision())
+      shape.rotate(-angle);
   }
 
   public void move(int direction) {
@@ -124,9 +131,7 @@ public class Tetromino {
     verticalMoveTick++;
     if (verticalMoveTick * verticalSpeed >= UPS_SET) {
       verticalMoveTick = 0;
-      canMove = !checkVerticalColision();
-      if (canMove)
-        move(DOWN);
+      move(DOWN);
     }
 
     horizontalMoveTick++;
