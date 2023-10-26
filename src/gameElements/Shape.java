@@ -45,39 +45,27 @@ public abstract class Shape {
       double y = point.getY() - center.getY();
       double newX = x * Math.cos(angle) - y * Math.sin(angle);
       double newY = x * Math.sin(angle) + y * Math.cos(angle);
-      point.setLocation(newX + center.getX(), newY + center.getY());
+      point.setLocation(Math.round(newX + center.getX()), Math.round(newY + center.getY()));
     }
   }
 
   public void render(Graphics g) {
-    // System.out.println("Rendering shape");
-    // System.out.println("Center: " + center);
-
     for (Point2D point : body) {
-      // System.out.println("Point x: " + point);
-
       g.setColor(color);
       g.fillRect(
           (int) (point.getX() * size - size / 2) + (int) renderOffset.getX(),
           (int) (point.getY() * size - size / 2) + (int) renderOffset.getY(),
           size,
           size);
-
-      g.setColor(color.brighter());
-      g.drawRect(
-          (int) (point.getX() * size - size / 2) + (int) renderOffset.getX(),
-          (int) (point.getY() * size - size / 2) + (int) renderOffset.getY(),
-          size,
-          size);
     }
-    // System.out.println("Color: " + color);
-    // System.out.println("Size: " + size);
-    // System.out.println("End of shape");
-
   }
 
   public Point2D[] getBody() {
     return body;
+  }
+
+  public Color getColor() {
+    return color;
   }
 
   public int getMinX() {
