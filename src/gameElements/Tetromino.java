@@ -43,7 +43,7 @@ public class Tetromino {
 
     if (dir == LEFT && shape.getMinX() <= 0)
       return true;
-    else if (dir == RIGHT && shape.getMaxX() >= BOARD_WIDTH)
+    else if (dir == RIGHT && shape.getMaxX() + 1 >= BOARD_WIDTH)
       return true;
 
     for (Point2D point : shape.getBody()) {
@@ -58,12 +58,9 @@ public class Tetromino {
   }
 
   private boolean checkVerticalColision() {
-    if (shape.getMinY() <= 0)
-      return true;
-
     canMove = false;
 
-    if (shape.getMaxY() >= BOARD_HEIGHT)
+    if (shape.getMaxY() + 1 >= BOARD_HEIGHT)
       return true;
 
     for (Point2D point : shape.getBody()) {
@@ -75,6 +72,23 @@ public class Tetromino {
     }
 
     canMove = true;
+    return false;
+  }
+
+  private boolean checkRotationColision() {
+    if (shape.getMinY() < 0 || shape.getMaxY() >= BOARD_HEIGHT)
+      return true;
+
+    if (shape.getMinX() < 0 || shape.getMaxX() >= BOARD_WIDTH)
+      return true;
+
+    for (Point2D point : shape.getBody()) {
+      int x = (int) point.getX();
+      int y = (int) point.getY();
+      if (board.getBoard()[y][x] != null)
+        return true;
+    }
+
     return false;
   }
 
@@ -92,9 +106,7 @@ public class Tetromino {
 
     shape.rotate(angle);
 
-    if (checkHorizontalColision(LEFT) ||
-        checkHorizontalColision(RIGHT) ||
-        checkVerticalColision())
+    if (checkRotationColision())
       shape.rotate(-angle);
   }
 
@@ -111,7 +123,8 @@ public class Tetromino {
         break;
 
       case DOWN:
-        shape.move(0, 1);
+        if (!checkVerticalColision())
+          shape.move(0, 1);
         break;
     }
   }
