@@ -19,7 +19,8 @@ Here is how you can do it:
  sudo apt install maven
  ```
  - Other systems:
-    Download and install the Apache Maven toolset and all its requirements from [this download page](https://maven.apache.org/download.cgi)
+
+   Download and install the Apache Maven toolset and all of its system requirements from [this download page](https://maven.apache.org/download.cgi)
 
 #### Compiling and Running the game:
 - Clone the repository's main (github) or master (gitlab) branch
@@ -33,3 +34,6 @@ You the game should start up immediately after maven finished the build tasks.
 
 ## Controls:
 
+- Move piece: directional arrows or h/j/k/l
+- Hard Drop: space
+- Rotate piece: z/x
