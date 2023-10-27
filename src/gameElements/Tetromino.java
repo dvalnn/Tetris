@@ -27,6 +27,8 @@ public class Tetromino {
   private boolean right, left, down, drop;
   private boolean active = true;
 
+  private Random rand = new Random();
+
   public Tetromino(int renderSize, Point2D renderOrigin, Board board) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin);
@@ -36,7 +38,16 @@ public class Tetromino {
   }
 
   private Shape shapeFactory(int renderSize, Point2D spawnPoint) {
-    return new IShape(renderSize, spawnPoint);
+    int shapeType = rand.nextInt(2);
+
+    switch (shapeType) {
+      case 0:
+        return new IShape(renderSize, spawnPoint);
+      case 1:
+        return new TShape(renderSize, spawnPoint);
+      default:
+        return null;
+    }
   }
 
   private boolean checkHorizontalColision(int dir) {
