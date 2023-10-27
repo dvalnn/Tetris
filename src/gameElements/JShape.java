@@ -3,31 +3,32 @@ package gameElements;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
+import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
 
-public class IShape extends Shape {
+public class JShape extends Shape {
 
   private static final Point2D[] SHAPE = {
       new Point2D.Double(0, 0),
-      new Point2D.Double(1, 0),
-      new Point2D.Double(2, 0),
-      new Point2D.Double(3, 0)
+      new Point2D.Double(0, 1),
+      new Point2D.Double(1, 1),
+      new Point2D.Double(2, 1),
   };
-  private static final Point2D CENTER = new Point2D.Double(1.5, 0.5);
-  private static final Color COLOR = new Color(0, 255, 255); // cyan
+  private static final Point2D CENTER = new Point2D.Double(1, 1);
+  private static final Color COLOR = Color.BLUE;
 
-  // private boolean horizontal = true;
+  private int rotation = UP;
 
-  public IShape(int renderSize, Point2D renderOrigin) {
+  public JShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);
 
     minX = 0;
-    maxX = 3;
+    maxX = 2;
     minY = 0;
-    maxY = 0;
+    maxY = 1;
 
-    // go to the center top of the board
-    move(BOARD_WIDTH / 2 - 2, 0);
+    // move to center top of the board;
+    move(BOARD_WIDTH / 2 - 1, 0);
   }
 
   @Override
@@ -41,7 +42,13 @@ public class IShape extends Shape {
   @Override
   public void rotate(double angle) {
     rotatePoints(angle);
-    // horizontal = !horizontal;
+
+    int dir = angle > 0 ? 1 : -1;
+    rotation = (rotation + dir) % 4;
+    if (rotation < 0) {
+      rotation += 4;
+    }
+
     calculateMinMaxCoords();
   }
 }
