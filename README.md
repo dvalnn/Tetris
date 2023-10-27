@@ -1,18 +1,18 @@
 ## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Welcome to the our project repository. We are building a java version of a Tetris Attack style game.
 
-## Folder Structure
+As of right now there are no released, so if you want to check out our current progress you need to 
+download and compile the source code for yourself.
+Here is how you can do it:
 
-The workspace contains two folders by default, where:
+### Compiling using the Maven build tools:
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+- Download and install the Apache Maven toolset and all its requirements from [this download page](https://maven.apache.org/download.cgi)
+- Clone this repository
+- On the project root folder run the following commands:
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+```bash
+mvn compile
+mvn exec:java
+```
