@@ -6,21 +6,21 @@ import java.awt.geom.Point2D;
 import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
 
-public class JShape extends Shape {
+public class LShape extends Shape {
 
   private static final Point2D[] SHAPE = {
-      new Point2D.Double(0, 0),
       new Point2D.Double(0, 1),
       new Point2D.Double(1, 1),
       new Point2D.Double(2, 1),
+      new Point2D.Double(2, 0),
   };
   private static final Point2D CENTER = new Point2D.Double(1, 1);
-  private static final Color COLOR = Color.BLUE;
+  private static final Color COLOR = Color.ORANGE;
 
   private int rotation = UP;
   private boolean horizontal = true;
 
-  public JShape(int renderSize, Point2D renderOrigin) {
+  public LShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);
 
     minX = 0;
@@ -38,11 +38,11 @@ public class JShape extends Shape {
       maxX = (int) Math.max(shape[0].getX(), shape[3].getX());
       minX = (int) Math.min(shape[0].getX(), shape[3].getX());
       if (rotation == UP) {
-        maxY = (int) shape[1].getY();
-        minY = (int) shape[0].getY();
+        maxY = (int) shape[2].getY();
+        minY = (int) shape[3].getY();
       } else {
-        maxY = (int) shape[0].getY();
-        minY = (int) shape[1].getY();
+        maxY = (int) shape[3].getY();
+        minY = (int) shape[2].getY();
       }
       return;
     }
@@ -50,11 +50,11 @@ public class JShape extends Shape {
     maxY = (int) Math.max(shape[0].getY(), shape[3].getY());
     minY = (int) Math.min(shape[0].getY(), shape[3].getY());
     if (rotation == RIGHT) {
-      maxX = (int) shape[0].getX();
-      minX = (int) shape[1].getX();
+      maxX = (int) shape[3].getX();
+      minX = (int) shape[2].getX();
     } else {
-      maxX = (int) shape[1].getX();
-      minX = (int) shape[0].getX();
+      maxX = (int) shape[2].getX();
+      minX = (int) shape[3].getX();
     }
   }
 
@@ -65,10 +65,10 @@ public class JShape extends Shape {
     horizontal = !horizontal;
     int dir = angle > 0 ? 1 : -1;
     rotation = (rotation + dir) % 4;
-    if (rotation < 0) {
+    if (rotation < 0)
       rotation += 4;
-    }
 
     calculateMinMaxCoords();
   }
+
 }
