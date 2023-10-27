@@ -1,0 +1,39 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>os-apontadores</groupId>
+  <artifactId>Tetris-Attack-Clone</artifactId>
+  <version>1.0</version>
+
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source> <!-- Set your Java version -->
+    <maven.compiler.target>1.8</maven.compiler.target> <!-- Set your Java version -->
+  </properties>
+  
+  <build>
+
+    <sourceDirectory>src</sourceDirectory>
+    <outputDirectory>bin</outputDirectory>
+    <plugins>
+        <!-- ... other plugins ... -->
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.0.0</version> <!-- Use the latest version -->
+            <configuration>
+                <mainClass>main.MainClass</mainClass>
+                <arguments>
+                    <argument></argument>
+                    <argument></argument>
+                    <!-- Add any other command-line arguments your application needs -->
+                </arguments>
+            </configuration>
+        </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!-- Add your dependencies here, if any -->
+  </dependencies>
+</project>
