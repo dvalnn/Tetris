@@ -7,12 +7,13 @@ import java.util.Random;
 import static utils.Constants.GameConstants.*;
 import static utils.Constants.Directions.*;
 
-import gameStates.GameState;
-
 public class Tetromino {
 
   private Shape shape;
+  private GhostShape ghost;
   private Board board;
+
+  private boolean updateGhost = true;
 
   private int verticalMoveTick = 0;
   private int horizontalMoveTick = 0;
@@ -27,16 +28,38 @@ public class Tetromino {
   private boolean right, left, down, drop;
   private boolean active = true;
 
+  private Random rand = new Random();
+
   public Tetromino(int renderSize, Point2D renderOrigin, Board board) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin);
+    ghost = new GhostShape(shape);
 
     System.out.println("[Tetromino] Hello!");
     System.out.println("[Tetromino] Shape: " + shape);
   }
 
   private Shape shapeFactory(int renderSize, Point2D spawnPoint) {
-    return new IShape(renderSize, spawnPoint);
+    int shapeType = rand.nextInt(7);
+
+    switch (shapeType) {
+      case 0:
+        return new IShape(renderSize, spawnPoint);
+      case 1:
+        return new TShape(renderSize, spawnPoint);
+      case 2:
+        return new OShape(renderSize, spawnPoint);
+      case 3:
+        return new JShape(renderSize, spawnPoint);
+      case 4:
+        return new LShape(renderSize, spawnPoint);
+      case 5:
+        return new SShape(renderSize, spawnPoint);
+      case 6:
+        return new ZShape(renderSize, spawnPoint);
+      default:
+        return null;
+    }
   }
 
   private boolean checkHorizontalColision(int dir) {
@@ -58,9 +81,7 @@ public class Tetromino {
     return false;
   }
 
-  private boolean checkVerticalColision() {
-    active = false;
-
+  private boolean checkVerticalColision(Shape shape) {
     if (shape.getMaxY() + 1 >= BOARD_HEIGHT)
       return true;
 
@@ -72,7 +93,6 @@ public class Tetromino {
       }
     }
 
-    active = true;
     return false;
   }
 
@@ -110,32 +130,55 @@ public class Tetromino {
 
     boolean rotationBlocked = checkRotationColision();
     System.out.println("Rotation blocked: " + rotationBlocked);
+
     if (rotationBlocked)
       shape.rotate(-angle);
+    else {
+      ghost.rotate(angle);
+      updateGhost = true;
+    }
   }
 
   public void move(int direction) {
     switch (direction) {
       case LEFT:
-        if (!checkHorizontalColision(LEFT))
+        if (!checkHorizontalColision(LEFT)) {
           shape.move(-1, 0);
+          updateGhost = true;
+        }
         break;
 
       case RIGHT:
-        if (!checkHorizontalColision(RIGHT))
+        if (!checkHorizontalColision(RIGHT)) {
           shape.move(1, 0);
+          updateGhost = true;
+        }
         break;
 
       case DOWN:
-        if (!checkVerticalColision())
+        if (checkVerticalColision(shape))
+          active = false;
+        else
           shape.move(0, 1);
+
         break;
     }
+  }
+
+  public void dropGhost() {
+    while (!checkVerticalColision(ghost))
+      ghost.move(0, 1);
   }
 
   public void update() {
     if (!active)
       return;
+
+    if (updateGhost) {
+      ghost.goToMaster(shape.getCenter());
+      dropGhost();
+      updateGhost = false;
+    }
 
     if (drop) {
       verticalSpeed = VERTICAL_INSTANT;
@@ -163,6 +206,11 @@ public class Tetromino {
   }
 
   public void render(Graphics g) {
+    // render ghost only if it's not in the same position as the shape
+    if (!ghost.getCenter().equals(shape.getCenter()))
+      ghost.render(g);
+
+    // render shape after ghost so it's on top
     shape.render(g);
   }
 

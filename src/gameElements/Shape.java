@@ -37,16 +37,6 @@ public abstract class Shape {
     this.color = new Color(color.getRGB());
     this.renderSize = renderSize;
     this.renderOffset = renderOrigin;
-
-    // System.out.println("[Shape] Hello!");
-    // System.out.println("[Shape] Center: " + center);
-    // System.out.println("[Shape] Points: ");
-    // for (Point2D point : points) {
-    // System.out.println("\t" + point);
-    // }
-    // System.out.println("[Shape] Color: " + color);
-    // System.out.println("[Shape] Render size: " + renderSize);
-    // System.out.println("[Shape] Render origin: " + renderOrigin);
   }
 
   public void move(int x, int y) {
@@ -79,11 +69,29 @@ public abstract class Shape {
           (int) (point.getY() * renderSize - renderSize / 2) + (int) renderOffset.getY(),
           renderSize,
           renderSize);
+      g.setColor(color.darker().darker());
+      g.drawRect(
+          (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),
+          (int) (point.getY() * renderSize - renderSize / 2) + (int) renderOffset.getY(),
+          renderSize,
+          renderSize);
     }
+  }
+
+  public Point2D getCenter() {
+    return center;
   }
 
   public Point2D[] getShape() {
     return shape;
+  }
+
+  public int getRenderSize() {
+    return renderSize;
+  }
+
+  public Point2D getRenderOffset() {
+    return renderOffset;
   }
 
   public Color getColor() {
@@ -105,5 +113,4 @@ public abstract class Shape {
   public int getMaxY() {
     return maxY;
   }
-
 }
