@@ -78,8 +78,20 @@ public abstract class Shape {
     }
   }
 
+  public Point2D getCenter() {
+    return center;
+  }
+
   public Point2D[] getShape() {
     return shape;
+  }
+
+  public int getRenderSize() {
+    return renderSize;
+  }
+
+  public Point2D getRenderOffset() {
+    return renderOffset;
   }
 
   public Color getColor() {
@@ -101,5 +113,4 @@ public abstract class Shape {
   public int getMaxY() {
     return maxY;
   }
-
 }
