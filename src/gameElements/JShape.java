@@ -18,7 +18,6 @@ public class JShape extends Shape {
   private static final Color COLOR = Color.BLUE;
 
   private int rotation = UP;
-  private boolean horizontal = true;
 
   public JShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);
@@ -34,35 +33,16 @@ public class JShape extends Shape {
 
   @Override
   protected void calculateMinMaxCoords() {
-    if (horizontal) {
-      maxX = (int) Math.max(shape[0].getX(), shape[3].getX());
-      minX = (int) Math.min(shape[0].getX(), shape[3].getX());
-      if (rotation == UP) {
-        maxY = (int) shape[1].getY();
-        minY = (int) shape[0].getY();
-      } else {
-        maxY = (int) shape[0].getY();
-        minY = (int) shape[1].getY();
-      }
-      return;
-    }
-
-    maxY = (int) Math.max(shape[0].getY(), shape[3].getY());
+    minX = (int) Math.min(shape[0].getX(), shape[3].getX());
+    maxX = (int) Math.max(shape[0].getX(), shape[3].getX());
     minY = (int) Math.min(shape[0].getY(), shape[3].getY());
-    if (rotation == RIGHT) {
-      maxX = (int) shape[0].getX();
-      minX = (int) shape[1].getX();
-    } else {
-      maxX = (int) shape[1].getX();
-      minX = (int) shape[0].getX();
-    }
+    maxY = (int) Math.max(shape[0].getY(), shape[3].getY());
   }
 
   @Override
   public void rotate(double angle) {
     rotatePoints(angle);
 
-    horizontal = !horizontal;
     int dir = angle > 0 ? 1 : -1;
     rotation = (rotation + dir) % 4;
     if (rotation < 0) {

@@ -18,7 +18,6 @@ public class ZShape extends Shape {
   private static final Color COLOR = Color.RED;
 
   // private int rotation = UP;
-  // private boolean horizontal = true;
 
   public ZShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);

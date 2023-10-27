@@ -18,7 +18,6 @@ public class SShape extends Shape {
   private static final Color COLOR = Color.GREEN;
 
   // private int rotation = UP;
-  // private boolean horizontal = true;
 
   public SShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);

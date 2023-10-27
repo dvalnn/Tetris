@@ -15,10 +15,9 @@ public class LShape extends Shape {
       new Point2D.Double(2, 0),
   };
   private static final Point2D CENTER = new Point2D.Double(1, 1);
-  private static final Color COLOR = Color.ORANGE;
+  private static final Color COLOR = new Color(255, 165, 0); // orange)
 
   private int rotation = UP;
-  private boolean horizontal = true;
 
   public LShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);
@@ -34,35 +33,16 @@ public class LShape extends Shape {
 
   @Override
   protected void calculateMinMaxCoords() {
-    if (horizontal) {
-      maxX = (int) Math.max(shape[0].getX(), shape[3].getX());
-      minX = (int) Math.min(shape[0].getX(), shape[3].getX());
-      if (rotation == UP) {
-        maxY = (int) shape[2].getY();
-        minY = (int) shape[3].getY();
-      } else {
-        maxY = (int) shape[3].getY();
-        minY = (int) shape[2].getY();
-      }
-      return;
-    }
-
-    maxY = (int) Math.max(shape[0].getY(), shape[3].getY());
+    minX = (int) Math.min(shape[0].getX(), shape[3].getX());
+    maxX = (int) Math.max(shape[0].getX(), shape[3].getX());
     minY = (int) Math.min(shape[0].getY(), shape[3].getY());
-    if (rotation == RIGHT) {
-      maxX = (int) shape[3].getX();
-      minX = (int) shape[2].getX();
-    } else {
-      maxX = (int) shape[2].getX();
-      minX = (int) shape[3].getX();
-    }
+    maxY = (int) Math.max(shape[0].getY(), shape[3].getY());
   }
 
   @Override
   public void rotate(double angle) {
     rotatePoints(angle);
 
-    horizontal = !horizontal;
     int dir = angle > 0 ? 1 : -1;
     rotation = (rotation + dir) % 4;
     if (rotation < 0)
