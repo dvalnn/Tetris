@@ -7,8 +7,6 @@ import java.util.Random;
 import static utils.Constants.GameConstants.*;
 import static utils.Constants.Directions.*;
 
-import gameStates.GameState;
-
 public class Tetromino {
 
   private Shape shape;
