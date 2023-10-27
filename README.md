@@ -37,3 +37,9 @@ You the game should start up immediately after maven finished the build tasks.
 - Move piece: directional arrows or h/j/k/l
 - Hard Drop: space
 - Rotate piece: z/x
+
+### Changing keybinds:
+
+All keybinds can be costumized under src/inputs/*.java.
+ 
+In game configuration is a WIP and will be implemented in the future.
