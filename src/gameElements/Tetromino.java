@@ -36,7 +36,7 @@ public class Tetromino {
   }
 
   private Shape shapeFactory(int renderSize, Point2D spawnPoint) {
-    int shapeType = rand.nextInt(3);
+    int shapeType = rand.nextInt(4);
 
     switch (shapeType) {
       case 0:
@@ -45,6 +45,8 @@ public class Tetromino {
         return new TShape(renderSize, spawnPoint);
       case 2:
         return new OShape(renderSize, spawnPoint);
+      case 3:
+        return new JShape(renderSize, spawnPoint);
       default:
         return null;
     }
