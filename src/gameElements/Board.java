@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
+import gameStates.GameState;
+
 import static utils.Constants.GameConstants.*;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
@@ -41,6 +43,10 @@ public class Board {
       int row = (int) point.getY();
       int col = (int) point.getX();
       board[row][col] = tetro1.getShape().getColor();
+    }
+    if (tetro1.getShape().getMinY() <= 0) {
+      System.out.println("[Board] Game Over!");
+      GameState.state = GameState.GAME_OVER;
     }
   }
 
