@@ -1,7 +1,9 @@
-package gameElements;
+package gameElements.shapeTypes;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+
+import gameElements.Shape;
 
 import static utils.Constants.GameConstants.*;
 

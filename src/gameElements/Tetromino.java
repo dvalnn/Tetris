@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
+import gameElements.shapeTypes.*;
+
 import static utils.Constants.GameConstants.*;
 import static utils.Constants.Directions.*;
 

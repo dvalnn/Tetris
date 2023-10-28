@@ -1,25 +1,27 @@
-package gameElements;
+package gameElements.shapeTypes;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
-// import static utils.Constants.Directions.*;
+import gameElements.Shape;
+
+import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
 
-public class ZShape extends Shape {
+public class JShape extends Shape {
 
   private static final Point2D[] SHAPE = {
       new Point2D.Double(0, 0),
-      new Point2D.Double(1, 0),
+      new Point2D.Double(0, 1),
       new Point2D.Double(1, 1),
       new Point2D.Double(2, 1),
   };
   private static final Point2D CENTER = new Point2D.Double(1, 1);
-  private static final Color COLOR = Color.RED;
+  private static final Color COLOR = Color.BLUE;
 
-  // private int rotation = UP;
+  private int rotation = UP;
 
-  public ZShape(int renderSize, Point2D renderOrigin) {
+  public JShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);
 
     minX = 0;
@@ -42,7 +44,13 @@ public class ZShape extends Shape {
   @Override
   public void rotate(double angle) {
     rotatePoints(angle);
+
+    int dir = angle > 0 ? 1 : -1;
+    rotation = (rotation + dir) % 4;
+    if (rotation < 0) {
+      rotation += 4;
+    }
+
     calculateMinMaxCoords();
   }
-
 }
