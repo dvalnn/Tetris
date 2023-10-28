@@ -6,8 +6,9 @@ import java.util.Random;
 
 import gameElements.shapeTypes.*;
 
-import static utils.Constants.GameConstants.*;
 import static utils.Constants.Directions.*;
+import static utils.Constants.TetrominoIDs.*;
+import static utils.Constants.GameConstants.*;
 
 public class Tetromino {
 
@@ -34,30 +35,39 @@ public class Tetromino {
 
   public Tetromino(int renderSize, Point2D renderOrigin, Board board) {
     this.board = board;
-    shape = shapeFactory(renderSize, renderOrigin);
+    shape = shapeFactory(renderSize, renderOrigin, rand.nextInt(7));
     ghost = new GhostShape(shape);
 
     System.out.println("[Tetromino] Hello!");
     System.out.println("[Tetromino] Shape: " + shape);
   }
 
-  private Shape shapeFactory(int renderSize, Point2D spawnPoint) {
-    int shapeType = rand.nextInt(7);
+  //NOTE: this constructor is only used for testing
+  // TODO: remove this constructor
+  public Tetromino(int renderSize, Point2D renderOrigin, Board board, int shapeID) {
+    this.board = board;
+    shape = shapeFactory(renderSize, renderOrigin, shapeID);
+    ghost = new GhostShape(shape);
 
-    switch (shapeType) {
-      case 0:
+    System.out.println("[Tetromino] Hello!");
+    System.out.println("[Tetromino] Shape: " + shape);
+  }
+
+  private Shape shapeFactory(int renderSize, Point2D spawnPoint, int shapeID) {
+    switch (shapeID) {
+      case I:
         return new IShape(renderSize, spawnPoint);
-      case 1:
+      case T:
         return new TShape(renderSize, spawnPoint);
-      case 2:
+      case O:
         return new OShape(renderSize, spawnPoint);
-      case 3:
+      case J:
         return new JShape(renderSize, spawnPoint);
-      case 4:
+      case L:
         return new LShape(renderSize, spawnPoint);
-      case 5:
+      case S:
         return new SShape(renderSize, spawnPoint);
-      case 6:
+      case Z:
         return new ZShape(renderSize, spawnPoint);
       default:
         return null;

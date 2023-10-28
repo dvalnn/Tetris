@@ -50,6 +50,11 @@ public class Menu extends State implements StateMethods {
   }
 
   @Override
+  public void mouseDragged(MouseEvent e) {
+
+  }
+
+  @Override
   public void keyPressed(KeyEvent e) {
     GameState.state = GameState.PLAYING;
   }

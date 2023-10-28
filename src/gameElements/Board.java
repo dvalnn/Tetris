@@ -20,6 +20,9 @@ public class Board {
   private Tetromino tetro1;
   private Tetromino tetro2;
 
+  private boolean debugMode = false;
+  private boolean paused = false;
+
   public Board(int size, int xOffset, int yOffset, Color color) {
     this.renderSize = size;
     renderOrigin = new Point(xOffset, yOffset);
@@ -85,7 +88,80 @@ public class Board {
     System.out.println("[Board] Cleared " + rowsCleared + " rows!");
   }
 
+  // NOTE: This method is only used for debugging purposes
+  public void addBlockOnMousePosition(int x, int y) {
+    if (!debugMode)
+      return;
+
+    toggleBlockOnMousePosition(x, y, true);
+  }
+
+  // NOTE: This method is only used for debugging purposes
+  public void removeBlockOnMousePosition(int x, int y) {
+    if (!debugMode)
+      return;
+
+    toggleBlockOnMousePosition(x, y, false);
+  }
+
+  // NOTE: This method is only used for debugging purposes
+  // it is not used in the actual game.
+  // PERF: This method is very inefficient. It iterates over
+  // the entire board every time the mouse is clicked.
+  private void toggleBlockOnMousePosition(int x, int y, boolean add) {
+
+    // NOTE: for each grid square, expand it fmom board coordinates
+    // to screen coordinates and check if the mouse is in it
+    // if it is, toggle the block.
+    // TODO: Make this more efficient somehow.
+    // Performance is not an issue right now, but
+    // it might be in the future
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+      for (int col = 0; col < BOARD_WIDTH; col++) {
+        int x1 = (int) (col * renderSize - renderSize / 2) + (int) renderOrigin.getX();
+        int y1 = (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY();
+        int x2 = x1 + renderSize;
+        int y2 = y1 + renderSize;
+
+        if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
+          if (add) {
+            board[row][col] = Color.PINK;
+          } else {
+            board[row][col] = backgroundColor;
+          }
+          return;
+        }
+      }
+    }
+
+  }
+
+  // NOTE: This method is only used for debugging purposes
+  public void setTetromino(int tetroID){
+    if(!debugMode)
+      return;
+    tetro1 = new Tetromino(renderSize, renderOrigin, this, tetroID);
+  }
+
+  // NOTE: This method is only used for debugging purposes
+  public void reset() {
+    if (!debugMode)
+      return;
+
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+      for (int col = 0; col < BOARD_WIDTH; col++) {
+        board[row][col] = backgroundColor;
+      }
+    }
+    tetro1 = new Tetromino(renderSize, renderOrigin, this);
+    tetro2 = new Tetromino(renderSize, renderOrigin, this);
+  }
+
   public void update() {
+    //NOTE: This is only used for debugging purposes
+    //TODO: Remove this
+    if(paused)
+      return;
     tetro1.update();
     if (!tetro1.isActive()) {
       addTetrominoToPile();
@@ -114,6 +190,28 @@ public class Board {
     }
 
     tetro1.render(g);
+
+    //NOTE: This is only used for debugging purposes
+    //TODO: Remove this
+    if (debugMode) {
+      g.setColor(Color.RED);
+      g.drawString("Debug Mode", 10, 10);
+    }
+    if(paused) {
+      g.setColor(Color.RED);
+      g.drawString("Paused", 10, 30);
+    }
+  }
+
+  // TODO: Obscure the debug mode activation
+  // Maybe make it so that the user has
+  // to press a certain key combination
+  public void toggleDebugMode() {
+    debugMode = !debugMode;
+  }
+
+  public void togglePause() {
+    paused = !paused;
   }
 
   public Tetromino getTetromino() {
