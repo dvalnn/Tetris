@@ -19,4 +19,14 @@ public class Constants {
     public static final int LEFT = 3;
   }
 
+  public static class TetrominoIDs {
+    public static final int I = 0;
+    public static final int J = 1;
+    public static final int L = 2;
+    public static final int O = 3;
+    public static final int S = 4;
+    public static final int T = 5;
+    public static final int Z = 6;
+  }
+
 }
