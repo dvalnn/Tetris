@@ -5,7 +5,6 @@ import java.awt.geom.Point2D;
 
 import gameElements.Shape;
 
-import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
 
 public class JShape extends Shape {
@@ -18,8 +17,6 @@ public class JShape extends Shape {
   };
   private static final Point2D CENTER = new Point2D.Double(1, 1);
   private static final Color COLOR = Color.BLUE;
-
-  private int rotation = UP;
 
   public JShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);
@@ -44,13 +41,6 @@ public class JShape extends Shape {
   @Override
   public void rotate(double angle) {
     rotatePoints(angle);
-
-    int dir = angle > 0 ? 1 : -1;
-    rotation = (rotation + dir) % 4;
-    if (rotation < 0) {
-      rotation += 4;
-    }
-
     calculateMinMaxCoords();
   }
 }

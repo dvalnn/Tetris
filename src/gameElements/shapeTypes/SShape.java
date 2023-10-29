@@ -19,8 +19,6 @@ public class SShape extends Shape {
   private static final Point2D CENTER = new Point2D.Double(1, 1);
   private static final Color COLOR = Color.GREEN;
 
-  // private int rotation = UP;
-
   public SShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);
 

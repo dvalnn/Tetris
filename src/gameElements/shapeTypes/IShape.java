@@ -18,8 +18,6 @@ public class IShape extends Shape {
   private static final Point2D CENTER = new Point2D.Double(1.5, 0.5);
   private static final Color COLOR = new Color(0, 255, 255); // cyan
 
-  // private boolean horizontal = true;
-
   public IShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);
 
@@ -43,7 +41,6 @@ public class IShape extends Shape {
   @Override
   public void rotate(double angle) {
     rotatePoints(angle);
-    // horizontal = !horizontal;
     calculateMinMaxCoords();
   }
 }
