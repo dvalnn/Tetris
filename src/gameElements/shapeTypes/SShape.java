@@ -1,10 +1,11 @@
-package gameElements;
-
-import java.awt.Color;
-import java.awt.geom.Point2D;
+package gameElements.shapeTypes;
 
 // import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
+
+import gameElements.Shape;
+import java.awt.Color;
+import java.awt.geom.Point2D;
 
 public class SShape extends Shape {
 
@@ -16,8 +17,6 @@ public class SShape extends Shape {
   };
   private static final Point2D CENTER = new Point2D.Double(1, 1);
   private static final Color COLOR = Color.GREEN;
-
-  // private int rotation = UP;
 
   public SShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);
@@ -44,5 +43,4 @@ public class SShape extends Shape {
     rotatePoints(angle);
     calculateMinMaxCoords();
   }
-
 }

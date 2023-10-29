@@ -1,5 +1,6 @@
-package gameElements;
+package gameElements.shapeTypes;
 
+import gameElements.Shape;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
@@ -7,11 +8,8 @@ public class GhostShape extends Shape {
 
   public GhostShape(Shape MasterShape) {
 
-    super(
-        MasterShape.getCenter(),
-        MasterShape.getShape(),
-        MasterShape.getColor(),
-        MasterShape.getRenderSize(),
+    super(MasterShape.getCenter(), MasterShape.getShape(),
+        MasterShape.getColor(), MasterShape.getRenderSize(),
         MasterShape.getRenderOffset());
 
     color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 50);
@@ -55,5 +53,4 @@ public class GhostShape extends Shape {
     minY += (int) y;
     maxY += (int) y;
   }
-
 }
