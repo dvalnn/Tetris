@@ -1,0 +1,320 @@
+@startuml
+package gameElements.shapeTypes {
+  class GhostShape {
+    + GhostShape(MasterShape : Shape)
+    # calculateMinMaxCoords()
+    + goToMaster(masterCenter : Point2D)
+    - move(x : double, y : double)
+    + rotate(angle : double)
+  }
+  class IShape {
+    - CENTER : Point2D {static}
+    - COLOR : Color {static}
+    - SHAPE : Point2D[] {static}
+    + IShape(renderSize : int, renderOrigin : Point2D)
+    # calculateMinMaxCoords()
+    + rotate(angle : double)
+  }
+  class JShape {
+    - CENTER : Point2D {static}
+    - COLOR : Color {static}
+    - SHAPE : Point2D[] {static}
+    + JShape(renderSize : int, renderOrigin : Point2D)
+    # calculateMinMaxCoords()
+    + rotate(angle : double)
+  }
+  class LShape {
+    - CENTER : Point2D {static}
+    - COLOR : Color {static}
+    - SHAPE : Point2D[] {static}
+    + LShape(renderSize : int, renderOrigin : Point2D)
+    # calculateMinMaxCoords()
+    + rotate(angle : double)
+  }
+  class OShape {
+    - CENTER : Point2D {static}
+    - COLOR : Color {static}
+    - SHAPE : Point2D[] {static}
+    + OShape(renderSize : int, renderOrigin : Point2D)
+    # calculateMinMaxCoords()
+    + rotate(angle : double)
+  }
+  class SShape {
+    - CENTER : Point2D {static}
+    - COLOR : Color {static}
+    - SHAPE : Point2D[] {static}
+    + SShape(renderSize : int, renderOrigin : Point2D)
+    # calculateMinMaxCoords()
+    + rotate(angle : double)
+  }
+  class TShape {
+    - CENTER : Point2D {static}
+    - COLOR : Color {static}
+    - SHAPE : Point2D[] {static}
+    - horizontal : boolean
+    - rotation : int
+    + TShape(renderSize : int, renderOrigin : Point2D)
+    # calculateMinMaxCoords()
+    + rotate(angle : double)
+  }
+  class ZShape {
+    - CENTER : Point2D {static}
+    - COLOR : Color {static}
+    - SHAPE : Point2D[] {static}
+    + ZShape(renderSize : int, renderOrigin : Point2D)
+    # calculateMinMaxCoords()
+    + rotate(angle : double)
+  }
+}
+package utils {
+  class Constants {
+    + Constants()
+  }
+  class Directions {
+    + DOWN : int {static}
+    + LEFT : int {static}
+    + NONE : int {static}
+    + RIGHT : int {static}
+    + UP : int {static}
+    + Directions()
+  }
+  class GameConstants {
+    + BOARD_HEIGHT : int {static}
+    + BOARD_SQUARE : int {static}
+    + BOARD_WIDTH : int {static}
+    + FPS_SET : int {static}
+    + GAME_HEIGHT : int {static}
+    + GAME_WIDTH : int {static}
+    + UPS_SET : int {static}
+    + GameConstants()
+  }
+  class TetrominoIDs {
+    + I : int {static}
+    + J : int {static}
+    + L : int {static}
+    + O : int {static}
+    + S : int {static}
+    + T : int {static}
+    + Z : int {static}
+    + TetrominoIDs()
+  }
+  class WallKickData {
+    - ARIKA_I_DL_KICK : int[][] {static}
+    - ARIKA_I_DR_KICK : int[][] {static}
+    - ARIKA_I_LD_KICK : int[][] {static}
+    - ARIKA_I_LU_KICK : int[][] {static}
+    - ARIKA_I_RD_KICK : int[][] {static}
+    - ARIKA_I_RU_KICK : int[][] {static}
+    - ARIKA_I_UL_KICK : int[][] {static}
+    - ARIKA_I_UR_KICK : int[][] {static}
+    - ARIKA_KICKS : int[][][][] {static}
+    - DEFAULT_DL_KICK : int[][] {static}
+    - DEFAULT_DR_KICK : int[][] {static}
+    - DEFAULT_KICKS : int[][][][] {static}
+    - DEFAULT_LD_KICK : int[][] {static}
+    - DEFAULT_LU_KICK : int[][] {static}
+    - DEFAULT_RD_KICK : int[][] {static}
+    - DEFAULT_RU_KICK : int[][] {static}
+    - DEFAULT_UL_KICK : int[][] {static}
+    - DEFAULT_UR_KICK : int[][] {static}
+    + WallKickData()
+    - getArikaKickData(rotationState : int, direction : int, kickIndex : int) : Point2D {static}
+    - getDefaultKickData(rotationState : int, direction : int, kickIndex : int) : Point2D {static}
+    + getKickData(shapeIndex : int, rotationState : int, direction : int, kickIndex : int) : Point2D {static}
+  }
+}
+package inputs {
+  class KeyboardInputs {
+    - gamePanel : GamePanel
+    + KeyboardInputs(gamePanel : GamePanel)
+    + keyPressed(e : KeyEvent)
+    + keyReleased(e : KeyEvent)
+    + keyTyped(e : KeyEvent)
+  }
+}
+package gameStates {
+  class GameOver {
+    + GameOver(game : Game)
+    + keyPressed(e : KeyEvent)
+    + keyReleased(e : KeyEvent)
+    + mouseClicked(e : MouseEvent)
+    + mouseDragged(e : MouseEvent)
+    + mouseMoved(e : MouseEvent)
+    + mousePressed(e : MouseEvent)
+    + mouseReleased(e : MouseEvent)
+    + render(g : Graphics)
+    + update()
+    + windowLostFocus()
+  }
+  enum GameState {
+    + GAME_OVER {static}
+    + MENU {static}
+    + PLAYING {static}
+    + state : GameState {static}
+    + valueOf(name : String) : GameState {static}
+    + values() : GameState[] {static}
+  }
+  class Menu {
+    + Menu(game : Game)
+    + keyPressed(e : KeyEvent)
+    + keyReleased(e : KeyEvent)
+    + mouseClicked(e : MouseEvent)
+    + mouseDragged(e : MouseEvent)
+    + mouseMoved(e : MouseEvent)
+    + mousePressed(e : MouseEvent)
+    + mouseReleased(e : MouseEvent)
+    + render(g : Graphics)
+    + update()
+    + windowLostFocus()
+  }
+  class Playing {
+    - X_OFFSET : int
+    - Y_OFFSET : int
+    - board : Board
+    - boardColor : Color
+    - mouseButton1Pressed : boolean
+    - mouseButton3Pressed : boolean
+    + Playing(game : Game)
+    + keyPressed(e : KeyEvent)
+    + keyReleased(e : KeyEvent)
+    + mouseClicked(e : MouseEvent)
+    + mouseDragged(e : MouseEvent)
+    + mouseMoved(e : MouseEvent)
+    + mousePressed(e : MouseEvent)
+    + mouseReleased(e : MouseEvent)
+    + render(g : Graphics)
+    + update()
+    + windowLostFocus()
+  }
+  class State {
+    # game : Game
+    + State(game : Game)
+    + getGame() : Game
+  }
+  interface StateMethods {
+    + keyPressed(KeyEvent) {abstract}
+    + keyReleased(KeyEvent) {abstract}
+    + mouseClicked(MouseEvent) {abstract}
+    + mouseDragged(MouseEvent) {abstract}
+    + mouseMoved(MouseEvent) {abstract}
+    + mousePressed(MouseEvent) {abstract}
+    + mouseReleased(MouseEvent) {abstract}
+    + render(Graphics) {abstract}
+    + update() {abstract}
+    + windowLostFocus() {abstract}
+  }
+}
+package gameElements {
+  class Board {
+    - backgroundColor : Color
+    - board : Color[][]
+    - debugMode : boolean
+    - gridColor : Color
+    - paused : boolean
+    - renderOrigin : Point2D
+    - renderSize : int
+    - tetro1 : Tetromino
+    - tetro2 : Tetromino
+    + Board(size : int, xOffset : int, yOffset : int, color : Color)
+    + addBlockOnMousePosition(x : int, y : int)
+    - addTetrominoToPile()
+    - checkRows()
+    - clearRow(row : int)
+    + getBackgroundColor() : Color
+    + getBoard() : Color[][]
+    + getTetromino() : Tetromino
+    + removeBlockOnMousePosition(x : int, y : int)
+    + render(g : Graphics)
+    + reset()
+    + setTetromino(tetroID : int)
+    - shiftRowsDown(row : int)
+    - toggleBlockOnMousePosition(x : int, y : int, add : boolean)
+    + toggleDebugMode()
+    + togglePause()
+    + update()
+  }
+  abstract class Shape {
+    # center : Point2D
+    # color : Color
+    # maxX : int
+    # maxY : int
+    # minX : int
+    # minY : int
+    - renderOffset : Point2D
+    - renderSize : int
+    # shape : Point2D[]
+    + Shape(center : Point2D, points : Point2D[], color : Color, renderSize : int, renderOrigin : Point2D)
+    # calculateMinMaxCoords() {abstract}
+    + getCenter() : Point2D
+    + getColor() : Color
+    + getMaxX() : int
+    + getMaxY() : int
+    + getMinX() : int
+    + getMinY() : int
+    + getRenderOffset() : Point2D
+    + getRenderSize() : int
+    + getShape() : Point2D[]
+    + move(x : int, y : int)
+    + render(g : Graphics)
+    + rotate(double) {abstract}
+    # rotatePoints(angle : double)
+  }
+  class Tetromino {
+    - HORIZONTAL_SPEED : int
+    - VERTICAL_FAST : int
+    - VERTICAL_INSTANT : int
+    - VERTICAL_SLOW : int
+    - active : boolean
+    - board : Board
+    - down : boolean
+    - drop : boolean
+    - ghost : GhostShape
+    - horizontalMoveTick : int
+    - left : boolean
+    - rand : Random
+    - right : boolean
+    - rotationStatus : int
+    - shape : Shape
+    - shapeID : int
+    - updateGhost : boolean
+    - verticalMoveTick : int
+    - verticalSpeed : int
+    + Tetromino(renderSize : int, renderOrigin : Point2D, board : Board)
+    + Tetromino(renderSize : int, renderOrigin : Point2D, board : Board, shapeID : int)
+    - bottomColides(shape : Shape) : boolean
+    + dropGhost()
+    + getShape() : Shape
+    + isActive() : boolean
+    + move(direction : int)
+    + render(g : Graphics)
+    + rotate(direction : int)
+    - rotationColides() : boolean
+    + setActive(active : boolean)
+    + setDown(down : boolean)
+    + setDrop(drop : boolean)
+    + setLeft(left : boolean)
+    + setRight(right : boolean)
+    - shapeFactory(renderSize : int, spawnPoint : Point2D, shapeID : int) : Shape
+    - sideColides(dir : int) : boolean
+    + update()
+  } }
+Tetromino -->  "-ghost" GhostShape
+Tetromino -->  "-shape" Shape
+GameState -->  "-state" GameState
+Playing -->  "-board" Board
+Board -->  "-tetro1" Tetromino
+GhostShape --|> Shape 
+IShape --|> Shape 
+JShape --|> Shape 
+LShape --|> Shape 
+OShape --|> Shape 
+SShape --|> Shape 
+TShape --|> Shape 
+ZShape --|> Shape 
+GameOver ..|> StateMethods 
+GameOver --|> State 
+Menu ..|> StateMethods 
+Menu --|> State 
+Playing ..|> StateMethods 
+Playing --|> State 
+@enduml

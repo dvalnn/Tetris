@@ -17,6 +17,38 @@
     <outputDirectory>bin</outputDirectory>
     <plugins>
           <plugin>
+              <groupId>com.github.davidmoten</groupId>
+              <artifactId>plantuml-maven-plugin</artifactId>
+              <version>0.2.7</version>
+              <executions>
+                  <execution>
+                      <id>generate-diagrams</id>
+                      <phase>generate-resources</phase>
+                      <goals>
+                          <goal>generate</goal>
+                      </goals>
+                      <configuration>
+                          <sources>
+                            <directory>${project.basedir}/etc</directory>
+                              <includes>
+                                  <include>**/*.puml</include>
+                              </includes>
+                              <!-- <excludes> -->
+                              <!--     <exclude>**/ignore-me.puml</exclude> -->
+                              <!-- </excludes> -->
+                         </sources>
+                          <outputDirectory>${project.basedir}/generated-diagrams</outputDirectory>
+                          <formats>
+                              <format>png</format>
+                              <format>svg</format>
+                          </formats>
+                          <preserveDirectoryStructure>false</preserveDirectoryStructure>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
+
+          <plugin>
           <groupId>com.iluwatar.urm</groupId>
           <artifactId>urm-maven-plugin</artifactId>
           <version>2.1.1</version>
@@ -24,16 +56,19 @@
             <!-- if outputDirectory is not set explicitly it will default to your build dir -->
             <outputDirectory>${project.basedir}/etc</outputDirectory>
             <packages>
-              <param>com.mycompany.mypackage</param>
-              <param>com.mycompany.other_package</param>
+              <param>gameElements</param>
+              <param>gameElements.shapeTypes</param>
+              <param>gameStates</param>
+              <param>utils</param>
+              <param>inputs</param>
             </packages>
             <ignores>
-              <param>com.mycompany.mypackage.MyClass</param>
-              <param>com.mycompany.other_package.OtherClass</param>
+              <param></param>
+              <param></param>
             </ignores>
             <includeMainDirectory>true</includeMainDirectory>
             <includeTestDirectory>false</includeTestDirectory>
-            <presenter>graphviz</presenter>
+            <presenter>plantuml</presenter>
           </configuration>
           <executions>
             <execution>
@@ -43,13 +78,13 @@
               </goals>
             </execution>
           </executions>
-          <dependencies>
-            <dependency>
-              <groupId>com.example</groupId>
-              <artifactId>example</artifactId>
-              <version>1.0.0</version>
-            </dependency>
-          </dependencies>
+          <!-- <dependencies> -->
+          <!--   <dependency> -->
+              <!-- <groupId>com.iluwatar</groupId> -->
+              <!-- <artifactId>urm-core</artifactId> -->
+              <!-- <version>2.1.1</version> -->
+          <!--   </dependency> -->
+          <!-- </dependencies> -->
         </plugin>
         <plugin>
             <groupId>org.codehaus.mojo</groupId>
