@@ -4,8 +4,8 @@ import static utils.Constants.GameConstants.*;
 
 import gameStates.GameOver;
 import gameStates.GameState;
-import gameStates.Menu;
 import gameStates.Playing;
+import gameStates.TitleScreen;
 import java.awt.Graphics;
 
 public class Game implements Runnable {
@@ -14,7 +14,7 @@ public class Game implements Runnable {
   private GamePanel gamePanel;
   private Thread gameThread;
 
-  private Menu menu;
+  private TitleScreen menu;
   private Playing playing;
   private GameOver gameOver;
 
@@ -32,7 +32,7 @@ public class Game implements Runnable {
   }
 
   private void initClasses() {
-    menu = new Menu(this);
+    menu = new TitleScreen(this);
     playing = new Playing(this);
     gameOver = new GameOver(this);
   }
@@ -44,44 +44,44 @@ public class Game implements Runnable {
 
   public void update() {
     switch (GameState.state) {
-      case MENU:
-        menu.update();
-        break;
-      case PLAYING:
-        playing.update();
-        break;
-      case GAME_OVER:
-        gameOver.update();
-        break;
+    case TITLE_SCREEN:
+      menu.update();
+      break;
+    case PLAYING:
+      playing.update();
+      break;
+    case GAME_OVER:
+      gameOver.update();
+      break;
     }
   }
 
   public void render(Graphics g) {
     switch (GameState.state) {
-      case MENU:
-        menu.render(g);
-        break;
-      case PLAYING:
-        playing.render(g);
-        break;
-      case GAME_OVER:
-        gameOver.render(g);
-        break;
+    case TITLE_SCREEN:
+      menu.render(g);
+      break;
+    case PLAYING:
+      playing.render(g);
+      break;
+    case GAME_OVER:
+      gameOver.render(g);
+      break;
     }
   }
 
   public void windowLostFocus() {
     System.out.println("Game.windowLostFocus()");
     switch (GameState.state) {
-      case MENU:
-        menu.windowLostFocus();
-        break;
-      case PLAYING:
-        playing.windowLostFocus();
-        break;
-      case GAME_OVER:
-        gameOver.windowLostFocus();
-        break;
+    case TITLE_SCREEN:
+      menu.windowLostFocus();
+      break;
+    case PLAYING:
+      playing.windowLostFocus();
+      break;
+    case GAME_OVER:
+      gameOver.windowLostFocus();
+      break;
     }
   }
 
@@ -139,19 +139,11 @@ public class Game implements Runnable {
     System.exit(0);
   }
 
-  public void exit() {
-    exit = true;
-  }
+  public void exit() { exit = true; }
 
-  public Playing getPlaying() {
-    return playing;
-  }
+  public Playing getPlaying() { return playing; }
 
-  public Menu getMenu() {
-    return menu;
-  }
+  public TitleScreen getMenu() { return menu; }
 
-  public GameOver getGameOver() {
-    return gameOver;
-  }
+  public GameOver getGameOver() { return gameOver; }
 }

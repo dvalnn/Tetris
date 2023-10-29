@@ -2,8 +2,8 @@ package gameStates;
 
 public enum GameState {
   PLAYING,
-  MENU,
+  TITLE_SCREEN,
   GAME_OVER;
 
-  public static GameState state = GameState.MENU;
+  public static GameState state = GameState.TITLE_SCREEN;
 }
