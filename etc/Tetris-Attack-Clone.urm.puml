@@ -297,11 +297,42 @@ package gameElements {
     - shapeFactory(renderSize : int, spawnPoint : Point2D, shapeID : int) : Shape
     - sideColides(dir : int) : boolean
     + update()
-  } }
+  }
+}
+package main {
+  class Game {
+    - exit : boolean
+    - gameOver : GameOver
+    - gamePanel : GamePanel
+    - gameThread : Thread
+    - gameWindow : GameWindow
+    - menu : Menu
+    - playing : Playing
+    + Game()
+    + exit()
+    + getGameOver() : GameOver
+    + getMenu() : Menu
+    + getPlaying() : Playing
+    - initClasses()
+    + render(g : Graphics)
+    + run()
+    - startGameLoop()
+    + update()
+    + windowLostFocus()
+  }
+  class MainClass {
+    + MainClass()
+    + main(args : String[]) {static}
+  }
+}
+Game -->  "-gameOver" GameOver
 Tetromino -->  "-ghost" GhostShape
 Tetromino -->  "-shape" Shape
 GameState -->  "-state" GameState
+Game -->  "-menu" Menu
+Game -->  "-playing" Playing
 Playing -->  "-board" Board
+State -->  "-game" Game
 Board -->  "-tetro1" Tetromino
 GhostShape --|> Shape 
 IShape --|> Shape 

@@ -37,7 +37,7 @@
                               <!--     <exclude>**/ignore-me.puml</exclude> -->
                               <!-- </excludes> -->
                          </sources>
-                          <outputDirectory>${project.basedir}/generated-diagrams</outputDirectory>
+                          <outputDirectory>${project.basedir}/etc/generated-diagrams</outputDirectory>
                           <formats>
                               <format>png</format>
                               <format>svg</format>
@@ -61,6 +61,7 @@
               <param>gameStates</param>
               <param>utils</param>
               <param>inputs</param>
+              <param>main</param>
             </packages>
             <ignores>
               <param></param>
