@@ -1,12 +1,12 @@
 package gameStates;
 
+import static utils.Constants.GameConstants.*;
+
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.Color;
-
 import main.Game;
-import static utils.Constants.GameConstants.*;
 
 public class GameOver extends State implements StateMethods {
 
@@ -45,6 +45,10 @@ public class GameOver extends State implements StateMethods {
   }
 
   @Override
+  public void mouseDragged(MouseEvent e) {
+  }
+
+  @Override
   public void keyPressed(KeyEvent e) {
     game.exit();
   }
@@ -56,5 +60,4 @@ public class GameOver extends State implements StateMethods {
   @Override
   public void windowLostFocus() {
   }
-
 }

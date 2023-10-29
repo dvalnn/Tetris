@@ -1,18 +1,16 @@
-package gameElements;
-
-import java.awt.Color;
-import java.awt.geom.Point2D;
+package gameElements.shapeTypes;
 
 import static utils.Constants.GameConstants.*;
+
+import gameElements.Shape;
+import java.awt.Color;
+import java.awt.geom.Point2D;
 
 public class OShape extends Shape {
 
   private static final Point2D[] SHAPE = {
-      new Point2D.Double(0, 0),
-      new Point2D.Double(0, 1),
-      new Point2D.Double(1, 0),
-      new Point2D.Double(1, 1)
-  };
+      new Point2D.Double(0, 0), new Point2D.Double(0, 1),
+      new Point2D.Double(1, 0), new Point2D.Double(1, 1) };
   private static final Point2D CENTER = new Point2D.Double(0.5, 0.5);
   private static final Color COLOR = Color.YELLOW;
 
@@ -38,5 +36,4 @@ public class OShape extends Shape {
   protected void calculateMinMaxCoords() {
     // do nothing
   }
-
 }

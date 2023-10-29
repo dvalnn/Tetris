@@ -2,7 +2,6 @@ package main;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-
 import javax.swing.JFrame;
 
 // GameWindow is a JFrame -- a window for the game to be displayed in
