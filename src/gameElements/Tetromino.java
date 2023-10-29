@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
+import utils.WallKickData;
 import gameElements.shapeTypes.*;
 
 import static utils.Constants.Directions.*;
@@ -16,20 +17,20 @@ public class Tetromino {
   private GhostShape ghost;
   private Board board;
 
-  private boolean updateGhost = true;
-
-  private int verticalMoveTick = 0;
-  private int horizontalMoveTick = 0;
-
   private final int HORIZONTAL_SPEED = 20;
   private final int VERTICAL_SLOW = 1;
   private final int VERTICAL_FAST = 20;
   private final int VERTICAL_INSTANT = 10000;
 
+  private int verticalMoveTick = 0;
+  private int horizontalMoveTick = 0;
   private int verticalSpeed = VERTICAL_SLOW;
+  private int rotationStatus = UP;
+  private int shapeID;
 
   private boolean right, left, down, drop;
   private boolean active = true;
+  private boolean updateGhost = true;
 
   private Random rand = new Random();
 
@@ -42,7 +43,7 @@ public class Tetromino {
     System.out.println("[Tetromino] Shape: " + shape);
   }
 
-  //NOTE: this constructor is only used for testing
+  // NOTE: this constructor is only used for testing
   // TODO: remove this constructor
   public Tetromino(int renderSize, Point2D renderOrigin, Board board, int shapeID) {
     this.board = board;
@@ -54,6 +55,7 @@ public class Tetromino {
   }
 
   private Shape shapeFactory(int renderSize, Point2D spawnPoint, int shapeID) {
+    this.shapeID = shapeID;
     switch (shapeID) {
       case I:
         return new IShape(renderSize, spawnPoint);
@@ -74,7 +76,7 @@ public class Tetromino {
     }
   }
 
-  private boolean checkHorizontalColision(int dir) {
+  private boolean sideColides(int dir) {
     int delta = dir == LEFT ? -1 : 1;
 
     if (dir == LEFT && shape.getMinX() <= 0)
@@ -93,7 +95,7 @@ public class Tetromino {
     return false;
   }
 
-  private boolean checkVerticalColision(Shape shape) {
+  private boolean bottomColides(Shape shape) {
     if (shape.getMaxY() + 1 >= BOARD_HEIGHT)
       return true;
 
@@ -108,7 +110,7 @@ public class Tetromino {
     return false;
   }
 
-  private boolean checkRotationColision() {
+  private boolean rotationColides() {
     if (shape.getMinY() < 0 || shape.getMaxY() >= BOARD_HEIGHT)
       return true;
 
@@ -129,6 +131,8 @@ public class Tetromino {
   public void rotate(int direction) {
     double angle = 0;
 
+    int rotationStatusDelta = direction == RIGHT ? 1 : -1;
+
     switch (direction) {
       case LEFT:
         angle = -Math.PI / 2;
@@ -140,35 +144,58 @@ public class Tetromino {
 
     shape.rotate(angle);
 
-    boolean rotationBlocked = checkRotationColision();
-    System.out.println("Rotation blocked: " + rotationBlocked);
+    for (int kickIndex = 0; kickIndex < 5; kickIndex++) {
 
-    if (rotationBlocked)
-      shape.rotate(-angle);
-    else {
-      ghost.rotate(angle);
-      updateGhost = true;
+      // get kick data for current rotation status, direction and kick index
+      // kick data is a point with x and y coordinates
+      // x and y are the amount of pixels the shape needs to move to avoid collision
+      // with other shapes. The amount of pixels is relative to the current rotation
+      // status and direction. Note that the rotation status is only updated if the
+      // rotation succeeds.
+      Point2D kickData = WallKickData.getKickData(shapeID, rotationStatus, direction, kickIndex);
+      shape.move((int) kickData.getX(), (int) kickData.getY());
+
+      // check if the rotation is valid for the current kick data
+      if (!rotationColides()) {
+        System.out.println("[Tetromino] Wall kicked on variant number " + kickIndex + " with rotation status "
+            + rotationStatus + " and direction " + direction);
+        // if the rotation is valid, update the ghost and rotation status
+        ghost.goToMaster(shape.getCenter());
+        ghost.rotate(angle);
+        updateGhost = true;
+
+        rotationStatus = (rotationStatus + rotationStatusDelta) % 4;
+        if (rotationStatus < 0)
+          rotationStatus = 3;
+        return;
+      }
+
+      // if the rotation is not valid, move the shape back to its original position
+      shape.move(-(int) kickData.getX(), -(int) kickData.getY());
     }
+
+    // if all kick variations fail, reset the shape to its original state
+    shape.rotate(-angle);
   }
 
   public void move(int direction) {
     switch (direction) {
       case LEFT:
-        if (!checkHorizontalColision(LEFT)) {
+        if (!sideColides(LEFT)) {
           shape.move(-1, 0);
           updateGhost = true;
         }
         break;
 
       case RIGHT:
-        if (!checkHorizontalColision(RIGHT)) {
+        if (!sideColides(RIGHT)) {
           shape.move(1, 0);
           updateGhost = true;
         }
         break;
 
       case DOWN:
-        if (checkVerticalColision(shape))
+        if (bottomColides(shape))
           active = false;
         else
           shape.move(0, 1);
@@ -178,7 +205,7 @@ public class Tetromino {
   }
 
   public void dropGhost() {
-    while (!checkVerticalColision(ghost))
+    while (!bottomColides(ghost))
       ghost.move(0, 1);
   }
 
