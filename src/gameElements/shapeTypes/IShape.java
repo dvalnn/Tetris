@@ -1,20 +1,16 @@
 package gameElements.shapeTypes;
 
-import java.awt.Color;
-import java.awt.geom.Point2D;
+import static utils.Constants.GameConstants.*;
 
 import gameElements.Shape;
-
-import static utils.Constants.GameConstants.*;
+import java.awt.Color;
+import java.awt.geom.Point2D;
 
 public class IShape extends Shape {
 
   private static final Point2D[] SHAPE = {
-      new Point2D.Double(0, 0),
-      new Point2D.Double(1, 0),
-      new Point2D.Double(2, 0),
-      new Point2D.Double(3, 0)
-  };
+      new Point2D.Double(0, 0), new Point2D.Double(1, 0),
+      new Point2D.Double(2, 0), new Point2D.Double(3, 0) };
   private static final Point2D CENTER = new Point2D.Double(1.5, 0.5);
   private static final Color COLOR = new Color(0, 255, 255); // cyan
 

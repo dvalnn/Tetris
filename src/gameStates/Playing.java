@@ -1,16 +1,15 @@
 package gameStates;
 
+import static utils.Constants.Directions.*;
+import static utils.Constants.GameConstants.*;
+import static utils.Constants.TetrominoIDs.*;
+
+import gameElements.Board;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.Color;
-
 import main.Game;
-import gameElements.Board;
-
-import static utils.Constants.Directions.*;
-import static utils.Constants.TetrominoIDs.*;
-import static utils.Constants.GameConstants.*;
 
 public class Playing extends State implements StateMethods {
 
@@ -116,9 +115,9 @@ public class Playing extends State implements StateMethods {
       case (KeyEvent.VK_P):
         board.togglePause();
         break;
-  
-      //NOTE: these keybinds are only for debugging purposes
-      //TODO: remove these keybinds
+
+      // NOTE: these keybinds are only for debugging purposes
+      // TODO: remove these keybinds
       case (KeyEvent.VK_1):
         board.setTetromino(I);
         break;
@@ -146,7 +145,7 @@ public class Playing extends State implements StateMethods {
       case (KeyEvent.VK_7):
         board.setTetromino(Z);
         break;
-      
+
       default:
         break;
     }
@@ -180,5 +179,4 @@ public class Playing extends State implements StateMethods {
   public void windowLostFocus() {
     // board.disableInputs();
   }
-
 }

@@ -21,11 +21,7 @@ public abstract class Shape {
   // * can be used as rotatePoints() wrapper
   public abstract void rotate(double angle);
 
-  public Shape(
-      Point2D center,
-      Point2D[] points,
-      Color color,
-      int renderSize,
+  public Shape(Point2D center, Point2D[] points, Color color, int renderSize,
       Point2D renderOrigin) {
 
     this.center = (Point2D) center.clone();
@@ -57,24 +53,25 @@ public abstract class Shape {
       double y = point.getY() - center.getY();
       double newX = x * Math.cos(angle) - y * Math.sin(angle);
       double newY = x * Math.sin(angle) + y * Math.cos(angle);
-      point.setLocation(Math.round(newX + center.getX()), Math.round(newY + center.getY()));
+      point.setLocation(Math.round(newX + center.getX()),
+          Math.round(newY + center.getY()));
     }
   }
 
   public void render(Graphics g) {
     for (Point2D point : shape) {
       g.setColor(color);
-      g.fillRect(
-          (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),
-          (int) (point.getY() * renderSize - renderSize / 2) + (int) renderOffset.getY(),
-          renderSize,
-          renderSize);
+      g.fillRect((int) (point.getX() * renderSize - renderSize / 2) +
+          (int) renderOffset.getX(),
+          (int) (point.getY() * renderSize - renderSize / 2) +
+              (int) renderOffset.getY(),
+          renderSize, renderSize);
       g.setColor(color.darker().darker());
-      g.drawRect(
-          (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),
-          (int) (point.getY() * renderSize - renderSize / 2) + (int) renderOffset.getY(),
-          renderSize,
-          renderSize);
+      g.drawRect((int) (point.getX() * renderSize - renderSize / 2) +
+          (int) renderOffset.getX(),
+          (int) (point.getY() * renderSize - renderSize / 2) +
+              (int) renderOffset.getY(),
+          renderSize, renderSize);
     }
   }
 

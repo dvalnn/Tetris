@@ -1,21 +1,17 @@
 package gameElements.shapeTypes;
 
-import java.awt.Color;
-import java.awt.geom.Point2D;
-
-import gameElements.Shape;
-
 import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
+
+import gameElements.Shape;
+import java.awt.Color;
+import java.awt.geom.Point2D;
 
 public class TShape extends Shape {
 
   private static final Point2D[] SHAPE = {
-      new Point2D.Double(0, 1),
-      new Point2D.Double(1, 1),
-      new Point2D.Double(2, 1),
-      new Point2D.Double(1, 0)
-  };
+      new Point2D.Double(0, 1), new Point2D.Double(1, 1),
+      new Point2D.Double(2, 1), new Point2D.Double(1, 0) };
   private static final Point2D CENTER = new Point2D.Double(1, 1);
   private static final Color COLOR = new Color(128, 0, 128); // Purple
 
@@ -77,5 +73,4 @@ public class TShape extends Shape {
     horizontal = !horizontal;
     calculateMinMaxCoords();
   }
-
 }

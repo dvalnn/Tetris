@@ -1,10 +1,9 @@
 package inputs;
 
+import gameStates.GameState;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import main.GamePanel;
-import gameStates.GameState;
 
 public class MouseInputs extends MouseAdapter {
   private GamePanel gamePanel;

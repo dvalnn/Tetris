@@ -1,15 +1,13 @@
 package main;
 
-import javax.swing.JPanel;
+import static utils.Constants.GameConstants.*;
 
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
-
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
-
-import static utils.Constants.GameConstants.*;
+import javax.swing.JPanel;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
 public class GamePanel extends JPanel {

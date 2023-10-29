@@ -1,9 +1,8 @@
 package inputs;
 
+import gameStates.GameState;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-import gameStates.GameState;
 import main.GamePanel;
 
 public class KeyboardInputs implements KeyListener {
@@ -33,7 +32,6 @@ public class KeyboardInputs implements KeyListener {
         gamePanel.getGame().getGameOver().keyPressed(e);
         break;
     }
-
   }
 
   @Override

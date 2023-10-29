@@ -1,13 +1,12 @@
 package gameElements;
 
+import static utils.Constants.GameConstants.*;
+
+import gameStates.GameState;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Point2D;
-
-import gameStates.GameState;
-
-import static utils.Constants.GameConstants.*;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
 public class Board {
@@ -133,12 +132,11 @@ public class Board {
         }
       }
     }
-
   }
 
   // NOTE: This method is only used for debugging purposes
-  public void setTetromino(int tetroID){
-    if(!debugMode)
+  public void setTetromino(int tetroID) {
+    if (!debugMode)
       return;
     tetro1 = new Tetromino(renderSize, renderOrigin, this, tetroID);
   }
@@ -158,9 +156,9 @@ public class Board {
   }
 
   public void update() {
-    //NOTE: This is only used for debugging purposes
-    //TODO: Remove this
-    if(paused)
+    // NOTE: This is only used for debugging purposes
+    // TODO: Remove this
+    if (paused)
       return;
     tetro1.update();
     if (!tetro1.isActive()) {
@@ -178,26 +176,24 @@ public class Board {
         g.fillRect(
             (int) (col * renderSize - renderSize / 2) + (int) renderOrigin.getX(),
             (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY(),
-            renderSize,
-            renderSize);
+            renderSize, renderSize);
         g.setColor(gridColor);
         g.drawRect(
             (int) (col * renderSize - renderSize / 2) + (int) renderOrigin.getX(),
             (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY(),
-            renderSize,
-            renderSize);
+            renderSize, renderSize);
       }
     }
 
     tetro1.render(g);
 
-    //NOTE: This is only used for debugging purposes
-    //TODO: Remove this
+    // NOTE: This is only used for debugging purposes
+    // TODO: Remove this
     if (debugMode) {
       g.setColor(Color.RED);
       g.drawString("Debug Mode", 10, 10);
     }
-    if(paused) {
+    if (paused) {
       g.setColor(Color.RED);
       g.drawString("Paused", 10, 30);
     }
@@ -225,5 +221,4 @@ public class Board {
   public Color getBackgroundColor() {
     return backgroundColor;
   }
-
 }

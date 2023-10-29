@@ -2,19 +2,17 @@ package main;
 
 import static utils.Constants.GameConstants.*;
 
-import java.awt.Graphics;
-
+import gameStates.GameOver;
 import gameStates.GameState;
 import gameStates.Menu;
 import gameStates.Playing;
-import gameStates.GameOver;
+import java.awt.Graphics;
 
 public class Game implements Runnable {
 
   private GameWindow gameWindow;
   private GamePanel gamePanel;
   private Thread gameThread;
-
 
   private Menu menu;
   private Playing playing;
@@ -127,10 +125,10 @@ public class Game implements Runnable {
 
       // prints the FPS and UPS every second
       // if (System.currentTimeMillis() - lastCheck >= 1000) {
-        // lastCheck = System.currentTimeMillis();
-        // System.out.println("FPS " + frames + " | UPS " + updates);
-        // frames = 0;
-        // updates = 0;
+      // lastCheck = System.currentTimeMillis();
+      // System.out.println("FPS " + frames + " | UPS " + updates);
+      // frames = 0;
+      // updates = 0;
       // }
 
       if (exit)

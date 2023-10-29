@@ -28,5 +28,4 @@ public class Constants {
     public static final int S = 5;
     public static final int Z = 6;
   }
-
 }

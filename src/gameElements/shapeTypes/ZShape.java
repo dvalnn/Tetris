@@ -1,12 +1,11 @@
 package gameElements.shapeTypes;
 
-import java.awt.Color;
-import java.awt.geom.Point2D;
-
-import gameElements.Shape;
-
 // import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
+
+import gameElements.Shape;
+import java.awt.Color;
+import java.awt.geom.Point2D;
 
 public class ZShape extends Shape {
 
@@ -46,5 +45,4 @@ public class ZShape extends Shape {
     rotatePoints(angle);
     calculateMinMaxCoords();
   }
-
 }

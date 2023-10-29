@@ -1,11 +1,10 @@
 package gameElements.shapeTypes;
 
-import java.awt.Color;
-import java.awt.geom.Point2D;
+import static utils.Constants.GameConstants.*;
 
 import gameElements.Shape;
-
-import static utils.Constants.GameConstants.*;
+import java.awt.Color;
+import java.awt.geom.Point2D;
 
 public class LShape extends Shape {
 
@@ -43,5 +42,4 @@ public class LShape extends Shape {
     rotatePoints(angle);
     calculateMinMaxCoords();
   }
-
 }

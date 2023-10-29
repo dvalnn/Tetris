@@ -1,15 +1,14 @@
 package gameElements;
 
+import static utils.Constants.Directions.*;
+import static utils.Constants.GameConstants.*;
+import static utils.Constants.TetrominoIDs.*;
+
+import gameElements.shapeTypes.*;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.Random;
-
 import utils.WallKickData;
-import gameElements.shapeTypes.*;
-
-import static utils.Constants.Directions.*;
-import static utils.Constants.TetrominoIDs.*;
-import static utils.Constants.GameConstants.*;
 
 public class Tetromino {
 
@@ -45,7 +44,8 @@ public class Tetromino {
 
   // NOTE: this constructor is only used for testing
   // TODO: remove this constructor
-  public Tetromino(int renderSize, Point2D renderOrigin, Board board, int shapeID) {
+  public Tetromino(int renderSize, Point2D renderOrigin, Board board,
+      int shapeID) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, shapeID);
     ghost = new GhostShape(shape);
@@ -148,17 +148,19 @@ public class Tetromino {
 
       // get kick data for current rotation status, direction and kick index
       // kick data is a point with x and y coordinates
-      // x and y are the amount of pixels the shape needs to move to avoid collision
-      // with other shapes. The amount of pixels is relative to the current rotation
-      // status and direction. Note that the rotation status is only updated if the
-      // rotation succeeds.
-      Point2D kickData = WallKickData.getKickData(shapeID, rotationStatus, direction, kickIndex);
+      // x and y are the amount of pixels the shape needs to move to avoid
+      // collision with other shapes. The amount of pixels is relative to the
+      // current rotation status and direction. Note that the rotation status is
+      // only updated if the rotation succeeds.
+      Point2D kickData = WallKickData.getKickData(shapeID, rotationStatus,
+          direction, kickIndex);
       shape.move((int) kickData.getX(), (int) kickData.getY());
 
       // check if the rotation is valid for the current kick data
       if (!rotationColides()) {
-        System.out.println("[Tetromino] Wall kicked on variant number " + kickIndex + " with rotation status "
-            + rotationStatus + " and direction " + direction);
+        System.out.println("[Tetromino] Wall kicked on variant number " +
+            kickIndex + " with rotation status " +
+            rotationStatus + " and direction " + direction);
         // if the rotation is valid, update the ghost and rotation status
         ghost.goToMaster(shape.getCenter());
         ghost.rotate(angle);
@@ -170,7 +172,8 @@ public class Tetromino {
         return;
       }
 
-      // if the rotation is not valid, move the shape back to its original position
+      // if the rotation is not valid, move the shape back to its original
+      // position
       shape.move(-(int) kickData.getX(), -(int) kickData.getY());
     }
 
@@ -280,5 +283,4 @@ public class Tetromino {
   public Shape getShape() {
     return shape;
   }
-
 }
