@@ -17,6 +17,7 @@ public class TitleScreen extends State implements StateMethods {
   public TitleScreen(Game game) {
     super(game);
     importImage();
+    game.initNetworking();
   }
 
   private void importImage() {
@@ -31,7 +32,8 @@ public class TitleScreen extends State implements StateMethods {
   }
 
   @Override
-  public void update() {}
+  public void update() {
+  }
 
   @Override
   public void render(Graphics g) {
@@ -44,16 +46,20 @@ public class TitleScreen extends State implements StateMethods {
   }
 
   @Override
-  public void mousePressed(MouseEvent e) {}
+  public void mousePressed(MouseEvent e) {
+  }
 
   @Override
-  public void mouseReleased(MouseEvent e) {}
+  public void mouseReleased(MouseEvent e) {
+  }
 
   @Override
-  public void mouseMoved(MouseEvent e) {}
+  public void mouseMoved(MouseEvent e) {
+  }
 
   @Override
-  public void mouseDragged(MouseEvent e) {}
+  public void mouseDragged(MouseEvent e) {
+  }
 
   @Override
   public void keyPressed(KeyEvent e) {
@@ -61,8 +67,10 @@ public class TitleScreen extends State implements StateMethods {
   }
 
   @Override
-  public void keyReleased(KeyEvent e) {}
+  public void keyReleased(KeyEvent e) {
+  }
 
   @Override
-  public void windowLostFocus() {}
+  public void windowLostFocus() {
+  }
 }
