@@ -5,19 +5,25 @@ import static utils.Constants.GameConstants.*;
 import static utils.Constants.TetrominoIDs.*;
 
 import gameElements.Board;
+import gameElements.BoardMP;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 import main.Game;
 
 public class Playing extends State implements StateMethods {
 
   private Board board;
+  private List<BoardMP> activeBoards = new ArrayList<BoardMP>();
   private Color boardColor = new Color(20, 20, 20);
 
   private final int X_OFFSET = GAME_WIDTH / 2 - BOARD_WIDTH * BOARD_SQUARE / 2;
-  private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
+  private final int Y_OFFSET =
+      GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
 
   private int networkTickCounter = 0;
 
@@ -69,8 +75,7 @@ public class Playing extends State implements StateMethods {
   }
 
   @Override
-  public void mouseMoved(MouseEvent e) {
-  }
+  public void mouseMoved(MouseEvent e) {}
 
   @Override
   public void mouseDragged(MouseEvent e) {
@@ -83,107 +88,112 @@ public class Playing extends State implements StateMethods {
   @Override
   public void keyPressed(KeyEvent e) {
     switch (e.getKeyCode()) {
-      case (KeyEvent.VK_Z):
-        board.getTetromino().rotate(LEFT);
-        break;
+    case (KeyEvent.VK_Z):
+      board.getTetromino().rotate(LEFT);
+      break;
 
-      case (KeyEvent.VK_X):
-        board.getTetromino().rotate(RIGHT);
-        break;
+    case (KeyEvent.VK_X):
+      board.getTetromino().rotate(RIGHT);
+      break;
 
-      case (KeyEvent.VK_LEFT):
-        board.getTetromino().setLeft(true);
-        break;
+    case (KeyEvent.VK_LEFT):
+      board.getTetromino().setLeft(true);
+      break;
 
-      case (KeyEvent.VK_DOWN):
-        board.getTetromino().setDown(true);
-        break;
+    case (KeyEvent.VK_DOWN):
+      board.getTetromino().setDown(true);
+      break;
 
-      case (KeyEvent.VK_RIGHT):
-        board.getTetromino().setRight(true);
-        break;
+    case (KeyEvent.VK_RIGHT):
+      board.getTetromino().setRight(true);
+      break;
 
-      case (KeyEvent.VK_SPACE):
-        board.getTetromino().setDrop(true);
-        break;
+    case (KeyEvent.VK_SPACE):
+      board.getTetromino().setDrop(true);
+      break;
 
-      case (KeyEvent.VK_G):
-        // board.toggleGrid();
-        break;
+    case (KeyEvent.VK_G):
+      // board.toggleGrid();
+      break;
 
-      case (KeyEvent.VK_D):
-        board.toggleDebugMode();
-        break;
+    case (KeyEvent.VK_D):
+      board.toggleDebugMode();
+      break;
 
-      case (KeyEvent.VK_R):
-        board.reset();
-        break;
+    case (KeyEvent.VK_R):
+      board.reset();
+      break;
 
-      case (KeyEvent.VK_P):
-        board.togglePause();
-        break;
+    case (KeyEvent.VK_P):
+      board.togglePause();
+      break;
 
-      // NOTE: these keybinds are only for debugging purposes
-      // TODO: remove these keybinds
-      case (KeyEvent.VK_1):
-        board.setTetromino(I);
-        break;
+    // NOTE: these keybinds are only for debugging purposes
+    // TODO: remove these keybinds
+    case (KeyEvent.VK_1):
+      board.setTetromino(I);
+      break;
 
-      case (KeyEvent.VK_2):
-        board.setTetromino(T);
-        break;
+    case (KeyEvent.VK_2):
+      board.setTetromino(T);
+      break;
 
-      case (KeyEvent.VK_3):
-        board.setTetromino(O);
-        break;
+    case (KeyEvent.VK_3):
+      board.setTetromino(O);
+      break;
 
-      case (KeyEvent.VK_4):
-        board.setTetromino(J);
-        break;
+    case (KeyEvent.VK_4):
+      board.setTetromino(J);
+      break;
 
-      case (KeyEvent.VK_5):
-        board.setTetromino(L);
-        break;
+    case (KeyEvent.VK_5):
+      board.setTetromino(L);
+      break;
 
-      case (KeyEvent.VK_6):
-        board.setTetromino(S);
-        break;
+    case (KeyEvent.VK_6):
+      board.setTetromino(S);
+      break;
 
-      case (KeyEvent.VK_7):
-        board.setTetromino(Z);
-        break;
+    case (KeyEvent.VK_7):
+      board.setTetromino(Z);
+      break;
 
-      default:
-        break;
+    default:
+      break;
     }
   }
 
   @Override
   public void keyReleased(KeyEvent e) {
     switch (e.getKeyCode()) {
-      case (KeyEvent.VK_LEFT):
-        board.getTetromino().setLeft(false);
-        break;
+    case (KeyEvent.VK_LEFT):
+      board.getTetromino().setLeft(false);
+      break;
 
-      case (KeyEvent.VK_DOWN):
-        board.getTetromino().setDown(false);
-        break;
+    case (KeyEvent.VK_DOWN):
+      board.getTetromino().setDown(false);
+      break;
 
-      case (KeyEvent.VK_RIGHT):
-        board.getTetromino().setRight(false);
-        break;
+    case (KeyEvent.VK_RIGHT):
+      board.getTetromino().setRight(false);
+      break;
 
-      case (KeyEvent.VK_SPACE):
-        board.getTetromino().setDrop(false);
-        break;
+    case (KeyEvent.VK_SPACE):
+      board.getTetromino().setDrop(false);
+      break;
 
-      default:
-        break;
+    default:
+      break;
     }
   }
 
   @Override
   public void windowLostFocus() {
     // board.disableInputs();
+  }
+
+  public void addBoardMP(String username, InetAddress address, int port) {
+    activeBoards.add(
+        new BoardMP(BOARD_SQUARE, 0, 0, Color.black, address, port, username));
   }
 }
