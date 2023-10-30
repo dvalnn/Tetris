@@ -17,7 +17,6 @@ public class TitleScreen extends State implements StateMethods {
   public TitleScreen(Game game) {
     super(game);
     importImage();
-    game.initNetworking();
   }
 
   private void importImage() {
@@ -63,14 +62,21 @@ public class TitleScreen extends State implements StateMethods {
 
   @Override
   public void keyPressed(KeyEvent e) {
-    GameState.state = GameState.PLAYING;
+    switch (e.getKeyCode()) {
+      case KeyEvent.VK_ENTER:
+        GameState.state = GameState.PLAYING;
+        break;
+      case KeyEvent.VK_M:
+        game.initNetworking();
+        GameState.state = GameState.PLAYING;
+        break;
+    }
   }
 
   @Override
   public void keyReleased(KeyEvent e) {
   }
 
-  @Override
   public void windowLostFocus() {
   }
 }

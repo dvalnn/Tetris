@@ -24,6 +24,8 @@ public class Game implements Runnable {
   private GameClient client;
   private GameServer server;
 
+  private boolean serverActive = false;
+  private boolean clientActive = false;
   private boolean exit = false;
 
   public Game() {
@@ -49,9 +51,10 @@ public class Game implements Runnable {
       server = new GameServer(this);
       server.start();
     } else {
-      // TODO make tis safer by checking if the IP address is valid
+      // TODO make this safer by checking if the IP address is valid
       // TODO make this a text field instead of a dialog box
-      String ipAddress = JOptionPane.showInputDialog("Enter server IP address:");
+      String ipAddress = JOptionPane.showInputDialog("Enter server IP address:").trim();
+      System.out.println("Connecting to " + ipAddress);
       client = new GameClient(this, ipAddress);
       client.start();
       client.sendData("ping".getBytes());
@@ -174,5 +177,29 @@ public class Game implements Runnable {
 
   public GameOver getGameOver() {
     return gameOver;
+  }
+
+  public boolean isServerActive() {
+    return serverActive;
+  }
+
+  public void setServerActive(boolean serverActive) {
+    this.serverActive = serverActive;
+  }
+
+  public boolean isClientActive() {
+    return clientActive;
+  }
+
+  public void setClientActive(boolean clientActive) {
+    this.clientActive = clientActive;
+  }
+
+  public GameClient getClient() {
+    return client;
+  }
+
+  public GameServer getServer() {
+    return server;
   }
 }

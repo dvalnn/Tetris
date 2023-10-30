@@ -19,6 +19,8 @@ public class Playing extends State implements StateMethods {
   private final int X_OFFSET = GAME_WIDTH / 2 - BOARD_WIDTH * BOARD_SQUARE / 2;
   private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
 
+  private int networkTickCounter = 0;
+
   private boolean mouseButton1Pressed = false;
   private boolean mouseButton3Pressed = false;
 
@@ -30,6 +32,11 @@ public class Playing extends State implements StateMethods {
   @Override
   public void update() {
     board.update();
+    networkTickCounter++;
+    if (game.isClientActive() && networkTickCounter > 50) {
+      networkTickCounter = 0;
+      game.getClient().sendData("ping".getBytes());
+    }
   }
 
   @Override

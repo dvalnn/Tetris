@@ -22,12 +22,14 @@ public class GameClient extends Thread {
       this.serverAddress = InetAddress.getByName(ipAddress);
     } catch (Exception e) {
       e.printStackTrace();
+      return;
     }
     try {
       this.socket = new DatagramSocket();
     } catch (Exception e) {
       e.printStackTrace();
     }
+    game.setClientActive(true);
   }
 
   public void parsePacket(byte[] data) {
