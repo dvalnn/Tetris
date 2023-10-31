@@ -9,7 +9,9 @@ public class KeyboardInputs implements KeyListener {
 
   private GamePanel gamePanel;
 
-  public KeyboardInputs(GamePanel gamePanel) { this.gamePanel = gamePanel; }
+  public KeyboardInputs(GamePanel gamePanel) {
+    this.gamePanel = gamePanel;
+  }
 
   @Override
   public void keyTyped(KeyEvent e) {}
@@ -17,34 +19,42 @@ public class KeyboardInputs implements KeyListener {
   @Override
   public void keyPressed(KeyEvent e) {
     switch (GameState.state) {
-    case TITLE_SCREEN:
-      gamePanel.getGame().getMenu().keyPressed(e);
-      break;
+      case TITLE_SCREEN:
+        gamePanel.getGame().getMenu().keyPressed(e);
+        break;
 
-    case PLAYING:
-      gamePanel.getGame().getPlaying().keyPressed(e);
-      break;
+      case PLAYING:
+        gamePanel.getGame().getPlaying().keyPressed(e);
+        break;
 
-    case GAME_OVER:
-      gamePanel.getGame().getGameOver().keyPressed(e);
-      break;
+      case PLAYING_MP:
+        gamePanel.getGame().getPlayingMP().keyPressed(e);
+        break;
+
+      case GAME_OVER:
+        gamePanel.getGame().getGameOver().keyPressed(e);
+        break;
     }
   }
 
   @Override
   public void keyReleased(KeyEvent e) {
     switch (GameState.state) {
-    case TITLE_SCREEN:
-      gamePanel.getGame().getMenu().keyReleased(e);
-      break;
+      case TITLE_SCREEN:
+        gamePanel.getGame().getMenu().keyReleased(e);
+        break;
 
-    case PLAYING:
-      gamePanel.getGame().getPlaying().keyReleased(e);
-      break;
+      case PLAYING:
+        gamePanel.getGame().getPlaying().keyReleased(e);
+        break;
 
-    case GAME_OVER:
-      gamePanel.getGame().getGameOver().keyReleased(e);
-      break;
+      case PLAYING_MP:
+        gamePanel.getGame().getPlayingMP().keyReleased(e);
+        break;
+
+      case GAME_OVER:
+        gamePanel.getGame().getGameOver().keyReleased(e);
+        break;
     }
   }
 }

@@ -1,5 +1,6 @@
 package gameStates;
 
+import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
 
 import gameElements.Board;
@@ -32,60 +33,98 @@ public class PlayingMP extends State implements StateMethods {
 
   @Override
   public void update() {
+    if (opponentBoards.size() == 0) {
+      return;
+    }
+
+    playerBoard.update();
+    for (BoardMP board : opponentBoards) {
+      board.update();
+    }
   }
 
   @Override
   public void render(Graphics g) {
     playerBoard.render(g);
-    for (BoardMP board : opponentBoards) {
-      board.render(g);
+    if (opponentBoards.size() == 0) {
+      g.drawString("Waiting for opponent...", GAME_WIDTH / 2, GAME_HEIGHT / 2);
+    } else
+      for (BoardMP board : opponentBoards) {
+        board.render(g);
+      }
+  }
+
+  @Override
+  public void mouseClicked(MouseEvent e) {}
+
+  @Override
+  public void mousePressed(MouseEvent e) {}
+
+  @Override
+  public void mouseReleased(MouseEvent e) {}
+
+  @Override
+  public void mouseMoved(MouseEvent e) {}
+
+  @Override
+  public void mouseDragged(MouseEvent e) {}
+
+  @Override
+  public void keyPressed(KeyEvent e) {
+    // same controls as playing.java
+    switch (e.getKeyCode()) {
+      case (KeyEvent.VK_Z):
+        playerBoard.getTetromino().rotate(LEFT);
+        break;
+
+      case (KeyEvent.VK_X):
+        playerBoard.getTetromino().rotate(RIGHT);
+        break;
+
+      case (KeyEvent.VK_LEFT):
+        playerBoard.getTetromino().setLeft(true);
+        break;
+
+      case (KeyEvent.VK_DOWN):
+        playerBoard.getTetromino().setDown(true);
+        break;
+
+      case (KeyEvent.VK_RIGHT):
+        playerBoard.getTetromino().setRight(true);
+        break;
+
+      case (KeyEvent.VK_SPACE):
+        playerBoard.getTetromino().setDrop(true);
+        break;
     }
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
-  }
-
-  @Override
-  public void mousePressed(MouseEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
-  }
-
-  @Override
-  public void mouseReleased(MouseEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
-  }
-
-  @Override
-  public void mouseMoved(MouseEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
-  }
-
-  @Override
-  public void mouseDragged(MouseEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'mouseDragged'");
-  }
-
-  @Override
-  public void keyPressed(KeyEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
-  }
-
-  @Override
   public void keyReleased(KeyEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+    switch (e.getKeyCode()) {
+      case (KeyEvent.VK_LEFT):
+        playerBoard.getTetromino().setLeft(false);
+        break;
+
+      case (KeyEvent.VK_DOWN):
+        playerBoard.getTetromino().setDown(false);
+        break;
+
+      case (KeyEvent.VK_RIGHT):
+        playerBoard.getTetromino().setRight(false);
+        break;
+
+      case (KeyEvent.VK_SPACE):
+        playerBoard.getTetromino().setDrop(false);
+        break;
+
+      default:
+        break;
+    }
   }
 
   @Override
-  public void windowLostFocus() {
-    // TODO Auto-generated method stub
-  }
+  public void windowLostFocus() {}
 
   public void addBoardMP(String username, InetAddress address, int port) {
     System.out.println("[PlayingMP] Adding board for " + username);
