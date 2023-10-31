@@ -12,14 +12,20 @@ public abstract class Packet {
 
     private int packetId;
 
-    private PacketTypes(int packetId) { this.packetId = packetId; }
+    private PacketTypes(int packetId) {
+      this.packetId = packetId;
+    }
 
-    public int getId() { return packetId; }
+    public int getId() {
+      return packetId;
+    }
   }
 
   public byte packetId;
 
-  public Packet(int packetId) { this.packetId = (byte)packetId; }
+  public Packet(int packetId) {
+    this.packetId = (byte) packetId;
+  }
 
   public abstract void writeData(GameClient client);
 
