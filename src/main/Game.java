@@ -46,7 +46,8 @@ public class Game implements Runnable {
   public void initNetworking() {
     // TODO make this a dialog box instead of a yes/no option
     if (JOptionPane.showConfirmDialog(null, "Run as server?") == JOptionPane.YES_OPTION) {
-      server = new GameServer(this);
+      String hostName = JOptionPane.showInputDialog("Enter server name:").trim();
+      server = new GameServer(this, hostName);
       server.start();
       serverActive = true;
     } else {
@@ -159,8 +160,7 @@ public class Game implements Runnable {
       // updates = 0;
       // }
 
-      if (exit)
-        break;
+      if (exit) break;
     }
 
     gameWindow.dispose();
@@ -207,7 +207,7 @@ public class Game implements Runnable {
     return server;
   }
 
-  public void addBoardMP(String username, InetAddress address, int port) {
+  public void addPlayer(String username, InetAddress address, int port) {
     playingMP.addBoardMP(username, address, port);
   }
 

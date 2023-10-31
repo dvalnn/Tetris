@@ -57,14 +57,8 @@ public class GameClient extends Thread {
 
   private void handleLogin(Packet00Login packet, InetAddress address, int port) {
     System.out.println(
-        "[Client] "
-            + address.toString()
-            + ":"
-            + port
-            + " "
-            + packet.getUsername()
-            + " has joined the game");
-    game.addBoardMP(packet.getUsername(), address, port);
+        "[Client] Connected to " + packet.getUsername() + " at " + address.toString() + ":" + port);
+    game.addPlayer(packet.getUsername(), address, port);
   }
 
   public void sendData(byte[] data) {
