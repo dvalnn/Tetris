@@ -10,15 +10,15 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
 import main.Game;
 
 public class PlayingMP extends State implements StateMethods {
 
   Color boardColor = new Color(20, 20, 20);
   Board playerBoard;
-  List<BoardMP> opponentBoards = new ArrayList<BoardMP>();
+  BoardMP opponentBoard;
+  private boolean matchOver = false;
+  private boolean opponentDisconnected = false;
 
   // calculate the offsets so that the boards are centered
   // and the player's board is on the left and the opponent's
@@ -31,27 +31,43 @@ public class PlayingMP extends State implements StateMethods {
     playerBoard = new Board(BOARD_SQUARE, PLAYER_X_OFFSET, Y_OFFSET, boardColor);
   }
 
+  public void addBoardMP(String username, InetAddress address, int port) {
+    System.out.println("[PlayingMP] Adding board for " + username);
+    opponentBoard = new BoardMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET, boardColor, username);
+  }
+
+  public void removeBoardMP(String username) {
+    System.out.println("[PlayingMP] " + username + " disconnected!");
+    opponentDisconnected = true;
+    matchOver = true;
+  }
+
   @Override
   public void update() {
-    if (opponentBoards.size() == 0) {
+    if (opponentBoard == null || opponentDisconnected) {
       return;
     }
 
     playerBoard.update();
-    for (BoardMP board : opponentBoards) {
-      board.update();
-    }
+    opponentBoard.update();
   }
 
   @Override
   public void render(Graphics g) {
-    playerBoard.render(g);
-    if (opponentBoards.size() == 0) {
+    if (opponentBoard == null) {
+      // TODO: make this look nicer
+      g.setColor(Color.WHITE);
+      g.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+      g.setColor(Color.BLACK);
       g.drawString("Waiting for opponent...", GAME_WIDTH / 2, GAME_HEIGHT / 2);
-    } else
-      for (BoardMP board : opponentBoards) {
-        board.render(g);
-      }
+    } else if (opponentDisconnected) {
+      g.setColor(Color.RED);
+      // draw message centered above both boards
+      // TODO: make this look nicer
+      g.drawString("Opponent disconnected!", GAME_WIDTH / 2, GAME_HEIGHT / 2);
+    } else opponentBoard.render(g);
+
+    playerBoard.render(g);
   }
 
   @Override
@@ -71,6 +87,10 @@ public class PlayingMP extends State implements StateMethods {
 
   @Override
   public void keyPressed(KeyEvent e) {
+    if (matchOver) {
+      GameState.state = GameState.GAME_OVER;
+      return;
+    }
     // same controls as playing.java
     switch (e.getKeyCode()) {
       case (KeyEvent.VK_Z):
@@ -125,15 +145,4 @@ public class PlayingMP extends State implements StateMethods {
 
   @Override
   public void windowLostFocus() {}
-
-  public void addBoardMP(String username, InetAddress address, int port) {
-    System.out.println("[PlayingMP] Adding board for " + username);
-    opponentBoards.add(
-        new BoardMP(
-            BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET, boardColor, address, port, username));
-  }
-
-  public List<BoardMP> getOpponentBoards() {
-    return opponentBoards;
-  }
 }

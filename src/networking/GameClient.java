@@ -7,6 +7,7 @@ import main.Game;
 import networking.packets.Packet;
 import networking.packets.Packet.PacketTypes;
 import networking.packets.Packet00Login;
+import networking.packets.Packet01Disconnect;
 
 public class GameClient extends Thread {
 
@@ -14,12 +15,14 @@ public class GameClient extends Thread {
   private int serverPort;
   private DatagramSocket socket;
   private Game game;
+  private String username;
 
-  public GameClient(Game game, String ipAddress) {
+  public GameClient(Game game, String ipAddress, String username) {
     System.out.println("[Client] Hello!");
 
     this.serverPort = 1331;
     this.game = game;
+    this.username = username;
 
     try {
       this.serverAddress = InetAddress.getByName(ipAddress);
@@ -49,10 +52,17 @@ public class GameClient extends Thread {
         handleLogin((Packet00Login) packet, address, port);
         break;
       case DISCONNECT:
+        packet = new Packet01Disconnect(data);
+        handleDisconnect((Packet01Disconnect) packet);
         break;
       case MOVE:
         break;
     }
+  }
+
+  private void handleDisconnect(Packet01Disconnect packet) {
+    System.out.println("[Client] " + packet.getUsername() + " has disconnected!");
+    game.removePlayer(packet.getUsername());
   }
 
   private void handleLogin(Packet00Login packet, InetAddress address, int port) {
@@ -69,6 +79,11 @@ public class GameClient extends Thread {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public void terminateConnection() {
+    Packet01Disconnect packet = new Packet01Disconnect(username);
+    packet.writeData(this);
   }
 
   @Override

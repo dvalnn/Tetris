@@ -43,6 +43,18 @@ public class Game implements Runnable {
     startGameLoop();
   }
 
+  private void initClasses() {
+    menu = new TitleScreen(this);
+    playing = new Playing(this);
+    gameOver = new GameOver(this);
+    playingMP = new PlayingMP(this);
+  }
+
+  private void startGameLoop() {
+    gameThread = new Thread(this);
+    gameThread.start();
+  }
+
   public void initNetworking() {
     // TODO make this a dialog box instead of a yes/no option
     if (JOptionPane.showConfirmDialog(null, "Run as server?") == JOptionPane.YES_OPTION) {
@@ -56,11 +68,28 @@ public class Game implements Runnable {
       String ipAddress = JOptionPane.showInputDialog("Enter server IP address:").trim();
       System.out.println("Connecting to " + ipAddress);
       Packet00Login loginPacket = new Packet00Login(JOptionPane.showInputDialog("Enter username:"));
-      client = new GameClient(this, ipAddress);
+      client = new GameClient(this, ipAddress, loginPacket.getUsername());
       client.start();
       loginPacket.writeData(client);
       clientActive = true;
     }
+  }
+
+  public void terminateConnection() {
+    if (serverActive) {
+      server.terminateConnection();
+    }
+    if (clientActive) {
+      client.terminateConnection();
+    }
+  }
+
+  public void addPlayer(String username, InetAddress address, int port) {
+    playingMP.addBoardMP(username, address, port);
+  }
+
+  public void removePlayer(String username) {
+    playingMP.removeBoardMP(username);
   }
 
   public void update() {
@@ -205,22 +234,6 @@ public class Game implements Runnable {
 
   public GameServer getServer() {
     return server;
-  }
-
-  public void addPlayer(String username, InetAddress address, int port) {
-    playingMP.addBoardMP(username, address, port);
-  }
-
-  private void initClasses() {
-    menu = new TitleScreen(this);
-    playing = new Playing(this);
-    gameOver = new GameOver(this);
-    playingMP = new PlayingMP(this);
-  }
-
-  private void startGameLoop() {
-    gameThread = new Thread(this);
-    gameThread.start();
   }
 
   public PlayingMP getPlayingMP() {
