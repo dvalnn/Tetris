@@ -1,14 +1,8 @@
 package networking;
 
-import static utils.Constants.GameConstants.*;
-
-import gameElements.BoardMP;
-import java.awt.Color;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
 import main.Game;
 import networking.packets.Packet;
 import networking.packets.Packet.PacketTypes;
@@ -16,11 +10,12 @@ import networking.packets.Packet00Login;
 
 public class GameServer extends Thread {
 
+  private final int connectionLimit = 1;
   private final int serverPort = 1331;
   private DatagramSocket socket;
   private Game game;
 
-  private List<BoardMP> connectedPlayers = new ArrayList<BoardMP>();
+  private Packet00Login remoteConnection;
 
   public GameServer(Game game) {
     System.out.println("[Server] Hello!");
@@ -34,19 +29,9 @@ public class GameServer extends Thread {
     }
   }
 
-  public void echoPacket(DatagramPacket packet) {
-    System.out.println("[Server] Parsing packet!");
-    String message = new String(packet.getData()).trim();
-    System.out.println("[Server] Received: " + message);
-    if (message.equals("ping")) {
-      sendData("pong".getBytes(), packet.getAddress(), packet.getPort());
-    }
-  }
-
   public void sendData(byte[] data, InetAddress address, int port) {
     System.out.println("[Server] Sending data!");
-    DatagramPacket packet =
-        new DatagramPacket(data, data.length, address, port);
+    DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
     try {
       socket.send(packet);
     } catch (Exception e) {
@@ -69,12 +54,6 @@ public class GameServer extends Thread {
     }
   }
 
-  public void sendDataToAllClients(byte[] data) {
-    for (BoardMP player : connectedPlayers) {
-      sendData(data, player.ipAddress, player.port);
-    }
-  }
-
   private void parsePacket(byte[] data, InetAddress address, int port) {
     System.out.println("[Server] Parsing packet!");
     String message = new String(data).trim();
@@ -84,44 +63,37 @@ public class GameServer extends Thread {
     Packet packet = null;
 
     switch (type) {
-    default:
-    case INVALID:
-      break;
-    case LOGIN:
-      packet = new Packet00Login(data);
-      System.out.println("[Server] " + address.toString() + ":" + port + " " +
-                         ((Packet00Login)packet).getUsername() +
-                         " has connected...");
-      addConnection((Packet00Login)packet, address, port);
-      break;
-    case DISCONNECT:
-      break;
-    case MOVE:
-      break;
+      default:
+      case INVALID:
+        break;
+      case LOGIN:
+        packet = new Packet00Login(data);
+        System.out.println(
+            "[Server] "
+                + address.toString()
+                + ":"
+                + port
+                + " "
+                + ((Packet00Login) packet).getUsername()
+                + " has connected...");
+        addConnection((Packet00Login) packet, address, port);
+        break;
+      case DISCONNECT:
+        break;
+      case MOVE:
+        break;
     }
   }
 
-  private void addConnection(Packet00Login packet, InetAddress address,
-                             int port) {
-    boolean alreadyConnected = false;
-    for (BoardMP player : connectedPlayers) {
-      if (packet.getUsername().equalsIgnoreCase(player.getUsername())) {
-        if (player.ipAddress == null) {
-          player.ipAddress = address;
-        }
-        if (player.port == -1) {
-          player.port = port;
-        }
-        alreadyConnected = true;
-      } else {
-        sendData(packet.getData(), player.ipAddress, player.port);
-        packet = new Packet00Login(player.getUsername());
+  private void addConnection(Packet00Login packet, InetAddress address, int port) {
+    if (game.isServerActive()) {
+      if (game.getPlayingMP().getOpponentBoards().size() < connectionLimit) {
+        game.addBoardMP(packet.getUsername(), address, port);
+        remoteConnection = packet;
         sendData(packet.getData(), address, port);
+      } else {
+        System.out.println("[Server] Connection limit reached!");
       }
-    }
-    if (!alreadyConnected) {
-      connectedPlayers.add(new BoardMP(BOARD_SQUARE, 0, 0, Color.black, address,
-                                       port, packet.getUsername()));
     }
   }
 }

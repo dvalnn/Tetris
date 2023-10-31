@@ -24,7 +24,6 @@ public class Packet00Login extends Packet {
 
   @Override
   public void writeData(GameServer server) {
-    server.sendDataToAllClients(getData());
   }
 
   @Override
@@ -32,5 +31,7 @@ public class Packet00Login extends Packet {
     return ("00" + this.username).getBytes();
   }
 
-  public String getUsername() { return username; }
+  public String getUsername() {
+    return username;
+  }
 }

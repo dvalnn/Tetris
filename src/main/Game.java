@@ -5,12 +5,14 @@ import static utils.Constants.GameConstants.*;
 import gameStates.GameOver;
 import gameStates.GameState;
 import gameStates.Playing;
+import gameStates.PlayingMP;
 import gameStates.TitleScreen;
 import java.awt.Graphics;
 import java.net.InetAddress;
 import javax.swing.JOptionPane;
 import networking.GameClient;
 import networking.GameServer;
+import networking.packets.Packet00Login;
 
 public class Game implements Runnable {
 
@@ -21,6 +23,7 @@ public class Game implements Runnable {
   private TitleScreen menu;
   private Playing playing;
   private GameOver gameOver;
+  private PlayingMP playingMP;
 
   private GameClient client;
   private GameServer server;
@@ -42,62 +45,71 @@ public class Game implements Runnable {
 
   public void initNetworking() {
     // TODO make this a dialog box instead of a yes/no option
-    if (JOptionPane.showConfirmDialog(null, "Run as server?") ==
-        JOptionPane.YES_OPTION) {
+    if (JOptionPane.showConfirmDialog(null, "Run as server?") == JOptionPane.YES_OPTION) {
       server = new GameServer(this);
       server.start();
+      serverActive = true;
     } else {
       // TODO make this safer by checking if the IP address is valid
       // TODO make this a text field instead of a dialog box
-      String ipAddress =
-          JOptionPane.showInputDialog("Enter server IP address:").trim();
+      String ipAddress = JOptionPane.showInputDialog("Enter server IP address:").trim();
       System.out.println("Connecting to " + ipAddress);
+      Packet00Login loginPacket = new Packet00Login(JOptionPane.showInputDialog("Enter username:"));
       client = new GameClient(this, ipAddress);
       client.start();
-      client.sendData("ping".getBytes());
+      loginPacket.writeData(client);
+      clientActive = true;
     }
   }
 
   public void update() {
     switch (GameState.state) {
-    case TITLE_SCREEN:
-      menu.update();
-      break;
-    case PLAYING:
-      playing.update();
-      break;
-    case GAME_OVER:
-      gameOver.update();
-      break;
+      case TITLE_SCREEN:
+        menu.update();
+        break;
+      case PLAYING:
+        playing.update();
+        break;
+      case PLAYING_MP:
+        playingMP.update();
+        break;
+      case GAME_OVER:
+        gameOver.update();
+        break;
     }
   }
 
   public void render(Graphics g) {
     switch (GameState.state) {
-    case TITLE_SCREEN:
-      menu.render(g);
-      break;
-    case PLAYING:
-      playing.render(g);
-      break;
-    case GAME_OVER:
-      gameOver.render(g);
-      break;
+      case TITLE_SCREEN:
+        menu.render(g);
+        break;
+      case PLAYING:
+        playing.render(g);
+        break;
+      case PLAYING_MP:
+        playingMP.render(g);
+        break;
+      case GAME_OVER:
+        gameOver.render(g);
+        break;
     }
   }
 
   public void windowLostFocus() {
-    System.out.println("Game.windowLostFocus()");
     switch (GameState.state) {
-    case TITLE_SCREEN:
-      menu.windowLostFocus();
-      break;
-    case PLAYING:
-      playing.windowLostFocus();
-      break;
-    case GAME_OVER:
-      gameOver.windowLostFocus();
-      break;
+      case TITLE_SCREEN:
+        menu.windowLostFocus();
+        break;
+      case PLAYING:
+        playing.windowLostFocus();
+        break;
+      case PLAYING_MP:
+        playingMP.windowLostFocus();
+        break;
+      case GAME_OVER:
+        gameOver.windowLostFocus();
+        break;
     }
   }
 
@@ -155,42 +167,63 @@ public class Game implements Runnable {
     System.exit(0);
   }
 
-  public void exit() { exit = true; }
+  public void exit() {
+    exit = true;
+  }
 
-  public Playing getPlaying() { return playing; }
+  public Playing getPlaying() {
+    return playing;
+  }
 
-  public TitleScreen getMenu() { return menu; }
+  public TitleScreen getMenu() {
+    return menu;
+  }
 
-  public GameOver getGameOver() { return gameOver; }
+  public GameOver getGameOver() {
+    return gameOver;
+  }
 
-  public boolean isServerActive() { return serverActive; }
+  public boolean isServerActive() {
+    return serverActive;
+  }
 
   public void setServerActive(boolean serverActive) {
     this.serverActive = serverActive;
   }
 
-  public boolean isClientActive() { return clientActive; }
+  public boolean isClientActive() {
+    return clientActive;
+  }
 
   public void setClientActive(boolean clientActive) {
     this.clientActive = clientActive;
   }
 
-  public GameClient getClient() { return client; }
+  public GameClient getClient() {
+    return client;
+  }
 
-  public GameServer getServer() { return server; }
+  public GameServer getServer() {
+    return server;
+  }
 
   public void addBoardMP(String username, InetAddress address, int port) {
-    playing.addBoardMP(username, address, port);
+    playingMP.addBoardMP(username, address, port);
   }
 
   private void initClasses() {
     menu = new TitleScreen(this);
     playing = new Playing(this);
     gameOver = new GameOver(this);
+    playingMP = new PlayingMP(this);
   }
 
   private void startGameLoop() {
     gameThread = new Thread(this);
     gameThread.start();
+  }
+
+  public PlayingMP getPlayingMP() {
+    return playingMP;
   }
 }

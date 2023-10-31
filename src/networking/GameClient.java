@@ -41,31 +41,35 @@ public class GameClient extends Thread {
     PacketTypes type = Packet.lookupPacket(message.substring(0, 2));
     Packet packet = null;
     switch (type) {
-    default:
-    case INVALID:
-      break;
-    case LOGIN:
-      packet = new Packet00Login(data);
-      handleLogin((Packet00Login)packet, address, port);
-      break;
-    case DISCONNECT:
-      break;
-    case MOVE:
-      break;
+      default:
+      case INVALID:
+        break;
+      case LOGIN:
+        packet = new Packet00Login(data);
+        handleLogin((Packet00Login) packet, address, port);
+        break;
+      case DISCONNECT:
+        break;
+      case MOVE:
+        break;
     }
   }
 
-  private void handleLogin(Packet00Login packet, InetAddress address,
-                           int port) {
-    System.out.println("[Client] " + address.toString() + ":" + port + " " +
-                       packet.getUsername() + " has joined the game");
+  private void handleLogin(Packet00Login packet, InetAddress address, int port) {
+    System.out.println(
+        "[Client] "
+            + address.toString()
+            + ":"
+            + port
+            + " "
+            + packet.getUsername()
+            + " has joined the game");
     game.addBoardMP(packet.getUsername(), address, port);
   }
 
   public void sendData(byte[] data) {
     System.out.println("[Client] Sending data!");
-    DatagramPacket packet =
-        new DatagramPacket(data, data.length, serverAddress, serverPort);
+    DatagramPacket packet = new DatagramPacket(data, data.length, serverAddress, serverPort);
     try {
       socket.send(packet);
     } catch (Exception e) {
