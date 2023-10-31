@@ -9,7 +9,7 @@ public abstract class Packet {
     LOGIN(00),
     DISCONNECT(01),
     SERVER_FULL(02),
-    MOVE(03);
+    UPDATE(03);
 
     private int packetId;
 

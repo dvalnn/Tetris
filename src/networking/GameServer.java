@@ -1,5 +1,6 @@
 package networking;
 
+import java.awt.Color;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -8,13 +9,14 @@ import networking.packets.Packet;
 import networking.packets.Packet.PacketTypes;
 import networking.packets.Packet00Login;
 import networking.packets.Packet01Disconnect;
+import networking.packets.Packet03Update;
 
 public class GameServer extends Thread {
   private final int serverPort = 1331;
   private DatagramSocket socket;
   private Game game;
 
-  private String hostName;
+  private String hostname;
 
   private InetAddress clientAddress;
   private int clientPort;
@@ -23,7 +25,7 @@ public class GameServer extends Thread {
     System.out.println("[Server] Hello!");
 
     this.game = game;
-    this.hostName = hostName;
+    this.hostname = hostName;
 
     try {
       this.socket = new DatagramSocket(serverPort);
@@ -33,9 +35,9 @@ public class GameServer extends Thread {
   }
 
   public void sendData(byte[] data) {
-    System.out.println("[Server] Sending data!");
     DatagramPacket packet = new DatagramPacket(data, data.length, clientAddress, clientPort);
     try {
+      // System.out.println("[Server] Sending: " + new String(data));
       socket.send(packet);
     } catch (Exception e) {
       e.printStackTrace();
@@ -58,11 +60,9 @@ public class GameServer extends Thread {
   }
 
   private void parsePacket(byte[] data, InetAddress address, int port) {
-    System.out.println("[Server] Parsing packet!");
-    String message = new String(data).trim();
-    System.out.println("[Server] Received: " + message);
+    String[] message = new String(data).split(",");
+    PacketTypes type = Packet.lookupPacket(message[0]);
 
-    PacketTypes type = Packet.lookupPacket(message.substring(0, 2));
     Packet packet = null;
 
     switch (type) {
@@ -80,9 +80,26 @@ public class GameServer extends Thread {
         handleDisconnect((Packet01Disconnect) packet);
         break;
 
-      case MOVE:
+      case UPDATE:
+        packet = new Packet03Update(data);
+        handleUpdate((Packet03Update) packet);
         break;
     }
+  }
+
+  private void handleUpdate(Packet03Update packet) {
+    if (packet.getUsername().equals(this.hostname)) {
+      return;
+    }
+
+    int x = packet.getX();
+    int y = packet.getY();
+    Color color = packet.getColor();
+
+    // System.out.println(
+    //     "[Server] Received: " + hostname + " " + x + " " + y + " " + color.toString());
+
+    game.getPlayingMP().getOpponentBoard().updateBoard(x, y, color);
   }
 
   private void handleDisconnect(Packet01Disconnect packet) {
@@ -93,11 +110,16 @@ public class GameServer extends Thread {
   private void handleLogin(Packet00Login packet, InetAddress address, int port) {
     if (clientAddress == null) {
       addConnection(packet, address, port);
-      Packet00Login reply = new Packet00Login(hostName);
+      Packet00Login reply = new Packet00Login(hostname);
       reply.writeData(this);
     } else {
       // TODO: send "server full" packet
     }
+  }
+
+  public void sendUpdate(int row, int col, Color color) {
+    Packet packet = new Packet03Update(hostname, row, col, color);
+    packet.writeData(this);
   }
 
   private void addConnection(Packet00Login packet, InetAddress address, int port) {
@@ -115,7 +137,7 @@ public class GameServer extends Thread {
   }
 
   public void terminateConnection() {
-    Packet01Disconnect disconnectPacket = new Packet01Disconnect(hostName);
+    Packet01Disconnect disconnectPacket = new Packet01Disconnect(hostname);
     disconnectPacket.writeData(this);
   }
 }

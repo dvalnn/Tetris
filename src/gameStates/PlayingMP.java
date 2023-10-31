@@ -5,10 +5,12 @@ import static utils.Constants.GameConstants.*;
 
 import gameElements.Board;
 import gameElements.BoardMP;
+import gameElements.Shape;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.net.InetAddress;
 import main.Game;
 
@@ -19,6 +21,9 @@ public class PlayingMP extends State implements StateMethods {
   BoardMP opponentBoard;
   private boolean matchOver = false;
   private boolean opponentDisconnected = false;
+
+  private int networkTick = 0;
+  private final int NETWORK_TICK_MAX = 5;
 
   // calculate the offsets so that the boards are centered
   // and the player's board is on the left and the opponent's
@@ -42,14 +47,36 @@ public class PlayingMP extends State implements StateMethods {
     matchOver = true;
   }
 
+  public void sendPlayerState() {
+    // send current player board to opponent
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+      for (int col = 0; col < BOARD_WIDTH; col++) {
+        game.sendUpdate(row, col, playerBoard.getBoard()[row][col]);
+      }
+    }
+
+    // send current player tetromino to opponent
+    Shape shape = playerBoard.getTetromino().getShape();
+    for (Point2D point : shape.getShape()) {
+      int row = (int) point.getY();
+      int col = (int) point.getX();
+      game.sendUpdate(row, col, shape.getColor());
+    }
+  }
+
   @Override
   public void update() {
     if (opponentBoard == null || opponentDisconnected) {
       return;
     }
 
+    networkTick++;
+    if (networkTick >= NETWORK_TICK_MAX) {
+      sendPlayerState();
+      networkTick = 0;
+    }
+
     playerBoard.update();
-    opponentBoard.update();
   }
 
   @Override
@@ -145,4 +172,8 @@ public class PlayingMP extends State implements StateMethods {
 
   @Override
   public void windowLostFocus() {}
+
+  public BoardMP getOpponentBoard() {
+    return opponentBoard;
+  }
 }

@@ -9,7 +9,7 @@ public class Packet01Disconnect extends Packet {
 
   public Packet01Disconnect(byte[] data) {
     super(01);
-    this.username = readData(data);
+    this.username = readData(data).split(",")[1];
   }
 
   public Packet01Disconnect(String username) {
@@ -29,7 +29,7 @@ public class Packet01Disconnect extends Packet {
 
   @Override
   public byte[] getData() {
-    return ("01" + this.username).getBytes();
+    return ("01" + "," + this.username).getBytes();
   }
 
   public String getUsername() {
