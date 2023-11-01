@@ -14,7 +14,7 @@ public class Tetromino {
 
   private Shape shape;
   private GhostShape ghost;
-  private Board board;
+  private PlayerBoard board;
 
   private final int HORIZONTAL_SPEED = 20;
   private final int VERTICAL_SLOW = 1;
@@ -33,7 +33,7 @@ public class Tetromino {
 
   private Random rand = new Random();
 
-  public Tetromino(int renderSize, Point2D renderOrigin, Board board) {
+  public Tetromino(int renderSize, Point2D renderOrigin, PlayerBoard board) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, rand.nextInt(7));
     ghost = new GhostShape(shape);
@@ -44,7 +44,7 @@ public class Tetromino {
 
   // NOTE: this constructor is only used for testing
   // TODO: remove this constructor
-  public Tetromino(int renderSize, Point2D renderOrigin, Board board, int shapeID) {
+  public Tetromino(int renderSize, Point2D renderOrigin, PlayerBoard board, int shapeID) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, shapeID);
     ghost = new GhostShape(shape);
@@ -84,7 +84,7 @@ public class Tetromino {
     for (Point2D point : shape.getPoints()) {
       int x = (int) point.getX() + delta;
       int y = (int) point.getY();
-      if (board.getBoard()[y][x] != board.getBackgroundColor()) {
+      if (board.getBoard().get(y).getIndexRGB(x) != board.getBackgroundColor().getRGB()) {
         return true;
       }
     }
@@ -98,7 +98,7 @@ public class Tetromino {
     for (Point2D point : shape.getPoints()) {
       int x = (int) point.getX();
       int y = (int) point.getY() + 1;
-      if (board.getBoard()[y][x] != board.getBackgroundColor()) {
+      if (board.getBoard().get(y).getIndexRGB(x) != board.getBackgroundColor().getRGB()) {
         return true;
       }
     }
@@ -114,7 +114,7 @@ public class Tetromino {
     for (Point2D point : shape.getPoints()) {
       int x = (int) point.getX();
       int y = (int) point.getY();
-      if (board.getBoard()[y][x] != board.getBackgroundColor()) {
+      if (board.getBoard().get(y).getIndexRGB(x) != board.getBackgroundColor().getRGB()) {
         return true;
       }
     }

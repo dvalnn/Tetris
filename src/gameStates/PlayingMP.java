@@ -3,8 +3,8 @@ package gameStates;
 import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
 
-import gameElements.Board;
 import gameElements.BoardMP;
+import gameElements.PlayerBoard;
 import gameElements.Shape;
 import gameElements.ShapeMP;
 import java.awt.Color;
@@ -12,12 +12,13 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.net.InetAddress;
+import java.util.List;
 import main.Game;
 
 public class PlayingMP extends State implements StateMethods {
 
   Color boardColor = new Color(20, 20, 20);
-  Board playerBoard;
+  PlayerBoard playerBoard;
   BoardMP opponentBoard;
   private ShapeMP shapeMP;
   private boolean matchOver = false;
@@ -34,7 +35,7 @@ public class PlayingMP extends State implements StateMethods {
 
   public PlayingMP(Game game) {
     super(game);
-    playerBoard = new Board(BOARD_SQUARE, PLAYER_X_OFFSET, Y_OFFSET, boardColor);
+    playerBoard = new PlayerBoard(BOARD_SQUARE, PLAYER_X_OFFSET, Y_OFFSET, boardColor);
   }
 
   public void addBoardMP(String username, InetAddress address, int port) {
@@ -56,8 +57,10 @@ public class PlayingMP extends State implements StateMethods {
 
     // send current player board to opponent
     for (int row = 0; row < BOARD_HEIGHT; row++) {
-      for (int col = 0; col < BOARD_WIDTH; col++) {
-        game.sendBoardUpdate(row, col, playerBoard.getBoard()[row][col]);
+      PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
+      List<Color> colors = line.getColorsCopyIfChanged();
+      if (colors != null) {
+        game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
       }
     }
   }

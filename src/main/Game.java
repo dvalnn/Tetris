@@ -102,11 +102,11 @@ public class Game implements Runnable {
     }
   }
 
-  public void sendBoardUpdate(int row, int col, Color color) {
+  public void sendBoardUpdate(int row, Color[] lineColors) {
     if (serverActive) {
-      server.sendBoardUpdate(row, col, color);
+      server.sendBoardUpdate(row, lineColors);
     } else if (clientActive) {
-      client.sendBoardUpdate(row, col, color);
+      client.sendBoardUpdate(row, lineColors);
     }
   }
 

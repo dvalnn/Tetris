@@ -91,11 +91,10 @@ public class GameClient extends Thread {
       return;
     }
 
-    int x = packet.getX();
-    int y = packet.getY();
-    Color color = packet.getColor();
+    int row = packet.getRow();
+    Color[] lineColors = packet.getLineColors();
 
-    game.getPlayingMP().getOpponentBoard().update(x, y, color);
+    game.getPlayingMP().getOpponentBoard().update(row, lineColors);
   }
 
   private void handleDisconnect(Packet01Disconnect packet) {
@@ -123,8 +122,8 @@ public class GameClient extends Thread {
     packet.writeData(this);
   }
 
-  public void sendBoardUpdate(int row, int col, Color color) {
-    Packet packet = new Packet03Board(username, row, col, color);
+  public void sendBoardUpdate(int row, Color[] color) {
+    Packet packet = new Packet03Board(username, row, color);
     packet.writeData(this);
   }
 

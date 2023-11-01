@@ -1,5 +1,7 @@
 package networking.packets;
 
+import static utils.Constants.GameConstants.BOARD_WIDTH;
+
 import java.awt.Color;
 import networking.GameClient;
 import networking.GameServer;
@@ -7,31 +9,24 @@ import networking.GameServer;
 public class Packet03Board extends Packet {
 
   private String username;
-  private int x, y;
-  private Color color;
+  private int row;
+  private Color[] lineColors;
   private String[] data;
 
   public Packet03Board(byte[] data) {
     super(03);
     this.data = readData(data).split(",");
 
-    // this.packetId = Integer.parseInt(this.data[0]);
     this.username = this.data[1];
-    this.x = Integer.parseInt(this.data[2]);
-    this.y = Integer.parseInt(this.data[3]);
-    int r = Integer.parseInt(this.data[4]);
-    int g = Integer.parseInt(this.data[5]);
-    int b = Integer.parseInt(this.data[6]);
-
-    this.color = new Color(r, g, b);
+    this.row = Integer.parseInt(this.data[2]);
+    this.lineColors = new Color[BOARD_WIDTH];
   }
 
-  public Packet03Board(String username, int x, int y, Color color) {
+  public Packet03Board(String username, int row, Color[] lineColors) {
     super(03);
     this.username = new String(username);
-    this.x = x;
-    this.y = y;
-    this.color = new Color(color.getRGB());
+    this.row = row;
+    this.lineColors = lineColors;
   }
 
   @Override
@@ -46,39 +41,22 @@ public class Packet03Board extends Packet {
 
   @Override
   public byte[] getData() {
-    int r = color.getRed();
-    int g = color.getGreen();
-    int b = color.getBlue();
-    return ("03"
-            + ","
-            + this.username
-            + ","
-            + this.x
-            + ","
-            + this.y
-            + ","
-            + r
-            + ","
-            + g
-            + ","
-            + b
-            + ",")
-        .getBytes();
+    String retStr = "03" + "," + username + "," + row;
+    for (Color color : lineColors) {
+      retStr += "," + color.getRGB();
+    }
+    return (retStr + ",").getBytes();
   }
 
   public String getUsername() {
     return username;
   }
 
-  public int getX() {
-    return x;
+  public int getRow() {
+    return row;
   }
 
-  public int getY() {
-    return y;
-  }
-
-  public Color getColor() {
-    return color;
+  public Color[] getLineColors() {
+    return lineColors;
   }
 }
