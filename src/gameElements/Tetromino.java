@@ -4,6 +4,7 @@ import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
 import static utils.Constants.TetrominoIDs.*;
 
+import gameElements.boardTypes.PlayerBoard;
 import gameElements.shapeTypes.*;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;

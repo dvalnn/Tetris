@@ -1,70 +1,16 @@
-package gameElements;
+package gameElements.boardTypes;
 
 import static utils.Constants.GameConstants.*;
 
+import gameElements.Board;
+import gameElements.Tetromino;
 import gameStates.GameState;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
-public class PlayerBoard {
-
-  public class BoardLine {
-    private List<Color> colors;
-    private boolean recentlyChanged = false;
-
-    public BoardLine() {
-      colors = new ArrayList<Color>(BOARD_WIDTH);
-      for (int i = 0; i < BOARD_WIDTH; i++) {
-        colors.add(backgroundColor);
-      }
-      recentlyChanged = true;
-    }
-
-    public void setColor(int index, Color color) {
-      setColor(index, color.getRGB());
-    }
-
-    public void setColor(int index, int rgb) {
-      colors.set(index, new Color(rgb));
-      recentlyChanged = true;
-    }
-
-    public int getIndexRGB(int index) {
-      return colors.get(index).getRGB();
-    }
-
-    public Color getIndexColorCopy(int index) {
-      return new Color(colors.get(index).getRGB());
-    }
-
-    public List<Color> getColorsCopyIfChanged() {
-      if (recentlyChanged) {
-        recentlyChanged = false;
-        return getColorsCopy();
-      }
-
-      return null;
-    }
-
-    public List<Color> getColorsCopy() {
-      List<Color> copy = new ArrayList<Color>(colors.size());
-      for (Color color : colors) {
-        copy.add(new Color(color.getRGB()));
-      }
-      return copy;
-    }
-  }
-
-  private List<BoardLine> board;
-  private Color backgroundColor;
-  private Color gridColor;
-  private Point2D renderOrigin;
-  private int renderSize;
+public class PlayerBoard extends Board {
 
   private Tetromino tetro1;
   private Tetromino tetro2;
@@ -73,23 +19,10 @@ public class PlayerBoard {
   private boolean paused = false;
 
   public PlayerBoard(int size, int xOffset, int yOffset, Color color) {
-    this.renderSize = size;
-    renderOrigin = new Point(xOffset, yOffset);
-
-    backgroundColor = new Color(color.getRGB());
-    gridColor = new Color(backgroundColor.brighter().getRGB());
+    super(size, xOffset, yOffset, color);
 
     tetro1 = new Tetromino(size, renderOrigin, this);
     tetro2 = new Tetromino(size, renderOrigin, this);
-
-    // init the board and board lines
-    // board lines are created with
-    // recentlyChanged = true
-    // and with backgroundColor
-    board = new ArrayList<BoardLine>(BOARD_HEIGHT);
-    for (int i = 0; i < BOARD_HEIGHT; i++) {
-      board.add(new BoardLine());
-    }
   }
 
   private void addTetrominoToPile() {
@@ -171,7 +104,6 @@ public class PlayerBoard {
         int y1 = (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY();
         int x2 = x1 + renderSize;
         int y2 = y1 + renderSize;
-
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
           if (add) {
             board.get(row).setColor(col, Color.PINK);
@@ -217,22 +149,7 @@ public class PlayerBoard {
   }
 
   public void render(Graphics g) {
-    for (int row = 0; row < BOARD_HEIGHT; row++) {
-      for (int col = 0; col < BOARD_WIDTH; col++) {
-        g.setColor(board.get(row).getIndexColorCopy(col));
-        g.fillRect(
-            (int) (col * renderSize - renderSize / 2) + (int) renderOrigin.getX(),
-            (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY(),
-            renderSize,
-            renderSize);
-        g.setColor(gridColor);
-        g.drawRect(
-            (int) (col * renderSize - renderSize / 2) + (int) renderOrigin.getX(),
-            (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY(),
-            renderSize,
-            renderSize);
-      }
-    }
+    super.render(g);
 
     tetro1.render(g);
 
@@ -261,13 +178,5 @@ public class PlayerBoard {
 
   public Tetromino getTetromino() {
     return tetro1;
-  }
-
-  public List<BoardLine> getBoard() {
-    return board;
-  }
-
-  public Color getBackgroundColor() {
-    return backgroundColor;
   }
 }

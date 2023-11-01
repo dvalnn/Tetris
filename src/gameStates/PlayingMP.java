@@ -3,10 +3,10 @@ package gameStates;
 import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
 
-import gameElements.BoardMP;
-import gameElements.PlayerBoard;
 import gameElements.Shape;
 import gameElements.ShapeMP;
+import gameElements.boardTypes.MPBoard;
+import gameElements.boardTypes.PlayerBoard;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -19,13 +19,15 @@ public class PlayingMP extends State implements StateMethods {
 
   Color boardColor = new Color(20, 20, 20);
   PlayerBoard playerBoard;
-  BoardMP opponentBoard;
+  MPBoard opponentBoard;
   private ShapeMP shapeMP;
   private boolean matchOver = false;
   private boolean opponentDisconnected = false;
 
   private int networkTick = 0;
   private final int NETWORK_TICK_MAX = 2;
+  private int fullSyncTick = 0;
+  private final int FULL_SYNC_TICK_MAX = 2 * UPS_SET;
 
   // calculate the offsets so that the boards are centered
   // and the player's board is on the left and the opponent's
@@ -40,7 +42,7 @@ public class PlayingMP extends State implements StateMethods {
 
   public void addBoardMP(String username, InetAddress address, int port) {
     System.out.println("[PlayingMP] Adding board for " + username);
-    opponentBoard = new BoardMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET, boardColor, username);
+    opponentBoard = new MPBoard(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET, boardColor, username);
     shapeMP = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
   }
 
@@ -48,6 +50,19 @@ public class PlayingMP extends State implements StateMethods {
     System.out.println("[PlayingMP] " + username + " disconnected!");
     opponentDisconnected = true;
     matchOver = true;
+  }
+
+  public void sendFullSync() {
+    // send current player tetromino to opponent
+    Shape currentShape = playerBoard.getTetromino().getShape();
+    game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
+
+    // send current player board to opponent
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+      PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
+      List<Color> colors = line.getColorsCopy();
+      game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
+    }
   }
 
   public void sendPlayerState() {
@@ -71,8 +86,12 @@ public class PlayingMP extends State implements StateMethods {
       return;
     }
 
+    fullSyncTick++;
     networkTick++;
-    if (networkTick >= NETWORK_TICK_MAX) {
+    if (fullSyncTick >= FULL_SYNC_TICK_MAX) {
+      sendFullSync();
+      fullSyncTick = 0;
+    } else if (networkTick >= NETWORK_TICK_MAX) {
       sendPlayerState();
       networkTick = 0;
     }
@@ -183,7 +202,7 @@ public class PlayingMP extends State implements StateMethods {
   @Override
   public void windowLostFocus() {}
 
-  public BoardMP getOpponentBoard() {
+  public MPBoard getOpponentBoard() {
     return opponentBoard;
   }
 

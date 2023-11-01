@@ -55,8 +55,8 @@ public class TShape extends Shape {
       case LEFT:
         minX = (int) points[3].getX();
         maxX = (int) points[1].getX();
-        minY = (int) points[0].getY();
-        maxY = (int) points[2].getY();
+        minY = (int) points[2].getY();
+        maxY = (int) points[0].getY();
         break;
     }
   }

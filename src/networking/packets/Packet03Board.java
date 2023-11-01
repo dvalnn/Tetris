@@ -20,6 +20,9 @@ public class Packet03Board extends Packet {
     this.username = this.data[1];
     this.row = Integer.parseInt(this.data[2]);
     this.lineColors = new Color[BOARD_WIDTH];
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+      this.lineColors[i] = new Color(Integer.parseInt(this.data[3 + i]));
+    }
   }
 
   public Packet03Board(String username, int row, Color[] lineColors) {

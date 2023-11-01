@@ -4,7 +4,7 @@ import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
 import static utils.Constants.TetrominoIDs.*;
 
-import gameElements.PlayerBoard;
+import gameElements.boardTypes.PlayerBoard;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
