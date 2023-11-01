@@ -1,6 +1,7 @@
 package networking;
 
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -9,15 +10,15 @@ import networking.packets.Packet;
 import networking.packets.Packet.PacketTypes;
 import networking.packets.Packet00Login;
 import networking.packets.Packet01Disconnect;
-import networking.packets.Packet03Update;
+import networking.packets.Packet03Board;
+import networking.packets.Packet04Shape;
 
 public class GameServer extends Thread {
+
   private final int serverPort = 1331;
   private DatagramSocket socket;
   private Game game;
-
   private String hostname;
-
   private InetAddress clientAddress;
   private int clientPort;
 
@@ -37,7 +38,6 @@ public class GameServer extends Thread {
   public void sendData(byte[] data) {
     DatagramPacket packet = new DatagramPacket(data, data.length, clientAddress, clientPort);
     try {
-      // System.out.println("[Server] Sending: " + new String(data));
       socket.send(packet);
     } catch (Exception e) {
       e.printStackTrace();
@@ -80,14 +80,29 @@ public class GameServer extends Thread {
         handleDisconnect((Packet01Disconnect) packet);
         break;
 
-      case UPDATE:
-        packet = new Packet03Update(data);
-        handleUpdate((Packet03Update) packet);
+      case BOARD:
+        packet = new Packet03Board(data);
+        handleUpdate((Packet03Board) packet);
         break;
+
+      case SHAPE:
+        packet = new Packet04Shape(data);
+        handleShape((Packet04Shape) packet);
     }
   }
 
-  private void handleUpdate(Packet03Update packet) {
+  private void handleShape(Packet04Shape packet) {
+    if (packet.getUsername().equals(this.hostname)) {
+      return;
+    }
+
+    Point2D[] points = packet.getPoints();
+    Color color = packet.getColor();
+
+    game.getPlayingMP().getShapeMP().update(points, color);
+  }
+
+  private void handleUpdate(Packet03Board packet) {
     if (packet.getUsername().equals(this.hostname)) {
       return;
     }
@@ -96,10 +111,7 @@ public class GameServer extends Thread {
     int y = packet.getY();
     Color color = packet.getColor();
 
-    // System.out.println(
-    //     "[Server] Received: " + hostname + " " + x + " " + y + " " + color.toString());
-
-    game.getPlayingMP().getOpponentBoard().updateBoard(x, y, color);
+    game.getPlayingMP().getOpponentBoard().update(x, y, color);
   }
 
   private void handleDisconnect(Packet01Disconnect packet) {
@@ -117,8 +129,13 @@ public class GameServer extends Thread {
     }
   }
 
-  public void sendUpdate(int row, int col, Color color) {
-    Packet packet = new Packet03Update(hostname, row, col, color);
+  public void sendShapeUpdate(Point2D[] points, Color color) {
+    Packet packet = new Packet04Shape(hostname, points, color);
+    packet.writeData(this);
+  }
+
+  public void sendBoardUpdate(int row, int col, Color color) {
+    Packet packet = new Packet03Board(hostname, row, col, color);
     packet.writeData(this);
   }
 

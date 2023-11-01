@@ -6,11 +6,11 @@ import static utils.Constants.GameConstants.*;
 import gameElements.Board;
 import gameElements.BoardMP;
 import gameElements.Shape;
+import gameElements.ShapeMP;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 import java.net.InetAddress;
 import main.Game;
 
@@ -19,11 +19,12 @@ public class PlayingMP extends State implements StateMethods {
   Color boardColor = new Color(20, 20, 20);
   Board playerBoard;
   BoardMP opponentBoard;
+  private ShapeMP shapeMP;
   private boolean matchOver = false;
   private boolean opponentDisconnected = false;
 
   private int networkTick = 0;
-  private final int NETWORK_TICK_MAX = 5;
+  private final int NETWORK_TICK_MAX = 2;
 
   // calculate the offsets so that the boards are centered
   // and the player's board is on the left and the opponent's
@@ -39,6 +40,7 @@ public class PlayingMP extends State implements StateMethods {
   public void addBoardMP(String username, InetAddress address, int port) {
     System.out.println("[PlayingMP] Adding board for " + username);
     opponentBoard = new BoardMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET, boardColor, username);
+    shapeMP = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
   }
 
   public void removeBoardMP(String username) {
@@ -48,19 +50,15 @@ public class PlayingMP extends State implements StateMethods {
   }
 
   public void sendPlayerState() {
+    // send current player tetromino to opponent
+    Shape currentShape = playerBoard.getTetromino().getShape();
+    game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
+
     // send current player board to opponent
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
-        game.sendUpdate(row, col, playerBoard.getBoard()[row][col]);
+        game.sendBoardUpdate(row, col, playerBoard.getBoard()[row][col]);
       }
-    }
-
-    // send current player tetromino to opponent
-    Shape shape = playerBoard.getTetromino().getShape();
-    for (Point2D point : shape.getShape()) {
-      int row = (int) point.getY();
-      int col = (int) point.getX();
-      game.sendUpdate(row, col, shape.getColor());
     }
   }
 
@@ -92,7 +90,16 @@ public class PlayingMP extends State implements StateMethods {
       // draw message centered above both boards
       // TODO: make this look nicer
       g.drawString("Opponent disconnected!", GAME_WIDTH / 2, GAME_HEIGHT / 2);
-    } else opponentBoard.render(g);
+    } else {
+      // draw line separating the two boards
+      g.setColor(Color.WHITE);
+      g.drawLine(GAME_WIDTH / 2, 0, GAME_WIDTH / 2, GAME_HEIGHT);
+
+      // draw opponent board
+      opponentBoard.render(g);
+      // draw opponnent controled shape
+      shapeMP.render(g);
+    }
 
     playerBoard.render(g);
   }
@@ -175,5 +182,9 @@ public class PlayingMP extends State implements StateMethods {
 
   public BoardMP getOpponentBoard() {
     return opponentBoard;
+  }
+
+  public ShapeMP getShapeMP() {
+    return shapeMP;
   }
 }

@@ -41,7 +41,7 @@ public class Board {
   }
 
   private void addTetrominoToPile() {
-    for (Point2D point : tetro1.getShape().getShape()) {
+    for (Point2D point : tetro1.getShape().getPoints()) {
       int row = (int) point.getY();
       int col = (int) point.getX();
       board[row][col] = tetro1.getShape().getColor();

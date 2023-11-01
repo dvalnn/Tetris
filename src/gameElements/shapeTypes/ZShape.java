@@ -10,10 +10,10 @@ import java.awt.geom.Point2D;
 public class ZShape extends Shape {
 
   private static final Point2D[] SHAPE = {
-      new Point2D.Double(0, 0),
-      new Point2D.Double(1, 0),
-      new Point2D.Double(1, 1),
-      new Point2D.Double(2, 1),
+    new Point2D.Double(0, 0),
+    new Point2D.Double(1, 0),
+    new Point2D.Double(1, 1),
+    new Point2D.Double(2, 1),
   };
   private static final Point2D CENTER = new Point2D.Double(1, 1);
   private static final Color COLOR = Color.RED;
@@ -34,10 +34,10 @@ public class ZShape extends Shape {
 
   @Override
   protected void calculateMinMaxCoords() {
-    minX = (int) Math.min(shape[0].getX(), shape[3].getX());
-    maxX = (int) Math.max(shape[0].getX(), shape[3].getX());
-    minY = (int) Math.min(shape[0].getY(), shape[3].getY());
-    maxY = (int) Math.max(shape[0].getY(), shape[3].getY());
+    minX = (int) Math.min(points[0].getX(), points[3].getX());
+    maxX = (int) Math.max(points[0].getX(), points[3].getX());
+    minY = (int) Math.min(points[0].getY(), points[3].getY());
+    maxY = (int) Math.max(points[0].getY(), points[3].getY());
   }
 
   @Override

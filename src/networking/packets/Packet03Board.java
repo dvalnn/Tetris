@@ -4,14 +4,14 @@ import java.awt.Color;
 import networking.GameClient;
 import networking.GameServer;
 
-public class Packet03Update extends Packet {
+public class Packet03Board extends Packet {
 
   private String username;
   private int x, y;
   private Color color;
   private String[] data;
 
-  public Packet03Update(byte[] data) {
+  public Packet03Board(byte[] data) {
     super(03);
     this.data = readData(data).split(",");
 
@@ -26,7 +26,7 @@ public class Packet03Update extends Packet {
     this.color = new Color(r, g, b);
   }
 
-  public Packet03Update(String username, int x, int y, Color color) {
+  public Packet03Board(String username, int x, int y, Color color) {
     super(03);
     this.username = new String(username);
     this.x = x;

@@ -44,8 +44,7 @@ public class Tetromino {
 
   // NOTE: this constructor is only used for testing
   // TODO: remove this constructor
-  public Tetromino(int renderSize, Point2D renderOrigin, Board board,
-      int shapeID) {
+  public Tetromino(int renderSize, Point2D renderOrigin, Board board, int shapeID) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, shapeID);
     ghost = new GhostShape(shape);
@@ -79,12 +78,10 @@ public class Tetromino {
   private boolean sideColides(int dir) {
     int delta = dir == LEFT ? -1 : 1;
 
-    if (dir == LEFT && shape.getMinX() <= 0)
-      return true;
-    else if (dir == RIGHT && shape.getMaxX() + 1 >= BOARD_WIDTH)
-      return true;
+    if (dir == LEFT && shape.getMinX() <= 0) return true;
+    else if (dir == RIGHT && shape.getMaxX() + 1 >= BOARD_WIDTH) return true;
 
-    for (Point2D point : shape.getShape()) {
+    for (Point2D point : shape.getPoints()) {
       int x = (int) point.getX() + delta;
       int y = (int) point.getY();
       if (board.getBoard()[y][x] != board.getBackgroundColor()) {
@@ -96,10 +93,9 @@ public class Tetromino {
   }
 
   private boolean bottomColides(Shape shape) {
-    if (shape.getMaxY() + 1 >= BOARD_HEIGHT)
-      return true;
+    if (shape.getMaxY() + 1 >= BOARD_HEIGHT) return true;
 
-    for (Point2D point : shape.getShape()) {
+    for (Point2D point : shape.getPoints()) {
       int x = (int) point.getX();
       int y = (int) point.getY() + 1;
       if (board.getBoard()[y][x] != board.getBackgroundColor()) {
@@ -111,13 +107,11 @@ public class Tetromino {
   }
 
   private boolean rotationColides() {
-    if (shape.getMinY() < 0 || shape.getMaxY() >= BOARD_HEIGHT)
-      return true;
+    if (shape.getMinY() < 0 || shape.getMaxY() >= BOARD_HEIGHT) return true;
 
-    if (shape.getMinX() < 0 || shape.getMaxX() >= BOARD_WIDTH)
-      return true;
+    if (shape.getMinX() < 0 || shape.getMaxX() >= BOARD_WIDTH) return true;
 
-    for (Point2D point : shape.getShape()) {
+    for (Point2D point : shape.getPoints()) {
       int x = (int) point.getX();
       int y = (int) point.getY();
       if (board.getBoard()[y][x] != board.getBackgroundColor()) {
@@ -152,23 +146,25 @@ public class Tetromino {
       // collision with other shapes. The amount of pixels is relative to the
       // current rotation status and direction. Note that the rotation status is
       // only updated if the rotation succeeds.
-      Point2D kickData = WallKickData.getKickData(shapeID, rotationStatus,
-          direction, kickIndex);
+      Point2D kickData = WallKickData.getKickData(shapeID, rotationStatus, direction, kickIndex);
       shape.move((int) kickData.getX(), (int) kickData.getY());
 
       // check if the rotation is valid for the current kick data
       if (!rotationColides()) {
-        System.out.println("[Tetromino] Wall kicked on variant number " +
-            kickIndex + " with rotation status " +
-            rotationStatus + " and direction " + direction);
+        System.out.println(
+            "[Tetromino] Wall kicked on variant number "
+                + kickIndex
+                + " with rotation status "
+                + rotationStatus
+                + " and direction "
+                + direction);
         // if the rotation is valid, update the ghost and rotation status
         ghost.goToMaster(shape.getCenter());
         ghost.rotate(angle);
         updateGhost = true;
 
         rotationStatus = (rotationStatus + rotationStatusDelta) % 4;
-        if (rotationStatus < 0)
-          rotationStatus = 3;
+        if (rotationStatus < 0) rotationStatus = 3;
         return;
       }
 
@@ -198,23 +194,19 @@ public class Tetromino {
         break;
 
       case DOWN:
-        if (bottomColides(shape))
-          active = false;
-        else
-          shape.move(0, 1);
+        if (bottomColides(shape)) active = false;
+        else shape.move(0, 1);
 
         break;
     }
   }
 
   public void dropGhost() {
-    while (!bottomColides(ghost))
-      ghost.move(0, 1);
+    while (!bottomColides(ghost)) ghost.move(0, 1);
   }
 
   public void update() {
-    if (!active)
-      return;
+    if (!active) return;
 
     if (updateGhost) {
       ghost.goToMaster(shape.getCenter());
@@ -249,8 +241,7 @@ public class Tetromino {
 
   public void render(Graphics g) {
     // render ghost only if it's not in the same position as the shape
-    if (!ghost.getCenter().equals(shape.getCenter()))
-      ghost.render(g);
+    if (!ghost.getCenter().equals(shape.getCenter())) ghost.render(g);
 
     // render shape after ghost so it's on top
     shape.render(g);

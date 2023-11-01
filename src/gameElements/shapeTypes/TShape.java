@@ -10,8 +10,9 @@ import java.awt.geom.Point2D;
 public class TShape extends Shape {
 
   private static final Point2D[] SHAPE = {
-      new Point2D.Double(0, 1), new Point2D.Double(1, 1),
-      new Point2D.Double(2, 1), new Point2D.Double(1, 0) };
+    new Point2D.Double(0, 1), new Point2D.Double(1, 1),
+    new Point2D.Double(2, 1), new Point2D.Double(1, 0)
+  };
   private static final Point2D CENTER = new Point2D.Double(1, 1);
   private static final Color COLOR = new Color(128, 0, 128); // Purple
 
@@ -31,31 +32,31 @@ public class TShape extends Shape {
   protected void calculateMinMaxCoords() {
     switch (rotation) {
       case UP:
-        minX = (int) shape[0].getX();
-        maxX = (int) shape[2].getX();
-        minY = (int) shape[3].getY();
-        maxY = (int) shape[1].getY();
+        minX = (int) points[0].getX();
+        maxX = (int) points[2].getX();
+        minY = (int) points[3].getY();
+        maxY = (int) points[1].getY();
         break;
 
       case RIGHT:
-        minX = (int) shape[1].getX();
-        maxX = (int) shape[3].getX();
-        minY = (int) shape[0].getY();
-        maxY = (int) shape[2].getY();
+        minX = (int) points[1].getX();
+        maxX = (int) points[3].getX();
+        minY = (int) points[0].getY();
+        maxY = (int) points[2].getY();
         break;
 
       case DOWN:
-        minX = (int) shape[2].getX();
-        maxX = (int) shape[0].getX();
-        minY = (int) shape[1].getY();
-        maxY = (int) shape[3].getY();
+        minX = (int) points[2].getX();
+        maxX = (int) points[0].getX();
+        minY = (int) points[1].getY();
+        maxY = (int) points[3].getY();
         break;
 
       case LEFT:
-        minX = (int) shape[3].getX();
-        maxX = (int) shape[1].getX();
-        minY = (int) shape[0].getY();
-        maxY = (int) shape[2].getY();
+        minX = (int) points[3].getX();
+        maxX = (int) points[1].getX();
+        minY = (int) points[0].getY();
+        maxY = (int) points[2].getY();
         break;
     }
   }

@@ -1,6 +1,7 @@
 package networking;
 
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -9,7 +10,8 @@ import networking.packets.Packet;
 import networking.packets.Packet.PacketTypes;
 import networking.packets.Packet00Login;
 import networking.packets.Packet01Disconnect;
-import networking.packets.Packet03Update;
+import networking.packets.Packet03Board;
+import networking.packets.Packet04Shape;
 
 public class GameClient extends Thread {
 
@@ -62,14 +64,29 @@ public class GameClient extends Thread {
         handleDisconnect((Packet01Disconnect) packet);
         break;
 
-      case UPDATE:
-        packet = new Packet03Update(data);
-        handleUpdate((Packet03Update) packet);
+      case BOARD:
+        packet = new Packet03Board(data);
+        handleBoard((Packet03Board) packet);
         break;
+
+      case SHAPE:
+        packet = new Packet04Shape(data);
+        handleShape((Packet04Shape) packet);
     }
   }
 
-  private void handleUpdate(Packet03Update packet) {
+  private void handleShape(Packet04Shape packet) {
+    if (packet.getUsername().equals(this.username)) {
+      return;
+    }
+
+    Point2D[] points = packet.getPoints();
+    Color color = packet.getColor();
+
+    game.getPlayingMP().getShapeMP().update(points, color);
+  }
+
+  private void handleBoard(Packet03Board packet) {
     if (packet.getUsername().equals(this.username)) {
       return;
     }
@@ -78,7 +95,7 @@ public class GameClient extends Thread {
     int y = packet.getY();
     Color color = packet.getColor();
 
-    game.getPlayingMP().getOpponentBoard().updateBoard(x, y, color);
+    game.getPlayingMP().getOpponentBoard().update(x, y, color);
   }
 
   private void handleDisconnect(Packet01Disconnect packet) {
@@ -101,8 +118,13 @@ public class GameClient extends Thread {
     }
   }
 
-  public void sendUpdate(int row, int col, Color color) {
-    Packet packet = new Packet03Update(username, row, col, color);
+  public void sendShapeUpdate(Point2D[] points, Color color) {
+    Packet packet = new Packet04Shape(username, points, color);
+    packet.writeData(this);
+  }
+
+  public void sendBoardUpdate(int row, int col, Color color) {
+    Packet packet = new Packet03Board(username, row, col, color);
     packet.writeData(this);
   }
 

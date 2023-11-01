@@ -9,6 +9,7 @@ import gameStates.PlayingMP;
 import gameStates.TitleScreen;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.geom.Point2D;
 import java.net.InetAddress;
 import javax.swing.JOptionPane;
 import networking.GameClient;
@@ -93,11 +94,19 @@ public class Game implements Runnable {
     playingMP.removeBoardMP(username);
   }
 
-  public void sendUpdate(int row, int col, Color color) {
+  public void sendShapeUpdate(Point2D[] points, Color color) {
     if (serverActive) {
-      server.sendUpdate(row, col, color);
+      server.sendShapeUpdate(points, color);
     } else if (clientActive) {
-      client.sendUpdate(row, col, color);
+      client.sendShapeUpdate(points, color);
+    }
+  }
+
+  public void sendBoardUpdate(int row, int col, Color color) {
+    if (serverActive) {
+      server.sendBoardUpdate(row, col, color);
+    } else if (clientActive) {
+      client.sendBoardUpdate(row, col, color);
     }
   }
 

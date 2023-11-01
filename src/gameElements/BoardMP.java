@@ -30,7 +30,7 @@ public class BoardMP {
     }
   }
 
-  public void updateBoard(int row, int col, Color color) {
+  public void update(int row, int col, Color color) {
     board[row][col] = new Color(color.getRGB());
   }
 
@@ -44,14 +44,14 @@ public class BoardMP {
       for (int col = 0; col < BOARD_WIDTH; col++) {
         g.setColor(board[row][col]);
         g.fillRect(
-            (int) renderOrigin.getX() + col * renderSize,
-            (int) renderOrigin.getY() + row * renderSize,
+            (int) (col * renderSize - renderSize / 2) + (int) renderOrigin.getX(),
+            (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY(),
             renderSize,
             renderSize);
         g.setColor(gridColor);
         g.drawRect(
-            (int) renderOrigin.getX() + col * renderSize,
-            (int) renderOrigin.getY() + row * renderSize,
+            (int) (col * renderSize - renderSize / 2) + (int) renderOrigin.getX(),
+            (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY(),
             renderSize,
             renderSize);
       }
