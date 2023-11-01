@@ -15,7 +15,7 @@ public class GhostShape extends Shape {
         MasterShape.getRenderSize(),
         MasterShape.getRenderOffset());
 
-    color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 50);
+    color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 100);
 
     minX = MasterShape.getMinX();
     maxX = MasterShape.getMaxX();
@@ -25,6 +25,11 @@ public class GhostShape extends Shape {
 
   @Override
   protected void calculateMinMaxCoords() {
+    minX = Integer.MAX_VALUE;
+    maxX = Integer.MIN_VALUE;
+    minY = Integer.MAX_VALUE;
+    maxY = Integer.MIN_VALUE;
+
     for (Point2D point : points) {
       minX = (int) Math.min(point.getX(), minX);
       maxX = (int) Math.max(point.getX(), maxX);
