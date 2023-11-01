@@ -59,9 +59,11 @@
               <param>gameElements</param>
               <param>gameElements.shapeTypes</param>
               <param>gameStates</param>
-              <param>utils</param>
               <param>inputs</param>
               <param>main</param>
+              <param>networking></param>
+              <param>networking.packets</param>
+              <param>utils</param>
             </packages>
             <ignores>
               <param></param>

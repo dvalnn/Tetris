@@ -148,14 +148,15 @@ package gameStates {
   }
   enum GameState {
     + GAME_OVER {static}
-    + MENU {static}
     + PLAYING {static}
+    + PLAYING_MP {static}
+    + TITLE_SCREEN {static}
     + state : GameState {static}
     + valueOf(name : String) : GameState {static}
     + values() : GameState[] {static}
   }
-  class Menu {
-    + Menu(game : Game)
+  class Lobby {
+    + Lobby()
     + keyPressed(e : KeyEvent)
     + keyReleased(e : KeyEvent)
     + mouseClicked(e : MouseEvent)
@@ -186,6 +187,35 @@ package gameStates {
     + update()
     + windowLostFocus()
   }
+  class PlayingMP {
+    - NETWORK_TICK_MAX : int
+    - OPPONENT_X_OFFSET : int
+    - PLAYER_X_OFFSET : int
+    - Y_OFFSET : int
+    ~ boardColor : Color
+    - matchOver : boolean
+    - networkTick : int
+    ~ opponentBoard : BoardMP
+    - opponentDisconnected : boolean
+    ~ playerBoard : Board
+    - shapeMP : ShapeMP
+    + PlayingMP(game : Game)
+    + addBoardMP(username : String, address : InetAddress, port : int)
+    + getOpponentBoard() : BoardMP
+    + getShapeMP() : ShapeMP
+    + keyPressed(e : KeyEvent)
+    + keyReleased(e : KeyEvent)
+    + mouseClicked(e : MouseEvent)
+    + mouseDragged(e : MouseEvent)
+    + mouseMoved(e : MouseEvent)
+    + mousePressed(e : MouseEvent)
+    + mouseReleased(e : MouseEvent)
+    + removeBoardMP(username : String)
+    + render(g : Graphics)
+    + sendPlayerState()
+    + update()
+    + windowLostFocus()
+  }
   class State {
     # game : Game
     + State(game : Game)
@@ -202,6 +232,21 @@ package gameStates {
     + render(Graphics) {abstract}
     + update() {abstract}
     + windowLostFocus() {abstract}
+  }
+  class TitleScreen {
+    - titleScreen : BufferedImage
+    + TitleScreen(game : Game)
+    - importImage()
+    + keyPressed(e : KeyEvent)
+    + keyReleased(e : KeyEvent)
+    + mouseClicked(e : MouseEvent)
+    + mouseDragged(e : MouseEvent)
+    + mouseMoved(e : MouseEvent)
+    + mousePressed(e : MouseEvent)
+    + mouseReleased(e : MouseEvent)
+    + render(g : Graphics)
+    + update()
+    + windowLostFocus()
   }
 }
 package gameElements {
@@ -233,6 +278,18 @@ package gameElements {
     + togglePause()
     + update()
   }
+  class BoardMP {
+    - backgroundColor : Color
+    + board : Color[][]
+    - gridColor : Color
+    - renderOrigin : Point2D
+    - renderSize : int
+    - username : String
+    + BoardMP(size : int, xOffset : int, yOffset : int, color : Color, username : String)
+    + getUsername() : String
+    + render(g : Graphics)
+    + update(row : int, col : int, color : Color)
+  }
   abstract class Shape {
     # center : Point2D
     # color : Color
@@ -240,9 +297,9 @@ package gameElements {
     # maxY : int
     # minX : int
     # minY : int
+    # points : Point2D[]
     - renderOffset : Point2D
     - renderSize : int
-    # shape : Point2D[]
     + Shape(center : Point2D, points : Point2D[], color : Color, renderSize : int, renderOrigin : Point2D)
     # calculateMinMaxCoords() {abstract}
     + getCenter() : Point2D
@@ -251,13 +308,23 @@ package gameElements {
     + getMaxY() : int
     + getMinX() : int
     + getMinY() : int
+    + getPoints() : Point2D[]
     + getRenderOffset() : Point2D
     + getRenderSize() : int
-    + getShape() : Point2D[]
     + move(x : int, y : int)
     + render(g : Graphics)
     + rotate(double) {abstract}
     # rotatePoints(angle : double)
+  }
+  class ShapeMP {
+    - color : Color
+    - points : Point2D[]
+    - renderOffset : Point2D
+    - renderSize : int
+    + ShapeMP(renderSize : int, xOffset : int, yOffset : int)
+    + getPoints() : Point2D[]
+    + render(g : Graphics)
+    + update(points : Point2D[], color : Color)
   }
   class Tetromino {
     - HORIZONTAL_SPEED : int
@@ -301,22 +368,40 @@ package gameElements {
 }
 package main {
   class Game {
+    - client : GameClient
+    - clientActive : boolean
     - exit : boolean
     - gameOver : GameOver
     - gamePanel : GamePanel
     - gameThread : Thread
     - gameWindow : GameWindow
-    - menu : Menu
+    - menu : TitleScreen
     - playing : Playing
+    - playingMP : PlayingMP
+    - server : GameServer
+    - serverActive : boolean
     + Game()
+    + addPlayer(username : String, address : InetAddress, port : int)
     + exit()
+    + getClient() : GameClient
     + getGameOver() : GameOver
-    + getMenu() : Menu
+    + getMenu() : TitleScreen
     + getPlaying() : Playing
+    + getPlayingMP() : PlayingMP
+    + getServer() : GameServer
     - initClasses()
+    + initNetworking()
+    + isClientActive() : boolean
+    + isServerActive() : boolean
+    + removePlayer(username : String)
     + render(g : Graphics)
     + run()
+    + sendBoardUpdate(row : int, col : int, color : Color)
+    + sendShapeUpdate(points : Point2D[], color : Color)
+    + setClientActive(clientActive : boolean)
+    + setServerActive(serverActive : boolean)
     - startGameLoop()
+    + terminateConnection()
     + update()
     + windowLostFocus()
   }
@@ -325,12 +410,89 @@ package main {
     + main(args : String[]) {static}
   }
 }
+package networking.packets {
+  abstract class Packet {
+    + packetId : byte
+    + Packet(packetId : int)
+    + getData() : byte[] {abstract}
+    + lookupPacket(id : int) : PacketTypes {static}
+    + lookupPacket(packetId : String) : PacketTypes {static}
+    + readData(data : byte[]) : String
+    + writeData(GameClient) {abstract}
+    + writeData(GameServer) {abstract}
+  }
+  enum PacketTypes {
+    + BOARD {static}
+    + DISCONNECT {static}
+    + INVALID {static}
+    + LOGIN {static}
+    + SERVER_FULL {static}
+    + SHAPE {static}
+    - packetId : int
+    + getId() : int
+    + valueOf(name : String) : PacketTypes {static}
+    + values() : PacketTypes[] {static}
+  }
+  class Packet00Login {
+    - username : String
+    + Packet00Login(data : byte[])
+    + Packet00Login(username : String)
+    + getData() : byte[]
+    + getUsername() : String
+    + writeData(client : GameClient)
+    + writeData(server : GameServer)
+  }
+  class Packet01Disconnect {
+    - username : String
+    + Packet01Disconnect(data : byte[])
+    + Packet01Disconnect(username : String)
+    + getData() : byte[]
+    + getUsername() : String
+    + writeData(client : GameClient)
+    + writeData(server : GameServer)
+  }
+  class Packet03Board {
+    - color : Color
+    - data : String[]
+    - username : String
+    - x : int
+    - y : int
+    + Packet03Board(data : byte[])
+    + Packet03Board(username : String, x : int, y : int, color : Color)
+    + getColor() : Color
+    + getData() : byte[]
+    + getUsername() : String
+    + getX() : int
+    + getY() : int
+    + writeData(client : GameClient)
+    + writeData(server : GameServer)
+  }
+  class Packet04Shape {
+    - POINTS_LEN : int
+    ~ color : Color
+    - data : String[]
+    ~ points : Point2D[]
+    - username : String
+    + Packet04Shape(data : byte[])
+    + Packet04Shape(username : String, points : Point2D[], color : Color)
+    + getColor() : Color
+    + getData() : byte[]
+    + getPoints() : Point2D[]
+    + getUsername() : String
+    + writeData(client : GameClient)
+    + writeData(server : GameServer)
+  }
+}
 Game -->  "-gameOver" GameOver
 Tetromino -->  "-ghost" GhostShape
+Game -->  "-menu" TitleScreen
 Tetromino -->  "-shape" Shape
 GameState -->  "-state" GameState
-Game -->  "-menu" Menu
+Game -->  "-playingMP" PlayingMP
+PlayingMP -->  "-shapeMP" ShapeMP
+PlayingMP -->  "-playerBoard" Board
 Game -->  "-playing" Playing
+PlayingMP -->  "-opponentBoard" BoardMP
 Playing -->  "-board" Board
 State -->  "-game" Game
 Board -->  "-tetro1" Tetromino
@@ -344,8 +506,15 @@ TShape --|> Shape
 ZShape --|> Shape 
 GameOver ..|> StateMethods 
 GameOver --|> State 
-Menu ..|> StateMethods 
-Menu --|> State 
+Lobby ..|> StateMethods 
 Playing ..|> StateMethods 
 Playing --|> State 
+PlayingMP ..|> StateMethods 
+PlayingMP --|> State 
+TitleScreen ..|> StateMethods 
+TitleScreen --|> State 
+Packet00Login --|> Packet 
+Packet01Disconnect --|> Packet 
+Packet03Board --|> Packet 
+Packet04Shape --|> Packet 
 @enduml
