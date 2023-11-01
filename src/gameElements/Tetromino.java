@@ -20,7 +20,7 @@ public class Tetromino {
   private final int HORIZONTAL_SPEED = 20;
   private final int VERTICAL_SLOW = 1;
   private final int VERTICAL_FAST = 20;
-  private final int VERTICAL_INSTANT = 10000;
+  private final int VERTICAL_INSTANT = 20000;
 
   private int verticalMoveTick = 0;
   private int horizontalMoveTick = 0;
@@ -33,6 +33,9 @@ public class Tetromino {
   private boolean updateGhost = true;
 
   private Random rand = new Random();
+  private boolean deactivating;
+  private int deactivationTickCounter;
+  private final int DEACTIVATION_TICKS = UPS_SET / 2; // 0.5 seconds
 
   public Tetromino(int renderSize, Point2D renderOrigin, PlayerBoard board) {
     this.board = board;
@@ -152,17 +155,13 @@ public class Tetromino {
 
       // check if the rotation is valid for the current kick data
       if (!rotationColides()) {
-        System.out.println(
-            "[Tetromino] Wall kicked on variant number "
-                + kickIndex
-                + " with rotation status "
-                + rotationStatus
-                + " and direction "
-                + direction);
         // if the rotation is valid, update the ghost and rotation status
         ghost.goToMaster(shape.getCenter());
         ghost.rotate(angle);
         updateGhost = true;
+
+        // succesfull rotation resets disable timer
+        deactivationTickCounter = 0;
 
         rotationStatus = (rotationStatus + rotationStatusDelta) % 4;
         if (rotationStatus < 0) rotationStatus = 3;
@@ -178,12 +177,50 @@ public class Tetromino {
     shape.rotate(-angle);
   }
 
-  public void move(int direction) {
+  private void handleMoveDown() {
+
+    boolean colision = bottomColides(shape);
+
+    if (colision && verticalSpeed == VERTICAL_INSTANT) {
+      active = false;
+      return;
+    }
+
+    if (colision && !deactivating) {
+      System.out.println("[Tetromino] Deactivating");
+      deactivating = true;
+      deactivationTickCounter = 0;
+      return;
+    }
+
+    if (colision && deactivating) {
+      deactivationTickCounter++;
+      System.out.println("[Tetromino] Deactivation tick: " + deactivationTickCounter);
+      if (deactivationTickCounter >= DEACTIVATION_TICKS) {
+        active = false;
+      }
+      return;
+    }
+
+    deactivationTickCounter = 0;
+    deactivating = false;
+
+    verticalMoveTick++;
+    if (verticalMoveTick * verticalSpeed >= UPS_SET) {
+      shape.move(0, 1);
+      verticalMoveTick = 0;
+    }
+  }
+
+  private void move(int direction) {
     switch (direction) {
       case LEFT:
         if (!sideColides(LEFT)) {
           shape.move(-1, 0);
           updateGhost = true;
+
+          // sucessfull movement resets disable timer
+          deactivationTickCounter = 0;
         }
         break;
 
@@ -195,9 +232,7 @@ public class Tetromino {
         break;
 
       case DOWN:
-        if (bottomColides(shape)) active = false;
-        else shape.move(0, 1);
-
+        handleMoveDown();
         break;
     }
   }
@@ -223,11 +258,10 @@ public class Tetromino {
       verticalSpeed = VERTICAL_SLOW;
     }
 
-    verticalMoveTick++;
-    if (verticalMoveTick * verticalSpeed >= UPS_SET) {
-      verticalMoveTick = 0;
-      move(DOWN);
-    }
+    move(DOWN);
+
+    // if the vertical speed is instant, the shape should not move horizontally
+    if (verticalSpeed == VERTICAL_INSTANT) return;
 
     horizontalMoveTick++;
     if (horizontalMoveTick * HORIZONTAL_SPEED >= UPS_SET) {
