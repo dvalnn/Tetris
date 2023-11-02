@@ -57,12 +57,14 @@
             <outputDirectory>${project.basedir}/etc</outputDirectory>
             <packages>
               <param>gameElements</param>
+              <param>gameElements.boardTypes</param>
               <param>gameElements.shapeTypes</param>
               <param>gameStates</param>
               <param>inputs</param>
               <param>main</param>
               <param>networking></param>
               <param>networking.packets</param>
+              <param>ui</param>
               <param>utils</param>
             </packages>
             <ignores>

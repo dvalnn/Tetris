@@ -66,6 +66,24 @@ package gameElements.shapeTypes {
     + rotate(angle : double)
   }
 }
+package ui {
+  class MenuButton {
+    - bounds : Rectangle2D
+    - image : BufferedImage
+    - index : int
+    - scale : double
+    - state : GameState
+    - xPos : int
+    - yPos : int
+    + MenuButton(center : Point, index : int, scale : double, state : GameState)
+    + MenuButton(xPos : int, yPos : int, index : int, scale : double, state : GameState)
+    + applyGameState()
+    + getBounds() : Rectangle2D
+    - initBounds()
+    - loadImg()
+    + render(g : Graphics)
+  }
+}
 package utils {
   class Constants {
     + Constants()
@@ -97,6 +115,57 @@ package utils {
     + T : int {static}
     + Z : int {static}
     + TetrominoIDs()
+  }
+  class UI {
+    + BACKGROUND_PATH : String {static}
+    + BUTTON_PATH : String {static}
+    + UI()
+  }
+  class Buttons {
+    + ABOUT_US : String {static}
+    + BUTTONS : String[] {static}
+    + BUTTON_COUNT : int {static}
+    + CHANGE_GAME_INPUTS : String {static}
+    + EXIT_GAME : String {static}
+    + HOST_GAME : String {static}
+    + JOIN_GAME : String {static}
+    + LEADERBOARD : String {static}
+    + MINUS_V1 : String {static}
+    + MINUS_V2 : String {static}
+    + MULTIPLAYER : String {static}
+    + NEW_GAME : String {static}
+    + PLUS_V1 : String {static}
+    + PLUS_V2 : String {static}
+    + PRESS_ENTER : String {static}
+    + RETURN_BUTTON : String {static}
+    + SETTINGS : String {static}
+    + SINGLE_PLAYER : String {static}
+    + Buttons()
+  }
+  class BUTTON_TYPE {
+    + ABOUT_US : int {static}
+    + CHANGE_GAME_INPUTS : int {static}
+    + EXIT_GAME : int {static}
+    + HOST_GAME : int {static}
+    + JOIN_GAME : int {static}
+    + LEADERBOARD : int {static}
+    + MINUS_V1 : int {static}
+    + MINUS_V2 : int {static}
+    + MULTIPLAYER : int {static}
+    + NEW_GAME : int {static}
+    + PLUS_V1 : int {static}
+    + PLUS_V2 : int {static}
+    + PRESS_ENTER : int {static}
+    + RETURN_BUTTON : int {static}
+    + SETTINGS : int {static}
+    + SINGLE_PLAYER : int {static}
+    + BUTTON_TYPE()
+  }
+  class LoadSave {
+    + LoadSave()
+    + loadBackground(path : String) : BufferedImage {static}
+    + loadButton(path : String) : BufferedImage {static}
+    + loadImage(path : String) : BufferedImage {static}
   }
   class WallKickData {
     - ARIKA_I_DL_KICK : int[][] {static}
@@ -171,7 +240,7 @@ package gameStates {
   class Playing {
     - X_OFFSET : int
     - Y_OFFSET : int
-    - board : Board
+    - board : PlayerBoard
     - boardColor : Color
     - mouseButton1Pressed : boolean
     - mouseButton3Pressed : boolean
@@ -188,20 +257,22 @@ package gameStates {
     + windowLostFocus()
   }
   class PlayingMP {
+    - FULL_SYNC_TICK_MAX : int
     - NETWORK_TICK_MAX : int
     - OPPONENT_X_OFFSET : int
     - PLAYER_X_OFFSET : int
     - Y_OFFSET : int
     ~ boardColor : Color
+    - fullSyncTick : int
     - matchOver : boolean
     - networkTick : int
-    ~ opponentBoard : BoardMP
+    ~ opponentBoard : MPBoard
     - opponentDisconnected : boolean
-    ~ playerBoard : Board
+    ~ playerBoard : PlayerBoard
     - shapeMP : ShapeMP
     + PlayingMP(game : Game)
     + addBoardMP(username : String, address : InetAddress, port : int)
-    + getOpponentBoard() : BoardMP
+    + getOpponentBoard() : MPBoard
     + getShapeMP() : ShapeMP
     + keyPressed(e : KeyEvent)
     + keyReleased(e : KeyEvent)
@@ -212,6 +283,7 @@ package gameStates {
     + mouseReleased(e : MouseEvent)
     + removeBoardMP(username : String)
     + render(g : Graphics)
+    + sendFullSync()
     + sendPlayerState()
     + update()
     + windowLostFocus()
@@ -234,9 +306,11 @@ package gameStates {
     + windowLostFocus() {abstract}
   }
   class TitleScreen {
+    - button : MenuButton
     - titleScreen : BufferedImage
+    - xPos : int
+    - yPos : int
     + TitleScreen(game : Game)
-    - importImage()
     + keyPressed(e : KeyEvent)
     + keyReleased(e : KeyEvent)
     + mouseClicked(e : MouseEvent)
@@ -251,44 +325,26 @@ package gameStates {
 }
 package gameElements {
   class Board {
-    - backgroundColor : Color
-    - board : Color[][]
-    - debugMode : boolean
-    - gridColor : Color
-    - paused : boolean
-    - renderOrigin : Point2D
-    - renderSize : int
-    - tetro1 : Tetromino
-    - tetro2 : Tetromino
+    # backgroundColor : Color
+    # board : List<BoardLine>
+    # gridColor : Color
+    # renderOrigin : Point2D
+    # renderSize : int
     + Board(size : int, xOffset : int, yOffset : int, color : Color)
-    + addBlockOnMousePosition(x : int, y : int)
-    - addTetrominoToPile()
-    - checkRows()
-    - clearRow(row : int)
     + getBackgroundColor() : Color
-    + getBoard() : Color[][]
-    + getTetromino() : Tetromino
-    + removeBlockOnMousePosition(x : int, y : int)
+    + getBoard() : List<BoardLine>
     + render(g : Graphics)
-    + reset()
-    + setTetromino(tetroID : int)
-    - shiftRowsDown(row : int)
-    - toggleBlockOnMousePosition(x : int, y : int, add : boolean)
-    + toggleDebugMode()
-    + togglePause()
-    + update()
   }
-  class BoardMP {
-    - backgroundColor : Color
-    + board : Color[][]
-    - gridColor : Color
-    - renderOrigin : Point2D
-    - renderSize : int
-    - username : String
-    + BoardMP(size : int, xOffset : int, yOffset : int, color : Color, username : String)
-    + getUsername() : String
-    + render(g : Graphics)
-    + update(row : int, col : int, color : Color)
+  class BoardLine {
+    - colors : List<Color>
+    - recentlyChanged : boolean
+    + BoardLine()
+    + getColorsCopy() : List<Color>
+    + getColorsCopyIfChanged() : List<Color>
+    + getIndexColorCopy(index : int) : Color
+    + getIndexRGB(index : int) : int
+    + setColor(index : int, color : Color)
+    + setColor(index : int, rgb : int)
   }
   abstract class Shape {
     # center : Point2D
@@ -327,12 +383,15 @@ package gameElements {
     + update(points : Point2D[], color : Color)
   }
   class Tetromino {
+    - DEACTIVATION_TICKS : int
     - HORIZONTAL_SPEED : int
     - VERTICAL_FAST : int
     - VERTICAL_INSTANT : int
     - VERTICAL_SLOW : int
     - active : boolean
-    - board : Board
+    - board : PlayerBoard
+    - deactivating : boolean
+    - deactivationTickCounter : int
     - down : boolean
     - drop : boolean
     - ghost : GhostShape
@@ -346,13 +405,14 @@ package gameElements {
     - updateGhost : boolean
     - verticalMoveTick : int
     - verticalSpeed : int
-    + Tetromino(renderSize : int, renderOrigin : Point2D, board : Board)
-    + Tetromino(renderSize : int, renderOrigin : Point2D, board : Board, shapeID : int)
+    + Tetromino(renderSize : int, renderOrigin : Point2D, board : PlayerBoard)
+    + Tetromino(renderSize : int, renderOrigin : Point2D, board : PlayerBoard, shapeID : int)
     - bottomColides(shape : Shape) : boolean
     + dropGhost()
     + getShape() : Shape
+    - handleMoveDown()
     + isActive() : boolean
-    + move(direction : int)
+    - move(direction : int)
     + render(g : Graphics)
     + rotate(direction : int)
     - rotationColides() : boolean
@@ -396,7 +456,7 @@ package main {
     + removePlayer(username : String)
     + render(g : Graphics)
     + run()
-    + sendBoardUpdate(row : int, col : int, color : Color)
+    + sendBoardUpdate(row : int, lineColors : Color[])
     + sendShapeUpdate(points : Point2D[], color : Color)
     + setClientActive(clientActive : boolean)
     + setServerActive(serverActive : boolean)
@@ -408,6 +468,35 @@ package main {
   class MainClass {
     + MainClass()
     + main(args : String[]) {static}
+  }
+}
+package gameElements.boardTypes {
+  class MPBoard {
+    - username : String
+    + MPBoard(size : int, xOffset : int, yOffset : int, color : Color, username : String)
+    + getUsername() : String
+    + update(row : int, colorLine : Color[])
+  }
+  class PlayerBoard {
+    - debugMode : boolean
+    - paused : boolean
+    - tetro1 : Tetromino
+    - tetro2 : Tetromino
+    + PlayerBoard(size : int, xOffset : int, yOffset : int, color : Color)
+    + addBlockOnMousePosition(x : int, y : int)
+    - addTetrominoToPile()
+    - checkRows()
+    - clearRow(row : int)
+    + getTetromino() : Tetromino
+    + removeBlockOnMousePosition(x : int, y : int)
+    + render(g : Graphics)
+    + reset()
+    + setTetromino(tetroID : int)
+    - shiftRowsDown(row : int)
+    - toggleBlockOnMousePosition(x : int, y : int, add : boolean)
+    + toggleDebugMode()
+    + togglePause()
+    + update()
   }
 }
 package networking.packets {
@@ -452,18 +541,16 @@ package networking.packets {
     + writeData(server : GameServer)
   }
   class Packet03Board {
-    - color : Color
     - data : String[]
+    - lineColors : Color[]
+    - row : int
     - username : String
-    - x : int
-    - y : int
     + Packet03Board(data : byte[])
-    + Packet03Board(username : String, x : int, y : int, color : Color)
-    + getColor() : Color
+    + Packet03Board(username : String, row : int, lineColors : Color[])
     + getData() : byte[]
+    + getLineColors() : Color[]
+    + getRow() : int
     + getUsername() : String
-    + getX() : int
-    + getY() : int
     + writeData(client : GameClient)
     + writeData(server : GameServer)
   }
@@ -484,18 +571,23 @@ package networking.packets {
   }
 }
 Game -->  "-gameOver" GameOver
-Tetromino -->  "-ghost" GhostShape
 Game -->  "-menu" TitleScreen
-Tetromino -->  "-shape" Shape
+PlayingMP -->  "-opponentBoard" MPBoard
 GameState -->  "-state" GameState
-Game -->  "-playingMP" PlayingMP
+MenuButton -->  "-state" GameState
 PlayingMP -->  "-shapeMP" ShapeMP
-PlayingMP -->  "-playerBoard" Board
+TitleScreen -->  "-button" MenuButton
+PlayingMP -->  "-playerBoard" PlayerBoard
 Game -->  "-playing" Playing
-PlayingMP -->  "-opponentBoard" BoardMP
-Playing -->  "-board" Board
 State -->  "-game" Game
-Board -->  "-tetro1" Tetromino
+Tetromino -->  "-ghost" GhostShape
+Tetromino -->  "-shape" Shape
+Game -->  "-playingMP" PlayingMP
+Playing -->  "-board" PlayerBoard
+Board -->  "-board" BoardLine
+PlayerBoard -->  "-tetro1" Tetromino
+MPBoard --|> Board 
+PlayerBoard --|> Board 
 GhostShape --|> Shape 
 IShape --|> Shape 
 JShape --|> Shape 
