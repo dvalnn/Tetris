@@ -1,64 +1,60 @@
 package gameStates;
 
 import static utils.Constants.GameConstants.*;
+import static utils.Constants.UI.Buttons.BUTTON_TYPE.PRESS_ENTER;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
 import main.Game;
+import ui.MenuButton;
+import utils.LoadSave;
 
 public class TitleScreen extends State implements StateMethods {
 
   private BufferedImage titleScreen;
 
+  // button should be placed in the bottom center of the screen
+  private final int xPos = GAME_WIDTH / 2;
+  private final int yPos = GAME_HEIGHT - 100;
+
+  private MenuButton button =
+      new MenuButton(new Point(xPos, yPos), PRESS_ENTER, 0.25, GameState.PLAYING);
+
   public TitleScreen(Game game) {
     super(game);
-    importImage();
-  }
-
-  private void importImage() {
-    String path = System.getProperty("user.dir") + "/assets/titleScreen.png";
-    try {
-      titleScreen = ImageIO.read(new File(path));
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("Error importing image " + path);
-      System.exit(1);
-    }
+    titleScreen = LoadSave.loadBackground("titlescreen.png");
   }
 
   @Override
-  public void update() {
-  }
+  public void update() {}
 
   @Override
   public void render(Graphics g) {
     g.drawImage(titleScreen, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+    button.render(g);
   }
 
   @Override
   public void mouseClicked(MouseEvent e) {
-    GameState.state = GameState.PLAYING;
+    if (button.getBounds().contains(e.getPoint())) {
+      GameState.state = GameState.PLAYING;
+    }
   }
 
   @Override
-  public void mousePressed(MouseEvent e) {
-  }
+  public void mousePressed(MouseEvent e) {}
 
   @Override
-  public void mouseReleased(MouseEvent e) {
-  }
+  public void mouseReleased(MouseEvent e) {}
 
   @Override
-  public void mouseMoved(MouseEvent e) {
-  }
+  public void mouseMoved(MouseEvent e) {}
 
   @Override
-  public void mouseDragged(MouseEvent e) {
-  }
+  public void mouseDragged(MouseEvent e) {}
 
   @Override
   public void keyPressed(KeyEvent e) {
@@ -74,9 +70,7 @@ public class TitleScreen extends State implements StateMethods {
   }
 
   @Override
-  public void keyReleased(KeyEvent e) {
-  }
+  public void keyReleased(KeyEvent e) {}
 
-  public void windowLostFocus() {
-  }
+  public void windowLostFocus() {}
 }
