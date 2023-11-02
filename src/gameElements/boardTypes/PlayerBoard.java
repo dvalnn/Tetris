@@ -4,7 +4,8 @@ import static utils.Constants.GameConstants.*;
 
 import gameElements.Board;
 import gameElements.Tetromino;
-import gameStates.GameState;
+import gameStates.GameStateHandler;
+import gameStates.GameStateHandler.GameStatesEnum;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
@@ -33,7 +34,7 @@ public class PlayerBoard extends Board {
     }
     if (tetro1.getShape().getMinY() <= 0) {
       System.out.println("[Board] Game Over!");
-      GameState.state = GameState.GAME_OVER;
+      GameStateHandler.setActiveState(GameStatesEnum.GAME_OVER);
     }
   }
 

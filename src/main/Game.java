@@ -2,11 +2,9 @@ package main;
 
 import static utils.Constants.GameConstants.*;
 
-import gameStates.GameOver;
-import gameStates.GameState;
-import gameStates.Playing;
-import gameStates.PlayingMP;
-import gameStates.TitleScreen;
+import gameStates.GameStateHandler;
+import gameStates.GameStateHandler.GameStatesEnum;
+import gameStates.stateTypes.PlayingMP;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
@@ -22,20 +20,15 @@ public class Game implements Runnable {
   private GamePanel gamePanel;
   private Thread gameThread;
 
-  private TitleScreen menu;
-  private Playing playing;
-  private GameOver gameOver;
-  private PlayingMP playingMP;
+  private static GameClient client;
+  private static GameServer server;
 
-  private GameClient client;
-  private GameServer server;
-
-  private boolean serverActive = false;
-  private boolean clientActive = false;
-  private boolean exit = false;
+  private static boolean serverActive = false;
+  private static boolean clientActive = false;
+  private static boolean exit = false;
 
   public Game() {
-    initClasses();
+    GameStateHandler.init();
 
     gamePanel = new GamePanel(this);
     gameWindow = new GameWindow(gamePanel);
@@ -45,23 +38,16 @@ public class Game implements Runnable {
     startGameLoop();
   }
 
-  private void initClasses() {
-    menu = new TitleScreen(this);
-    playing = new Playing(this);
-    gameOver = new GameOver(this);
-    playingMP = new PlayingMP(this);
-  }
-
   private void startGameLoop() {
     gameThread = new Thread(this);
     gameThread.start();
   }
 
-  public void initNetworking() {
+  public static void initNetworking() {
     // TODO make this a dialog box instead of a yes/no option
     if (JOptionPane.showConfirmDialog(null, "Run as server?") == JOptionPane.YES_OPTION) {
       String hostName = JOptionPane.showInputDialog("Enter server name:").trim();
-      server = new GameServer(this, hostName);
+      server = new GameServer(hostName);
       server.start();
       serverActive = true;
     } else {
@@ -70,7 +56,7 @@ public class Game implements Runnable {
       String ipAddress = JOptionPane.showInputDialog("Enter server IP address:").trim();
       System.out.println("Connecting to " + ipAddress);
       Packet00Login loginPacket = new Packet00Login(JOptionPane.showInputDialog("Enter username:"));
-      client = new GameClient(this, ipAddress, loginPacket.getUsername());
+      client = new GameClient(ipAddress, loginPacket.getUsername());
       client.start();
       loginPacket.writeData(client);
       clientActive = true;
@@ -86,15 +72,22 @@ public class Game implements Runnable {
     }
   }
 
-  public void addPlayer(String username, InetAddress address, int port) {
+  public static void addPlayer(String username, InetAddress address, int port) {
+    PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
     playingMP.addBoardMP(username, address, port);
   }
 
-  public void removePlayer(String username) {
+  public static void removePlayer(String username) {
+    PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
     playingMP.removeBoardMP(username);
   }
 
-  public void sendShapeUpdate(Point2D[] points, Color color) {
+  public static void updateShapeMP(Point2D[] points, Color color) {
+    PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
+    playingMP.getShapeMP().update(points, color);
+  }
+
+  public static void sendShapeUpdate(Point2D[] points, Color color) {
     if (serverActive) {
       server.sendShapeUpdate(points, color);
     } else if (clientActive) {
@@ -102,7 +95,12 @@ public class Game implements Runnable {
     }
   }
 
-  public void sendBoardUpdate(int row, Color[] lineColors) {
+  public static void updateBoardMP(int row, Color[] lineColors) {
+    PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
+    playingMP.getBoardMP().update(row, lineColors);
+  }
+
+  public static void sendBoardUpdate(int row, Color[] lineColors) {
     if (serverActive) {
       server.sendBoardUpdate(row, lineColors);
     } else if (clientActive) {
@@ -111,54 +109,15 @@ public class Game implements Runnable {
   }
 
   public void update() {
-    switch (GameState.state) {
-      case TITLE_SCREEN:
-        menu.update();
-        break;
-      case PLAYING:
-        playing.update();
-        break;
-      case PLAYING_MP:
-        playingMP.update();
-        break;
-      case GAME_OVER:
-        gameOver.update();
-        break;
-    }
+    GameStateHandler.getActiveState().update();
   }
 
   public void render(Graphics g) {
-    switch (GameState.state) {
-      case TITLE_SCREEN:
-        menu.render(g);
-        break;
-      case PLAYING:
-        playing.render(g);
-        break;
-      case PLAYING_MP:
-        playingMP.render(g);
-        break;
-      case GAME_OVER:
-        gameOver.render(g);
-        break;
-    }
+    GameStateHandler.getActiveState().render(g);
   }
 
   public void windowLostFocus() {
-    switch (GameState.state) {
-      case TITLE_SCREEN:
-        menu.windowLostFocus();
-        break;
-      case PLAYING:
-        playing.windowLostFocus();
-        break;
-      case PLAYING_MP:
-        playingMP.windowLostFocus();
-        break;
-      case GAME_OVER:
-        gameOver.windowLostFocus();
-        break;
-    }
+    GameStateHandler.getActiveState().windowLostFocus();
   }
 
   @Override
@@ -214,20 +173,8 @@ public class Game implements Runnable {
     System.exit(0);
   }
 
-  public void exit() {
+  public static void exit() {
     exit = true;
-  }
-
-  public Playing getPlaying() {
-    return playing;
-  }
-
-  public TitleScreen getMenu() {
-    return menu;
-  }
-
-  public GameOver getGameOver() {
-    return gameOver;
   }
 
   public boolean isServerActive() {
@@ -235,15 +182,15 @@ public class Game implements Runnable {
   }
 
   public void setServerActive(boolean serverActive) {
-    this.serverActive = serverActive;
+    Game.serverActive = serverActive;
   }
 
   public boolean isClientActive() {
     return clientActive;
   }
 
-  public void setClientActive(boolean clientActive) {
-    this.clientActive = clientActive;
+  public static void setClientActive(boolean clientActive) {
+    Game.clientActive = clientActive;
   }
 
   public GameClient getClient() {
@@ -252,9 +199,5 @@ public class Game implements Runnable {
 
   public GameServer getServer() {
     return server;
-  }
-
-  public PlayingMP getPlayingMP() {
-    return playingMP;
   }
 }

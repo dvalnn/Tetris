@@ -1,4 +1,4 @@
-package gameStates;
+package gameStates.stateTypes;
 
 import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
@@ -7,15 +7,17 @@ import gameElements.Shape;
 import gameElements.ShapeMP;
 import gameElements.boardTypes.MPBoard;
 import gameElements.boardTypes.PlayerBoard;
+import gameStates.GameStateHandler;
+import gameStates.GameStateHandler.GameStatesEnum;
+import gameStates.State;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.net.InetAddress;
 import java.util.List;
 import main.Game;
 
-public class PlayingMP extends State implements StateMethods {
+public class PlayingMP extends State {
 
   Color boardColor = new Color(20, 20, 20);
   PlayerBoard playerBoard;
@@ -35,8 +37,8 @@ public class PlayingMP extends State implements StateMethods {
   private final int OPPONENT_X_OFFSET = 3 * GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2;
   private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
 
-  public PlayingMP(Game game) {
-    super(game);
+  public PlayingMP() {
+    super(GameStatesEnum.PLAYING_MP);
     playerBoard = new PlayerBoard(BOARD_SQUARE, PLAYER_X_OFFSET, Y_OFFSET, boardColor);
   }
 
@@ -55,27 +57,27 @@ public class PlayingMP extends State implements StateMethods {
   public void sendFullSync() {
     // send current player tetromino to opponent
     Shape currentShape = playerBoard.getTetromino().getShape();
-    game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
+    Game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
 
     // send current player board to opponent
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
       List<Color> colors = line.getColorsCopy();
-      game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
+      Game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
     }
   }
 
   public void sendPlayerState() {
     // send current player tetromino to opponent
     Shape currentShape = playerBoard.getTetromino().getShape();
-    game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
+    Game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
 
     // send current player board to opponent
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
       List<Color> colors = line.getColorsCopyIfChanged();
       if (colors != null) {
-        game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
+        Game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
       }
     }
   }
@@ -127,24 +129,9 @@ public class PlayingMP extends State implements StateMethods {
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {}
-
-  @Override
-  public void mousePressed(MouseEvent e) {}
-
-  @Override
-  public void mouseReleased(MouseEvent e) {}
-
-  @Override
-  public void mouseMoved(MouseEvent e) {}
-
-  @Override
-  public void mouseDragged(MouseEvent e) {}
-
-  @Override
   public void keyPressed(KeyEvent e) {
     if (matchOver) {
-      GameState.state = GameState.GAME_OVER;
+      GameStateHandler.setActiveState(GameStatesEnum.GAME_OVER);
       return;
     }
     // same controls as playing.java
@@ -202,7 +189,7 @@ public class PlayingMP extends State implements StateMethods {
   @Override
   public void windowLostFocus() {}
 
-  public MPBoard getOpponentBoard() {
+  public MPBoard getBoardMP() {
     return opponentBoard;
   }
 

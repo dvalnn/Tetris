@@ -17,15 +17,13 @@ public class GameServer extends Thread {
 
   private final int serverPort = 1331;
   private DatagramSocket socket;
-  private Game game;
   private String hostname;
   private InetAddress clientAddress;
   private int clientPort;
 
-  public GameServer(Game game, String hostName) {
+  public GameServer(String hostName) {
     System.out.println("[Server] Hello!");
 
-    this.game = game;
     this.hostname = hostName;
 
     try {
@@ -99,7 +97,7 @@ public class GameServer extends Thread {
     Point2D[] points = packet.getPoints();
     Color color = packet.getColor();
 
-    game.getPlayingMP().getShapeMP().update(points, color);
+    Game.updateShapeMP(points, color);
   }
 
   private void handleUpdate(Packet03Board packet) {
@@ -110,12 +108,12 @@ public class GameServer extends Thread {
     int row = packet.getRow();
     Color[] lineColors = packet.getLineColors();
 
-    game.getPlayingMP().getOpponentBoard().update(row, lineColors);
+    Game.updateBoardMP(row, lineColors);
   }
 
   private void handleDisconnect(Packet01Disconnect packet) {
     System.out.println("[Server] " + packet.getUsername() + " has disconnected!");
-    game.removePlayer(packet.getUsername());
+    Game.removePlayer(packet.getUsername());
   }
 
   private void handleLogin(Packet00Login packet, InetAddress address, int port) {
@@ -139,7 +137,7 @@ public class GameServer extends Thread {
   }
 
   private void addConnection(Packet00Login packet, InetAddress address, int port) {
-    game.addPlayer(packet.getUsername(), address, port);
+    Game.addPlayer(packet.getUsername(), address, port);
     clientAddress = address;
     clientPort = port;
     System.out.println(

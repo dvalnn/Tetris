@@ -1,17 +1,18 @@
-package gameStates;
+package gameStates.stateTypes;
 
 import static utils.Constants.Directions.*;
 import static utils.Constants.GameConstants.*;
 import static utils.Constants.TetrominoIDs.*;
 
 import gameElements.boardTypes.PlayerBoard;
+import gameStates.GameStateHandler.GameStatesEnum;
+import gameStates.State;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import main.Game;
 
-public class Playing extends State implements StateMethods {
+public class Playing extends State {
 
   private PlayerBoard board;
   private Color boardColor = new Color(20, 20, 20);
@@ -22,8 +23,8 @@ public class Playing extends State implements StateMethods {
   private boolean mouseButton1Pressed = false;
   private boolean mouseButton3Pressed = false;
 
-  public Playing(Game game) {
-    super(game);
+  public Playing() {
+    super(GameStatesEnum.PLAYING);
     board = new PlayerBoard(BOARD_SQUARE, X_OFFSET, Y_OFFSET, boardColor);
   }
 
@@ -55,9 +56,6 @@ public class Playing extends State implements StateMethods {
     if (e.getButton() == MouseEvent.BUTTON1) mouseButton1Pressed = false;
     else if (e.getButton() == MouseEvent.BUTTON3) mouseButton3Pressed = false;
   }
-
-  @Override
-  public void mouseMoved(MouseEvent e) {}
 
   @Override
   public void mouseDragged(MouseEvent e) {
@@ -170,7 +168,5 @@ public class Playing extends State implements StateMethods {
   }
 
   @Override
-  public void windowLostFocus() {
-    // board.disableInputs();
-  }
+  public void windowLostFocus() {}
 }

@@ -1,18 +1,19 @@
-package gameStates;
+package gameStates.stateTypes;
 
 import static utils.Constants.GameConstants.*;
 import static utils.Constants.UI.Buttons.BUTTON_TYPE.PRESS_ENTER;
 
+import gameStates.GameStateHandler.GameStatesEnum;
+import gameStates.State;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import main.Game;
 import ui.MenuButton;
 import utils.LoadSave;
 
-public class TitleScreen extends State implements StateMethods {
+public class TitleScreen extends State {
 
   private BufferedImage titleScreen;
 
@@ -21,10 +22,10 @@ public class TitleScreen extends State implements StateMethods {
   private final int yPos = GAME_HEIGHT - 100;
 
   private MenuButton button =
-      new MenuButton(new Point(xPos, yPos), PRESS_ENTER, 0.25, GameState.PLAYING);
+      new MenuButton(new Point(xPos, yPos), PRESS_ENTER, 0.25, GameStatesEnum.MAIN_MENU);
 
-  public TitleScreen(Game game) {
-    super(game);
+  public TitleScreen() {
+    super(GameStatesEnum.TITLE_SCREEN);
     titleScreen = LoadSave.loadBackground("titlescreen.png");
   }
 
@@ -40,37 +41,16 @@ public class TitleScreen extends State implements StateMethods {
   @Override
   public void mouseClicked(MouseEvent e) {
     if (button.getBounds().contains(e.getPoint())) {
-      GameState.state = GameState.PLAYING;
+      button.applyGameState();
     }
   }
-
-  @Override
-  public void mousePressed(MouseEvent e) {}
-
-  @Override
-  public void mouseReleased(MouseEvent e) {}
-
-  @Override
-  public void mouseMoved(MouseEvent e) {}
-
-  @Override
-  public void mouseDragged(MouseEvent e) {}
 
   @Override
   public void keyPressed(KeyEvent e) {
     switch (e.getKeyCode()) {
       case KeyEvent.VK_ENTER:
-        GameState.state = GameState.PLAYING;
-        break;
-      case KeyEvent.VK_M:
-        game.initNetworking();
-        GameState.state = GameState.PLAYING_MP;
+        button.applyGameState();
         break;
     }
   }
-
-  @Override
-  public void keyReleased(KeyEvent e) {}
-
-  public void windowLostFocus() {}
 }

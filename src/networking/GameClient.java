@@ -18,14 +18,12 @@ public class GameClient extends Thread {
   private InetAddress serverAddress;
   private int serverPort;
   private DatagramSocket socket;
-  private Game game;
   private String username;
 
-  public GameClient(Game game, String ipAddress, String username) {
+  public GameClient(String ipAddress, String username) {
     System.out.println("[Client] Hello!");
 
     this.serverPort = 1331;
-    this.game = game;
     this.username = username;
 
     try {
@@ -39,7 +37,7 @@ public class GameClient extends Thread {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    game.setClientActive(true);
+    Game.setClientActive(true);
   }
 
   public void parsePacket(byte[] data, InetAddress address, int port) {
@@ -83,7 +81,7 @@ public class GameClient extends Thread {
     Point2D[] points = packet.getPoints();
     Color color = packet.getColor();
 
-    game.getPlayingMP().getShapeMP().update(points, color);
+    Game.updateShapeMP(points, color);
   }
 
   private void handleBoard(Packet03Board packet) {
@@ -94,18 +92,18 @@ public class GameClient extends Thread {
     int row = packet.getRow();
     Color[] lineColors = packet.getLineColors();
 
-    game.getPlayingMP().getOpponentBoard().update(row, lineColors);
+    Game.updateBoardMP(row, lineColors);
   }
 
   private void handleDisconnect(Packet01Disconnect packet) {
     System.out.println("[Client] " + packet.getUsername() + " has disconnected!");
-    game.removePlayer(packet.getUsername());
+    Game.removePlayer(packet.getUsername());
   }
 
   private void handleLogin(Packet00Login packet, InetAddress address, int port) {
     System.out.println(
         "[Client] Connected to " + packet.getUsername() + " at " + address.toString() + ":" + port);
-    game.addPlayer(packet.getUsername(), address, port);
+    Game.addPlayer(packet.getUsername(), address, port);
   }
 
   public void sendData(byte[] data) {

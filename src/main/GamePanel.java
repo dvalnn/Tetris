@@ -19,9 +19,9 @@ public class GamePanel extends JPanel {
     this.game = game;
     setPanelSize();
 
-    addKeyListener(new KeyboardInputs(this));
+    addKeyListener(new KeyboardInputs());
 
-    mouseInputs = new MouseInputs(this);
+    mouseInputs = new MouseInputs();
     addMouseListener(mouseInputs);
     addMouseMotionListener(mouseInputs);
   }
@@ -31,9 +31,6 @@ public class GamePanel extends JPanel {
     setMinimumSize(size);
     setMaximumSize(size);
     setPreferredSize(size);
-  }
-
-  public void updatePanel() {
   }
 
   // paintComponent is called whenever the JPanel needs to be redrawn
