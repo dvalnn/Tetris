@@ -44,15 +44,15 @@ public class Game implements Runnable {
   }
 
   public static void initNetworking() {
-    // TODO make this a dialog box instead of a yes/no option
+    // TODO: make this a dialog box instead of a yes/no option
     if (JOptionPane.showConfirmDialog(null, "Run as server?") == JOptionPane.YES_OPTION) {
       String hostName = JOptionPane.showInputDialog("Enter server name:").trim();
       server = new GameServer(hostName);
       server.start();
       serverActive = true;
     } else {
-      // TODO make this safer by checking if the IP address is valid
-      // TODO make this a text field instead of a dialog box
+      // TODO: make this safer by checking if the IP address is valid
+      // TODO: make this a text field instead of a dialog box
       String ipAddress = JOptionPane.showInputDialog("Enter server IP address:").trim();
       System.out.println("Connecting to " + ipAddress);
       Packet00Login loginPacket = new Packet00Login(JOptionPane.showInputDialog("Enter username:"));
