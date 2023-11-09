@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 // Visual elements are handled by GamePanel, which represents the "picture"
 public class GameWindow extends JFrame {
   private JFrame jFrame;
-  private GamePanel gamePanel;
+  protected GamePanel gamePanel;
 
   public GameWindow(GamePanel gamePanel) {
     jFrame = new JFrame("Tetris");

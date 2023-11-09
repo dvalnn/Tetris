@@ -3,9 +3,10 @@ package com.psw.tetris.utils;
 public class Constants {
 
   public static class UI {
-    public static final String BUTTON_PATH = System.getProperty("user.dir") + "/assets/buttons/";
+    public static final String BUTTON_PATH =
+        System.getProperty("user.dir") + "/src/main/resources/buttons/";
     public static final String BACKGROUND_PATH =
-        System.getProperty("user.dir") + "/assets/backgrounds/";
+        System.getProperty("user.dir") + "/src/main/resources/backgrounds/";
 
     public static class Buttons {
 
