@@ -31,9 +31,6 @@ public class TitleScreen extends State {
   }
 
   @Override
-  public void update() {}
-
-  @Override
   public void render(Graphics g) {
     g.drawImage(titleScreen, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
     button.render(g);

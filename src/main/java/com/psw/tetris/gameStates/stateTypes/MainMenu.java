@@ -90,10 +90,10 @@ public class MainMenu extends State {
   public void keyPressed(KeyEvent e) {
 
     switch (e.getKeyCode()) {
-        // TODO: remove this
+        // TODO: remove this and add a multiplayer button
       case KeyEvent.VK_M:
         Game.initNetworking();
-        GameStateHandler.setActiveState(GameStatesEnum.MAIN_MENU);
+        GameStateHandler.setActiveState(GameStatesEnum.PLAYING_MP);
         break;
     }
   }
