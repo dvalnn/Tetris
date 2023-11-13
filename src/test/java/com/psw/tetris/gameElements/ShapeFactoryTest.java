@@ -24,6 +24,7 @@ import java.awt.geom.Point2D;
  * This is done by comparing the points of the tetromino with a reference array
  * of points, having in consideration the center of the piece.
  */
+
 public class ShapeFactoryTest {
 
         private Shape shape;
@@ -42,7 +43,6 @@ public class ShapeFactoryTest {
                         assertEquals(referencePoints[i], points[i]);
                 }
         }
-
         @Test
         public void JShapeGeneratesShapeJ() {
                 shape = new JShape(0, new Point2D.Double(0, 0));
@@ -57,7 +57,6 @@ public class ShapeFactoryTest {
                         assertEquals(referencePoints[i], points[i]);
                 }
         }
-
         @Test
         public void LShapeGeneratesShapeL() {
                 shape = new LShape(0, new Point2D.Double(0, 0));
@@ -72,7 +71,6 @@ public class ShapeFactoryTest {
                         assertEquals(referencePoints[i], points[i]);
                 }
         }
-
         @Test
         public void OShapeGeneratesShapeO() {
                 shape = new OShape(0, new Point2D.Double(0, 0));
@@ -87,7 +85,6 @@ public class ShapeFactoryTest {
                         assertEquals(referencePoints[i], points[i]);
                 }
         }
-
         @Test
         public void SShapeGeneratesShapeS() {
                 shape = new SShape(0, new Point2D.Double(0, 0));
@@ -102,7 +99,6 @@ public class ShapeFactoryTest {
                         assertEquals(referencePoints[i], points[i]);
                 }
         }
-
         @Test
         public void TShapeGeneratesShapeT() {
                 shape = new TShape(0, new Point2D.Double(0, 0));
@@ -117,7 +113,7 @@ public class ShapeFactoryTest {
                         assertEquals(referencePoints[i], points[i]);
                 }
         }
-
+        @Test
         public void ZShapeGeneratesShapeZ() {
                 shape = new ZShape(0, new Point2D.Double(0, 0));
                 Point2D[] points = shape.getPoints();
@@ -131,6 +127,7 @@ public class ShapeFactoryTest {
                         assertEquals(referencePoints[i], points[i]);
                 }
         }
+
         // testar UI
         // testar Gamelogic
 
