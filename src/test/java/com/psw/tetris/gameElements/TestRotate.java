@@ -41,5 +41,5 @@ public class TestRotate{
         for (int i = 0; i < points.length; i++) {
             assertEquals(rotationPoints[i], points[i]);
         }
-    }   
+    } 
 }

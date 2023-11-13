@@ -66,6 +66,8 @@ public class Tetromino {
 
   // NOTE: this constructor is only used for testing
   // TODO: remove this constructor
+
+  
   public Tetromino(int renderSize, Point2D renderOrigin, PlayerBoard board, int shapeID) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, shapeID);

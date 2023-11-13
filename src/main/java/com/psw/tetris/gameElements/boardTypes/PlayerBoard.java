@@ -14,8 +14,11 @@ import java.awt.geom.Point2D;
 // GamePanel is a JPanel -- a container for all visual elements in the game
 public class PlayerBoard extends Board {
 
-  private Tetromino tetro1;
-  private Tetromino tetro2;
+  // TODO: implement 6 Tetrominos
+
+  private Tetromino activeTetro; // active 
+  private Tetromino nextTetro; // next 
+  private Tetromino holdTetro; // hold
 
   private boolean debugMode = false;
   private boolean paused = false;
@@ -23,17 +26,35 @@ public class PlayerBoard extends Board {
   public PlayerBoard(int size, int xOffset, int yOffset, Color color) {
     super(size, xOffset, yOffset, color);
 
-    tetro1 = new Tetromino(size, renderOrigin, this);
-    tetro2 = new Tetromino(size, renderOrigin, this);
+    activeTetro = new Tetromino(size, renderOrigin, this);
+    nextTetro = new Tetromino(size, renderOrigin, this);
+    holdTetro = new Tetromino(size, renderOrigin, this);
+    
   }
+  // trocar os pontos pelos da peças -> 
+  // trocar os ghosts-> ja feito pelo tetromino
+  // verificar se esta a colidir com algo-> ja feito pelo tetromino
+  // limpar as posições que ficam logo após alterar
+
+
+  public void holdTetromino() {
+    
+    //active -> hold e a hold passa para a active 
+    //holdTetro = activeTetro;
+    //activeTetro = holdTetro;
+    // dar update para substituir
+
+    
+}
+  
 
   private void addTetrominoToPile() {
-    for (Point2D point : tetro1.getShape().getPoints()) {
+    for (Point2D point : activeTetro.getShape().getPoints()) {
       int row = (int) point.getY();
       int col = (int) point.getX();
-      board.get(row).setColor(col, tetro1.getShape().getColor());
+      board.get(row).setColor(col, activeTetro.getShape().getColor());
     }
-    if (tetro1.getShape().getMinY() <= 0) {
+    if (activeTetro.getShape().getMinY() <= 0) {
       System.out.println("[Board] Game Over!");
       GameStateHandler.setActiveState(GameStatesEnum.GAME_OVER);
     }
@@ -121,7 +142,7 @@ public class PlayerBoard extends Board {
   // NOTE: This method is only used for debugging purposes
   public void setTetromino(int tetroID) {
     if (!debugMode) return;
-    tetro1 = new Tetromino(renderSize, renderOrigin, this, tetroID);
+    activeTetro = new Tetromino(renderSize, renderOrigin, this, tetroID);
   }
 
   // NOTE: This method is only used for debugging purposes
@@ -133,27 +154,28 @@ public class PlayerBoard extends Board {
         board.get(row).setColor(col, backgroundColor);
       }
     }
-    tetro1 = new Tetromino(renderSize, renderOrigin, this);
-    tetro2 = new Tetromino(renderSize, renderOrigin, this);
+    activeTetro = new Tetromino(renderSize, renderOrigin, this);
+
+    nextTetro = new Tetromino(renderSize, renderOrigin, this);
   }
 
   public void update() {
     // NOTE: This is only used for debugging purposes
     // TODO: Remove this
     if (paused) return;
-    tetro1.update();
-    if (!tetro1.isActive()) {
+    activeTetro.update();
+    if (!activeTetro.isActive()) {
       addTetrominoToPile();
       checkRows();
-      tetro1 = tetro2;
-      tetro2 = new Tetromino(renderSize, renderOrigin, this);
+      activeTetro = nextTetro;
+      nextTetro = new Tetromino(renderSize, renderOrigin, this);
     }
   }
 
   public void render(Graphics g) {
     super.render(g);
 
-    tetro1.render(g);
+    activeTetro.render(g);
 
     // NOTE: This is only used for debugging purposes
     // TODO: Remove this
@@ -179,6 +201,12 @@ public class PlayerBoard extends Board {
   }
 
   public Tetromino getTetromino() {
-    return tetro1;
+    return activeTetro;
+  }
+  public Tetromino getNextTetromino() {
+    return nextTetro;
+  }
+  public Tetromino getHoldTetromino() {
+    return holdTetro;
   }
 }
