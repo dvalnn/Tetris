@@ -58,10 +58,10 @@ public class Tetromino {
   public Tetromino(int renderSize, Point2D renderOrigin, PlayerBoard board) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, rand.nextInt(7));
-    ghost = new GhostShape(shape);
+    shape.initPosition();
 
-    System.out.println("[Tetromino] Hello!");
-    System.out.println("[Tetromino] Shape: " + shape);
+    ghost = new GhostShape(shape);
+    System.out.println("[Tetromino] New Shape: " + shape);
   }
 
   // NOTE: this constructor is only used for testing
@@ -69,10 +69,11 @@ public class Tetromino {
   public Tetromino(int renderSize, Point2D renderOrigin, PlayerBoard board, int shapeID) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, shapeID);
+    shape.initPosition();
+    
     ghost = new GhostShape(shape);
 
-    System.out.println("[Tetromino] Hello!");
-    System.out.println("[Tetromino] Shape: " + shape);
+    System.out.println("[Tetromino] New Shape: " + shape);
   }
 
   private Shape shapeFactory(int renderSize, Point2D spawnPoint, int shapeID) {
@@ -100,8 +101,10 @@ public class Tetromino {
   private boolean sideColides(int dir) {
     int delta = dir == LEFT ? -1 : 1;
 
-    if (dir == LEFT && shape.getMinX() <= 0) return true;
-    else if (dir == RIGHT && shape.getMaxX() + 1 >= BOARD_WIDTH) return true;
+    if (dir == LEFT && shape.getMinX() <= 0)
+      return true;
+    else if (dir == RIGHT && shape.getMaxX() + 1 >= BOARD_WIDTH)
+      return true;
 
     for (Point2D point : shape.getPoints()) {
       int x = (int) point.getX() + delta;
@@ -115,7 +118,8 @@ public class Tetromino {
   }
 
   private boolean bottomColides(Shape shape) {
-    if (shape.getMaxY() + 1 >= BOARD_HEIGHT) return true;
+    if (shape.getMaxY() + 1 >= BOARD_HEIGHT)
+      return true;
 
     for (Point2D point : shape.getPoints()) {
       int x = (int) point.getX();
@@ -129,9 +133,11 @@ public class Tetromino {
   }
 
   private boolean rotationColides() {
-    if (shape.getMinY() < 0 || shape.getMaxY() >= BOARD_HEIGHT) return true;
+    if (shape.getMinY() < 0 || shape.getMaxY() >= BOARD_HEIGHT)
+      return true;
 
-    if (shape.getMinX() < 0 || shape.getMaxX() >= BOARD_WIDTH) return true;
+    if (shape.getMinX() < 0 || shape.getMaxX() >= BOARD_WIDTH)
+      return true;
 
     for (Point2D point : shape.getPoints()) {
       int x = (int) point.getX();
@@ -182,7 +188,8 @@ public class Tetromino {
         deactivationTickCounter = 0;
 
         rotationStatus = (rotationStatus + rotationStatusDelta) % 4;
-        if (rotationStatus < 0) rotationStatus = 3;
+        if (rotationStatus < 0)
+          rotationStatus = 3;
         return;
       }
 
@@ -256,11 +263,13 @@ public class Tetromino {
   }
 
   public void dropGhost() {
-    while (!bottomColides(ghost)) ghost.move(0, 1);
+    while (!bottomColides(ghost))
+      ghost.move(0, 1);
   }
 
   public void update() {
-    if (!active) return;
+    if (!active)
+      return;
 
     if (updateGhost) {
       ghost.goToMaster(shape.getCenter());
@@ -279,7 +288,8 @@ public class Tetromino {
     move(DOWN);
 
     // if the vertical speed is instant, the shape should not move horizontally
-    if (verticalSpeed == VERTICAL_INSTANT) return;
+    if (verticalSpeed == VERTICAL_INSTANT)
+      return;
 
     horizontalMoveTick++;
     if (horizontalMoveTick * HORIZONTAL_SPEED >= UPS_SET) {
@@ -294,7 +304,8 @@ public class Tetromino {
 
   public void render(Graphics g) {
     // render ghost only if it's not in the same position as the shape
-    if (!ghost.getCenter().equals(shape.getCenter())) ghost.render(g);
+    if (!ghost.getCenter().equals(shape.getCenter()))
+      ghost.render(g);
 
     // render shape after ghost so it's on top
     shape.render(g);

@@ -22,6 +22,11 @@ public class GhostShape extends Shape {
     minY = MasterShape.getMinY();
     maxY = MasterShape.getMaxY();
   }
+  
+  // move to center top of the board
+  @Override
+  public void initPosition() {
+  }
 
   @Override
   protected void calculateMinMaxCoords() {

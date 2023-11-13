@@ -23,10 +23,15 @@ public class OShape extends Shape {
     maxX = 1;
     minY = 0;
     maxY = 1;
+  }
 
-    // move to the center top of the board;
+  // move to center top of the board
+  @Override
+  public void initPosition()
+  {
     this.move(BOARD_WIDTH / 2, 0);
   }
+
 
   @Override
   public void rotate(double angle) {
