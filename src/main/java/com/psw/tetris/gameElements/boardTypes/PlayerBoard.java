@@ -28,7 +28,6 @@ public class PlayerBoard extends Board {
 
     activeTetro = new Tetromino(size, renderOrigin, this);
     nextTetro = new Tetromino(size, renderOrigin, this);
-    holdTetro = new Tetromino(size, renderOrigin, this);
     
   }
   // trocar os pontos pelos da peças -> 
@@ -38,11 +37,21 @@ public class PlayerBoard extends Board {
 
 
   public void holdTetromino() {
-    
-    //active -> hold e a hold passa para a active 
-    //holdTetro = activeTetro;
-    //activeTetro = holdTetro;
-    // dar update para substituir
+    if(holdTetro == null)
+    {
+      holdTetro = activeTetro;
+      activeTetro = nextTetro;
+      nextTetro = new Tetromino(renderSize, renderOrigin, this);
+
+      // necessita de dar set a origem e ao tamanho para uma board diferente para o hold 
+      // a peça de hold não se mexe 
+    }
+    else
+    {
+      nextTetro = activeTetro;      
+      activeTetro = holdTetro;
+      holdTetro = null;
+    }
 
     
 }
