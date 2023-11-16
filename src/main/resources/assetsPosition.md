@@ -1,4 +1,4 @@
-PowerPoint saves assets position in cm. In order to render the asset in the right
+PowerPoint saves assets position in cm. In order to render the assets in the right
 position, it must be converted to xx and yy coords.
 
 
