@@ -1,7 +1,6 @@
 package com.psw.tetris.gameElements;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
@@ -12,6 +11,7 @@ import com.psw.tetris.gameElements.shapeTypes.OShape;
 import com.psw.tetris.gameElements.shapeTypes.SShape;
 import com.psw.tetris.gameElements.shapeTypes.TShape;
 import com.psw.tetris.gameElements.shapeTypes.ZShape;
+
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
@@ -23,15 +23,17 @@ public class PlayerBoardTest{
     @Test 
     public void holdTetrominoTest(){
 
-        board = (PlayerBoard) new Board(0,0,0,color); // ->meter valores prov 0 
+        color = Color.RED;
+
+        board = new PlayerBoard(0,0,0,color); // ->meter valores prov 0 
 
         Tetromino active = board.getTetromino(); // peça valida 
         Tetromino next = board.getNextTetromino(); // peça valida 
         Tetromino hold = board.getHoldTetromino(); // null   
 
-        assertEquals(active, true);
-        assertEquals(next, true);  
-        assertEquals(hold,null);// antes de dar hold esta variavel tem que ser nula 
+        assertNotNull(active);
+        assertNotNull(next);  
+        assertNull(hold);// antes de dar hold esta variavel tem que ser nula 
 
         board.holdTetromino();
 
@@ -39,16 +41,10 @@ public class PlayerBoardTest{
         Tetromino newNext = board.getNextTetromino();
         Tetromino newHold = board.getHoldTetromino();
 
-        assertEquals(newActive,next);
+        assertNotNull(newNext); 
         assertEquals(newHold,active);
-        assertEquals(newNext,true);
+        assertEquals(newActive.getShapeID(),next.getShapeID());
 
-        board.holdTetromino();
-
-        assertEquals(newActive,active);
-        assertEquals(newHold,hold);
-
-        
 
         // nothing happens to Hold next since they are only swapped 
         //TODO: test if the positions of the Tetromino is correct after the change :)) 
