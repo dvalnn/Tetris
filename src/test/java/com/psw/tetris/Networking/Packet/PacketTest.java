@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.psw.tetris.networking.packets.Packet00Login;
+import com.psw.tetris.networking.packets.Packet;
 
 public class PacketTest {
   @Test
