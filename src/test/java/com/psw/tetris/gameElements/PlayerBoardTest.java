@@ -1,7 +1,6 @@
 package com.psw.tetris.gameElements;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
@@ -12,6 +11,7 @@ import com.psw.tetris.gameElements.shapeTypes.OShape;
 import com.psw.tetris.gameElements.shapeTypes.SShape;
 import com.psw.tetris.gameElements.shapeTypes.TShape;
 import com.psw.tetris.gameElements.shapeTypes.ZShape;
+
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
@@ -23,7 +23,9 @@ public class PlayerBoardTest{
     @Test 
     public void holdTetrominoTest(){
 
-        board = (PlayerBoard) new Board(0,0,0,color); // ->meter valores prov 0 
+        color = Color.RED;
+
+        board = new PlayerBoard(0,0,0,color); // ->meter valores prov 0 
 
         Tetromino active = board.getTetromino(); // peça valida 
         Tetromino next = board.getNextTetromino(); // peça valida 
