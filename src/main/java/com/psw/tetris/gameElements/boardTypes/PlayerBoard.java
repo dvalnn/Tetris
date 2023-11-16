@@ -12,16 +12,18 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
+
 public class PlayerBoard extends Board {
 
   // TODO: implement 6 Tetrominos
 
   private Tetromino activeTetro; // active
-  private Tetromino nextTetro; // next
-  private Tetromino holdTetro; // hold
+  private Tetromino nextTetro;   // next
+  private Tetromino holdTetro;   // hold
 
   private boolean debugMode = false;
   private boolean paused = false;
+  private boolean blockHoldTetromino = false;
 
   public PlayerBoard(int size, int xOffset, int yOffset, Color color) {
     super(size, xOffset, yOffset, color);
@@ -30,27 +32,26 @@ public class PlayerBoard extends Board {
     nextTetro = new Tetromino(size, renderOrigin, this);
   }
 
-  // trocar os pontos pelos da peças ->
-  // trocar os ghosts-> ja feito pelo tetromino
-  // verificar se esta a colidir com algo-> ja feito pelo tetromino
-  // limpar as posições que ficam logo após alterar
-  public void holdTetromino() {
-    if(holdTetro == null)
+  public void holdTetromino() { 
+    if(blockHoldTetromino) return;  
+
+    if(holdTetro == null) 
     {
       holdTetro = activeTetro;
-      activeTetro = nextTetro;
+      activeTetro = new Tetromino(renderSize, renderOrigin, this, nextTetro.getShapeID());
       nextTetro = new Tetromino(renderSize, renderOrigin, this);
+      blockHoldTetromino = true;
       return;
-      // necessita de dar set a origem e ao tamanho para uma board diferente para o hold
-      // a peça de hold não se mexe
     }
 
-    nextTetro = activeTetro;
-    activeTetro = holdTetro;
-    holdTetro = null;
+    Tetromino aux = activeTetro;
+    activeTetro = new Tetromino(renderSize, renderOrigin, this, holdTetro.getShapeID());
+    holdTetro = aux;
+    blockHoldTetromino = true;
 }
 
   private void addTetrominoToPile() {
+    blockHoldTetromino = false;
     for (Point2D point : activeTetro.getShape().getPoints()) {
       int row = (int) point.getY();
       int col = (int) point.getX();
@@ -60,6 +61,7 @@ public class PlayerBoard extends Board {
       System.out.println("[Board] Game Over!");
       GameStateHandler.setActiveState(GameStatesEnum.GAME_OVER);
     }
+
   }
 
   private void clearRow(int row) {

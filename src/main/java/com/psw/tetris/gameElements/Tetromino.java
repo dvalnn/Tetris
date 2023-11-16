@@ -337,6 +337,10 @@ public class Tetromino {
     return active;
   }
 
+  public int getShapeID() {
+    return shapeID;
+  }
+
   public Shape getShape() {
     return shape;
   }

@@ -31,9 +31,9 @@ public class PlayerBoardTest{
         Tetromino next = board.getNextTetromino(); // peça valida 
         Tetromino hold = board.getHoldTetromino(); // null   
 
-        assertEquals(active, true);
-        assertEquals(next, true);  
-        assertEquals(hold,null);// antes de dar hold esta variavel tem que ser nula 
+        assertNotNull(active);
+        assertNotNull(next);  
+        assertNull(hold);// antes de dar hold esta variavel tem que ser nula 
 
         board.holdTetromino();
 
@@ -41,16 +41,10 @@ public class PlayerBoardTest{
         Tetromino newNext = board.getNextTetromino();
         Tetromino newHold = board.getHoldTetromino();
 
-        assertEquals(newActive,next);
+        assertNotNull(newNext); 
         assertEquals(newHold,active);
-        assertEquals(newNext,true);
+        assertEquals(newActive.getShapeID(),next.getShapeID());
 
-        board.holdTetromino();
-
-        assertEquals(newActive,active);
-        assertEquals(newHold,hold);
-
-        
 
         // nothing happens to Hold next since they are only swapped 
         //TODO: test if the positions of the Tetromino is correct after the change :)) 
