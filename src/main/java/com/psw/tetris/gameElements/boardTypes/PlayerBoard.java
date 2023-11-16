@@ -16,8 +16,8 @@ public class PlayerBoard extends Board {
 
   // TODO: implement 6 Tetrominos
 
-  private Tetromino activeTetro; // active 
-  private Tetromino nextTetro; // next 
+  private Tetromino activeTetro; // active
+  private Tetromino nextTetro; // next
   private Tetromino holdTetro; // hold
 
   private boolean debugMode = false;
@@ -28,34 +28,27 @@ public class PlayerBoard extends Board {
 
     activeTetro = new Tetromino(size, renderOrigin, this);
     nextTetro = new Tetromino(size, renderOrigin, this);
-    
   }
-  // trocar os pontos pelos da peças -> 
+
+  // trocar os pontos pelos da peças ->
   // trocar os ghosts-> ja feito pelo tetromino
   // verificar se esta a colidir com algo-> ja feito pelo tetromino
   // limpar as posições que ficam logo após alterar
-
-
   public void holdTetromino() {
     if(holdTetro == null)
     {
       holdTetro = activeTetro;
       activeTetro = nextTetro;
       nextTetro = new Tetromino(renderSize, renderOrigin, this);
-
-      // necessita de dar set a origem e ao tamanho para uma board diferente para o hold 
-      // a peça de hold não se mexe 
-    }
-    else
-    {
-      nextTetro = activeTetro;      
-      activeTetro = holdTetro;
-      holdTetro = null;
+      return;
+      // necessita de dar set a origem e ao tamanho para uma board diferente para o hold
+      // a peça de hold não se mexe
     }
 
-    
+    nextTetro = activeTetro;
+    activeTetro = holdTetro;
+    holdTetro = null;
 }
-  
 
   private void addTetrominoToPile() {
     for (Point2D point : activeTetro.getShape().getPoints()) {
