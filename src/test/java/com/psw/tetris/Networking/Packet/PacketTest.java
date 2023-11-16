@@ -12,8 +12,11 @@ public class PacketTest {
   @Test
   public void testConstructor1() {
     String username = "tiago";
+    int id = 0;
     String data = "00," + username;
     Packet00Login newP = new Packet00Login(data.getBytes());
-    assertNotNull(data);
+    assertNotNull(newP);
+    assertEquals(newP.getUsername(),username);
+    assertEquals(newP.getId(),id);
   }
 }
