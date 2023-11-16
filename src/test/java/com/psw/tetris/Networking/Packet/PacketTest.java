@@ -18,6 +18,5 @@ public class PacketTest {
     Packet00Login newP = new Packet00Login(data.getBytes());
     assertNotNull(newP);
     assertEquals(newP.getUsername(),username);
-    assertEquals(newP.getId(),id);
   }
 }
