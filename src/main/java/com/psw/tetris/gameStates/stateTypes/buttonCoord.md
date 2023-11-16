@@ -18,19 +18,28 @@ position, it must be converted to xx and yy coords.
 
 
 Conversion from cm to pixel:
-
-
 xx = (GAME_WIDTH * xxCm) / POWERPOINT_WIDTH
 yy = (GAME_HEIGHT *yyCm ) / POWERPOINT_HEIGHT  
 
+Example of a menu
+---*--- <background.<fileType>> ---*---
+  * <asset1.<fileType>>
+    xxCm: <xxCm> cm
+    yyCm: <yyCm> cm
+
+  * <asset2.<fileType>>
+    xxCm: <xxCm> cm
+    yyCm: <yyCm> cm
+
 The following values represent the position of the assets' *center* in cm.
 
-- TitleScreen
+
+---*--- titlescreen.png ---*---
   * pressEnter.png
     xxCm: 6.58  cm
     yyCm: 13.79 cm
 
----*--- MainMenu ---*---
+---*--- mainMenu.png ---*---
   * newGame.png
       xxCm: 1.05 cm
       yyCm: 6.25 cm
@@ -47,34 +56,34 @@ The following values represent the position of the assets' *center* in cm.
       xxCm: 1.05  cm
       yyCm: 17.05 cm
 
----*--- AboutUs ---*---
+---*--- aboutUs.png ---*---
   * returnButton.png
       xxCm: 1.05 cm
       yyCm: 17.05 cm
 
----*--- Leaderboard ---*---
+---*--- leaderboard.png ---*---
   * returnButton.png
       xxCm: 1.05 cm
       yyCm: 17.05 cm
 
----*--- Settings ---*---
-  * ChangeGameInputs
+---*--- settings.png ---*---
+  * changeGameInputs.png
       xxCm: 1.48 cm
       yyCm: 10.68 cm
 
-  * IncreaseMusicVol
+  * plusv1.png
       xxCm: 10.97 cm
       yyCm: 5.48 cm
 
-  * DecreaseMusicVol
+  * minusv1.png
       xxCm: 13.16 cm
       yyCm: 5.48 cm
 
-  * IncreaseEffectsVol
+  * plusv2.png
       xxCm: 10.97 cm
       yyCm: 7.88 cm
 
-  * DecreaseEffectsVol
+  * minusv2.png
       xxCm: 13.16 cm
       yyCm: 7.88 cm
 
@@ -86,7 +95,7 @@ The following values represent the position of the assets' *center* in cm.
       xxCm: 1.05 cm
       yyCm: 17.05 cm
 
----*--- NewGame ---*---
+---*--- newGame.png ---*---
   * singlePlayer.png
       xxCm: 8.38 cm
       yyCm: 8.84 cm
@@ -98,7 +107,44 @@ The following values represent the position of the assets' *center* in cm.
   * returnButton.png
       xxCm: 1.05 cm
       yyCm: 17.05 cm
+    
+---*--- multiplayer.png ---*---
+  * hostGame.png
+      xxCm: 8.38 cm
+      yyCm: 8.84 cm
 
-    
-    
-    
+  * joinGame.png
+      xxCm: 18.68 cm
+      yyCm: 8.84 cm
+
+  * returnButton.png
+      xxCm: 1.05 cm
+      yyCm: 17.05 cm
+
+---*--- multiWaiting.png ---*---
+  * waitingOppon.png
+      xxCm: 8.04 cm
+      yyCm: 17.05 cm
+  
+  * start.png
+      xxCm: 8.04 cm
+      yyCm: 17.05 cm
+
+  * returnButton.png
+      xxCm: 1.05 cm
+      yyCm: 17.05 cm
+      
+  * playerJoined.png
+      xxCm: 8.04 cm
+      yyCm: 17.05 cm
+
+  * joinedWaiting.png
+      xxCm: 8.04 cm
+      yyCm: 17.05 cm
+
+// TODO:
+---*--- multiCreateSession.png ---*---
+---*--- singleplayerGame.png ---*---
+---*--- multiplayerGame.png ---*---
+
+~ make this a .json file!!
