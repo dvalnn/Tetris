@@ -46,7 +46,12 @@ public final class GameStateHandler {
     return statesMap.get(activeState);
   }
 
+  // TODO: replace with switchState
   public static void setActiveState(GameStatesEnum state) {
+    activeState = state;
+  }
+
+  public static void switchState(GameStatesEnum state) {
     activeState = state;
   }
 }
