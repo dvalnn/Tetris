@@ -1,16 +1,20 @@
 package com.psw.tetris;
 
+import com.psw.tetris.utils.JsonParserUtil;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.InstanceCreator;
+import com.google.gson.JsonParser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.lang.reflect.Type;
+import java.util.Set;
+
 
 public class jsonFilesTest {
 
@@ -38,16 +42,6 @@ public class jsonFilesTest {
       rgb[2] = 0;
     }
   }
-
-  public class JsonShapeCreator implements InstanceCreator<JsonShape> {
-    @Override
-    public JsonShape createInstance(Type arg0) {
-      JsonShape shape = new JsonShape();
-      shape.initColor();
-      return shape;
-    }
-  }
-
   JsonShape shape = new JsonShape();
   JsonShape shape2 = new JsonShape();
 
@@ -85,32 +79,65 @@ public class jsonFilesTest {
         .setPrettyPrinting()
         .create();
 
+        
     String json = gson.toJson(shape);
-
     // save to file
     try {
-      java.io.FileWriter writer = new java.io.FileWriter("shape.json");
-      writer.write(json);
-      writer.close();
+      java.io.FileWriter writerI = new java.io.FileWriter("src/test/resources/shapeI.json");
+      writerI.write(json);
+      writerI.close();
+
+      java.io.FileWriter writerJ = new java.io.FileWriter("src/test/resources/shapeJ.json");
+      writerJ.write(json);
+      writerJ.close();
+
     } catch (Exception e) {
       e.printStackTrace();
       assertTrue(false); // force fail
     }
 
     JsonShape shape3;
-
+    JsonShape shape4;
     // read from file
+
+// não dar hard code ao nome do ficheiro nem a quantos ficheiros são
+// ver quantos ficheiros do tipo json existem e ler todos
     try {
-      java.io.FileReader reader = new java.io.FileReader("shape.json");
-      shape3 = gson.fromJson(reader, JsonShape.class);
-      reader.close();
+      java.io.FileReader readerI= new java.io.FileReader("src/test/resources/shapeI.json");
+      shape3 = gson.fromJson(readerI, JsonShape.class);
+      readerI.close();
+
+      java.io.FileReader readerJ = new java.io.FileReader("src/test/resources/shapeJ.json");
+      shape4 = gson.fromJson(readerJ, JsonShape.class);
+      readerJ.close();
+
+      
     } catch (Exception e) {
       shape3 = null; // here so that the lsp doesn't complain
+      shape4 = null; // here so that the lsp doesn't complain
       e.printStackTrace();
       assertTrue(false); // force fail
     }
-
     shape3.initColor();
-    assertShapeEquals(shape, shape3);
+    assertShapeEquals(shape, shape3); 
+
+    shape4.initColor();
+    assertShapeEquals(shape, shape4);
+  }
+
+  @Test
+  public void shapeIisFoundByGetExtensions() {
+    JsonParserUtil parser = new JsonParserUtil();
+    String filename = "shapeI.json";
+    String extension = parser.getExtensions(filename);
+    assertEquals("json", extension);
+  }
+
+  @Test 
+  public void listFilesFindsFourJsonFiles() {
+    String dir = "src/test/resources/";
+    JsonParserUtil parser = new JsonParserUtil();
+    Set<String> files = parser.listFiles(dir);
+    assertEquals(4, files.size());
   }
 }
