@@ -21,6 +21,8 @@ public abstract class Shape {
   // * can be used as rotatePoints() wrapper
   public abstract void rotate(double angle);
 
+  public abstract void initPosition();
+
   public Shape(
       Point2D center, Point2D[] points, Color color, int renderSize, Point2D renderOrigin) {
 

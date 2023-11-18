@@ -25,7 +25,11 @@ public class JShape extends Shape {
     minY = 0;
     maxY = 1;
 
-    // move to center top of the board;
+  }
+  // move to center top of the board
+  @Override 
+  public void initPosition()
+  {
     move(BOARD_WIDTH / 2 - 1, 0);
   }
 

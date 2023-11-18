@@ -58,21 +58,24 @@ public class Tetromino {
   public Tetromino(int renderSize, Point2D renderOrigin, PlayerBoard board) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, rand.nextInt(7));
-    ghost = new GhostShape(shape);
+    shape.initPosition();
 
-    System.out.println("[Tetromino] Hello!");
-    System.out.println("[Tetromino] Shape: " + shape);
+    ghost = new GhostShape(shape);
+    System.out.println("[Tetromino] New Shape: " + shape);
   }
 
   // NOTE: this constructor is only used for testing
   // TODO: remove this constructor
+
+  
   public Tetromino(int renderSize, Point2D renderOrigin, PlayerBoard board, int shapeID) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, shapeID);
+    shape.initPosition();
+    
     ghost = new GhostShape(shape);
 
-    System.out.println("[Tetromino] Hello!");
-    System.out.println("[Tetromino] Shape: " + shape);
+    System.out.println("[Tetromino] New Shape: " + shape);
   }
 
   private Shape shapeFactory(int renderSize, Point2D spawnPoint, int shapeID) {
@@ -332,6 +335,10 @@ public class Tetromino {
 
   public boolean isActive() {
     return active;
+  }
+
+  public int getShapeID() {
+    return shapeID;
   }
 
   public Shape getShape() {
