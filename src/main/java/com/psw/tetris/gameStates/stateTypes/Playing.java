@@ -103,7 +103,7 @@ public class Playing extends State {
         board.getTetromino().setDrop(true);
         break;
 
-      case (KeyEvent.VK_E):
+      case (KeyEvent.VK_C):
         board.holdTetromino();
         break;
         
