@@ -21,7 +21,8 @@ public class ShapeMP {
   }
 
   public void render(Graphics g) {
-    if (points == null) return;
+    if (points == null)
+      return;
 
     for (Point2D point : points) {
       g.setColor(color);

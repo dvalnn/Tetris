@@ -33,7 +33,8 @@ public class GameWindow extends JFrame {
     jFrame.addWindowFocusListener(
         new WindowFocusListener() {
           @Override
-          public void windowGainedFocus(WindowEvent arg0) {}
+          public void windowGainedFocus(WindowEvent arg0) {
+          }
 
           @Override
           public void windowLostFocus(WindowEvent arg0) {
@@ -45,10 +46,12 @@ public class GameWindow extends JFrame {
         new WindowListener() {
 
           @Override
-          public void windowActivated(WindowEvent arg0) {}
+          public void windowActivated(WindowEvent arg0) {
+          }
 
           @Override
-          public void windowClosed(WindowEvent arg0) {}
+          public void windowClosed(WindowEvent arg0) {
+          }
 
           @Override
           public void windowClosing(WindowEvent arg0) {
@@ -56,16 +59,20 @@ public class GameWindow extends JFrame {
           }
 
           @Override
-          public void windowDeactivated(WindowEvent arg0) {}
+          public void windowDeactivated(WindowEvent arg0) {
+          }
 
           @Override
-          public void windowDeiconified(WindowEvent arg0) {}
+          public void windowDeiconified(WindowEvent arg0) {
+          }
 
           @Override
-          public void windowIconified(WindowEvent arg0) {}
+          public void windowIconified(WindowEvent arg0) {
+          }
 
           @Override
-          public void windowOpened(WindowEvent arg0) {}
+          public void windowOpened(WindowEvent arg0) {
+          }
         });
 
     // makes the GameWindow visible -- must be the last line of code

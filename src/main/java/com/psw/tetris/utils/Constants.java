@@ -3,10 +3,8 @@ package com.psw.tetris.utils;
 public class Constants {
 
   public static class UI {
-    public static final String BUTTON_PATH =
-        System.getProperty("user.dir") + "/src/main/resources/buttons/";
-    public static final String BACKGROUND_PATH =
-        System.getProperty("user.dir") + "/src/main/resources/backgrounds/";
+    public static final String BUTTON_PATH = System.getProperty("user.dir") + "/src/main/resources/buttons/";
+    public static final String BACKGROUND_PATH = System.getProperty("user.dir") + "/src/main/resources/backgrounds/";
 
     public static class Buttons {
 
@@ -47,22 +45,22 @@ public class Constants {
       public static final String SINGLE_PLAYER = "singlePlayer.png";
 
       public static final String[] BUTTONS = {
-        ABOUT_US,
-        CHANGE_GAME_INPUTS,
-        EXIT_GAME,
-        HOST_GAME,
-        JOIN_GAME,
-        LEADERBOARD,
-        MINUS_V1,
-        MINUS_V2,
-        MULTIPLAYER,
-        NEW_GAME,
-        PLUS_V1,
-        PLUS_V2,
-        PRESS_ENTER,
-        RETURN_BUTTON,
-        SETTINGS,
-        SINGLE_PLAYER
+          ABOUT_US,
+          CHANGE_GAME_INPUTS,
+          EXIT_GAME,
+          HOST_GAME,
+          JOIN_GAME,
+          LEADERBOARD,
+          MINUS_V1,
+          MINUS_V2,
+          MULTIPLAYER,
+          NEW_GAME,
+          PLUS_V1,
+          PLUS_V2,
+          PRESS_ENTER,
+          RETURN_BUTTON,
+          SETTINGS,
+          SINGLE_PLAYER
       };
 
       public static final int BUTTON_COUNT = 16;

@@ -6,10 +6,12 @@ import java.awt.event.KeyListener;
 
 public class KeyboardInputs implements KeyListener {
 
-  public KeyboardInputs() {}
+  public KeyboardInputs() {
+  }
 
   @Override
-  public void keyTyped(KeyEvent e) {}
+  public void keyTyped(KeyEvent e) {
+  }
 
   @Override
   public void keyPressed(KeyEvent e) {

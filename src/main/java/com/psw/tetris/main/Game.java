@@ -166,7 +166,8 @@ public class Game implements Runnable {
       // updates = 0;
       // }
 
-      if (exit) break;
+      if (exit)
+        break;
     }
 
     gameWindow.dispose();
