@@ -101,14 +101,16 @@ public class PlayerBoard extends Board {
 
   // NOTE: This method is only used for debugging purposes
   public void addBlockOnMousePosition(int x, int y) {
-    if (!debugMode) return;
+    if (!debugMode)
+      return;
 
     toggleBlockOnMousePosition(x, y, true);
   }
 
   // NOTE: This method is only used for debugging purposes
   public void removeBlockOnMousePosition(int x, int y) {
-    if (!debugMode) return;
+    if (!debugMode)
+      return;
 
     toggleBlockOnMousePosition(x, y, false);
   }
@@ -151,7 +153,8 @@ public class PlayerBoard extends Board {
 
   // NOTE: This method is only used for debugging purposes
   public void reset() {
-    if (!debugMode) return;
+    if (!debugMode)
+      return;
 
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
@@ -159,16 +162,17 @@ public class PlayerBoard extends Board {
       }
     }
     activeTetro = new Tetromino(renderSize, renderOrigin, this);
-
     nextTetro = new Tetromino(renderSize, renderOrigin, this);
   }
 
   public void update() {
     // NOTE: This is only used for debugging purposes
     // TODO: Remove this
+    
     if (paused) return;
     activeTetro.update();
     if (!activeTetro.isActive()) {
+
       addTetrominoToPile();
       checkRows();
       activeTetro = nextTetro;

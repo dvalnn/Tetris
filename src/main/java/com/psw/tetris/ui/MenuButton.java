@@ -47,9 +47,8 @@ public class MenuButton {
   }
 
   private void initBounds() {
-    bounds =
-        new Rectangle(
-            xPos, yPos, (int) (image.getWidth() * scale), (int) (image.getHeight() * scale));
+    bounds = new Rectangle(
+        xPos, yPos, (int) (image.getWidth() * scale), (int) (image.getHeight() * scale));
   }
 
   public Rectangle getBounds() {
@@ -61,7 +60,8 @@ public class MenuButton {
   }
 
   public void render(Graphics g) {
-    if (image == null) loadImg();
+    if (image == null)
+      loadImg();
 
     g.drawImage(
         image,
@@ -77,6 +77,7 @@ public class MenuButton {
   }
 
   public void applyGameState() {
-    if (state != null) GameStateHandler.setActiveState(state);
+    if (state != null)
+      GameStateHandler.setActiveState(state);
   }
 }

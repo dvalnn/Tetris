@@ -22,8 +22,7 @@ public class TitleScreen extends State {
   private final int xPos = GAME_WIDTH / 2;
   private final int yPos = GAME_HEIGHT - 100;
 
-  private MenuButton button =
-      new MenuButton(new Point(xPos, yPos), PRESS_ENTER, 0.25, GameStatesEnum.MAIN_MENU);
+  private MenuButton button = new MenuButton(new Point(xPos, yPos), PRESS_ENTER, 0.25, GameStatesEnum.MAIN_MENU);
 
   public TitleScreen() {
     super(GameStatesEnum.TITLE_SCREEN);

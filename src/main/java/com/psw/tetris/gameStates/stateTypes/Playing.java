@@ -51,21 +51,26 @@ public class Playing extends State {
 
   @Override
   public void mouseClicked(MouseEvent e) {
-    if (e.getButton() == MouseEvent.BUTTON1) board.addBlockOnMousePosition(e.getX(), e.getY());
+    if (e.getButton() == MouseEvent.BUTTON1)
+      board.addBlockOnMousePosition(e.getX(), e.getY());
     else if (e.getButton() == MouseEvent.BUTTON3)
       board.removeBlockOnMousePosition(e.getX(), e.getY());
   }
 
   @Override
   public void mousePressed(MouseEvent e) {
-    if (e.getButton() == MouseEvent.BUTTON1) mouseButton1Pressed = true;
-    else if (e.getButton() == MouseEvent.BUTTON3) mouseButton3Pressed = true;
+    if (e.getButton() == MouseEvent.BUTTON1)
+      mouseButton1Pressed = true;
+    else if (e.getButton() == MouseEvent.BUTTON3)
+      mouseButton3Pressed = true;
   }
 
   @Override
   public void mouseReleased(MouseEvent e) {
-    if (e.getButton() == MouseEvent.BUTTON1) mouseButton1Pressed = false;
-    else if (e.getButton() == MouseEvent.BUTTON3) mouseButton3Pressed = false;
+    if (e.getButton() == MouseEvent.BUTTON1)
+      mouseButton1Pressed = false;
+    else if (e.getButton() == MouseEvent.BUTTON3)
+      mouseButton3Pressed = false;
   }
 
   @Override
@@ -123,8 +128,8 @@ public class Playing extends State {
         board.togglePause();
         break;
 
-        // NOTE: these keybinds are only for debugging purposes
-        // TODO: remove these keybinds
+      // NOTE: these keybinds are only for debugging purposes
+      // TODO: remove these keybinds
       case (KeyEvent.VK_1):
         board.setTetromino(I);
         break;
@@ -183,5 +188,6 @@ public class Playing extends State {
   }
 
   @Override
-  public void windowLostFocus() {}
+  public void windowLostFocus() {
+  }
 }

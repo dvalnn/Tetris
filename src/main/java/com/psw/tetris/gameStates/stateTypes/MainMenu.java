@@ -28,7 +28,7 @@ public class MainMenu extends State {
   private MenuButton exitButton;
 
   private MenuButton[] Buttons = {
-    newGameButton, leaderboardButton, settingsButton, aboutUsButton, exitButton
+      newGameButton, leaderboardButton, settingsButton, aboutUsButton, exitButton
   };
 
   private BufferedImage menuBackground;
@@ -42,23 +42,18 @@ public class MainMenu extends State {
     super(GameStatesEnum.MAIN_MENU);
 
     menuBackground = LoadSave.loadBackground("mainMenu.png");
-    newGameButton =
-        new MenuButton(FIRST_BUTTON_X, FIRST_BUTTON_Y, NEW_GAME, SCALE, GameStatesEnum.PLAYING);
+    newGameButton = new MenuButton(FIRST_BUTTON_X, FIRST_BUTTON_Y, NEW_GAME, SCALE, GameStatesEnum.PLAYING);
 
-    int secondButtonY =
-        (int) (FIRST_BUTTON_Y + newGameButton.getBounds().getHeight() + BUTTON_SPACING);
+    int secondButtonY = (int) (FIRST_BUTTON_Y + newGameButton.getBounds().getHeight() + BUTTON_SPACING);
     leaderboardButton = new MenuButton(FIRST_BUTTON_X, secondButtonY, LEADERBOARD, SCALE, null);
 
-    int thirdButtonY =
-        (int) (secondButtonY + leaderboardButton.getBounds().getHeight() + BUTTON_SPACING);
+    int thirdButtonY = (int) (secondButtonY + leaderboardButton.getBounds().getHeight() + BUTTON_SPACING);
     settingsButton = new MenuButton(FIRST_BUTTON_X, thirdButtonY, SETTINGS, SCALE, null);
 
-    int fourthButtonY =
-        (int) (thirdButtonY + settingsButton.getBounds().getHeight() + BUTTON_SPACING);
+    int fourthButtonY = (int) (thirdButtonY + settingsButton.getBounds().getHeight() + BUTTON_SPACING);
     aboutUsButton = new MenuButton(FIRST_BUTTON_X, fourthButtonY, ABOUT_US, SCALE, null);
 
-    int fifthButtonY =
-        (int) (fourthButtonY + aboutUsButton.getBounds().getHeight() + BUTTON_SPACING);
+    int fifthButtonY = (int) (fourthButtonY + aboutUsButton.getBounds().getHeight() + BUTTON_SPACING);
     exitButton = new MenuButton(FIRST_BUTTON_X, fifthButtonY, EXIT_GAME, SCALE, null);
 
     Buttons[0] = newGameButton;
@@ -90,7 +85,7 @@ public class MainMenu extends State {
   public void keyPressed(KeyEvent e) {
 
     switch (e.getKeyCode()) {
-        // TODO: remove this and add a multiplayer button
+      // TODO: remove this and add a multiplayer button
       case KeyEvent.VK_M:
         Game.initNetworking();
         GameStateHandler.setActiveState(GameStatesEnum.PLAYING_MP);

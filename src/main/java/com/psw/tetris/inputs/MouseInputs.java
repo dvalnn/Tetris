@@ -6,7 +6,8 @@ import java.awt.event.MouseEvent;
 
 public class MouseInputs extends MouseAdapter {
 
-  public MouseInputs() {}
+  public MouseInputs() {
+  }
 
   @Override
   public void mouseClicked(MouseEvent e) {

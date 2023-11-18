@@ -193,7 +193,8 @@ public class PlayingMP extends State {
   }
 
   @Override
-  public void windowLostFocus() {}
+  public void windowLostFocus() {
+  }
 
   public MPBoard getBoardMP() {
     return opponentBoard;
