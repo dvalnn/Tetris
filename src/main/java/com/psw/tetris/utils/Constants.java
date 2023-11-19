@@ -8,62 +8,21 @@ public class Constants {
 
     public static class Buttons {
 
-      public static class BUTTON_TYPE {
-        public static final int ABOUT_US = 0;
-        public static final int CHANGE_GAME_INPUTS = 1;
-        public static final int EXIT_GAME = 2;
-        public static final int HOST_GAME = 3;
-        public static final int JOIN_GAME = 4;
-        public static final int LEADERBOARD = 5;
-        public static final int MINUS_V1 = 6;
-        public static final int MINUS_V2 = 7;
-        public static final int MULTIPLAYER = 8;
-        public static final int NEW_GAME = 9;
-        public static final int PLUS_V1 = 10;
-        public static final int PLUS_V2 = 11;
-        public static final int PRESS_ENTER = 12;
-        public static final int RETURN_BUTTON = 13;
-        public static final int SETTINGS = 14;
-        public static final int SINGLE_PLAYER = 15;
-      }
-
-      public static final String ABOUT_US = "aboutUs.png";
-      public static final String CHANGE_GAME_INPUTS = "changeGameInputs.png";
-      public static final String EXIT_GAME = "exitGame.png";
-      public static final String HOST_GAME = "hostGame.png";
-      public static final String JOIN_GAME = "joinGame.png";
-      public static final String LEADERBOARD = "leaderboard.png";
-      public static final String MINUS_V1 = "minusv1.png";
-      public static final String MINUS_V2 = "minusv2.png";
-      public static final String MULTIPLAYER = "multiplayer.png";
-      public static final String NEW_GAME = "newGame.png";
-      public static final String PLUS_V1 = "plusv1.png";
-      public static final String PLUS_V2 = "plusv2.png";
-      public static final String PRESS_ENTER = "pressEnter.png";
-      public static final String RETURN_BUTTON = "returnButton.png";
-      public static final String SETTINGS = "settings.png";
-      public static final String SINGLE_PLAYER = "singlePlayer.png";
-
-      public static final String[] BUTTONS = {
-          ABOUT_US,
-          CHANGE_GAME_INPUTS,
-          EXIT_GAME,
-          HOST_GAME,
-          JOIN_GAME,
-          LEADERBOARD,
-          MINUS_V1,
-          MINUS_V2,
-          MULTIPLAYER,
-          NEW_GAME,
-          PLUS_V1,
-          PLUS_V2,
-          PRESS_ENTER,
-          RETURN_BUTTON,
-          SETTINGS,
-          SINGLE_PLAYER
-      };
-
-      public static final int BUTTON_COUNT = 16;
+      public static final String ABOUT_US = BUTTON_PATH + "aboutUs.png";
+      public static final String EXIT_GAME = BUTTON_PATH + "exitGame.png";
+      public static final String HOST_GAME = BUTTON_PATH + "hostGame.png";
+      public static final String JOIN_GAME = BUTTON_PATH + "joinGame.png";
+      public static final String LEADERBOARD = BUTTON_PATH + "leaderboard.png";
+      public static final String MINUS_V1 = BUTTON_PATH + "minusv1.png";
+      public static final String MINUS_V2 = BUTTON_PATH + "minusv2.png";
+      public static final String MULTIPLAYER = BUTTON_PATH + "multiplayer.png";
+      public static final String NEW_GAME = BUTTON_PATH + "newGame.png";
+      public static final String PLUS_V1 = BUTTON_PATH + "plusv1.png";
+      public static final String PLUS_V2 = BUTTON_PATH + "plusv2.png";
+      public static final String PRESS_ENTER = BUTTON_PATH + "pressEnter.png";
+      public static final String RETURN_BUTTON = BUTTON_PATH + "returnButton.png";
+      public static final String SETTINGS = BUTTON_PATH + "settings.png";
+      public static final String SINGLE_PLAYER = BUTTON_PATH + "singlePlayer.png";
     }
   }
 
