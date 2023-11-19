@@ -65,9 +65,6 @@ public class Tetromino {
     System.out.println("[Tetromino] New Shape: " + shape);
   }
 
-  // NOTE: this constructor is only used for testing
-  // TODO: remove this constructor
-
   public Tetromino(final int renderSize, final Point2D renderOrigin, final PlayerBoard board, final int shapeID) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, shapeID);

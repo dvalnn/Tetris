@@ -1,150 +1,153 @@
+# Positions for the assets
+
 PowerPoint saves assets position in cm. In order to render the assets in the right
 position, it must be converted to xx and yy coords.
 
+|powerPoint|
+| 16:9 |
+POWERPOINT_HEIGHT = 19.05cm
+POWERPOINT_WIDTH = 33.867cm
 
-   ----------
-  |powerPoint|
-  |   16:9   | POWERPOINT_HEIGHT = 19.05cm
-  |          |
-   ----------
-    POWERPOINT_WIDTH = 33.867cm
-
-   ----------
-  |gameWindow|
-  |   16:9   | GAME_HEIGHT = 720px
-  |          |
-   ----------
-     GAME_WIDTH = 1280px
-
+|gameWindow|
+| 16:9 | GAME_HEIGHT = 720px
+GAME_WIDTH = 1280px
 
 Conversion from cm to pixel:
-xx = (GAME_WIDTH * xxCm) / POWERPOINT_WIDTH
-yy = (GAME_HEIGHT *yyCm ) / POWERPOINT_HEIGHT  
+$xx = (GAME_WIDTH * xxCm) / POWERPOINT_WIDTH$
+$yy = (GAME_HEIGHT *yyCm ) / POWERPOINT_HEIGHT$
 
 Example of a menu
----*--- <background.<fileType>> ---*---
-  * <asset1.<fileType>>
-    xxCm: <xxCm> cm
-    yyCm: <yyCm> cm
+---_--- <background.<fileType>> ---_---
 
-  * <asset2.<fileType>>
-    xxCm: <xxCm> cm
-    yyCm: <yyCm> cm
+- <asset1.<fileType>>
+  xxCm: <xxCm> cm
+  yyCm: <yyCm> cm
 
-The following values represent the position of the assets' *center* in cm.
+- <asset2.<fileType>>
+  xxCm: <xxCm> cm
+  yyCm: <yyCm> cm
 
+The following values represent the position of the assets' _center_ in cm.
 
----*--- titlescreen.png ---*---
-  * pressEnter.png
-    xxCm: 6.58  cm
-    yyCm: 13.79 cm
+---_--- titlescreen.png ---_---
 
----*--- mainMenu.png ---*---
-  * newGame.png
-      xxCm: 1.05 cm
-      yyCm: 6.25 cm
-  * leaderboard.png
-      xxCm: 1.05 cm
-      yyCm: 8.16 cm
-  * settings.png
-      xxCm: 1.05 cm
-      yyCm: 6.25 cm
-  * aboutUs.png
-      xxCm: 1.05 cm
-      yyCm: 11.97 cm
-  * exitGame.png
-      xxCm: 1.05  cm
-      yyCm: 17.05 cm
+- pressEnter.png
+  xxCm: 6.58 cm
+  yyCm: 13.79 cm
 
----*--- aboutUs.png ---*---
-  * returnButton.png
-      xxCm: 1.05 cm
-      yyCm: 17.05 cm
+---_--- mainMenu.png ---_---
 
----*--- leaderboard.png ---*---
-  * returnButton.png
-      xxCm: 1.05 cm
-      yyCm: 17.05 cm
+- newGame.png
+  xxCm: 1.05 cm
+  yyCm: 6.25 cm
+- leaderboard.png
+  xxCm: 1.05 cm
+  yyCm: 8.16 cm
+- settings.png
+  xxCm: 1.05 cm
+  yyCm: 6.25 cm
+- aboutUs.png
+  xxCm: 1.05 cm
+  yyCm: 11.97 cm
+- exitGame.png
+  xxCm: 1.05 cm
+  yyCm: 17.05 cm
 
----*--- settings.png ---*---
-  * changeGameInputs.png
-      xxCm: 1.48 cm
-      yyCm: 10.68 cm
+---_--- aboutUs.png ---_---
 
-  * plusv1.png
-      xxCm: 10.97 cm
-      yyCm: 5.48 cm
+- returnButton.png
+  xxCm: 1.05 cm
+  yyCm: 17.05 cm
 
-  * minusv1.png
-      xxCm: 13.16 cm
-      yyCm: 5.48 cm
+---_--- leaderboard.png ---_---
 
-  * plusv2.png
-      xxCm: 10.97 cm
-      yyCm: 7.88 cm
+- returnButton.png
+  xxCm: 1.05 cm
+  yyCm: 17.05 cm
 
-  * minusv2.png
-      xxCm: 13.16 cm
-      yyCm: 7.88 cm
+---_--- settings.png ---_---
 
-  * settingsPopUp.png
-      xxCm: 5.92 cm
-      yyCm: 3.61 cm
+- changeGameInputs.png
+  xxCm: 1.48 cm
+  yyCm: 10.68 cm
 
-  * returnButton.png
-      xxCm: 1.05 cm
-      yyCm: 17.05 cm
+- plusv1.png
+  xxCm: 10.97 cm
+  yyCm: 5.48 cm
 
----*--- newGame.png ---*---
-  * singlePlayer.png
-      xxCm: 8.38 cm
-      yyCm: 8.84 cm
+- minusv1.png
+  xxCm: 13.16 cm
+  yyCm: 5.48 cm
 
-  * multiplayer.png
-      xxCm: 18.68 cm
-      yyCm: 8.84 cm
+- plusv2.png
+  xxCm: 10.97 cm
+  yyCm: 7.88 cm
 
-  * returnButton.png
-      xxCm: 1.05 cm
-      yyCm: 17.05 cm
-    
----*--- multiplayer.png ---*---
-  * hostGame.png
-      xxCm: 8.38 cm
-      yyCm: 8.84 cm
+- minusv2.png
+  xxCm: 13.16 cm
+  yyCm: 7.88 cm
 
-  * joinGame.png
-      xxCm: 18.68 cm
-      yyCm: 8.84 cm
+- settingsPopUp.png
+  xxCm: 5.92 cm
+  yyCm: 3.61 cm
 
-  * returnButton.png
-      xxCm: 1.05 cm
-      yyCm: 17.05 cm
+- returnButton.png
+  xxCm: 1.05 cm
+  yyCm: 17.05 cm
 
----*--- multiWaiting.png ---*---
-  * waitingOppon.png
-      xxCm: 8.04 cm
-      yyCm: 17.05 cm
-  
-  * start.png
-      xxCm: 8.04 cm
-      yyCm: 17.05 cm
+---_--- newGame.png ---_---
 
-  * returnButton.png
-      xxCm: 1.05 cm
-      yyCm: 17.05 cm
-      
-  * playerJoined.png
-      xxCm: 8.04 cm
-      yyCm: 17.05 cm
+- singlePlayer.png
+  xxCm: 8.38 cm
+  yyCm: 8.84 cm
 
-  * joinedWaiting.png
-      xxCm: 8.04 cm
-      yyCm: 17.05 cm
+- multiplayer.png
+  xxCm: 18.68 cm
+  yyCm: 8.84 cm
+
+- returnButton.png
+  xxCm: 1.05 cm
+  yyCm: 17.05 cm
+
+---_--- multiplayer.png ---_---
+
+- hostGame.png
+  xxCm: 8.38 cm
+  yyCm: 8.84 cm
+
+- joinGame.png
+  xxCm: 18.68 cm
+  yyCm: 8.84 cm
+
+- returnButton.png
+  xxCm: 1.05 cm
+  yyCm: 17.05 cm
+
+---_--- multiWaiting.png ---_---
+
+- waitingOppon.png
+  xxCm: 8.04 cm
+  yyCm: 17.05 cm
+
+- start.png
+  xxCm: 8.04 cm
+  yyCm: 17.05 cm
+
+- returnButton.png
+  xxCm: 1.05 cm
+  yyCm: 17.05 cm
+- playerJoined.png
+  xxCm: 8.04 cm
+  yyCm: 17.05 cm
+
+- joinedWaiting.png
+  xxCm: 8.04 cm
+  yyCm: 17.05 cm
 
 // TODO:
----*--- multiCreateSession.png ---*---
----*--- singleplayerGame.png ---*---
----*--- multiplayerGame.png ---*---
+---_--- multiCreateSession.png ---_---
+---_--- singleplayerGame.png ---_---
+---_--- multiplayerGame.png ---_---
 
 ~ make this a .json file!!
+

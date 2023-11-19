@@ -2,6 +2,7 @@ package com.psw.tetris.gameStates;
 
 import java.util.HashMap;
 
+import com.psw.tetris.gameStates.stateTypes.GameModeSelect;
 import com.psw.tetris.gameStates.stateTypes.GameOver;
 import com.psw.tetris.gameStates.stateTypes.MainMenu;
 import com.psw.tetris.gameStates.stateTypes.Playing;
@@ -10,17 +11,18 @@ import com.psw.tetris.gameStates.stateTypes.TitleScreen;
 
 public final class GameStateHandler {
   public enum GameStatesEnum {
-    PLAYING,
-    PLAYING_MP,
     TITLE_SCREEN,
     MAIN_MENU,
+    GAME_MODE_SELECT,
+    PLAYING,
+    PLAYING_MP,
     GAME_OVER;
   }
 
   private static GameStatesEnum activeState;
-  private static HashMap<GameStatesEnum, State> statesMap = new HashMap<GameStatesEnum, State>();
+  private static HashMap<GameStatesEnum, GameState> statesMap = new HashMap<GameStatesEnum, GameState>();
 
-  private static void addState(final State state) {
+  private static void addState(final GameState state) {
     statesMap.put(state.getStateID(), state);
   }
 
@@ -30,12 +32,13 @@ public final class GameStateHandler {
 
     addState(new TitleScreen());
     addState(new MainMenu());
+    addState(new GameModeSelect());
     addState(new PlayingMP());
     addState(new Playing());
     addState(new GameOver());
   }
 
-  public static State getState(final GameStatesEnum stateID) {
+  public static GameState getState(final GameStatesEnum stateID) {
     return statesMap.get(stateID);
   }
 
@@ -43,7 +46,7 @@ public final class GameStateHandler {
     return activeState;
   }
 
-  public static State getActiveState() {
+  public static GameState getActiveState() {
     return statesMap.get(activeState);
   }
 

@@ -9,20 +9,18 @@ import static com.psw.tetris.utils.Constants.UI.Buttons.NEW_GAME;
 import static com.psw.tetris.utils.Constants.UI.Buttons.SETTINGS;
 
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.gameStates.State;
+import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.main.Game;
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.ButtonAction;
 import com.psw.tetris.ui.SwitchGameStateAction;
 import com.psw.tetris.utils.LoadSave;
 
-public class MainMenu extends State {
+public class MainMenu extends GameState {
 
   private final Button<GameStatesEnum, Void> newGameButton;
   private final Button<GameStatesEnum, Void> leaderboardButton;
@@ -107,7 +105,7 @@ public class MainMenu extends State {
   @Override
   public void mouseClicked(final MouseEvent e) {
     if (newGameButton.getBounds().contains(e.getPoint())) {
-      newGameButton.execAction(GameStatesEnum.PLAYING);
+      newGameButton.execAction(GameStatesEnum.GAME_MODE_SELECT);
       return;
     }
     if (leaderboardButton.getBounds().contains(e.getPoint())) {
@@ -131,15 +129,4 @@ public class MainMenu extends State {
     }
   }
 
-  @Override
-  public void keyPressed(final KeyEvent e) {
-
-    switch (e.getKeyCode()) {
-      // TODO: remove this and add a multiplayer button
-      case KeyEvent.VK_M:
-        Game.initNetworking();
-        GameStateHandler.setActiveState(GameStatesEnum.PLAYING_MP);
-        break;
-    }
-  }
 }

@@ -6,11 +6,11 @@ import java.awt.event.MouseEvent;
 
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 
-public class State implements StateMethods {
+public class GameState implements StateMethods {
 
   protected GameStatesEnum stateID;
 
-  public State(final GameStatesEnum stateID) {
+  public GameState(final GameStatesEnum stateID) {
     this.stateID = stateID;
   }
 

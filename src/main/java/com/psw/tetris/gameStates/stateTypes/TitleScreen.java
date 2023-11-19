@@ -11,12 +11,12 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.gameStates.State;
+import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.SwitchGameStateAction;
 import com.psw.tetris.utils.LoadSave;
 
-public class TitleScreen extends State {
+public class TitleScreen extends GameState {
 
   private final BufferedImage titleScreen;
 

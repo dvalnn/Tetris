@@ -22,9 +22,9 @@ import java.awt.event.MouseEvent;
 
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.gameStates.State;
+import com.psw.tetris.gameStates.GameState;
 
-public class Playing extends State {
+public class Playing extends GameState {
 
   private final PlayerBoard board;
   private final Color boardColor = new Color(20, 20, 20);

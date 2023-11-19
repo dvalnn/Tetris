@@ -8,10 +8,10 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.gameStates.State;
+import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.main.Game;
 
-public class GameOver extends State {
+public class GameOver extends GameState {
 
   public GameOver() {
     super(GameStatesEnum.GAME_OVER);

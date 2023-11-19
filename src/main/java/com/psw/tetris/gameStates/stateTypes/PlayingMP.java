@@ -21,10 +21,10 @@ import com.psw.tetris.gameElements.boardTypes.MPBoard;
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.gameStates.State;
+import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.main.Game;
 
-public class PlayingMP extends State {
+public class PlayingMP extends GameState {
 
   Color boardColor = new Color(20, 20, 20);
   PlayerBoard playerBoard;
