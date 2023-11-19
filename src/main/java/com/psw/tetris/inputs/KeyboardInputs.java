@@ -6,18 +6,20 @@ import java.awt.event.KeyListener;
 
 public class KeyboardInputs implements KeyListener {
 
-  public KeyboardInputs() {}
+  public KeyboardInputs() {
+  }
 
   @Override
-  public void keyTyped(KeyEvent e) {}
+  public void keyTyped(final KeyEvent e) {
+  }
 
   @Override
-  public void keyPressed(KeyEvent e) {
+  public void keyPressed(final KeyEvent e) {
     GameStateHandler.getActiveState().keyPressed(e);
   }
 
   @Override
-  public void keyReleased(KeyEvent e) {
+  public void keyReleased(final KeyEvent e) {
     GameStateHandler.getActiveState().keyReleased(e);
   }
 }

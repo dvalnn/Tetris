@@ -1,0 +1,45 @@
+package com.psw.tetris.gameElements;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
+
+import java.awt.Color;
+
+public class PlayerBoardTest {
+  private PlayerBoard board;
+  private Color color;
+
+  // TODO: trocar o que tem true para valores entre 0 a 7 -> shape factory
+  // accepted values :))
+  @Test
+  public void holdTetrominoTest() {
+
+    color = Color.RED;
+
+    board = new PlayerBoard(0, 0, 0, color); // ->meter valores prov 0
+
+    Tetromino active = board.getTetromino(); // peça valida
+    Tetromino next = board.getNextTetromino(); // peça valida
+    Tetromino hold = board.getHoldTetromino(); // null
+
+    assertNotNull(active);
+    assertNotNull(next);
+    assertNull(hold);// antes de dar hold esta variavel tem que ser nula
+
+    board.holdTetromino();
+
+    Tetromino newActive = board.getTetromino();
+    Tetromino newNext = board.getNextTetromino();
+    Tetromino newHold = board.getHoldTetromino();
+
+    assertNotNull(newNext);
+    assertEquals(newHold, active);
+    assertEquals(newActive.getShapeID(), next.getShapeID());
+
+    // nothing happens to Hold next since they are only swapped
+    // TODO: test if the positions of the Tetromino is correct after the change :))
+
+  }
+}

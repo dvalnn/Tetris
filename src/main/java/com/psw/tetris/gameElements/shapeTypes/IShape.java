@@ -9,8 +9,8 @@ import java.awt.geom.Point2D;
 public class IShape extends Shape {
 
   private static final Point2D[] SHAPE = {
-    new Point2D.Double(0, 0), new Point2D.Double(1, 0),
-    new Point2D.Double(2, 0), new Point2D.Double(3, 0)
+      new Point2D.Double(0, 0), new Point2D.Double(1, 0),
+      new Point2D.Double(2, 0), new Point2D.Double(3, 0)
   };
   private static final Point2D CENTER = new Point2D.Double(1.5, 0.5);
   private static final Color COLOR = new Color(0, 255, 255); // cyan
@@ -23,7 +23,10 @@ public class IShape extends Shape {
     minY = 0;
     maxY = 0;
 
-    // go to the center top of the board
+  }
+  // move to center top of the board
+  @Override
+  public void initPosition() {
     move(BOARD_WIDTH / 2 - 2, 0);
   }
 
