@@ -1,83 +1,29 @@
 {
-    "shapes": [
-        {
-            "_comment": "IShape properties",
-            "center": [1.5,0.5],
-            "points": [
-              [0,0],
-              [1,0],
-              [2,0],
-              [3,0]
-            ],
-            "color": [0,255,255]
-        },
-        {
-            "_comment": "JShape properties",
-            "center": [1,1],
-            "points": [
-              [0,0],
-              [0,1],
-              [1,1],
-              [2,1]
-            ],
-            "color": [0,0,255]     
-        },
-        {
-            "_comment": "LShape properties",
-            "center": [1,1],
-            "points": [
-              [0,1],
-              [1,1],
-              [2,1],
-              [2,0]
-            ],
-            "color": [255,165,0]      
-        },
-        {
-            "_comment": "OShape properties",
-            "center": [0.5,0.5],
-            "points": [
-              [0,0],
-              [0,1],
-              [1,0],
-              [1,1]
-            ],
-            "color": [255,255,0]      
-        },
-        {
-            "_comment": "SShape properties",
-            "center": [1,1],
-            "points": [
-              [0,1],
-              [1,1],
-              [1,0],
-              [2,0]
-            ],
-            "color": [0,255,0]      
-        },
-        {
-            "_comment": "TShape properties",
-            "center": [1,1],
-            "points": [
-              [0,1],
-              [1,1],
-              [2,1],
-              [1,0]
-            ],
-            "color": [128,0,128]      
-        },
-        {
-            "_comment": "ZShape properties",
-            "center": [1,1],
-            "points": [
-              [0,0],
-              [1,0],
-              [1,1],
-              [2,1]
-            ],
-            "color": [255,0,0]      
-        }
-    ]
-  }
-  
-  
+  "center": {
+    "x": 0.0,
+    "y": 1.5
+  },
+  "points": [
+    {
+      "x": 0.0,
+      "y": 0.0
+    },
+    {
+      "x": 0.0,
+      "y": 0.0
+    },
+    {
+      "x": 0.0,
+      "y": 0.0
+    },
+    {
+      "x": 0.0,
+      "y": 0.0
+    }
+  ],
+  "rgb": [
+    0,
+    0,
+    0
+  ]
+}

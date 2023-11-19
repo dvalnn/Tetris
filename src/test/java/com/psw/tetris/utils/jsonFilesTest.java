@@ -1,6 +1,8 @@
-package com.psw.tetris;
+package com.psw.tetris.utils;
 
 import com.psw.tetris.utils.JsonParserUtil;
+import com.psw.tetris.utils.JsonShape;
+
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.Gson;
@@ -14,34 +16,12 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.lang.reflect.Type;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 
 
 public class jsonFilesTest {
 
-  public class JsonShape {
-    Point2D.Double center = null;
-    Point2D.Double[] points = null;
-    int rgb[] = null;
-
-    transient Color color = null;
-
-    public void initColor() {
-      color = new Color(rgb[0], rgb[1], rgb[2]);
-    }
-
-    public void initDefault() {
-      center = new Point2D.Double(0, 0);
-      points = new Point2D.Double[4];
-      points[0] = new Point2D.Double(0, 0);
-      points[1] = new Point2D.Double(0, 0);
-      points[2] = new Point2D.Double(0, 0);
-      points[3] = new Point2D.Double(0, 0);
-      rgb = new int[3];
-      rgb[0] = 0;
-      rgb[1] = 0;
-      rgb[2] = 0;
-    }
-  }
   JsonShape shape = new JsonShape();
   JsonShape shape2 = new JsonShape();
 
@@ -133,11 +113,23 @@ public class jsonFilesTest {
     assertEquals("json", extension);
   }
 
+
+
   @Test 
   public void listFilesFindsFourJsonFiles() {
     String dir = "src/test/resources/";
     JsonParserUtil parser = new JsonParserUtil();
     Set<String> files = parser.listFiles(dir);
     assertEquals(4, files.size());
+  }
+
+  // TODO: Refactor this later heart
+  // This test compares the read json files and checks if they are equal
+  @Test
+  public void verifyJsonData() {
+    String dir = "src/test/resources/";
+    JsonParserUtil parser = new JsonParserUtil();
+    JsonShape shapes[] = parser.readAllJsonData(dir);
+    assertShapeEquals(shapes[0], shapes[1]);
   }
 }
