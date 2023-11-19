@@ -12,7 +12,7 @@ import java.util.List;
 public class Board {
 
   public class BoardLine {
-    private List<Color> colors;
+    private final List<Color> colors;
     private boolean recentlyChanged = false;
 
     public BoardLine() {
@@ -23,20 +23,20 @@ public class Board {
       recentlyChanged = true;
     }
 
-    public void setColor(int index, Color color) {
+    public void setColor(final int index, final Color color) {
       setColor(index, color.getRGB());
     }
 
-    public void setColor(int index, int rgb) {
+    public void setColor(final int index, final int rgb) {
       colors.set(index, new Color(rgb));
       recentlyChanged = true;
     }
 
-    public int getIndexRGB(int index) {
+    public int getIndexRGB(final int index) {
       return colors.get(index).getRGB();
     }
 
-    public Color getIndexColorCopy(int index) {
+    public Color getIndexColorCopy(final int index) {
       return new Color(colors.get(index).getRGB());
     }
 
@@ -50,8 +50,8 @@ public class Board {
     }
 
     public List<Color> getColorsCopy() {
-      List<Color> copy = new ArrayList<Color>(colors.size());
-      for (Color color : colors) {
+      final List<Color> copy = new ArrayList<Color>(colors.size());
+      for (final Color color : colors) {
         copy.add(new Color(color.getRGB()));
       }
       return copy;
@@ -68,7 +68,7 @@ public class Board {
 
   protected int renderSize;
 
-  public Board(int size, int xOffset, int yOffset, Color color) {
+  public Board(final int size, final int xOffset, final int yOffset, final Color color) {
     this.renderSize = size;
     renderOrigin = new Point2D.Double(xOffset, yOffset);
 
@@ -85,7 +85,7 @@ public class Board {
     }
   }
 
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
 
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {

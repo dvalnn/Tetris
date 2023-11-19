@@ -20,7 +20,7 @@ public final class GameStateHandler {
   private static GameStatesEnum activeState;
   private static HashMap<GameStatesEnum, State> statesMap = new HashMap<GameStatesEnum, State>();
 
-  private static void addState(State state) {
+  private static void addState(final State state) {
     statesMap.put(state.getStateID(), state);
   }
 
@@ -35,7 +35,7 @@ public final class GameStateHandler {
     addState(new GameOver());
   }
 
-  public static State getState(GameStatesEnum stateID) {
+  public static State getState(final GameStatesEnum stateID) {
     return statesMap.get(stateID);
   }
 
@@ -48,11 +48,11 @@ public final class GameStateHandler {
   }
 
   // TODO: replace with switchState
-  public static void setActiveState(GameStatesEnum state) {
+  public static void setActiveState(final GameStatesEnum state) {
     activeState = state;
   }
 
-  public static void switchState(GameStatesEnum state) {
+  public static void switchState(final GameStatesEnum state) {
     activeState = state;
   }
 }

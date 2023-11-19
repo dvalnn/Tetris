@@ -85,22 +85,22 @@ public class WallKickData {
       { ARIKA_I_LU_KICK, ARIKA_I_LD_KICK }
   };
 
-  private static Point2D getDefaultKickData(int rotationState, int direction, int kickIndex) {
-    int directionIndex = direction == RIGHT ? 0 : 1;
+  private static Point2D getDefaultKickData(final int rotationState, final int direction, final int kickIndex) {
+    final int directionIndex = direction == RIGHT ? 0 : 1;
     return new Point2D.Double(
         DEFAULT_KICKS[rotationState][directionIndex][kickIndex][0],
         DEFAULT_KICKS[rotationState][directionIndex][kickIndex][1]);
   }
 
-  private static Point2D getArikaKickData(int rotationState, int direction, int kickIndex) {
-    int directionIndex = direction == RIGHT ? 0 : 1;
+  private static Point2D getArikaKickData(final int rotationState, final int direction, final int kickIndex) {
+    final int directionIndex = direction == RIGHT ? 0 : 1;
     return new Point2D.Double(
         ARIKA_KICKS[rotationState][directionIndex][kickIndex][0],
         ARIKA_KICKS[rotationState][directionIndex][kickIndex][1]);
   }
 
   public static Point2D getKickData(
-      int shapeIndex, int rotationState, int direction, int kickIndex) {
+      final int shapeIndex, final int rotationState, final int direction, final int kickIndex) {
     if (shapeIndex == I) {
       return getArikaKickData(rotationState, direction, kickIndex);
     } else {

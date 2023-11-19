@@ -49,13 +49,13 @@ public class PlayingMP extends State {
     playerBoard = new PlayerBoard(BOARD_SQUARE, PLAYER_X_OFFSET, Y_OFFSET, boardColor);
   }
 
-  public void addBoardMP(String username, InetAddress address, int port) {
+  public void addBoardMP(final String username, final InetAddress address, final int port) {
     System.out.println("[PlayingMP] Adding board for " + username);
     opponentBoard = new MPBoard(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET, boardColor, username);
     shapeMP = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
   }
 
-  public void removeBoardMP(String username) {
+  public void removeBoardMP(final String username) {
     System.out.println("[PlayingMP] " + username + " disconnected!");
     opponentDisconnected = true;
     matchOver = true;
@@ -63,26 +63,26 @@ public class PlayingMP extends State {
 
   public void sendFullSync() {
     // send current player tetromino to opponent
-    Shape currentShape = playerBoard.getTetromino().getShape();
+    final Shape currentShape = playerBoard.getTetromino().getShape();
     Game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
 
     // send current player board to opponent
     for (int row = 0; row < BOARD_HEIGHT; row++) {
-      PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
-      List<Color> colors = line.getColorsCopy();
+      final PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
+      final List<Color> colors = line.getColorsCopy();
       Game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
     }
   }
 
   public void sendPlayerState() {
     // send current player tetromino to opponent
-    Shape currentShape = playerBoard.getTetromino().getShape();
+    final Shape currentShape = playerBoard.getTetromino().getShape();
     Game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
 
     // send current player board to opponent
     for (int row = 0; row < BOARD_HEIGHT; row++) {
-      PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
-      List<Color> colors = line.getColorsCopyIfChanged();
+      final PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
+      final List<Color> colors = line.getColorsCopyIfChanged();
       if (colors != null) {
         Game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
       }
@@ -109,7 +109,7 @@ public class PlayingMP extends State {
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     if (opponentBoard == null) {
       // TODO: make this look nicer
       g.setColor(Color.WHITE);
@@ -136,7 +136,7 @@ public class PlayingMP extends State {
   }
 
   @Override
-  public void keyPressed(KeyEvent e) {
+  public void keyPressed(final KeyEvent e) {
     if (matchOver) {
       GameStateHandler.setActiveState(GameStatesEnum.GAME_OVER);
       return;
@@ -170,7 +170,7 @@ public class PlayingMP extends State {
   }
 
   @Override
-  public void keyReleased(KeyEvent e) {
+  public void keyReleased(final KeyEvent e) {
     switch (e.getKeyCode()) {
       case (KeyEvent.VK_LEFT):
         playerBoard.getTetromino().setLeft(false);

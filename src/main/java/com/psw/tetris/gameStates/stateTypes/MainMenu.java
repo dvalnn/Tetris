@@ -24,25 +24,25 @@ import com.psw.tetris.utils.LoadSave;
 
 public class MainMenu extends State {
 
-  private Button<GameStatesEnum, Void> newGameButton;
-  private Button<GameStatesEnum, Void> leaderboardButton;
-  private Button<GameStatesEnum, Void> settingsButton;
-  private Button<GameStatesEnum, Void> aboutUsButton;
-  private Button<Void, Void> exitButton;
+  private final Button<GameStatesEnum, Void> newGameButton;
+  private final Button<GameStatesEnum, Void> leaderboardButton;
+  private final Button<GameStatesEnum, Void> settingsButton;
+  private final Button<GameStatesEnum, Void> aboutUsButton;
+  private final Button<Void, Void> exitButton;
 
-  private BufferedImage newGameButtonImage = LoadSave.loadImage(NEW_GAME);
-  private BufferedImage leaderboardButtonImage = LoadSave.loadImage(LEADERBOARD);
-  private BufferedImage settingsButtonImage = LoadSave.loadImage(SETTINGS);
-  private BufferedImage aboutUsButtonImage = LoadSave.loadImage(ABOUT_US);
-  private BufferedImage exitButtonImage = LoadSave.loadImage(EXIT_GAME);
+  private final BufferedImage newGameButtonImage = LoadSave.loadImage(NEW_GAME);
+  private final BufferedImage leaderboardButtonImage = LoadSave.loadImage(LEADERBOARD);
+  private final BufferedImage settingsButtonImage = LoadSave.loadImage(SETTINGS);
+  private final BufferedImage aboutUsButtonImage = LoadSave.loadImage(ABOUT_US);
+  private final BufferedImage exitButtonImage = LoadSave.loadImage(EXIT_GAME);
 
-  private SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
-  private ButtonAction<Void, Void> quitGameAction = (Void) -> {
+  private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
+  private final ButtonAction<Void, Void> quitGameAction = (Void) -> {
     Game.exit();
     return null;
   };
 
-  private BufferedImage menuBackground;
+  private final BufferedImage menuBackground;
 
   private final double SCALE = 0.25;
   private final int FIRST_BUTTON_X = 100;
@@ -60,7 +60,7 @@ public class MainMenu extends State {
         SCALE,
         switchGameStateAction);
 
-    int secondButtonY = (int) (FIRST_BUTTON_Y + newGameButton.getBounds().getHeight() + BUTTON_SPACING);
+    final int secondButtonY = (int) (FIRST_BUTTON_Y + newGameButton.getBounds().getHeight() + BUTTON_SPACING);
     leaderboardButton = new Button<GameStatesEnum, Void>(
         FIRST_BUTTON_X,
         secondButtonY,
@@ -68,7 +68,7 @@ public class MainMenu extends State {
         SCALE,
         switchGameStateAction);
 
-    int thirdButtonY = (int) (secondButtonY + leaderboardButton.getBounds().getHeight() + BUTTON_SPACING);
+    final int thirdButtonY = (int) (secondButtonY + leaderboardButton.getBounds().getHeight() + BUTTON_SPACING);
     settingsButton = new Button<GameStatesEnum, Void>(
         FIRST_BUTTON_X,
         thirdButtonY,
@@ -76,7 +76,7 @@ public class MainMenu extends State {
         SCALE,
         switchGameStateAction);
 
-    int fourthButtonY = (int) (thirdButtonY + settingsButton.getBounds().getHeight() + BUTTON_SPACING);
+    final int fourthButtonY = (int) (thirdButtonY + settingsButton.getBounds().getHeight() + BUTTON_SPACING);
     aboutUsButton = new Button<GameStatesEnum, Void>(
         FIRST_BUTTON_X,
         fourthButtonY,
@@ -84,7 +84,7 @@ public class MainMenu extends State {
         SCALE,
         switchGameStateAction);
 
-    int fifthButtonY = (int) (fourthButtonY + aboutUsButton.getBounds().getHeight() + BUTTON_SPACING);
+    final int fifthButtonY = (int) (fourthButtonY + aboutUsButton.getBounds().getHeight() + BUTTON_SPACING);
     exitButton = new Button<Void, Void>(
         FIRST_BUTTON_X,
         fifthButtonY,
@@ -94,7 +94,7 @@ public class MainMenu extends State {
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     g.drawImage(menuBackground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
 
     newGameButton.render(g);
@@ -105,7 +105,7 @@ public class MainMenu extends State {
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void mouseClicked(final MouseEvent e) {
     if (newGameButton.getBounds().contains(e.getPoint())) {
       newGameButton.execAction(GameStatesEnum.PLAYING);
       return;
@@ -132,7 +132,7 @@ public class MainMenu extends State {
   }
 
   @Override
-  public void keyPressed(KeyEvent e) {
+  public void keyPressed(final KeyEvent e) {
 
     switch (e.getKeyCode()) {
       // TODO: remove this and add a multiplayer button

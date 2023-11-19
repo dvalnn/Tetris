@@ -18,7 +18,7 @@ public class GameOver extends State {
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     g.setColor(Color.BLACK);
     g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
@@ -27,7 +27,7 @@ public class GameOver extends State {
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void mouseClicked(final MouseEvent e) {
     Game.exit();
   }
 }

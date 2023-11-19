@@ -2,18 +2,19 @@ package com.psw.tetris.networking.packets;
 
 import static com.psw.tetris.utils.Constants.GameConstants.BOARD_WIDTH;
 
+import java.awt.Color;
+
 import com.psw.tetris.networking.GameClient;
 import com.psw.tetris.networking.GameServer;
-import java.awt.Color;
 
 public class Packet03Board extends Packet {
 
-  private String username;
-  private int row;
-  private Color[] lineColors;
+  private final String username;
+  private final int row;
+  private final Color[] lineColors;
   private String[] data;
 
-  public Packet03Board(byte[] data) {
+  public Packet03Board(final byte[] data) {
     super(03);
     this.data = readData(data).split(",");
 
@@ -25,7 +26,7 @@ public class Packet03Board extends Packet {
     }
   }
 
-  public Packet03Board(String username, int row, Color[] lineColors) {
+  public Packet03Board(final String username, final int row, final Color[] lineColors) {
     super(03);
     this.username = new String(username);
     this.row = row;
@@ -33,19 +34,19 @@ public class Packet03Board extends Packet {
   }
 
   @Override
-  public void writeData(GameClient client) {
+  public void writeData(final GameClient client) {
     client.sendData(getData());
   }
 
   @Override
-  public void writeData(GameServer server) {
+  public void writeData(final GameServer server) {
     server.sendData(getData());
   }
 
   @Override
   public byte[] getData() {
     String retStr = "03" + "," + username + "," + row;
-    for (Color color : lineColors) {
+    for (final Color color : lineColors) {
       retStr += "," + color.getRGB();
     }
     return (retStr + ",").getBytes();

@@ -15,6 +15,10 @@ import static com.psw.tetris.utils.Constants.TetrominoIDs.S;
 import static com.psw.tetris.utils.Constants.TetrominoIDs.T;
 import static com.psw.tetris.utils.Constants.TetrominoIDs.Z;
 
+import java.awt.Graphics;
+import java.awt.geom.Point2D;
+import java.util.Random;
+
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
 import com.psw.tetris.gameElements.shapeTypes.GhostShape;
 import com.psw.tetris.gameElements.shapeTypes.IShape;
@@ -25,15 +29,12 @@ import com.psw.tetris.gameElements.shapeTypes.SShape;
 import com.psw.tetris.gameElements.shapeTypes.TShape;
 import com.psw.tetris.gameElements.shapeTypes.ZShape;
 import com.psw.tetris.utils.WallKickData;
-import java.awt.Graphics;
-import java.awt.geom.Point2D;
-import java.util.Random;
 
 public class Tetromino {
 
-  private Shape shape;
-  private GhostShape ghost;
-  private PlayerBoard board;
+  private final Shape shape;
+  private final GhostShape ghost;
+  private final PlayerBoard board;
 
   private final int HORIZONTAL_SPEED = 20;
   private final int VERTICAL_SLOW = 1;
@@ -50,12 +51,12 @@ public class Tetromino {
   private boolean active = true;
   private boolean updateGhost = true;
 
-  private Random rand = new Random();
+  private final Random rand = new Random();
   private boolean deactivating;
   private int deactivationTickCounter;
   private final int DEACTIVATION_TICKS = UPS_SET / 2; // 0.5 seconds
 
-  public Tetromino(int renderSize, Point2D renderOrigin, PlayerBoard board) {
+  public Tetromino(final int renderSize, final Point2D renderOrigin, final PlayerBoard board) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, rand.nextInt(7));
     shape.initPosition();
@@ -67,18 +68,17 @@ public class Tetromino {
   // NOTE: this constructor is only used for testing
   // TODO: remove this constructor
 
-  
-  public Tetromino(int renderSize, Point2D renderOrigin, PlayerBoard board, int shapeID) {
+  public Tetromino(final int renderSize, final Point2D renderOrigin, final PlayerBoard board, final int shapeID) {
     this.board = board;
     shape = shapeFactory(renderSize, renderOrigin, shapeID);
     shape.initPosition();
-    
+
     ghost = new GhostShape(shape);
 
     System.out.println("[Tetromino] New Shape: " + shape);
   }
 
-  private Shape shapeFactory(int renderSize, Point2D spawnPoint, int shapeID) {
+  private Shape shapeFactory(final int renderSize, final Point2D spawnPoint, final int shapeID) {
     this.shapeID = shapeID;
     switch (shapeID) {
       case I:
@@ -100,17 +100,17 @@ public class Tetromino {
     }
   }
 
-  private boolean sideColides(int dir) {
-    int delta = dir == LEFT ? -1 : 1;
+  private boolean sideColides(final int dir) {
+    final int delta = dir == LEFT ? -1 : 1;
 
     if (dir == LEFT && shape.getMinX() <= 0)
       return true;
     else if (dir == RIGHT && shape.getMaxX() + 1 >= BOARD_WIDTH)
       return true;
 
-    for (Point2D point : shape.getPoints()) {
-      int x = (int) point.getX() + delta;
-      int y = (int) point.getY();
+    for (final Point2D point : shape.getPoints()) {
+      final int x = (int) point.getX() + delta;
+      final int y = (int) point.getY();
       if (board.getBoard().get(y).getIndexRGB(x) != board.getBackgroundColor().getRGB()) {
         return true;
       }
@@ -119,13 +119,13 @@ public class Tetromino {
     return false;
   }
 
-  private boolean bottomColides(Shape shape) {
+  private boolean bottomColides(final Shape shape) {
     if (shape.getMaxY() + 1 >= BOARD_HEIGHT)
       return true;
 
-    for (Point2D point : shape.getPoints()) {
-      int x = (int) point.getX();
-      int y = (int) point.getY() + 1;
+    for (final Point2D point : shape.getPoints()) {
+      final int x = (int) point.getX();
+      final int y = (int) point.getY() + 1;
       if (board.getBoard().get(y).getIndexRGB(x) != board.getBackgroundColor().getRGB()) {
         return true;
       }
@@ -141,9 +141,9 @@ public class Tetromino {
     if (shape.getMinX() < 0 || shape.getMaxX() >= BOARD_WIDTH)
       return true;
 
-    for (Point2D point : shape.getPoints()) {
-      int x = (int) point.getX();
-      int y = (int) point.getY();
+    for (final Point2D point : shape.getPoints()) {
+      final int x = (int) point.getX();
+      final int y = (int) point.getY();
       if (board.getBoard().get(y).getIndexRGB(x) != board.getBackgroundColor().getRGB()) {
         return true;
       }
@@ -152,10 +152,10 @@ public class Tetromino {
     return false;
   }
 
-  public void rotate(int direction) {
+  public void rotate(final int direction) {
     double angle = 0;
 
-    int rotationStatusDelta = direction == RIGHT ? 1 : -1;
+    final int rotationStatusDelta = direction == RIGHT ? 1 : -1;
 
     switch (direction) {
       case LEFT:
@@ -176,7 +176,7 @@ public class Tetromino {
       // collision with other shapes. The amount of pixels is relative to the
       // current rotation status and direction. Note that the rotation status is
       // only updated if the rotation succeeds.
-      Point2D kickData = WallKickData.getKickData(shapeID, rotationStatus, direction, kickIndex);
+      final Point2D kickData = WallKickData.getKickData(shapeID, rotationStatus, direction, kickIndex);
       shape.move((int) kickData.getX(), (int) kickData.getY());
 
       // check if the rotation is valid for the current kick data
@@ -206,7 +206,7 @@ public class Tetromino {
 
   private void handleMoveDown() {
 
-    boolean colision = bottomColides(shape);
+    final boolean colision = bottomColides(shape);
 
     if (colision && verticalSpeed == VERTICAL_INSTANT) {
       active = false;
@@ -239,7 +239,7 @@ public class Tetromino {
     }
   }
 
-  private void move(int direction) {
+  private void move(final int direction) {
     switch (direction) {
       case LEFT:
         if (!sideColides(LEFT)) {
@@ -304,7 +304,7 @@ public class Tetromino {
     }
   }
 
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     // render ghost only if it's not in the same position as the shape
     if (!ghost.getCenter().equals(shape.getCenter()))
       ghost.render(g);
@@ -313,23 +313,23 @@ public class Tetromino {
     shape.render(g);
   }
 
-  public void setRight(boolean right) {
+  public void setRight(final boolean right) {
     this.right = right;
   }
 
-  public void setLeft(boolean left) {
+  public void setLeft(final boolean left) {
     this.left = left;
   }
 
-  public void setDown(boolean down) {
+  public void setDown(final boolean down) {
     this.down = down;
   }
 
-  public void setDrop(boolean drop) {
+  public void setDrop(final boolean drop) {
     this.drop = drop;
   }
 
-  public void setActive(boolean active) {
+  public void setActive(final boolean active) {
     this.active = active;
   }
 

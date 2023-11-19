@@ -12,9 +12,9 @@ public abstract class Packet {
     BOARD(03),
     SHAPE(04);
 
-    private int packetId;
+    private final int packetId;
 
-    private PacketTypes(int packetId) {
+    private PacketTypes(final int packetId) {
       this.packetId = packetId;
     }
 
@@ -25,7 +25,7 @@ public abstract class Packet {
 
   public byte packetId;
 
-  public Packet(int packetId) {
+  public Packet(final int packetId) {
     this.packetId = (byte) packetId;
   }
 
@@ -33,23 +33,23 @@ public abstract class Packet {
 
   public abstract void writeData(GameServer server);
 
-  public String readData(byte[] data) {
-    String message = new String(data).trim();
+  public String readData(final byte[] data) {
+    final String message = new String(data).trim();
     return message.substring(2);
   }
 
   public abstract byte[] getData();
 
-  public static PacketTypes lookupPacket(String packetId) {
+  public static PacketTypes lookupPacket(final String packetId) {
     try {
       return lookupPacket(Integer.parseInt(packetId));
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       return PacketTypes.INVALID;
     }
   }
 
-  public static PacketTypes lookupPacket(int id) {
-    for (PacketTypes p : PacketTypes.values()) {
+  public static PacketTypes lookupPacket(final int id) {
+    for (final PacketTypes p : PacketTypes.values()) {
       if (p.getId() == id) {
         return p;
       }

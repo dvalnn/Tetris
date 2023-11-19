@@ -18,12 +18,12 @@ import com.psw.tetris.utils.LoadSave;
 
 public class TitleScreen extends State {
 
-  private BufferedImage titleScreen;
+  private final BufferedImage titleScreen;
 
   private final int buttonX = GAME_WIDTH / 2;
   private final int buttonY = GAME_HEIGHT - 100;
 
-  private Button<GameStatesEnum, Void> button = new Button<GameStatesEnum, Void>(
+  private final Button<GameStatesEnum, Void> button = new Button<GameStatesEnum, Void>(
       new Point(buttonX, buttonY),
       LoadSave.loadImage(PRESS_ENTER),
       0.25,
@@ -35,20 +35,20 @@ public class TitleScreen extends State {
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     g.drawImage(titleScreen, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
     button.render(g);
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void mouseClicked(final MouseEvent e) {
     if (button.getBounds().contains(e.getPoint())) {
       button.execAction(GameStatesEnum.MAIN_MENU);
     }
   }
 
   @Override
-  public void keyPressed(KeyEvent e) {
+  public void keyPressed(final KeyEvent e) {
     switch (e.getKeyCode()) {
       case KeyEvent.VK_ENTER:
         button.execAction(GameStatesEnum.MAIN_MENU);

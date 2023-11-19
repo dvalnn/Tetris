@@ -1,19 +1,20 @@
 package com.psw.tetris.networking.packets;
 
-import com.psw.tetris.networking.GameClient;
-import com.psw.tetris.networking.GameServer;
 import java.awt.Color;
 import java.awt.geom.Point2D;
+
+import com.psw.tetris.networking.GameClient;
+import com.psw.tetris.networking.GameServer;
 
 public class Packet04Shape extends Packet {
   private final int POINTS_LEN = 4;
 
-  private String username;
+  private final String username;
   Point2D[] points;
   Color color;
   private String[] data;
 
-  public Packet04Shape(byte[] data) {
+  public Packet04Shape(final byte[] data) {
     super(04);
     this.data = readData(data).split(",");
 
@@ -21,19 +22,18 @@ public class Packet04Shape extends Packet {
     this.username = this.data[1];
     points = new Point2D[POINTS_LEN];
     for (int i = 0; i < POINTS_LEN; i++) {
-      this.points[i] =
-          new Point2D.Double(
-              Double.parseDouble(this.data[2 + i * 2]), Double.parseDouble(this.data[3 + i * 2]));
+      this.points[i] = new Point2D.Double(
+          Double.parseDouble(this.data[2 + i * 2]), Double.parseDouble(this.data[3 + i * 2]));
     }
 
-    int r = Integer.parseInt(this.data[10]);
-    int g = Integer.parseInt(this.data[11]);
-    int b = Integer.parseInt(this.data[12]);
+    final int r = Integer.parseInt(this.data[10]);
+    final int g = Integer.parseInt(this.data[11]);
+    final int b = Integer.parseInt(this.data[12]);
 
     this.color = new Color(r, g, b);
   }
 
-  public Packet04Shape(String username, Point2D[] points, Color color) {
+  public Packet04Shape(final String username, final Point2D[] points, final Color color) {
     super(04);
 
     this.username = new String(username);
@@ -45,20 +45,20 @@ public class Packet04Shape extends Packet {
   }
 
   @Override
-  public void writeData(GameClient client) {
+  public void writeData(final GameClient client) {
     client.sendData(getData());
   }
 
   @Override
-  public void writeData(GameServer server) {
+  public void writeData(final GameServer server) {
     server.sendData(getData());
   }
 
   @Override
   public byte[] getData() {
-    int r = color.getRed();
-    int g = color.getGreen();
-    int b = color.getBlue();
+    final int r = color.getRed();
+    final int g = color.getGreen();
+    final int b = color.getBlue();
     String retMsg = "04" + "," + this.username;
 
     for (int i = 0; i < POINTS_LEN; i++) {

@@ -8,21 +8,21 @@ import java.awt.image.BufferedImage;
 
 public class Button<T, V> {
 
-  private ButtonAction<T, V> action;
+  private final ButtonAction<T, V> action;
 
-  private int xPos;
-  private int yPos;
-  private double imgScale;
+  private final int xPos;
+  private final int yPos;
+  private final double imgScale;
 
-  private BufferedImage image;
+  private final BufferedImage image;
   private Rectangle bounds;
 
   public Button(
-      int xPos,
-      int yPos,
-      BufferedImage image,
-      double imgScale,
-      ButtonAction<T, V> action) {
+      final int xPos,
+      final int yPos,
+      final BufferedImage image,
+      final double imgScale,
+      final ButtonAction<T, V> action) {
 
     this.xPos = xPos;
     this.yPos = yPos;
@@ -34,10 +34,10 @@ public class Button<T, V> {
   }
 
   public Button(
-      Point center,
-      BufferedImage image,
-      double imgScale,
-      ButtonAction<T, V> action) {
+      final Point center,
+      final BufferedImage image,
+      final double imgScale,
+      final ButtonAction<T, V> action) {
 
     xPos = (int) (center.getX() - image.getWidth() * imgScale / 2);
     yPos = (int) (center.getY() - image.getHeight() * imgScale / 2);
@@ -61,11 +61,11 @@ public class Button<T, V> {
     return bounds;
   }
 
-  public V execAction(T args) {
+  public V execAction(final T args) {
     return action.exec(args);
   }
 
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     g.drawImage(
         image,
         xPos,

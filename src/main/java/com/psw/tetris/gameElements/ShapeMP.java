@@ -7,24 +7,24 @@ import java.awt.geom.Point2D;
 public class ShapeMP {
   private Point2D[] points;
   private Color color;
-  private int renderSize;
-  private Point2D renderOffset;
+  private final int renderSize;
+  private final Point2D renderOffset;
 
-  public ShapeMP(int renderSize, int xOffset, int yOffset) {
+  public ShapeMP(final int renderSize, final int xOffset, final int yOffset) {
     this.renderSize = renderSize;
     this.renderOffset = new Point2D.Double(xOffset, yOffset);
   }
 
-  public void update(Point2D[] points, Color color) {
+  public void update(final Point2D[] points, final Color color) {
     this.points = points;
     this.color = color;
   }
 
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     if (points == null)
       return;
 
-    for (Point2D point : points) {
+    for (final Point2D point : points) {
       g.setColor(color);
       g.fillRect(
           (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),

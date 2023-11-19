@@ -16,8 +16,8 @@ import javax.swing.JOptionPane;
 
 public class Game implements Runnable {
 
-  private GameWindow gameWindow;
-  private GamePanel gamePanel;
+  private final GameWindow gameWindow;
+  private final GamePanel gamePanel;
   private Thread gameThread;
 
   private static GameClient client;
@@ -46,16 +46,16 @@ public class Game implements Runnable {
   public static void initNetworking() {
     // TODO: make this a dialog box instead of a yes/no option
     if (JOptionPane.showConfirmDialog(null, "Run as server?") == JOptionPane.YES_OPTION) {
-      String hostName = JOptionPane.showInputDialog("Enter server name:").trim();
+      final String hostName = JOptionPane.showInputDialog("Enter server name:").trim();
       server = new GameServer(hostName);
       server.start();
       serverActive = true;
     } else {
       // TODO: make this safer by checking if the IP address is valid
       // TODO: make this a text field instead of a dialog box
-      String ipAddress = JOptionPane.showInputDialog("Enter server IP address:").trim();
+      final String ipAddress = JOptionPane.showInputDialog("Enter server IP address:").trim();
       System.out.println("Connecting to " + ipAddress);
-      Packet00Login loginPacket = new Packet00Login(JOptionPane.showInputDialog("Enter username:"));
+      final Packet00Login loginPacket = new Packet00Login(JOptionPane.showInputDialog("Enter username:"));
       client = new GameClient(ipAddress, loginPacket.getUsername());
       client.start();
       loginPacket.writeData(client);
@@ -72,22 +72,22 @@ public class Game implements Runnable {
     }
   }
 
-  public static void addPlayer(String username, InetAddress address, int port) {
-    PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
+  public static void addPlayer(final String username, final InetAddress address, final int port) {
+    final PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
     playingMP.addBoardMP(username, address, port);
   }
 
-  public static void removePlayer(String username) {
-    PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
+  public static void removePlayer(final String username) {
+    final PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
     playingMP.removeBoardMP(username);
   }
 
-  public static void updateShapeMP(Point2D[] points, Color color) {
-    PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
+  public static void updateShapeMP(final Point2D[] points, final Color color) {
+    final PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
     playingMP.getShapeMP().update(points, color);
   }
 
-  public static void sendShapeUpdate(Point2D[] points, Color color) {
+  public static void sendShapeUpdate(final Point2D[] points, final Color color) {
     if (serverActive) {
       server.sendShapeUpdate(points, color);
     } else if (clientActive) {
@@ -95,12 +95,12 @@ public class Game implements Runnable {
     }
   }
 
-  public static void updateBoardMP(int row, Color[] lineColors) {
-    PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
+  public static void updateBoardMP(final int row, final Color[] lineColors) {
+    final PlayingMP playingMP = (PlayingMP) GameStateHandler.getState(GameStatesEnum.PLAYING_MP);
     playingMP.getBoardMP().update(row, lineColors);
   }
 
-  public static void sendBoardUpdate(int row, Color[] lineColors) {
+  public static void sendBoardUpdate(final int row, final Color[] lineColors) {
     if (serverActive) {
       server.sendBoardUpdate(row, lineColors);
     } else if (clientActive) {
@@ -112,7 +112,7 @@ public class Game implements Runnable {
     GameStateHandler.getActiveState().update();
   }
 
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     GameStateHandler.getActiveState().render(g);
   }
 
@@ -123,8 +123,8 @@ public class Game implements Runnable {
   @Override
   public void run() {
     // time per frame and time per update in nanoseconds
-    double timePerFrame = 1000000000 / FPS_SET;
-    double timePerUpdate = 1000000000 / UPS_SET;
+    final double timePerFrame = 1000000000 / FPS_SET;
+    final double timePerUpdate = 1000000000 / UPS_SET;
 
     double deltaFrame = 0;
     double deltaUpdate = 0;
@@ -138,7 +138,7 @@ public class Game implements Runnable {
 
     // Game Loop
     while (true) {
-      long currentTime = System.nanoTime();
+      final long currentTime = System.nanoTime();
 
       deltaFrame += (currentTime - previousTime) / timePerFrame;
       deltaUpdate += (currentTime - previousTime) / timePerUpdate;
@@ -182,7 +182,7 @@ public class Game implements Runnable {
     return serverActive;
   }
 
-  public void setServerActive(boolean serverActive) {
+  public void setServerActive(final boolean serverActive) {
     Game.serverActive = serverActive;
   }
 
@@ -190,7 +190,7 @@ public class Game implements Runnable {
     return clientActive;
   }
 
-  public static void setClientActive(boolean clientActive) {
+  public static void setClientActive(final boolean clientActive) {
     Game.clientActive = clientActive;
   }
 

@@ -10,7 +10,7 @@ public class State implements StateMethods {
 
   protected GameStatesEnum stateID;
 
-  public State(GameStatesEnum stateID) {
+  public State(final GameStatesEnum stateID) {
     this.stateID = stateID;
   }
 
@@ -23,35 +23,35 @@ public class State implements StateMethods {
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void mouseClicked(final MouseEvent e) {
   }
 
   @Override
-  public void mousePressed(MouseEvent e) {
+  public void mousePressed(final MouseEvent e) {
   }
 
   @Override
-  public void mouseReleased(MouseEvent e) {
+  public void mouseReleased(final MouseEvent e) {
   }
 
   @Override
-  public void mouseMoved(MouseEvent e) {
+  public void mouseMoved(final MouseEvent e) {
   }
 
   @Override
-  public void mouseDragged(MouseEvent e) {
+  public void mouseDragged(final MouseEvent e) {
   }
 
   @Override
-  public void keyPressed(KeyEvent e) {
+  public void keyPressed(final KeyEvent e) {
   }
 
   @Override
-  public void keyReleased(KeyEvent e) {
+  public void keyReleased(final KeyEvent e) {
   }
 
   @Override
@@ -59,10 +59,10 @@ public class State implements StateMethods {
   }
 
   @Override
-  public void mouseEntered(MouseEvent e) {
+  public void mouseEntered(final MouseEvent e) {
   }
 
   @Override
-  public void mouseExited(MouseEvent e) {
+  public void mouseExited(final MouseEvent e) {
   }
 }

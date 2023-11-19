@@ -26,8 +26,8 @@ import com.psw.tetris.gameStates.State;
 
 public class Playing extends State {
 
-  private PlayerBoard board;
-  private Color boardColor = new Color(20, 20, 20);
+  private final PlayerBoard board;
+  private final Color boardColor = new Color(20, 20, 20);
 
   private final int X_OFFSET = GAME_WIDTH / 2 - BOARD_WIDTH * BOARD_SQUARE / 2;
   private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
@@ -46,12 +46,12 @@ public class Playing extends State {
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     board.render(g);
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void mouseClicked(final MouseEvent e) {
     if (e.getButton() == MouseEvent.BUTTON1)
       board.addBlockOnMousePosition(e.getX(), e.getY());
     else if (e.getButton() == MouseEvent.BUTTON3)
@@ -59,7 +59,7 @@ public class Playing extends State {
   }
 
   @Override
-  public void mousePressed(MouseEvent e) {
+  public void mousePressed(final MouseEvent e) {
     if (e.getButton() == MouseEvent.BUTTON1)
       mouseButton1Pressed = true;
     else if (e.getButton() == MouseEvent.BUTTON3)
@@ -67,7 +67,7 @@ public class Playing extends State {
   }
 
   @Override
-  public void mouseReleased(MouseEvent e) {
+  public void mouseReleased(final MouseEvent e) {
     if (e.getButton() == MouseEvent.BUTTON1)
       mouseButton1Pressed = false;
     else if (e.getButton() == MouseEvent.BUTTON3)
@@ -75,7 +75,7 @@ public class Playing extends State {
   }
 
   @Override
-  public void mouseDragged(MouseEvent e) {
+  public void mouseDragged(final MouseEvent e) {
     if (mouseButton1Pressed && !mouseButton3Pressed)
       board.addBlockOnMousePosition(e.getX(), e.getY());
     else if (!mouseButton1Pressed && mouseButton3Pressed)
@@ -83,7 +83,7 @@ public class Playing extends State {
   }
 
   @Override
-  public void keyPressed(KeyEvent e) {
+  public void keyPressed(final KeyEvent e) {
     switch (e.getKeyCode()) {
       case (KeyEvent.VK_Z):
         board.getTetromino().rotate(LEFT);
@@ -165,7 +165,7 @@ public class Playing extends State {
   }
 
   @Override
-  public void keyReleased(KeyEvent e) {
+  public void keyReleased(final KeyEvent e) {
     switch (e.getKeyCode()) {
       case (KeyEvent.VK_LEFT):
         board.getTetromino().setLeft(false);
