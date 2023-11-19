@@ -1,11 +1,12 @@
 package com.psw.tetris.gameStates;
 
+import java.util.HashMap;
+
 import com.psw.tetris.gameStates.stateTypes.GameOver;
 import com.psw.tetris.gameStates.stateTypes.MainMenu;
 import com.psw.tetris.gameStates.stateTypes.Playing;
 import com.psw.tetris.gameStates.stateTypes.PlayingMP;
 import com.psw.tetris.gameStates.stateTypes.TitleScreen;
-import java.util.HashMap;
 
 public final class GameStateHandler {
   public enum GameStatesEnum {

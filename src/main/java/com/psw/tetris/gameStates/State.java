@@ -1,9 +1,10 @@
 package com.psw.tetris.gameStates;
 
-import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
+import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 
 public class State implements StateMethods {
 

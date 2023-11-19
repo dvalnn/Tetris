@@ -9,6 +9,12 @@ import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
 import static com.psw.tetris.utils.Constants.GameConstants.UPS_SET;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.net.InetAddress;
+import java.util.List;
+
 import com.psw.tetris.gameElements.Shape;
 import com.psw.tetris.gameElements.ShapeMP;
 import com.psw.tetris.gameElements.boardTypes.MPBoard;
@@ -17,11 +23,6 @@ import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.State;
 import com.psw.tetris.main.Game;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.net.InetAddress;
-import java.util.List;
 
 public class PlayingMP extends State {
 

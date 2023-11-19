@@ -15,13 +15,14 @@ import static com.psw.tetris.utils.Constants.TetrominoIDs.S;
 import static com.psw.tetris.utils.Constants.TetrominoIDs.T;
 import static com.psw.tetris.utils.Constants.TetrominoIDs.Z;
 
-import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
-import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.gameStates.State;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
+import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
+import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.psw.tetris.gameStates.State;
 
 public class Playing extends State {
 
@@ -111,7 +112,7 @@ public class Playing extends State {
       case (KeyEvent.VK_C):
         board.holdTetromino();
         break;
-        
+
       case (KeyEvent.VK_G):
         // board.toggleGrid();
         break;
