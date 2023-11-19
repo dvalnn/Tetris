@@ -12,8 +12,8 @@ public abstract class Shape {
 
   protected int minX, maxX, minY, maxY;
 
-  private int renderSize;
-  private Point2D renderOffset;
+  private final int renderSize;
+  private final Point2D renderOffset;
 
   protected abstract void calculateMinMaxCoords();
 
@@ -21,8 +21,14 @@ public abstract class Shape {
   // * can be used as rotatePoints() wrapper
   public abstract void rotate(double angle);
 
+  public abstract void initPosition();
+
   public Shape(
-      Point2D center, Point2D[] points, Color color, int renderSize, Point2D renderOrigin) {
+      final Point2D center,
+      final Point2D[] points,
+      final Color color,
+      final int renderSize,
+      final Point2D renderOrigin) {
 
     this.center = (Point2D) center.clone();
     this.points = new Point2D[points.length];
@@ -35,9 +41,9 @@ public abstract class Shape {
     this.renderOffset = renderOrigin;
   }
 
-  public void move(int x, int y) {
+  public void move(final int x, final int y) {
     center.setLocation(center.getX() + x, center.getY() + y);
-    for (Point2D point : points) {
+    for (final Point2D point : points) {
       point.setLocation(point.getX() + x, point.getY() + y);
     }
 
@@ -47,18 +53,18 @@ public abstract class Shape {
     maxY += y;
   }
 
-  protected void rotatePoints(double angle) {
-    for (Point2D point : points) {
-      double x = point.getX() - center.getX();
-      double y = point.getY() - center.getY();
-      double newX = x * Math.cos(angle) - y * Math.sin(angle);
-      double newY = x * Math.sin(angle) + y * Math.cos(angle);
+  protected void rotatePoints(final double angle) {
+    for (final Point2D point : points) {
+      final double x = point.getX() - center.getX();
+      final double y = point.getY() - center.getY();
+      final double newX = x * Math.cos(angle) - y * Math.sin(angle);
+      final double newY = x * Math.sin(angle) + y * Math.cos(angle);
       point.setLocation(Math.round(newX + center.getX()), Math.round(newY + center.getY()));
     }
   }
 
-  public void render(Graphics g) {
-    for (Point2D point : points) {
+  public void render(final Graphics g) {
+    for (final Point2D point : points) {
       g.setColor(color);
       g.fillRect(
           (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),

@@ -6,40 +6,41 @@ import java.awt.event.MouseEvent;
 
 public class MouseInputs extends MouseAdapter {
 
-  public MouseInputs() {}
+  public MouseInputs() {
+  }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void mouseClicked(final MouseEvent e) {
     GameStateHandler.getActiveState().mouseClicked(e);
   }
 
   @Override
-  public void mousePressed(MouseEvent e) {
+  public void mousePressed(final MouseEvent e) {
     GameStateHandler.getActiveState().mousePressed(e);
   }
 
   @Override
-  public void mouseReleased(MouseEvent e) {
+  public void mouseReleased(final MouseEvent e) {
     GameStateHandler.getActiveState().mouseReleased(e);
   }
 
   @Override
-  public void mouseEntered(MouseEvent e) {
+  public void mouseEntered(final MouseEvent e) {
     GameStateHandler.getActiveState().mouseEntered(e);
   }
 
   @Override
-  public void mouseExited(MouseEvent e) {
+  public void mouseExited(final MouseEvent e) {
     GameStateHandler.getActiveState().mouseExited(e);
   }
 
   @Override
-  public void mouseDragged(MouseEvent e) {
+  public void mouseDragged(final MouseEvent e) {
     GameStateHandler.getActiveState().mouseDragged(e);
   }
 
   @Override
-  public void mouseMoved(MouseEvent e) {
+  public void mouseMoved(final MouseEvent e) {
     GameStateHandler.getActiveState().mouseMoved(e);
   }
 }

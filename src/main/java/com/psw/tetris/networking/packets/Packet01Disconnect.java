@@ -5,25 +5,25 @@ import com.psw.tetris.networking.GameServer;
 
 public class Packet01Disconnect extends Packet {
 
-  private String username;
+  private final String username;
 
-  public Packet01Disconnect(byte[] data) {
+  public Packet01Disconnect(final byte[] data) {
     super(01);
     this.username = readData(data).split(",")[1];
   }
 
-  public Packet01Disconnect(String username) {
+  public Packet01Disconnect(final String username) {
     super(01);
     this.username = username;
   }
 
   @Override
-  public void writeData(GameClient client) {
+  public void writeData(final GameClient client) {
     client.sendData(getData());
   }
 
   @Override
-  public void writeData(GameServer server) {
+  public void writeData(final GameServer server) {
     server.sendData(getData());
   }
 

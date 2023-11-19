@@ -1,21 +1,24 @@
 package com.psw.tetris.main;
 
-import static com.psw.tetris.utils.Constants.GameConstants.*;
+import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
+import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
 
-import com.psw.tetris.inputs.KeyboardInputs;
-import com.psw.tetris.inputs.MouseInputs;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+
 import javax.swing.JPanel;
+
+import com.psw.tetris.inputs.KeyboardInputs;
+import com.psw.tetris.inputs.MouseInputs;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
 public class GamePanel extends JPanel {
 
-  private MouseInputs mouseInputs;
-  private Game game;
+  private final MouseInputs mouseInputs;
+  private final Game game;
 
-  public GamePanel(Game game) {
+  public GamePanel(final Game game) {
     this.game = game;
     setPanelSize();
 
@@ -27,14 +30,14 @@ public class GamePanel extends JPanel {
   }
 
   private void setPanelSize() {
-    Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
+    final Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     setMinimumSize(size);
     setMaximumSize(size);
     setPreferredSize(size);
   }
 
   // paintComponent is called whenever the JPanel needs to be redrawn
-  public void paintComponent(Graphics g) {
+  public void paintComponent(final Graphics g) {
     // calls JPanel's paintComponent method
     super.paintComponent(g);
     game.render(g);

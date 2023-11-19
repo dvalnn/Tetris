@@ -13,8 +13,8 @@ import java.awt.geom.Point2D;
 public class TShape extends Shape {
 
   private static final Point2D[] SHAPE = {
-    new Point2D.Double(0, 1), new Point2D.Double(1, 1),
-    new Point2D.Double(2, 1), new Point2D.Double(1, 0)
+      new Point2D.Double(0, 1), new Point2D.Double(1, 1),
+      new Point2D.Double(2, 1), new Point2D.Double(1, 0)
   };
   private static final Point2D CENTER = new Point2D.Double(1, 1);
   private static final Color COLOR = new Color(128, 0, 128); // Purple
@@ -25,10 +25,16 @@ public class TShape extends Shape {
   public TShape(int renderSize, Point2D renderOrigin) {
     super(CENTER, SHAPE, COLOR, renderSize, renderOrigin);
 
-    // go to the center top of the board
-    move(BOARD_WIDTH / 2 - 1, 0);
+    minX = 0;
+    maxX = 2;
+    minY = 0;
+    maxY = 1;
+  }
 
-    calculateMinMaxCoords();
+  // move to center top of the board;
+  @Override
+  public void initPosition() {
+    move(BOARD_WIDTH / 2 - 1, 0);
   }
 
   @Override

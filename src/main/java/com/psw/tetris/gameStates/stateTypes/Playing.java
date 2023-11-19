@@ -15,18 +15,19 @@ import static com.psw.tetris.utils.Constants.TetrominoIDs.S;
 import static com.psw.tetris.utils.Constants.TetrominoIDs.T;
 import static com.psw.tetris.utils.Constants.TetrominoIDs.Z;
 
-import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
-import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.gameStates.State;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class Playing extends State {
+import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
+import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.psw.tetris.gameStates.GameState;
 
-  private PlayerBoard board;
-  private Color boardColor = new Color(20, 20, 20);
+public class Playing extends GameState {
+
+  private final PlayerBoard board;
+  private final Color boardColor = new Color(20, 20, 20);
 
   private final int X_OFFSET = GAME_WIDTH / 2 - BOARD_WIDTH * BOARD_SQUARE / 2;
   private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
@@ -45,31 +46,36 @@ public class Playing extends State {
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     board.render(g);
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
-    if (e.getButton() == MouseEvent.BUTTON1) board.addBlockOnMousePosition(e.getX(), e.getY());
+  public void mouseClicked(final MouseEvent e) {
+    if (e.getButton() == MouseEvent.BUTTON1)
+      board.addBlockOnMousePosition(e.getX(), e.getY());
     else if (e.getButton() == MouseEvent.BUTTON3)
       board.removeBlockOnMousePosition(e.getX(), e.getY());
   }
 
   @Override
-  public void mousePressed(MouseEvent e) {
-    if (e.getButton() == MouseEvent.BUTTON1) mouseButton1Pressed = true;
-    else if (e.getButton() == MouseEvent.BUTTON3) mouseButton3Pressed = true;
+  public void mousePressed(final MouseEvent e) {
+    if (e.getButton() == MouseEvent.BUTTON1)
+      mouseButton1Pressed = true;
+    else if (e.getButton() == MouseEvent.BUTTON3)
+      mouseButton3Pressed = true;
   }
 
   @Override
-  public void mouseReleased(MouseEvent e) {
-    if (e.getButton() == MouseEvent.BUTTON1) mouseButton1Pressed = false;
-    else if (e.getButton() == MouseEvent.BUTTON3) mouseButton3Pressed = false;
+  public void mouseReleased(final MouseEvent e) {
+    if (e.getButton() == MouseEvent.BUTTON1)
+      mouseButton1Pressed = false;
+    else if (e.getButton() == MouseEvent.BUTTON3)
+      mouseButton3Pressed = false;
   }
 
   @Override
-  public void mouseDragged(MouseEvent e) {
+  public void mouseDragged(final MouseEvent e) {
     if (mouseButton1Pressed && !mouseButton3Pressed)
       board.addBlockOnMousePosition(e.getX(), e.getY());
     else if (!mouseButton1Pressed && mouseButton3Pressed)
@@ -77,7 +83,7 @@ public class Playing extends State {
   }
 
   @Override
-  public void keyPressed(KeyEvent e) {
+  public void keyPressed(final KeyEvent e) {
     switch (e.getKeyCode()) {
       case (KeyEvent.VK_Z):
         board.getTetromino().rotate(LEFT);
@@ -103,6 +109,10 @@ public class Playing extends State {
         board.getTetromino().setDrop(true);
         break;
 
+      case (KeyEvent.VK_C):
+        board.holdTetromino();
+        break;
+
       case (KeyEvent.VK_G):
         // board.toggleGrid();
         break;
@@ -119,8 +129,8 @@ public class Playing extends State {
         board.togglePause();
         break;
 
-        // NOTE: these keybinds are only for debugging purposes
-        // TODO: remove these keybinds
+      // NOTE: these keybinds are only for debugging purposes
+      // TODO: remove these keybinds
       case (KeyEvent.VK_1):
         board.setTetromino(I);
         break;
@@ -155,7 +165,7 @@ public class Playing extends State {
   }
 
   @Override
-  public void keyReleased(KeyEvent e) {
+  public void keyReleased(final KeyEvent e) {
     switch (e.getKeyCode()) {
       case (KeyEvent.VK_LEFT):
         board.getTetromino().setLeft(false);
@@ -179,5 +189,6 @@ public class Playing extends State {
   }
 
   @Override
-  public void windowLostFocus() {}
+  public void windowLostFocus() {
+  }
 }
