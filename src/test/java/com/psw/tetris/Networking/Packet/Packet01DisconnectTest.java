@@ -7,16 +7,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class Packet01DisconnectTest {
 
-  private Packet01Disconnect packet;
-
   @Test
   public void testConstructorWithString() {
+    Packet01Disconnect packet = new Packet01Disconnect("TestUser");
     assertEquals("TestUser", packet.getUsername());
   }
 
   @Test
   public void testGetData() {
     byte[] expectedData = "01,TestUser".getBytes();
+    Packet01Disconnect packet = new Packet01Disconnect("TestUser");
     assertArrayEquals(expectedData, packet.getData());
   }
 

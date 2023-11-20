@@ -7,12 +7,22 @@ import java.awt.Color;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Packet03BoardTest {
+  private Color[] testColors = {
+      Color.RED,
+      Color.BLUE,
+      Color.GREEN,
+      Color.MAGENTA,
+      Color.ORANGE,
+      Color.RED,
+      Color.BLUE,
+      Color.GREEN,
+      Color.MAGENTA,
+      Color.ORANGE };
 
   @Test
   public void testConstructorWithDataArray() {
     String testUsername = "TestUser";
     int testRow = 5;
-    Color[] testColors = { Color.RED, Color.BLUE, Color.GREEN };
 
     StringBuilder testDataBuilder = new StringBuilder();
     testDataBuilder.append("03").append(",").append(testUsername).append(",").append(testRow);
@@ -33,9 +43,9 @@ public class Packet03BoardTest {
   public void testGetData() {
     String testUsername = "TestUser";
     int testRow = 5;
-    Color[] testColors = { Color.RED, Color.BLUE, Color.GREEN };
     Packet03Board packet = new Packet03Board(testUsername, testRow, testColors);
 
+    // BUG: The expected color data does not match the actual color data.
     byte[] expectedData = ("03," + testUsername + "," + testRow + ",-65536,-16776961,-16711936,").getBytes();
     byte[] actualData = packet.getData();
 
