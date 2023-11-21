@@ -15,8 +15,8 @@ import java.awt.event.KeyEvent;
 import java.net.InetAddress;
 import java.util.List;
 
-import com.psw.tetris.gameElements.Shape;
-import com.psw.tetris.gameElements.ShapeMP;
+import com.psw.tetris.gameElements.shapeTypes.Shape;
+import com.psw.tetris.gameElements.shapeTypes.ShapeMP;
 import com.psw.tetris.gameElements.boardTypes.MPBoard;
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
 import com.psw.tetris.gameStates.GameStateHandler;

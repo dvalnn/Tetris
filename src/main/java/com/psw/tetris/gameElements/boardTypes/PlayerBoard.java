@@ -2,35 +2,64 @@ package com.psw.tetris.gameElements.boardTypes;
 
 import static com.psw.tetris.utils.Constants.GameConstants.BOARD_HEIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.BOARD_WIDTH;
+import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Random;
 
 import com.psw.tetris.gameElements.Board;
+import com.psw.tetris.gameElements.shapeTypes.JsonShape;
 import com.psw.tetris.gameElements.Tetromino;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.psw.tetris.utils.JsonShapeParser;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
 
 public class PlayerBoard extends Board {
 
   // TODO: implement 6 Tetrominos
-
   private Tetromino activeTetro; // active
   private Tetromino nextTetro; // next
+  // private Tetromino nextTetro2; // next
+  // private Tetromino nextTetro3; // next
+  // private Tetromino nextTetro4; // next
+  // private Tetromino nextTetro5; // next
+  // private Tetromino nextTetro6; // next
+
   private Tetromino holdTetro; // hold
 
   private boolean debugMode = false;
   private boolean paused = false;
   private boolean blockHoldTetromino = false;
 
+  protected ArrayList<JsonShape> shapeData;
+
+  private final Random rand = new Random();
+
   public PlayerBoard(final int size, final int xOffset, final int yOffset, final Color color) {
     super(size, xOffset, yOffset, color);
 
-    activeTetro = new Tetromino(size, renderOrigin, this);
-    nextTetro = new Tetromino(size, renderOrigin, this);
+    shapeData = JsonShapeParser.parseAllJsonShapes(RESOURCES_PATH + "/shapes/");
+
+    activeTetro = tetrominoFactory(shapeData);
+    nextTetro = tetrominoFactory(shapeData);
+  }
+
+  private Tetromino tetrominoFactory(ArrayList<JsonShape> shapeData) {
+
+    int shapeID = rand.nextInt(shapeData.size());
+    JsonShape shape = shapeData.get(shapeID);
+
+    return new Tetromino(renderSize, renderOrigin, this, shape, shapeID);
+  }
+
+  private Tetromino tetrominoFactory(int shapeID) {
+    JsonShape shape = shapeData.get(shapeID);
+    return new Tetromino(renderSize, renderOrigin, this, shape, shapeID);
   }
 
   public void holdTetromino() {
@@ -39,14 +68,14 @@ public class PlayerBoard extends Board {
 
     if (holdTetro == null) {
       holdTetro = activeTetro;
-      activeTetro = new Tetromino(renderSize, renderOrigin, this, nextTetro.getShapeID());
-      nextTetro = new Tetromino(renderSize, renderOrigin, this);
+      activeTetro = tetrominoFactory(shapeData);
+      nextTetro = tetrominoFactory(shapeData);
       blockHoldTetromino = true;
       return;
     }
 
     final Tetromino aux = activeTetro;
-    activeTetro = new Tetromino(renderSize, renderOrigin, this, holdTetro.getShapeID());
+    activeTetro = tetrominoFactory(activeTetro.getShapeID());
     holdTetro = aux;
     blockHoldTetromino = true;
   }
@@ -150,7 +179,7 @@ public class PlayerBoard extends Board {
   public void setTetromino(final int tetroID) {
     if (!debugMode)
       return;
-    activeTetro = new Tetromino(renderSize, renderOrigin, this, tetroID);
+    activeTetro = tetrominoFactory(tetroID);
   }
 
   // NOTE: This method is only used for debugging purposes
@@ -163,29 +192,29 @@ public class PlayerBoard extends Board {
         board.get(row).setColor(col, backgroundColor);
       }
     }
-    activeTetro = new Tetromino(renderSize, renderOrigin, this);
-    nextTetro = new Tetromino(renderSize, renderOrigin, this);
+
+    activeTetro = tetrominoFactory(shapeData);
+    nextTetro = tetrominoFactory(shapeData);
   }
 
   public void update() {
     // NOTE: This is only used for debugging purposes
     // TODO: Remove this
-
     if (paused)
       return;
+
     activeTetro.update();
     if (!activeTetro.isActive()) {
 
       addTetrominoToPile();
       checkRows();
       activeTetro = nextTetro;
-      nextTetro = new Tetromino(renderSize, renderOrigin, this);
+      nextTetro = tetrominoFactory(shapeData);
     }
   }
 
   public void render(final Graphics g) {
     super.render(g);
-
     activeTetro.render(g);
 
     // NOTE: This is only used for debugging purposes

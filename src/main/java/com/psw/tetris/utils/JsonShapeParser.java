@@ -2,32 +2,28 @@ package com.psw.tetris.utils;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.gson.Gson;
+import com.psw.tetris.gameElements.shapeTypes.JsonShape;
 
-public class JsonParserUtil {
+public class JsonShapeParser {
 
-  public String getExtensions(final String filename) {
-    return com.google.common.io.Files.getFileExtension(filename);
-  }
-
-  public Set<String> listFiles(final String dir) {
+  public static Set<String> listFiles(final String dir) {
     return Stream.of(new File(dir).listFiles())
         .filter(file -> !file.isDirectory())
         .map(File::getName)
         .collect(Collectors.toSet());
   }
 
-  public JsonShape[] readAllJsonData(final String dir) {
-
-    int filesSaved = 0;
+  public static ArrayList<JsonShape> parseAllJsonShapes(final String dir) {
 
     final Set<String> files = listFiles(dir);
-    final JsonShape[] shapes = new JsonShape[files.size()];
+    ArrayList<JsonShape> shapes = new ArrayList<JsonShape>(files.size());
 
     final String[] filesToRead = new String[files.size()];
     files.toArray(filesToRead);
@@ -40,11 +36,11 @@ public class JsonParserUtil {
         final JsonShape shape = new Gson().fromJson(reader, JsonShape.class);
         reader.close();
 
-        shapes[filesSaved] = shape;
-        filesSaved++;
+        shapes.add(shape);
 
       } catch (final Exception e) {
         e.printStackTrace();
+        return null;
       }
     }
     return shapes;

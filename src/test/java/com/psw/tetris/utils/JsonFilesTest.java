@@ -5,17 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.psw.tetris.gameElements.shapeTypes.JsonShape;
 
-public class jsonFilesTest {
+public class JsonFilesTest {
 
   JsonShape shape = new JsonShape();
-  JsonShape shape2 = new JsonShape();
 
   public void assertShapeEquals(final JsonShape expected, final JsonShape actual) {
     assertNotNull(expected);
@@ -33,91 +34,73 @@ public class jsonFilesTest {
         () -> assertEquals(expected.points[3].getY(), actual.points[3].getY()),
         () -> assertEquals(expected.rgb[0], actual.rgb[0]),
         () -> assertEquals(expected.rgb[1], actual.rgb[1]),
-        () -> assertEquals(expected.rgb[2], actual.rgb[2]),
-        () -> assertEquals(expected.color, actual.color));
+        () -> assertEquals(expected.rgb[2], actual.rgb[2]));
   }
 
   @Test
   public void testShape() {
-    shape.initDefault();
-    shape2.initDefault();
-    shape.initColor();
-    shape2.initColor();
-
-    assertShapeEquals(shape, shape2);
-
     final Gson gson = new GsonBuilder()
         .serializeNulls()
         .setPrettyPrinting()
         .create();
 
+    // init shape as non null values
+    shape.center = new java.awt.geom.Point2D.Double(1.0, 2.0);
+    shape.points = new java.awt.geom.Point2D.Double[4];
+    shape.points[0] = new java.awt.geom.Point2D.Double(3.0, 4.0);
+    shape.points[1] = new java.awt.geom.Point2D.Double(5.0, 6.0);
+    shape.points[2] = new java.awt.geom.Point2D.Double(7.0, 8.0);
+    shape.points[3] = new java.awt.geom.Point2D.Double(9.0, 10.0);
+    shape.rgb = new int[3];
+    shape.rgb[0] = 11;
+    shape.rgb[1] = 12;
+    shape.rgb[2] = 13;
+
     final String json = gson.toJson(shape);
     // save to file
     try {
-      final java.io.FileWriter writerI = new java.io.FileWriter("src/test/resources/shapeI.json");
+      final java.io.FileWriter writerI = new java.io.FileWriter("src/test/resources/shapes/shape2.json");
       writerI.write(json);
       writerI.close();
-
-      final java.io.FileWriter writerJ = new java.io.FileWriter("src/test/resources/shapeJ.json");
-      writerJ.write(json);
-      writerJ.close();
 
     } catch (final Exception e) {
       e.printStackTrace();
       assertTrue(false); // force fail
     }
 
-    JsonShape shape3;
-    JsonShape shape4;
+    JsonShape shape2;
     // read from file
 
     // não dar hard code ao nome do ficheiro nem a quantos ficheiros são
     // ver quantos ficheiros do tipo json existem e ler todos
     try {
-      final java.io.FileReader readerI = new java.io.FileReader("src/test/resources/shapeI.json");
-      shape3 = gson.fromJson(readerI, JsonShape.class);
+      final java.io.FileReader readerI = new java.io.FileReader("src/test/resources/shapes/shape2.json");
+      shape2 = gson.fromJson(readerI, JsonShape.class);
       readerI.close();
 
-      final java.io.FileReader readerJ = new java.io.FileReader("src/test/resources/shapeJ.json");
-      shape4 = gson.fromJson(readerJ, JsonShape.class);
-      readerJ.close();
-
     } catch (final Exception e) {
-      shape3 = null; // here so that the lsp doesn't complain
-      shape4 = null; // here so that the lsp doesn't complain
+      shape2 = null; // here so that the lsp doesn't complain
       e.printStackTrace();
       assertTrue(false); // force fail
     }
-    shape3.initColor();
-    assertShapeEquals(shape, shape3);
 
-    shape4.initColor();
-    assertShapeEquals(shape, shape4);
-  }
-
-  @Test
-  public void shapeIisFoundByGetExtensions() {
-    final JsonParserUtil parser = new JsonParserUtil();
-    final String filename = "shapeI.json";
-    final String extension = parser.getExtensions(filename);
-    assertEquals("json", extension);
+    assertShapeEquals(shape, shape2);
   }
 
   @Test
   public void listFilesFindsFourJsonFiles() {
-    final String dir = "src/test/resources/";
-    final JsonParserUtil parser = new JsonParserUtil();
-    final Set<String> files = parser.listFiles(dir);
-    assertEquals(4, files.size());
+    final String dir = "src/test/resources/shapes/";
+    final Set<String> files = JsonShapeParser.listFiles(dir);
+    assertEquals(3, files.size());
   }
 
-  // TODO: Refactor this later heart
   // This test compares the read json files and checks if they are equal
+  // TODO: Refactor this later heart
   @Test
   public void verifyJsonData() {
-    final String dir = "src/test/resources/";
-    final JsonParserUtil parser = new JsonParserUtil();
-    final JsonShape shapes[] = parser.readAllJsonData(dir);
-    assertShapeEquals(shapes[0], shapes[1]);
+    final String dir = "src/test/resources/shapes/";
+    final ArrayList<JsonShape> shapes = JsonShapeParser.parseAllJsonShapes(dir);
+    assertNotNull(shapes);
+    assertShapeEquals(shapes.get(0), shapes.get(1));
   }
 }

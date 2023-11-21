@@ -1,10 +1,12 @@
-package com.psw.tetris.gameElements;
+package com.psw.tetris.gameElements.shapeTypes;
+
+import static com.psw.tetris.utils.Constants.GameConstants.BOARD_WIDTH;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
-public abstract class Shape {
+public class Shape {
 
   protected Point2D center;
   protected Point2D[] points;
@@ -14,14 +16,6 @@ public abstract class Shape {
 
   private final int renderSize;
   private final Point2D renderOffset;
-
-  protected abstract void calculateMinMaxCoords();
-
-  // * Shape specific way of rotating
-  // * can be used as rotatePoints() wrapper
-  public abstract void rotate(double angle);
-
-  public abstract void initPosition();
 
   public Shape(
       final Point2D center,
@@ -39,6 +33,8 @@ public abstract class Shape {
     this.color = new Color(color.getRGB());
     this.renderSize = renderSize;
     this.renderOffset = renderOrigin;
+
+    calculateMinMaxCoords();
   }
 
   public void move(final int x, final int y) {
@@ -53,7 +49,25 @@ public abstract class Shape {
     maxY += y;
   }
 
-  protected void rotatePoints(final double angle) {
+  public void initPosition() {
+    move(BOARD_WIDTH / 2 - 1, 0);
+  }
+
+  protected void calculateMinMaxCoords() {
+    minX = Integer.MAX_VALUE;
+    maxX = Integer.MIN_VALUE;
+    minY = Integer.MAX_VALUE;
+    maxY = Integer.MIN_VALUE;
+
+    for (Point2D point : points) {
+      minX = (int) Math.min(point.getX(), minX);
+      maxX = (int) Math.max(point.getX(), maxX);
+      minY = (int) Math.min(point.getY(), minY);
+      maxY = (int) Math.max(point.getY(), maxY);
+    }
+  }
+
+  public void rotate(final double angle) {
     for (final Point2D point : points) {
       final double x = point.getX() - center.getX();
       final double y = point.getY() - center.getY();
@@ -61,6 +75,8 @@ public abstract class Shape {
       final double newY = x * Math.sin(angle) + y * Math.cos(angle);
       point.setLocation(Math.round(newX + center.getX()), Math.round(newY + center.getY()));
     }
+
+    calculateMinMaxCoords();
   }
 
   public void render(final Graphics g) {

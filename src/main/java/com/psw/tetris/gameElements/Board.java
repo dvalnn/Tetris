@@ -68,11 +68,18 @@ public class Board {
 
   protected int renderSize;
 
-  public Board(final int size, final int xOffset, final int yOffset, final Color color) {
+  public Board(
+      final int size,
+      final int xOffset,
+      final int yOffset,
+      final Color color) {
+
     this.renderSize = size;
+
     renderOrigin = new Point2D.Double(xOffset, yOffset);
 
     backgroundColor = new Color(color.getRGB());
+
     gridColor = new Color(backgroundColor.brighter().getRGB());
 
     // init the board and board lines

@@ -1,6 +1,5 @@
 package com.psw.tetris.gameElements.shapeTypes;
 
-import com.psw.tetris.gameElements.Shape;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
@@ -22,31 +21,10 @@ public class GhostShape extends Shape {
     minY = MasterShape.getMinY();
     maxY = MasterShape.getMaxY();
   }
-  
+
   // move to center top of the board
   @Override
   public void initPosition() {
-  }
-
-  @Override
-  protected void calculateMinMaxCoords() {
-    minX = Integer.MAX_VALUE;
-    maxX = Integer.MIN_VALUE;
-    minY = Integer.MAX_VALUE;
-    maxY = Integer.MIN_VALUE;
-
-    for (Point2D point : points) {
-      minX = (int) Math.min(point.getX(), minX);
-      maxX = (int) Math.max(point.getX(), maxX);
-      minY = (int) Math.min(point.getY(), minY);
-      maxY = (int) Math.max(point.getY(), maxY);
-    }
-  }
-
-  @Override
-  public void rotate(double angle) {
-    rotatePoints(angle);
-    calculateMinMaxCoords();
   }
 
   public void goToMaster(Point2D masterCenter) {
