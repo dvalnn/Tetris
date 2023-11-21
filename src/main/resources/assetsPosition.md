@@ -27,7 +27,17 @@ Example of a menu
   xxCm: <xxCm> cm
   yyCm: <yyCm> cm
 
+* <pop-up.<fileType>>
+  xxCm: <xxCm> cm
+  yyCm: <yyCm> cm
+
 The following values represent the position of the assets' _center_ in cm.
+
+Note:
+
+---_--- <image.fileType> ---_--- is the background image
+- <button.fileType> is a button
+* <popUp.fileType> is a pop-up
 
 ---_--- titlescreen.png ---_---
 
@@ -136,18 +146,99 @@ The following values represent the position of the assets' _center_ in cm.
 - returnButton.png
   xxCm: 1.05 cm
   yyCm: 17.05 cm
+
 - playerJoined.png
   xxCm: 8.04 cm
   yyCm: 17.05 cm
 
-- joinedWaiting.png
+* joinedWaiting.png
   xxCm: 8.04 cm
   yyCm: 17.05 cm
 
-// TODO:
 ---_--- multiCreateSession.png ---_---
+- playerName.png
+  xxCm: 8.08 cm
+  yyCm: 7.16 cm
+
+- roomName.png
+  xxCm: 8.08 cm
+  yyCm: 9.38 cm
+
+- start.png
+  xxCm: 8.04 cm
+  yyCm: 17.05 cm
+
+- returnButton.png
+  xxCm: 1.05 cm
+  yyCm: 17.05 cm
+  
 ---_--- singleplayerGame.png ---_---
+
+* board.png
+  xxCm: 13.53 cm
+  yyCm: 2.72 cm
+  
+* gameEssentials.png
+  xxCm: 13.53 cm   // To test! 
+  yyCm: 2.72 cm    // To test!
+
+* countdown.png
+  xxCm: 8.53 cm 
+  yyCm: 4.7 cm
+ 
+* gamePaused.png
+  xxCm: 5.92 cm    
+  yyCm: 4.7 cm    
+  
+  - resume.png
+  xxCm: 6.33 cm
+  yyCm: 7.56 cm
+
+  - restart.png
+  xxCm: 6.33 cm
+  yyCm: 9.26 cm
+
+  - exit.png
+  xxCm: 6.33 cm
+  yyCm: 12.55 cm
+
+* gameoverSingle.png
+  xxCm: 5.92 cm
+  yyCm: 4.7 cm
+  
+  - gameOverRetry.png
+  xxCm: 10.64 cm
+  yyCm: 12.94 cm
+
+  - gameOverExit.png
+  xxCm: 7.02 cm
+  yyCm: 12.94 cm
+  
 ---_--- multiplayerGame.png ---_---
+* countdown.png
+  xxCm: 8.53 cm 
+  yyCm: 4.7 cm
 
-~ make this a .json file!!
+* multiEssentials.png
+  xxCm: 16.43 cm // To test!
+  yyCm: 9.03 cm  // To test!
 
+* gameOverMulti.png
+  xxCm: 5.92 cm 
+  yyCm: 4.7 cm
+  
+  - gameOverExit.png
+  xxCm: 7.02 cm
+  yyCm: 12.94 cm
+  
+  - gameOverRetry.png
+  xxCm: 22.77 cm
+  yyCm: 12.94 cm
+
+* waitingForOpponent.png
+  xxCm: 5.92 cm
+  yyCm: 4.7 cm
+  
+  - gameOverExit.png
+  xxCm: 11.87 cm
+  yyCm: 8.77 cm
