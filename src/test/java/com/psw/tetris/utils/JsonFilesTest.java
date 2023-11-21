@@ -5,12 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.Gson;
+
 import com.google.gson.GsonBuilder;
 import com.psw.tetris.gameElements.shapeTypes.JsonShape;
 
@@ -34,7 +36,10 @@ public class JsonFilesTest {
         () -> assertEquals(expected.points[3].getY(), actual.points[3].getY()),
         () -> assertEquals(expected.rgb[0], actual.rgb[0]),
         () -> assertEquals(expected.rgb[1], actual.rgb[1]),
-        () -> assertEquals(expected.rgb[2], actual.rgb[2]));
+        () -> assertEquals(expected.rgb[2], actual.rgb[2]),
+        () -> assertEquals(expected.id, actual.id),
+        () -> assertEquals(expected.rotates, actual.rotates)
+        );
   }
 
   @Test
@@ -55,6 +60,8 @@ public class JsonFilesTest {
     shape.rgb[0] = 11;
     shape.rgb[1] = 12;
     shape.rgb[2] = 13;
+    shape.id = "shapeI";
+    shape.rotates = true;
 
     final String json = gson.toJson(shape);
     // save to file
@@ -71,8 +78,6 @@ public class JsonFilesTest {
     JsonShape shape2;
     // read from file
 
-    // não dar hard code ao nome do ficheiro nem a quantos ficheiros são
-    // ver quantos ficheiros do tipo json existem e ler todos
     try {
       final java.io.FileReader readerI = new java.io.FileReader("src/test/resources/shapes/shape2.json");
       shape2 = gson.fromJson(readerI, JsonShape.class);
@@ -91,16 +96,46 @@ public class JsonFilesTest {
   public void listFilesFindsFourJsonFiles() {
     final String dir = "src/test/resources/shapes/";
     final Set<String> files = JsonShapeParser.listFiles(dir);
-    assertEquals(3, files.size());
+    assertEquals(4, files.size());
   }
 
-  // This test compares the read json files and checks if they are equal
-  // TODO: Refactor this later heart
+  
   @Test
   public void verifyJsonData() {
     final String dir = "src/test/resources/shapes/";
     final ArrayList<JsonShape> shapes = JsonShapeParser.parseAllJsonShapes(dir);
     assertNotNull(shapes);
-    assertShapeEquals(shapes.get(0), shapes.get(1));
+    assertShapeEquals(shapes.get(0), shapes.get(2));
   }
+  @Test
+  //verifies that the keybindings.json file is parsed correctly
+  public void verifyKeybindingsJsonData() {
+
+    final Gson gson = new GsonBuilder()
+        .serializeNulls()
+        .setPrettyPrinting()
+        .create();
+
+
+    final String file = "src/main/resources/keybinds.json";
+    final Keybindings keybindings = JsonKeybindingsParser.parseKeybindings(file);
+
+    final String json = gson.toJson(keybindings);
+
+    // save to file
+    try {
+      final java.io.FileWriter writerI = new java.io.FileWriter("src/test/resources/shapes/keybinds.json");
+      writerI.write(json);
+      writerI.close();
+
+    } catch (final Exception e) {
+      e.printStackTrace();
+      assertTrue(false); // force fail
+    }
+
+
+
+
+  }
+
 }
