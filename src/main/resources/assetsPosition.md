@@ -220,8 +220,8 @@ Note:
   yyCm: 4.7 cm
 
 * multiEssentials.png
-  xxCm: 16.43 cm // To test!
-  yyCm: 9.03 cm  // To test!
+  xxCm: 16.43 cm
+  yyCm: 9.03 cm 
 
 * gameOverMulti.png
   xxCm: 5.92 cm 
