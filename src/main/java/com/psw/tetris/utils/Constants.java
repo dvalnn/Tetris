@@ -34,7 +34,7 @@ public class Constants {
     public static final int UPS_SET = 100;
     public static final int BOARD_WIDTH = 10;
     public static final int BOARD_HEIGHT = 20;
-    public static final int BOARD_SQUARE = 30;
+    public static final int BOARD_SQUARE = 25;
     public static final int GAME_WIDTH = 1280;
     public static final int GAME_HEIGHT = 720;
   }

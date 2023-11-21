@@ -19,9 +19,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.psw.tetris.utils.LoadSave;
 import com.psw.tetris.gameStates.GameState;
 
 public class Playing extends GameState {
@@ -29,8 +31,11 @@ public class Playing extends GameState {
   private final PlayerBoard board;
   private final Color boardColor = new Color(20, 20, 20);
 
-  private final int X_OFFSET = GAME_WIDTH / 2 - BOARD_WIDTH * BOARD_SQUARE / 2;
-  private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
+  private final BufferedImage background;
+  private final BufferedImage foreground;
+
+  private final int X_OFFSET = (GAME_WIDTH - BOARD_WIDTH * BOARD_SQUARE) / 2 + 10;
+  private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2 + 18;
 
   private boolean mouseButton1Pressed = false;
   private boolean mouseButton3Pressed = false;
@@ -38,6 +43,8 @@ public class Playing extends GameState {
   public Playing() {
     super(GameStatesEnum.PLAYING);
     board = new PlayerBoard(BOARD_SQUARE, X_OFFSET, Y_OFFSET, boardColor);
+    background = LoadSave.loadBackground("singlePlayerGame.png");
+    foreground = LoadSave.loadBackground("singleEssentials2.png");
   }
 
   @Override
@@ -47,6 +54,8 @@ public class Playing extends GameState {
 
   @Override
   public void render(final Graphics g) {
+    g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+    g.drawImage(foreground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
     board.render(g);
   }
 

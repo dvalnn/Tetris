@@ -27,7 +27,7 @@ Example of a menu
   xxCm: <xxCm> cm
   yyCm: <yyCm> cm
 
-* <pop-up.<fileType>>
+- <pop-up.<fileType>>
   xxCm: <xxCm> cm
   yyCm: <yyCm> cm
 
@@ -36,8 +36,10 @@ The following values represent the position of the assets' _center_ in cm.
 Note:
 
 ---_--- <image.fileType> ---_--- is the background image
+
 - <button.fileType> is a button
-* <popUp.fileType> is a pop-up
+
+- <popUp.fileType> is a pop-up
 
 ---_--- titlescreen.png ---_---
 
@@ -50,15 +52,19 @@ Note:
 - newGame.png
   xxCm: 1.05 cm
   yyCm: 6.25 cm
+
 - leaderboard.png
   xxCm: 1.05 cm
   yyCm: 8.16 cm
+
 - settings.png
   xxCm: 1.05 cm
   yyCm: 6.25 cm
+
 - aboutUs.png
   xxCm: 1.05 cm
   yyCm: 11.97 cm
+
 - exitGame.png
   xxCm: 1.05 cm
   yyCm: 17.05 cm
@@ -151,11 +157,12 @@ Note:
   xxCm: 8.04 cm
   yyCm: 17.05 cm
 
-* joinedWaiting.png
+- joinedWaiting.png
   xxCm: 8.04 cm
   yyCm: 17.05 cm
 
 ---_--- multiCreateSession.png ---_---
+
 - playerName.png
   xxCm: 8.08 cm
   yyCm: 7.16 cm
@@ -171,74 +178,76 @@ Note:
 - returnButton.png
   xxCm: 1.05 cm
   yyCm: 17.05 cm
-  
+
 ---_--- singleplayerGame.png ---_---
 
-* board.png
+- board.png
   xxCm: 13.53 cm
   yyCm: 2.72 cm
-  
-* gameEssentials.png
-  xxCm: 13.53 cm   // To test! 
-  yyCm: 2.72 cm    // To test!
 
-* countdown.png
-  xxCm: 8.53 cm 
+- gameEssentials.png
+  xxCm: 13.53 cm // To test!
+  yyCm: 2.72 cm // To test!
+
+- countdown.png
+  xxCm: 8.53 cm
   yyCm: 4.7 cm
- 
-* gamePaused.png
-  xxCm: 5.92 cm    
-  yyCm: 4.7 cm    
-  
+
+- gamePaused.png
+  xxCm: 5.92 cm  
+  yyCm: 4.7 cm
+
   - resume.png
-  xxCm: 6.33 cm
-  yyCm: 7.56 cm
+    xxCm: 6.33 cm
+    yyCm: 7.56 cm
 
   - restart.png
-  xxCm: 6.33 cm
-  yyCm: 9.26 cm
+    xxCm: 6.33 cm
+    yyCm: 9.26 cm
 
   - exit.png
-  xxCm: 6.33 cm
-  yyCm: 12.55 cm
+    xxCm: 6.33 cm
+    yyCm: 12.55 cm
 
-* gameoverSingle.png
+- gameoverSingle.png
   xxCm: 5.92 cm
   yyCm: 4.7 cm
-  
-  - gameOverRetry.png
+
+- gameOverRetry.png
   xxCm: 10.64 cm
   yyCm: 12.94 cm
 
-  - gameOverExit.png
+- gameOverExit.png
   xxCm: 7.02 cm
   yyCm: 12.94 cm
-  
+
 ---_--- multiplayerGame.png ---_---
-* countdown.png
-  xxCm: 8.53 cm 
+
+- countdown.png
+  xxCm: 8.53 cm
   yyCm: 4.7 cm
 
-* multiEssentials.png
+- multiEssentials.png
   xxCm: 16.43 cm
-  yyCm: 9.03 cm 
+  yyCm: 9.03 cm
 
-* gameOverMulti.png
-  xxCm: 5.92 cm 
+- gameOverMulti.png
+  xxCm: 5.92 cm
   yyCm: 4.7 cm
-  
-  - gameOverExit.png
+
+- gameOverExit.png
   xxCm: 7.02 cm
   yyCm: 12.94 cm
-  
-  - gameOverRetry.png
+
+- gameOverRetry.png
   xxCm: 22.77 cm
   yyCm: 12.94 cm
 
-* waitingForOpponent.png
+- waitingForOpponent.png
   xxCm: 5.92 cm
   yyCm: 4.7 cm
-  
-  - gameOverExit.png
+
+- gameOverExit.png
   xxCm: 11.87 cm
   yyCm: 8.77 cm
+
