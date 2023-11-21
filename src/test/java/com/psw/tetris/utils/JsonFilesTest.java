@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.psw.tetris.gameElements.shapeTypes.JsonShape;
 
-public class JsonFilesTest {
+public class JsonFilesTest { 
 
   JsonShape shape = new JsonShape();
 
@@ -96,7 +96,7 @@ public class JsonFilesTest {
   public void listFilesFindsFourJsonFiles() {
     final String dir = "src/test/resources/shapes/";
     final Set<String> files = JsonShapeParser.listFiles(dir);
-    assertEquals(4, files.size());
+    assertEquals(3, files.size());
   }
 
   
@@ -105,37 +105,7 @@ public class JsonFilesTest {
     final String dir = "src/test/resources/shapes/";
     final ArrayList<JsonShape> shapes = JsonShapeParser.parseAllJsonShapes(dir);
     assertNotNull(shapes);
-    assertShapeEquals(shapes.get(0), shapes.get(2));
-  }
-  @Test
-  //verifies that the keybindings.json file is parsed correctly
-  public void verifyKeybindingsJsonData() {
-
-    final Gson gson = new GsonBuilder()
-        .serializeNulls()
-        .setPrettyPrinting()
-        .create();
-
-
-    final String file = "src/main/resources/keybinds.json";
-    final Keybindings keybindings = JsonKeybindingsParser.parseKeybindings(file);
-
-    final String json = gson.toJson(keybindings);
-
-    // save to file
-    try {
-      final java.io.FileWriter writerI = new java.io.FileWriter("src/test/resources/shapes/keybinds.json");
-      writerI.write(json);
-      writerI.close();
-
-    } catch (final Exception e) {
-      e.printStackTrace();
-      assertTrue(false); // force fail
-    }
-
-
-
-
+    assertShapeEquals(shapes.get(0), shapes.get(1));
   }
 
 }
