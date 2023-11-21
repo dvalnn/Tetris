@@ -15,6 +15,7 @@ import com.psw.tetris.gameElements.shapeTypes.JsonShape;
 import com.psw.tetris.gameElements.Tetromino;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.psw.tetris.settings.BoardSettings;
 import com.psw.tetris.utils.JsonShapeParser;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
@@ -40,6 +41,15 @@ public class PlayerBoard extends Board {
 
   private final Random rand = new Random();
 
+  public PlayerBoard(BoardSettings set) {
+    super(set);
+
+    shapeData = JsonShapeParser.parseAllJsonShapes(RESOURCES_PATH + "/shapes/");
+
+    activeTetro = tetrominoFactory(shapeData);
+    nextTetro = tetrominoFactory(shapeData);
+  }
+
   public PlayerBoard(final int size, final int xOffset, final int yOffset, final Color color) {
     super(size, xOffset, yOffset, color);
 
@@ -54,12 +64,22 @@ public class PlayerBoard extends Board {
     int shapeID = rand.nextInt(shapeData.size());
     JsonShape shape = shapeData.get(shapeID);
 
-    return new Tetromino(renderSize, renderOrigin, this, shape, shapeID);
+    return new Tetromino(
+        set.squareSize,
+        new Point2D.Double(set.xOffset, set.yOffset),
+        this,
+        shape,
+        shapeID);
   }
 
   private Tetromino tetrominoFactory(int shapeID) {
     JsonShape shape = shapeData.get(shapeID);
-    return new Tetromino(renderSize, renderOrigin, this, shape, shapeID);
+    return new Tetromino(
+        set.squareSize,
+        new Point2D.Double(set.xOffset, set.yOffset),
+        this,
+        shape,
+        shapeID);
   }
 
   public void holdTetromino() {
@@ -96,7 +116,7 @@ public class PlayerBoard extends Board {
 
   private void clearRow(final int row) {
     for (int col = 0; col < BOARD_WIDTH; col++) {
-      board.get(row).setColor(col, backgroundColor);
+      board.get(row).setColor(col, set.backgroundColor);
     }
   }
 
@@ -114,7 +134,7 @@ public class PlayerBoard extends Board {
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       boolean full = true;
       for (int col = 0; col < BOARD_WIDTH; col++) {
-        if (board.get(row).getIndexRGB(col) == backgroundColor.getRGB()) {
+        if (board.get(row).getIndexRGB(col) == set.backgroundColor.getRGB()) {
           full = false;
           break;
         }
@@ -159,15 +179,15 @@ public class PlayerBoard extends Board {
     // it might be in the future
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
-        final int x1 = (int) (col * renderSize - renderSize / 2) + (int) renderOrigin.getX();
-        final int y1 = (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY();
-        final int x2 = x1 + renderSize;
-        final int y2 = y1 + renderSize;
+        final int x1 = (int) (col * set.squareSize - set.squareSize / 2) + (int) set.xOffset;
+        final int y1 = (int) (row * set.squareSize - set.squareSize / 2) + (int) set.yOffset;
+        final int x2 = x1 + set.squareSize;
+        final int y2 = y1 + set.squareSize;
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
           if (add) {
             board.get(row).setColor(col, Color.PINK);
           } else {
-            board.get(row).setColor(col, backgroundColor);
+            board.get(row).setColor(col, set.backgroundColor);
           }
           return;
         }
@@ -189,7 +209,7 @@ public class PlayerBoard extends Board {
 
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
-        board.get(row).setColor(col, backgroundColor);
+        board.get(row).setColor(col, set.backgroundColor);
       }
     }
 

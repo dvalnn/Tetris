@@ -5,9 +5,10 @@ import static com.psw.tetris.utils.Constants.GameConstants.BOARD_WIDTH;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.psw.tetris.settings.BoardSettings;
 
 public class Board {
 
@@ -18,7 +19,7 @@ public class Board {
     public BoardLine() {
       colors = new ArrayList<Color>(BOARD_WIDTH);
       for (int i = 0; i < BOARD_WIDTH; i++) {
-        colors.add(backgroundColor);
+        colors.add(set.backgroundColor);
       }
       recentlyChanged = true;
     }
@@ -60,13 +61,7 @@ public class Board {
 
   protected List<BoardLine> board;
 
-  protected Color backgroundColor;
-
-  protected Color gridColor;
-
-  protected Point2D renderOrigin;
-
-  protected int renderSize;
+  protected final BoardSettings set;
 
   public Board(
       final int size,
@@ -74,13 +69,26 @@ public class Board {
       final int yOffset,
       final Color color) {
 
-    this.renderSize = size;
+    set = new BoardSettings(
+        size,
+        xOffset,
+        yOffset,
+        new Color(color.getRGB()),
+        new Color(color.brighter().getRGB()));
 
-    renderOrigin = new Point2D.Double(xOffset, yOffset);
+    // init the board and board lines
+    // board lines are created with
+    // recentlyChanged = true
+    // and with backgroundColor
+    board = new ArrayList<BoardLine>(BOARD_HEIGHT);
+    for (int i = 0; i < BOARD_HEIGHT; i++) {
+      board.add(new BoardLine());
+    }
+  }
 
-    backgroundColor = new Color(color.getRGB());
+  public Board(BoardSettings settings) {
 
-    gridColor = new Color(backgroundColor.brighter().getRGB());
+    this.set = settings;
 
     // init the board and board lines
     // board lines are created with
@@ -98,16 +106,16 @@ public class Board {
       for (int col = 0; col < BOARD_WIDTH; col++) {
         g.setColor(board.get(row).getIndexColorCopy(col));
         g.fillRect(
-            (int) (col * renderSize - renderSize / 2) + (int) renderOrigin.getX(),
-            (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY(),
-            renderSize,
-            renderSize);
-        g.setColor(gridColor);
+            (int) (col * set.squareSize - set.squareSize / 2) + (int) set.xOffset,
+            (int) (row * set.squareSize - set.squareSize / 2) + (int) set.yOffset,
+            set.squareSize,
+            set.squareSize);
+        g.setColor(set.gridColor);
         g.drawRect(
-            (int) (col * renderSize - renderSize / 2) + (int) renderOrigin.getX(),
-            (int) (row * renderSize - renderSize / 2) + (int) renderOrigin.getY(),
-            renderSize,
-            renderSize);
+            (int) (col * set.squareSize - set.squareSize / 2) + (int) set.xOffset,
+            (int) (row * set.squareSize - set.squareSize / 2) + (int) set.yOffset,
+            set.squareSize,
+            set.squareSize);
       }
     }
   }
@@ -117,6 +125,6 @@ public class Board {
   }
 
   public Color getBackgroundColor() {
-    return backgroundColor;
+    return set.backgroundColor;
   }
 }
