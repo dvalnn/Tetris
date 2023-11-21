@@ -63,31 +63,7 @@ public class Board {
 
   protected final BoardSettings set;
 
-  public Board(
-      final int size,
-      final int xOffset,
-      final int yOffset,
-      final Color color) {
-
-    set = new BoardSettings(
-        size,
-        xOffset,
-        yOffset,
-        new Color(color.getRGB()),
-        new Color(color.brighter().getRGB()));
-
-    // init the board and board lines
-    // board lines are created with
-    // recentlyChanged = true
-    // and with backgroundColor
-    board = new ArrayList<BoardLine>(BOARD_HEIGHT);
-    for (int i = 0; i < BOARD_HEIGHT; i++) {
-      board.add(new BoardLine());
-    }
-  }
-
   public Board(BoardSettings settings) {
-
     this.set = settings;
 
     // init the board and board lines

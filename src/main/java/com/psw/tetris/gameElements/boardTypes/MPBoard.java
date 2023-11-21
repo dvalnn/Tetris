@@ -3,13 +3,14 @@ package com.psw.tetris.gameElements.boardTypes;
 import java.awt.Color;
 
 import com.psw.tetris.gameElements.Board;
+import com.psw.tetris.settings.BoardSettings;
 
 // Class to represent the board of a multiplayer opponent
 public class MPBoard extends Board {
   private final String username;
 
-  public MPBoard(final int size, final int xOffset, final int yOffset, final Color color, final String username) {
-    super(size, xOffset, yOffset, color);
+  public MPBoard(BoardSettings set, final String username) {
+    super(set);
     this.username = username;
   }
 

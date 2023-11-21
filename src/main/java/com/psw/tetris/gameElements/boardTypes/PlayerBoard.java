@@ -50,15 +50,6 @@ public class PlayerBoard extends Board {
     nextTetro = tetrominoFactory(shapeData);
   }
 
-  public PlayerBoard(final int size, final int xOffset, final int yOffset, final Color color) {
-    super(size, xOffset, yOffset, color);
-
-    shapeData = JsonShapeParser.parseAllJsonShapes(RESOURCES_PATH + "/shapes/");
-
-    activeTetro = tetrominoFactory(shapeData);
-    nextTetro = tetrominoFactory(shapeData);
-  }
-
   private Tetromino tetrominoFactory(ArrayList<JsonShape> shapeData) {
 
     int shapeID = rand.nextInt(shapeData.size());

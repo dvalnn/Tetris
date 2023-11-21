@@ -19,7 +19,6 @@ import com.psw.tetris.gameElements.shapeTypes.Shape;
 import com.psw.tetris.utils.WallKickData;
 
 public class Tetromino {
-
   private final Shape shape;
   private final GhostShape ghost;
   private final PlayerBoard board;
