@@ -7,27 +7,15 @@ import static com.psw.tetris.utils.Constants.Directions.UP;
 import static com.psw.tetris.utils.Constants.GameConstants.BOARD_HEIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.BOARD_WIDTH;
 import static com.psw.tetris.utils.Constants.GameConstants.UPS_SET;
-import static com.psw.tetris.utils.Constants.TetrominoIDs.I;
-import static com.psw.tetris.utils.Constants.TetrominoIDs.J;
-import static com.psw.tetris.utils.Constants.TetrominoIDs.L;
-import static com.psw.tetris.utils.Constants.TetrominoIDs.O;
-import static com.psw.tetris.utils.Constants.TetrominoIDs.S;
-import static com.psw.tetris.utils.Constants.TetrominoIDs.T;
-import static com.psw.tetris.utils.Constants.TetrominoIDs.Z;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
-import java.util.Random;
 
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
 import com.psw.tetris.gameElements.shapeTypes.GhostShape;
-import com.psw.tetris.gameElements.shapeTypes.IShape;
-import com.psw.tetris.gameElements.shapeTypes.JShape;
-import com.psw.tetris.gameElements.shapeTypes.LShape;
-import com.psw.tetris.gameElements.shapeTypes.OShape;
-import com.psw.tetris.gameElements.shapeTypes.SShape;
-import com.psw.tetris.gameElements.shapeTypes.TShape;
-import com.psw.tetris.gameElements.shapeTypes.ZShape;
+import com.psw.tetris.gameElements.shapeTypes.JsonShape;
+import com.psw.tetris.gameElements.shapeTypes.Shape;
 import com.psw.tetris.utils.WallKickData;
 
 public class Tetromino {
@@ -51,50 +39,36 @@ public class Tetromino {
   private boolean active = true;
   private boolean updateGhost = true;
 
-  private final Random rand = new Random();
   private boolean deactivating;
   private int deactivationTickCounter;
   private final int DEACTIVATION_TICKS = UPS_SET / 2; // 0.5 seconds
 
-  public Tetromino(final int renderSize, final Point2D renderOrigin, final PlayerBoard board) {
+  public Tetromino(
+      final int renderSize,
+      final Point2D renderOrigin,
+      final PlayerBoard board,
+      final JsonShape shapeData,
+      final int shapeID) {
+
     this.board = board;
-    shape = shapeFactory(renderSize, renderOrigin, rand.nextInt(7));
+
+    Color shapeColor = new Color(
+        shapeData.rgb[0],
+        shapeData.rgb[1],
+        shapeData.rgb[2]);
+
+    shape = new Shape(
+        shapeData.center,
+        shapeData.points,
+        shapeColor,
+        renderSize,
+        renderOrigin);
+
     shape.initPosition();
 
     ghost = new GhostShape(shape);
-    System.out.println("[Tetromino] New Shape: " + shape);
-  }
-
-  public Tetromino(final int renderSize, final Point2D renderOrigin, final PlayerBoard board, final int shapeID) {
-    this.board = board;
-    shape = shapeFactory(renderSize, renderOrigin, shapeID);
-    shape.initPosition();
-
-    ghost = new GhostShape(shape);
 
     System.out.println("[Tetromino] New Shape: " + shape);
-  }
-
-  private Shape shapeFactory(final int renderSize, final Point2D spawnPoint, final int shapeID) {
-    this.shapeID = shapeID;
-    switch (shapeID) {
-      case I:
-        return new IShape(renderSize, spawnPoint);
-      case T:
-        return new TShape(renderSize, spawnPoint);
-      case O:
-        return new OShape(renderSize, spawnPoint);
-      case J:
-        return new JShape(renderSize, spawnPoint);
-      case L:
-        return new LShape(renderSize, spawnPoint);
-      case S:
-        return new SShape(renderSize, spawnPoint);
-      case Z:
-        return new ZShape(renderSize, spawnPoint);
-      default:
-        return null;
-    }
   }
 
   private boolean sideColides(final int dir) {
@@ -173,7 +147,12 @@ public class Tetromino {
       // collision with other shapes. The amount of pixels is relative to the
       // current rotation status and direction. Note that the rotation status is
       // only updated if the rotation succeeds.
-      final Point2D kickData = WallKickData.getKickData(shapeID, rotationStatus, direction, kickIndex);
+      final Point2D kickData = WallKickData.getKickData(
+          shapeID,
+          rotationStatus,
+          direction,
+          kickIndex);
+
       shape.move((int) kickData.getX(), (int) kickData.getY());
 
       // check if the rotation is valid for the current kick data

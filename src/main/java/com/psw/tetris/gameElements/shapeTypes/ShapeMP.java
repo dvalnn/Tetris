@@ -1,4 +1,4 @@
-package com.psw.tetris.gameElements;
+package com.psw.tetris.gameElements.shapeTypes;
 
 import java.awt.Color;
 import java.awt.Graphics;
