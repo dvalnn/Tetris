@@ -23,6 +23,7 @@ import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.main.Game;
+import com.psw.tetris.settings.BoardSettings;
 
 public class PlayingMP extends GameState {
 
@@ -44,14 +45,28 @@ public class PlayingMP extends GameState {
   private final int OPPONENT_X_OFFSET = 3 * GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2;
   private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
 
+  BoardSettings playerBoardSet = new BoardSettings(
+      BOARD_SQUARE,
+      PLAYER_X_OFFSET,
+      Y_OFFSET,
+      boardColor,
+      boardColor.brighter());
+
+  BoardSettings opponentBoardSet = new BoardSettings(
+      BOARD_SQUARE,
+      OPPONENT_X_OFFSET,
+      Y_OFFSET,
+      boardColor,
+      boardColor.brighter());
+
   public PlayingMP() {
     super(GameStatesEnum.PLAYING_MP);
-    playerBoard = new PlayerBoard(BOARD_SQUARE, PLAYER_X_OFFSET, Y_OFFSET, boardColor);
+    playerBoard = new PlayerBoard(playerBoardSet);
   }
 
   public void addBoardMP(final String username, final InetAddress address, final int port) {
     System.out.println("[PlayingMP] Adding board for " + username);
-    opponentBoard = new MPBoard(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET, boardColor, username);
+    opponentBoard = new MPBoard(opponentBoardSet, username);
     shapeMP = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
   }
 

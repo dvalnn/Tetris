@@ -26,6 +26,8 @@ import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.utils.LoadSave;
 import com.psw.tetris.gameStates.GameState;
 
+import com.psw.tetris.settings.BoardSettings;
+
 public class Playing extends GameState {
 
   private final PlayerBoard board;
@@ -35,14 +37,22 @@ public class Playing extends GameState {
   private final BufferedImage foreground;
 
   private final int X_OFFSET = (GAME_WIDTH - BOARD_WIDTH * BOARD_SQUARE) / 2 + 10;
-  private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2 + 18;
+  private final int Y_OFFSET = (GAME_HEIGHT - BOARD_HEIGHT * BOARD_SQUARE) / 2 + 18;
 
   private boolean mouseButton1Pressed = false;
   private boolean mouseButton3Pressed = false;
 
   public Playing() {
     super(GameStatesEnum.PLAYING);
-    board = new PlayerBoard(BOARD_SQUARE, X_OFFSET, Y_OFFSET, boardColor);
+
+    BoardSettings set = new BoardSettings(
+        BOARD_SQUARE,
+        X_OFFSET,
+        Y_OFFSET,
+        boardColor,
+        boardColor.brighter());
+
+    board = new PlayerBoard(set);
     background = LoadSave.loadBackground("singlePlayerGame.png");
     foreground = LoadSave.loadBackground("singleEssentials2.png");
   }
