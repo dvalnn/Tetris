@@ -1,7 +1,6 @@
 package com.psw.tetris.gameStates.stateTypes;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -16,11 +15,11 @@ import static com.psw.tetris.utils.Constants.UI.Buttons.NEW_GAME;
 
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.GameState;
-import com.psw.tetris.main.Game;
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.ButtonAction;
 import com.psw.tetris.ui.SwitchGameStateAction;
 import com.psw.tetris.utils.LoadSave;
+
 
 public class ChangeKeybinds extends GameState {
 
@@ -41,6 +40,7 @@ public class ChangeKeybinds extends GameState {
         RESET;
     }
     private keyAction Action = keyAction.ROTATE_LEFT;
+
     private final Button<keyAction, Void> buttonRotateLeft;
     private final Button<keyAction, Void> buttonRotateRight;
     private final Button<keyAction, Void> buttonMoveRight;
@@ -120,8 +120,6 @@ public class ChangeKeybinds extends GameState {
                 softDropButtonImage,
                 SCALE,
                 changeKeyAction);
-        // final int sixthButtonY = (int) (fifthButtonY +
-        // buttonSoftDrop.getBounds().getHeight() + BUTTON_SPACING);
 
         buttonHardDrop = new Button<keyAction, Void>(
                 FIFTH_BUTTON_X,
@@ -129,32 +127,28 @@ public class ChangeKeybinds extends GameState {
                 hardDropButtonImage,
                 SCALE,
                 changeKeyAction);
-        // final int seventhButtonY = (int) (sixthButtonY +
-        // buttonHardDrop.getBounds().getHeight() + BUTTON_SPACING);
+
         buttonHold = new Button<keyAction, Void>(
                 FIFTH_BUTTON_X,
                 secondButtonY,
                 holdButtonImage,
                 SCALE,
                 changeKeyAction);
-        // final int eighthButtonY = (int) (seventhButtonY +
-        // buttonHold.getBounds().getHeight() + BUTTON_SPACING);
+
         buttonPause = new Button<keyAction, Void>(
                 FIFTH_BUTTON_X,
                 thirdButtonY,
                 pauseButtonImage,
                 SCALE,
                 changeKeyAction);
-        // final int ninthButtonY = (int) (eighthButtonY +
-        // buttonPause.getBounds().getHeight() + BUTTON_SPACING);
+
         buttonReset = new Button<keyAction, Void>(
                 FIFTH_BUTTON_X,
                 fourthButtonY,
                 resetButtonImage,
                 SCALE,
                 changeKeyAction);
-        // final int tenthButtonY = (int) (ninthButtonY +
-        // buttonReset.getBounds().getHeight() + BUTTON_SPACING);
+                
         buttonReturn = new Button<GameStatesEnum, Void>(
                 FIFTH_BUTTON_X,
                 fifthButtonY,
@@ -217,31 +211,31 @@ public class ChangeKeybinds extends GameState {
     @Override
     public void keyPressed(final KeyEvent e) {
         switch (Action) {
-            case keyAction.ROTATE_LEFT:
+            case ROTATE_LEFT:
                 keybind.rotatesLeft = e.getKeyCode();
                 break;
-            case keyAction.ROTATE_RIGHT:
+            case ROTATE_RIGHT:
                 keybind.rotatesRight = e.getKeyCode();
                 break;
-            case keyAction.MOVE_LEFT:
+            case MOVE_LEFT:
                 keybind.movesLeft = e.getKeyCode();
                 break;
-            case keyAction.MOVE_RIGHT:
+            case MOVE_RIGHT:
                 keybind.movesRight = e.getKeyCode();
                 break;
-            case keyAction.SOFT_DROP:
+            case SOFT_DROP:
                 keybind.softDrop = e.getKeyCode();
                 break;
-            case keyAction.HARD_DROP:
+            case HARD_DROP:
                 keybind.hardDrop = e.getKeyCode();
                 break;
-            case keyAction.HOLD:
+            case HOLD:
                 keybind.hold = e.getKeyCode();
                 break;
-            case keyAction.PAUSE:
+            case PAUSE:
                 keybind.pause = e.getKeyCode();
                 break;
-            case keyAction.RESET:
+            case RESET:
                 keybind = new Keybindings();
                 break;
             default:

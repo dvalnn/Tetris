@@ -12,7 +12,6 @@ public class Constants {
 
     public static class Buttons {
       private static final String BUTTON_PATH = RESOURCES_PATH + "/buttons/";
-
       public static final String ABOUT_US = BUTTON_PATH + "aboutUs.png";
       public static final String EXIT_GAME = BUTTON_PATH + "exitGame.png";
       public static final String HOST_GAME = BUTTON_PATH + "hostGame.png";
