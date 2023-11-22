@@ -43,6 +43,37 @@ public class Score {
     scoreMap.put(Action.B2B_T_SPIN_TRIPLE, 2400); // TODO: implement
   }
 
+  public static void registerLinesCleared(int lines) {
+
+    Score.Action action = Score.Action.NONE;
+
+    switch (lines) {
+      case 0:
+        break;
+
+      case 1:
+        action = Score.scoreAction(Score.Action.SINGLE);
+        break;
+
+      case 2:
+        action = Score.scoreAction(Score.Action.DOUBLE);
+        break;
+
+      case 3:
+        action = Score.scoreAction(Score.Action.TRIPLE);
+        break;
+
+      case 4:
+        action = Score.scoreAction(Score.Action.TETRIS);
+        break;
+
+    }
+
+    System.out.println("[SCORE] Score: " + score);
+    System.out.println("[SCORE] Action: " + action);
+    System.out.println("[SCORE] Combo: " + combo);
+  }
+
   public static Action scoreAction(Action action) {
     if (action == Action.NONE) {
       combo = false;
