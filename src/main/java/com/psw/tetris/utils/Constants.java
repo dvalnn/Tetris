@@ -4,7 +4,8 @@ public class Constants {
 
   public static final String USER_DIR = System.getProperty("user.dir");
   public static final String RESOURCES_PATH = USER_DIR + "/src/main/resources";
-  public static final String KEYBINDINGS_PATH = RESOURCEPATH + "keybinds.json";
+  
+  public static final String KEYBINDINGS_PATH = RESOURCES_PATH + "/keybinds.json";
 
   public static class UI {
     public static final String BACKGROUND_PATH = RESOURCES_PATH + "/backgrounds/";
