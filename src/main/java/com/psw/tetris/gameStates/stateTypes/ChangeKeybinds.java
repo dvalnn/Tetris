@@ -1,15 +1,137 @@
 package com.psw.tetris.gameStates.stateTypes;
 
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+
+import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.psw.tetris.gameStates.GameState;
+import com.psw.tetris.main.Game;
+import com.psw.tetris.ui.Button;
+import com.psw.tetris.ui.ButtonAction;
+import com.psw.tetris.ui.SwitchGameStateAction;
+import com.psw.tetris.utils.LoadSave;
+
+
 public class ChangeKeybinds extends GameState {
 
     // background
     // botão de return
     // botões de keybinds
-    // logica de trocar keybinds
-    // logica de resetar para defaults keybinds
+    // logica de trocar keybinds // doneee
+    // logica de resetar para defaults keybinds // doneee
+
+    private final Button<Integer, Void> buttonRotateLeft;
+    private final Button<Integer, Void> buttonRotateRight;
+    private final Button<Integer, Void> buttonMoveRight;
+    private final Button<Integer, Void> buttonMoveLeft;
+    private final Button<Integer, Void> buttonModeDown;
+    private final Button<Integer, Void> buttonHardDrop;
+    private final Button<Integer, Void> buttonHold;
+    private final Button<Integer, Void> buttonPause;
+    private final Button<Integer, Void> buttonReset;
+    private final Button<GameStatesEnum, Void> buttonReturn;
+
+    private final BufferedImage rotateLeftButtonImage = LoadSave.loadImage("pressEnter.png");
+    private final BufferedImage rotateRightButtonImage = LoadSave.loadImage("pressEnter.png");
+    private final BufferedImage moveRightButtonImage = LoadSave.loadImage("pressEnter.png");
+    private final BufferedImage moveLeftButtonImage = LoadSave.loadImage("pressEnter.png");
+    private final BufferedImage modeDownButtonImage = LoadSave.loadImage("pressEnter.png");
+    private final BufferedImage hardDropButtonImage = LoadSave.loadImage("pressEnter.png");
+    private final BufferedImage holdButtonImage = LoadSave.loadImage("pressEnter.png");
+    private final BufferedImage pauseButtonImage = LoadSave.loadImage("pressEnter.png");
+    private final BufferedImage resetButtonImage = LoadSave.loadImage("pressEnter.png");
+    private final BufferedImage returnButtonImage = LoadSave.loadImage("returnButton.png");
+
+    private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
+    private final ButtonAction<Integer, Void> changeKeyAction = (Void) -> {
+        ChangeKeybinds(e.getKeyCode());
+        return null;
+    };
+
+    private final double SCALE = 0.25/* */;
+    private final int FIRST_BUTTON_X = 100/* */;
+    private final int FIRST_BUTTON_Y = 300/* */;
+    private final int BUTTON_SPACING = 25/* */;
 
     public ChangeKeybinds() {
         super(GameStatesEnum.CHANGE_KEYBINDS);
+
+        keyBackground = LoadSave.loadBackground("aboutUs.png");
+
+        buttonRotateLeft = new Button<Integer, Void>(
+                FIRST_BUTTON_X,
+                FIRST_BUTTON_Y,
+                rotateLeftButtonImage,
+                SCALE,
+                changeKeyAction);
+
+        final int secondButtonY = (int) (FIRST_BUTTON_Y + buttonRotateLeft.getBounds().getHeight() + BUTTON_SPACING);
+        buttonRotateRight = new Button<Integer, Void>(
+                FIRST_BUTTON_X,
+                secondButtonY,
+                rotateRightButtonImage,
+                SCALE,
+                changeKeyAction);
+
+        final int thirdButtonY = (int) (secondButtonY + buttonRotateRight.getBounds().getHeight() + BUTTON_SPACING);
+        buttonMoveRight = new Button<Integer, Void>(
+                FIRST_BUTTON_X,
+                thirdButtonY,
+                moveRightButtonImage,
+                SCALE,
+                changeKeyAction);
+        final int fourthButtonY = (int) (thirdButtonY + buttonMoveRight.getBounds().getHeight() + BUTTON_SPACING);
+        buttonMoveLeft = new Button<Integer, Void>(
+                FIRST_BUTTON_X,
+                fourthButtonY,
+                moveLeftButtonImage,
+                SCALE,
+                changeKeyAction);
+        final int fifthButtonY = (int) (fourthButtonY + buttonMoveLeft.getBounds().getHeight() + BUTTON_SPACING);
+        buttonModeDown = new Button<Integer, Void>(
+                FIRST_BUTTON_X,
+                fifthButtonY,
+                modeDownButtonImage,
+                SCALE,
+                changeKeyAction);
+        final int sixthButtonY = (int) (fifthButtonY + buttonModeDown.getBounds().getHeight() + BUTTON_SPACING);
+        buttonHardDrop = new Button<Integer, Void>(
+                FIRST_BUTTON_X,
+                sixthButtonY,
+                hardDropButtonImage,
+                SCALE,
+                changeKeyAction);
+        final int seventhButtonY = (int) (sixthButtonY + buttonHardDrop.getBounds().getHeight() + BUTTON_SPACING);
+        buttonHold = new Button<Integer, Void>(
+                FIRST_BUTTON_X,
+                seventhButtonY,
+                holdButtonImage,
+                SCALE,
+                changeKeyAction);
+        final int eighthButtonY = (int) (seventhButtonY + buttonHold.getBounds().getHeight() + BUTTON_SPACING);
+        buttonPause = new Button<Integer, Void>(
+                FIRST_BUTTON_X,
+                eighthButtonY,
+                pauseButtonImage,
+                SCALE,
+                changeKeyAction);
+        final int ninthButtonY = (int) (eighthButtonY + buttonPause.getBounds().getHeight() + BUTTON_SPACING);
+        buttonReset = new Button<Integer, Void>(
+                FIRST_BUTTON_X,
+                ninthButtonY,
+                resetButtonImage,
+                SCALE,
+                changeKeyAction);
+        final int tenthButtonY = (int) (ninthButtonY + buttonReset.getBounds().getHeight() + BUTTON_SPACING);
+        buttonReturn = new Button<GameStatesEnum, Void>(
+                FIRST_BUTTON_X,
+                FIRST_BUTTON_Y,
+                returnButtonImage,
+                SCALE,
+                switchGameStateAction);
     }
 
     public enum keyAction {
@@ -17,79 +139,73 @@ public class ChangeKeybinds extends GameState {
         ROTATE_RIGHT,
         MOVE_LEFT,
         MOVE_RIGHT,
-        MOVE_DOWN,
+        SOFT_DROP,
         HARD_DROP,
         HOLD,
-        PAUSE;
+        PAUSE,
+        RESET;
     }
 
     @Override
     public void render(final Graphics g) {
 
-        // g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);// ! coordenadas
-        // ainda a definir
-        // g.drawImage(button1, 0, 0, GAME_WIDTH, GAME_HEIGHT, null); //! coordenadas
-        // ainda a definir
-        // g.drawImage(button2, 0, 0, GAME_WIDTH, GAME_HEIGHT, null); //! coordenadas
-        // ainda a definir
-        // g.drawImage(button3, 0, 0, GAME_WIDTH, GAME_HEIGHT, null); //! coordenadas
-        // ainda a definir
-        // g.drawImage(button4, 0, 0, GAME_WIDTH, GAME_HEIGHT, null); //! coordenadas
-        // ainda a definir
-        // g.drawImage(button5, 0, 0, GAME_WIDTH, GAME_HEIGHT, null); //! coordenadas
-        // ainda a definir
-        // g.drawImage(button6, 0, 0, GAME_WIDTH, GAME_HEIGHT, null); //! coordenadas
-        // ainda a definir
-        // g.drawImage(button7, 0, 0, GAME_WIDTH, GAME_HEIGHT, null); //! coordenadas
-        // ainda a definir
-        // g.drawImage(button8, 0, 0, GAME_WIDTH, GAME_HEIGHT, null); //! coordenadas
-        // ainda a definir
-        buttonRotateLeft.render(g);
-        buttonRotateRight.render(g);
-        buttonMoveRight.render(g);
-        buttonMoveLeft.render(g);
-        buttonModeDown.render(g);
-        buttonHardDrop.render(g);
-        buttonHold.render(g);
-        buttonPause.render(g);
+        g.drawImage(keyBackground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+        //buttonRotateLeft.render(g);
+        //buttonRotateRight.render(g);
+        //buttonMoveRight.render(g);
+        //buttonMoveLeft.render(g);
+        //buttonSoftDrop.render(g);
+        //buttonHardDrop.render(g);
+        //buttonHold.render(g);
+        //buttonPause.render(g);
+        //buttonReset.render(g);
+        buttonReturn.render(g);
     }
 
     // actions ainda a definir
     @Override
     public void mouseClicked(final KeyEvent e) {
-        if (button.getBounds().contains(e.getPoint())) {
+        if (buttonRotateLeft.getBounds().contains(e.getPoint())) {
             keyAction = keyAction.ROTATE_LEFT;
-            // button.execAction(GameStatesEnum.MAIN_MENU);
-        }
-        else if (button1.getBounds().contains(e.getPoint())) {
+            buttonRotateLeft.execAction(e.getKeyCode());
+
+        } else if (buttonRotateRight.getBounds().contains(e.getPoint())) {
             keyAction = keyAction.ROTATE_RIGHT;
-            // button1.execAction(GameStatesEnum.MAIN_MENU);
-        } 
-        else if (button2.getBounds().contains(e.getPoint())) {
+            buttonRotateRight.execAction(e.getKeyCode());
+
+        } else if (buttonMoveRight.getBounds().contains(e.getPoint())) {
             keyAction = keyAction.MOVE_LEFT;
-            // button2.execAction(GameStatesEnum.MAIN_MENU);
-        } 
-        else if (button3.getBounds().contains(e.getPoint())) {
+            buttonMoveRight.execAction(e.getKeyCode());
+
+        } else if (buttonMoveRight.getBounds().contains(e.getPoint())) {
             keyAction = keyAction.MOVE_RIGHT;
-            // button3.execAction(GameStatesEnum.MAIN_MENU);
-        } 
-        else if (button4.getBounds().contains(e.getPoint())) {
-            keyAction = keyAction.MOVE_DOWN;
-            // button4.execAction(GameStatesEnum.MAIN_MENU);
-        } 
-        else if (button5.getBounds().contains(e.getPoint())) {
+            buttonMoveRight.execAction(e.getKeyCode());
+
+        } else if (buttonSoftDrop.getBounds().contains(e.getPoint())) {
+            keyAction = keyAction.SOFT_DROP;
+            buttonSoftDrop.execAction(e.getKeyCode());
+
+        } else if (buttonHardDrop.getBounds().contains(e.getPoint())) {
             keyAction = keyAction.HARD_DROP;
-            // button5.execAction(GameStatesEnum.MAIN_MENU);
-        } 
-        else if (button6.getBounds().contains(e.getPoint())) {
+            buttonHardDrop.execAction(e.getKeyCode());
+
+        } else if (buttonHold.getBounds().contains(e.getPoint())) {
             keyAction = keyAction.HOLD;
-            // button6.execAction(GameStatesEnum.MAIN_MENU);
-        } 
-        else if (button7.getBounds().contains(e.getPoint())) {
+            buttonHold.execAction(e.getKeyCode());
+
+        } else if (buttonPause.getBounds().contains(e.getPoint())) {
             keyAction = keyAction.PAUSE;
-            // button7.execAction(GameStatesEnum.MAIN_MENU);
-        } 
+            buttonPause.execAction(e.getKeyCode());
+
+        } else if (buttonReset.getBounds().contains(e.getPoint())) {
+            keyAction = keyAction.RESET;
+            buttonReset.execAction(e.getKeyCode());
+
+        }else if (buttonReturn.getBounds().contains(e.getPoint())) {
+            keyAction = keyAction.RETURN;
+            GameStateHandler.setActiveState(GameStatesEnum.SETTINGS);
     }
+}
 
     @Override
     public void keyPressed(final KeyEvent e) {
@@ -118,10 +234,12 @@ public class ChangeKeybinds extends GameState {
             case keyAction.PAUSE:
                 keybind.pause = e.getKeyCode();
                 break;
+            case keyAction.RESET:
+                keybind = new Keybinds();
+                break;
             default:
                 return;
         }
-        
         Keybinds.saveToFile(keybind, KEYBINDINGS_PATH);
     }
 

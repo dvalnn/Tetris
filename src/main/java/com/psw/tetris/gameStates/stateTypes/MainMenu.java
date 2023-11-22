@@ -116,6 +116,7 @@ public class MainMenu extends GameState {
     if (settingsButton.getBounds().contains(e.getPoint())) {
       // TODO: implement this feature
       // settingsButton.execAction(GameStatesEnum.SETTINGS);
+      settingsButton.execAction(GameStatesEnum.CHANGE_KEYBINDS);
       return;
     }
     if (aboutUsButton.getBounds().contains(e.getPoint())) {
