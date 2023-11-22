@@ -13,6 +13,7 @@ public final class GameStateHandler {
   public enum GameStatesEnum {
     TITLE_SCREEN,
     MAIN_MENU,
+    CHANGE_KEYBINDS,
     GAME_MODE_SELECT,
     PLAYING,
     PLAYING_MP,
@@ -32,6 +33,7 @@ public final class GameStateHandler {
 
     addState(new TitleScreen());
     addState(new MainMenu());
+    addState(new ChangeKeybinds());
     addState(new GameModeSelect());
     addState(new PlayingMP());
     addState(new Playing());
