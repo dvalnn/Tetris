@@ -219,6 +219,8 @@ public class PlayerBoard extends Board {
     // score values, as both PlayerBoard and BoardMP
     // extend Board.
     playerScore = Score.getScore();
+    playerLevel = Levels.getCurrentLevel() + 1;
+    playerLines = Levels.getTotalLinesCleared();
 
     // NOTE: This is only used for debugging purposes
     // TODO: Remove this

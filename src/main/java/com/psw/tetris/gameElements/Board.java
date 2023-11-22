@@ -66,6 +66,12 @@ public class Board {
   protected final BoardSettings set;
 
   protected int playerScore = 0;
+  protected int playerLevel = 0;
+  protected int playerLines = 0;
+
+  private int tickCounter = 0;
+  private int seconds = 0;
+  private int minutes = 0;
 
   public Board(BoardSettings settings) {
     this.set = settings;
@@ -99,15 +105,34 @@ public class Board {
       }
     }
 
+    tickCounter++;
+
+    if (tickCounter >= 60) {
+      seconds++;
+      tickCounter = 0;
+    }
+    if (seconds >= 60) {
+      minutes++;
+      seconds = 0;
+    }
+
+    // text elements rendering (score and level)
     g.setColor(Color.WHITE);
     g.setFont(g.getFont().deriveFont(30f));
-
     Graphics2D g2 = (Graphics2D) g;
 
-    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+    g2.setRenderingHint(
+        RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
 
+    // TODO: Center the text properly
     g2.drawString("" + playerScore, set.scoreRenderX, set.scoreRenderY);
+
+    g2.drawString("" + playerLevel, set.levelRenderX, set.levelRenderY);
+    g2.drawString("" + playerLines, set.linesRenderX, set.linesRenderY);
+    g2.drawString(String.format("%02d:%02d", minutes, seconds),
+        set.timerRenderX,
+        set.timerRenderY);
   }
 
   public List<BoardLine> getBoard() {
