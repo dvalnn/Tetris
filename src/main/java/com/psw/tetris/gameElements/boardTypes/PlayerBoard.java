@@ -17,6 +17,8 @@ import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.settings.BoardSettings;
 import com.psw.tetris.utils.JsonShapeParser;
+import com.psw.tetris.gameplay.Score;
+import com.psw.tetris.gameplay.Levels;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
 
@@ -137,7 +139,37 @@ public class PlayerBoard extends Board {
       }
     }
 
+    Score.Action action = Score.Action.NONE;
+
+    switch (rowsCleared) {
+      case 0:
+        break;
+
+      case 1:
+        action = Score.scoreAction(Score.Action.SINGLE);
+        break;
+
+      case 2:
+        action = Score.scoreAction(Score.Action.DOUBLE);
+        break;
+
+      case 3:
+        action = Score.scoreAction(Score.Action.TRIPLE);
+        break;
+
+      case 4:
+        action = Score.scoreAction(Score.Action.TETRIS);
+        break;
+
+    }
+
+    Levels.incrementLinesCleared(rowsCleared);
+
     System.out.println("[Board] Cleared " + rowsCleared + " rows!");
+    System.out.println("[Board] Action: " + action.toString());
+    System.out.println("[Board] Score: " + Score.getScore());
+    System.out.println("[Board] Level: " + Levels.getCurrentLevel());
+    System.out.println("[Board] Lines: " + Levels.getTotalLinesCleared());
   }
 
   // NOTE: This method is only used for debugging purposes

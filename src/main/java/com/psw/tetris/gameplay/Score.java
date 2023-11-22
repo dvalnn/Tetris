@@ -13,13 +13,16 @@ public class Score {
     NONE, SINGLE, DOUBLE, TRIPLE, TETRIS, B2B_TETRIS, MINI_T_SPIN,
     MINI_T_SPIN_SINGLE, MINI_T_SPIN_DOUBLE, B2B_MINI_T_SPIN_DOUBLE, T_SPIN,
     T_SPIN_SINGLE, T_SPIN_DOUBLE, T_SPIN_TRIPLE, B2B_T_SPIN_SINGLE,
-    B2B_T_SPIN_DOUBLE, B2B_T_SPIN_TRIPLE
+    B2B_T_SPIN_DOUBLE, B2B_T_SPIN_TRIPLE;
+
   }
 
   private static HashMap<Action, Integer> scoreMap = new HashMap<Action, Integer>();
 
   // TODO: implement action detection into the game for all actions
   static {
+    scoreMap.put(Action.NONE, 0);
+
     scoreMap.put(Action.SINGLE, 100); // TODO: implement
     scoreMap.put(Action.DOUBLE, 300); // TODO: implement
     scoreMap.put(Action.TRIPLE, 500); // TODO: implement
@@ -40,11 +43,11 @@ public class Score {
     scoreMap.put(Action.B2B_T_SPIN_TRIPLE, 2400); // TODO: implement
   }
 
-  public static void scoreAction(Action action) {
+  public static Action scoreAction(Action action) {
     if (action == Action.NONE) {
       combo = false;
       prevAction = Action.NONE;
-      return;
+      return Action.NONE;
     }
 
     boolean updatePreviousAction = true;
@@ -71,7 +74,7 @@ public class Score {
       updatePreviousAction = false;
     }
 
-    int levelMultiplier = Levels.getCurrentLevel();
+    int levelMultiplier = Levels.getCurrentLevel() + 1; // levels start at 0
     int actionModifier = scoreMap.get(action);
     int previousModifier = scoreMap.get(prevAction);
 
@@ -88,6 +91,8 @@ public class Score {
 
     if (updatePreviousAction)
       prevAction = action;
+
+    return action;
   }
 
   public static void scoreSoftDrop() {

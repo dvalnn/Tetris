@@ -8,6 +8,9 @@ public class Levels {
   private static int levelLinesCleared = 0;
   private static int totalLinesCleared = 0;
 
+  public static int softDropMultiplier = 20;
+  public static int hardDropMultiplier = 100;
+
   private static int[] linesToNextLevel = {
       10, 20, 30, 40, 50, 60, 70, 80, 90, // 0-8
       100, 100, 100, 100, 100, 100, 100, // 9-15
@@ -15,25 +18,21 @@ public class Levels {
       200, 200, 200, 200, 200 // 25 + (max level)
   };
 
-  private static final int[] levelSpeeds = {
-      48, 43, 38, 33, 28, 23, 18, 13, 8, 6, // 0-9
-      5, 5, 5, // 10-13
-      4, 4, 4, // 13-15
-      3, 3, 3, // 16-18
-      2, 2, 2, 2, 2, 2, 2, 2, 2, 2, // 19-28
-      1 // 29 + (max level)
+  private static final int[] levelSpeed = {
+      80, 72, 63, 55, 47, 38, 30, 22, 13, 10, // 0-9
+      8, 8, 8, // 10-13
+      7, 7, 7, // 13-15
+      5, 5, 5, // 16-18
+      3, 3, 3, 3, 3, 3, 3, 3, 3, 3, // 19-28
+      2 // 29 + (max level)
   };
-
-  public static int softDropMultiplier = 2;
-
-  public static int hardDropMultiplier = 20;
 
   public static int getTotalLinesCleared() {
     return totalLinesCleared;
   }
 
   public static int getLevelSpeed() {
-    return levelSpeeds[currentLevel];
+    return levelSpeed[currentLevel];
   }
 
   public static int getCurrentLevel() {
