@@ -107,13 +107,13 @@ public class PlayerBoard extends Board {
 
   }
 
-  private void clearRow(final int row) {
+  private void clearLine(final int row) {
     for (int col = 0; col < BOARD_WIDTH; col++) {
       board.get(row).setColor(col, set.backgroundColor);
     }
   }
 
-  private void shiftRowsDown(final int row) {
+  private void shiftLineDown(final int row) {
     for (int r = row; r > 0; r--) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
         board.get(r).setColor(col, board.get(r - 1).getIndexRGB(col));
@@ -121,8 +121,8 @@ public class PlayerBoard extends Board {
     }
   }
 
-  private void checkRows() {
-    int rowsCleared = 0;
+  private void checkLines() {
+    int linesCleared = 0;
 
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       boolean full = true;
@@ -133,43 +133,14 @@ public class PlayerBoard extends Board {
         }
       }
       if (full) {
-        rowsCleared++;
-        clearRow(row);
-        shiftRowsDown(row);
+        linesCleared++;
+        clearLine(row);
+        shiftLineDown(row);
       }
     }
 
-    Score.Action action = Score.Action.NONE;
-
-    switch (rowsCleared) {
-      case 0:
-        break;
-
-      case 1:
-        action = Score.scoreAction(Score.Action.SINGLE);
-        break;
-
-      case 2:
-        action = Score.scoreAction(Score.Action.DOUBLE);
-        break;
-
-      case 3:
-        action = Score.scoreAction(Score.Action.TRIPLE);
-        break;
-
-      case 4:
-        action = Score.scoreAction(Score.Action.TETRIS);
-        break;
-
-    }
-
-    Levels.incrementLinesCleared(rowsCleared);
-
-    System.out.println("[Board] Cleared " + rowsCleared + " rows!");
-    System.out.println("[Board] Action: " + action.toString());
-    System.out.println("[Board] Score: " + Score.getScore());
-    System.out.println("[Board] Level: " + Levels.getCurrentLevel());
-    System.out.println("[Board] Lines: " + Levels.getTotalLinesCleared());
+    Score.registerLinesCleared(linesCleared);
+    Levels.registerLinesCleared(linesCleared);
   }
 
   // NOTE: This method is only used for debugging purposes
@@ -250,7 +221,7 @@ public class PlayerBoard extends Board {
     if (!activeTetro.isActive()) {
 
       addTetrominoToPile();
-      checkRows();
+      checkLines();
       activeTetro = nextTetro;
       nextTetro = tetrominoFactory(shapeData);
     }
