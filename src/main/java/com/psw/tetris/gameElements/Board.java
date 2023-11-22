@@ -5,6 +5,8 @@ import static com.psw.tetris.utils.Constants.GameConstants.BOARD_WIDTH;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +65,8 @@ public class Board {
 
   protected final BoardSettings set;
 
+  protected int playerScore = 0;
+
   public Board(BoardSettings settings) {
     this.set = settings;
 
@@ -82,18 +86,28 @@ public class Board {
       for (int col = 0; col < BOARD_WIDTH; col++) {
         g.setColor(board.get(row).getIndexColorCopy(col));
         g.fillRect(
-            (int) (col * set.squareSize - set.squareSize / 2) + (int) set.xOffset,
-            (int) (row * set.squareSize - set.squareSize / 2) + (int) set.yOffset,
+            (int) (col * set.squareSize - set.squareSize / 2) + set.xOffset,
+            (int) (row * set.squareSize - set.squareSize / 2) + set.yOffset,
             set.squareSize,
             set.squareSize);
         g.setColor(set.gridColor);
         g.drawRect(
-            (int) (col * set.squareSize - set.squareSize / 2) + (int) set.xOffset,
-            (int) (row * set.squareSize - set.squareSize / 2) + (int) set.yOffset,
+            (int) (col * set.squareSize - set.squareSize / 2) + set.xOffset,
+            (int) (row * set.squareSize - set.squareSize / 2) + set.yOffset,
             set.squareSize,
             set.squareSize);
       }
     }
+
+    g.setColor(Color.WHITE);
+    g.setFont(g.getFont().deriveFont(30f));
+
+    Graphics2D g2 = (Graphics2D) g;
+
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+        RenderingHints.VALUE_ANTIALIAS_ON);
+
+    g2.drawString("" + playerScore, set.scoreRenderX, set.scoreRenderY);
   }
 
   public List<BoardLine> getBoard() {

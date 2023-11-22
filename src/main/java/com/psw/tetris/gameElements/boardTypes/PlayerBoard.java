@@ -141,6 +141,7 @@ public class PlayerBoard extends Board {
 
     Score.registerLinesCleared(linesCleared);
     Levels.registerLinesCleared(linesCleared);
+
   }
 
   // NOTE: This method is only used for debugging purposes
@@ -212,6 +213,13 @@ public class PlayerBoard extends Board {
   }
 
   public void update() {
+    // update the score. This is done in this class
+    // and not direcly on the parent class so that
+    // the player and the opponent can have different
+    // score values, as both PlayerBoard and BoardMP
+    // extend Board.
+    playerScore = Score.getScore();
+
     // NOTE: This is only used for debugging purposes
     // TODO: Remove this
     if (paused)

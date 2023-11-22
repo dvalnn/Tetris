@@ -7,6 +7,8 @@ public class BoardSettings {
   public final int squareSize;
   public final int xOffset;
   public final int yOffset;
+  public final int scoreRenderX;
+  public final int scoreRenderY;
   public final Color backgroundColor;
   public final Color gridColor;
 
@@ -22,5 +24,10 @@ public class BoardSettings {
     this.yOffset = yOffset;
     this.backgroundColor = backgroundColor;
     this.gridColor = gridColor;
+
+    // default magic numbers
+    this.scoreRenderX = xOffset + 255;
+    this.scoreRenderY = yOffset + 472;
+
   }
 }
