@@ -107,7 +107,7 @@ public class MainMenu extends GameState {
     leaderboardButton.execIfClicked(
         e.getPoint(),
         switchStateAction,
-        GameStatesEnum.MAIN_MENU); // TODO: implement leaderboard;
+        GameStatesEnum.LEADERBOARD); // TODO: implement leaderboard;
 
     settingsButton.execIfClicked(
         e.getPoint(),

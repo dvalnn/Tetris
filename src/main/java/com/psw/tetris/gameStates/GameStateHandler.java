@@ -7,7 +7,7 @@ import java.util.HashMap;
 import com.psw.tetris.gameStates.stateTypes.ChangeKeybinds;
 import com.psw.tetris.gameStates.stateTypes.GameModeSelect;
 import com.psw.tetris.gameStates.stateTypes.GameOver;
-import com.psw.tetris.gameStates.stateTypes.LeaderBoard;
+import com.psw.tetris.gameStates.stateTypes.Leaderboard;
 import com.psw.tetris.gameStates.stateTypes.Lobby;
 import com.psw.tetris.gameStates.stateTypes.MainMenu;
 import com.psw.tetris.gameStates.stateTypes.Playing;
@@ -43,7 +43,7 @@ public final class GameStateHandler {
     addState(new TitleScreen());
     addState(new MainMenu());
     addState(new Settings());
-    addState(new LeaderBoard());
+    addState(new Leaderboard());
     addState(new ChangeKeybinds());
     addState(new GameModeSelect());
     addState(new Lobby());
