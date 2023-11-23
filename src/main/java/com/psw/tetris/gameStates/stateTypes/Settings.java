@@ -21,7 +21,6 @@ import com.psw.tetris.ui.SwitchGameStateAction;
 import com.psw.tetris.utils.LoadSave;
 
 
-//TODO: Add volume and lower volume effect functions
 
 public class Settings extends GameState {
 
@@ -114,6 +113,7 @@ public class Settings extends GameState {
 
 
     }
+    
     @Override
     public void render(final Graphics g) {
 
