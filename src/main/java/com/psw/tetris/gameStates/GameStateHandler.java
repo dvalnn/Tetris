@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.psw.tetris.gameStates.stateTypes.GameModeSelect;
 import com.psw.tetris.gameStates.stateTypes.GameOver;
+import com.psw.tetris.gameStates.stateTypes.Lobby;
 import com.psw.tetris.gameStates.stateTypes.MainMenu;
 import com.psw.tetris.gameStates.stateTypes.Playing;
 import com.psw.tetris.gameStates.stateTypes.PlayingMP;
@@ -14,6 +15,7 @@ public final class GameStateHandler {
     TITLE_SCREEN,
     MAIN_MENU,
     GAME_MODE_SELECT,
+    LOBBY,
     PLAYING,
     PLAYING_MP,
     GAME_OVER;
@@ -33,6 +35,7 @@ public final class GameStateHandler {
     addState(new TitleScreen());
     addState(new MainMenu());
     addState(new GameModeSelect());
+    addState(new Lobby());
     addState(new PlayingMP());
     addState(new Playing());
     addState(new GameOver());

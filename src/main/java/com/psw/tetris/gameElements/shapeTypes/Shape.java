@@ -96,6 +96,23 @@ public class Shape {
     }
   }
 
+  public void renderAt(final Graphics g, final int x, final int y) {
+    for (final Point2D point : points) {
+      g.setColor(color);
+      g.fillRect(
+          (int) (point.getX() * renderSize - renderSize / 2) + x,
+          (int) (point.getY() * renderSize - renderSize / 2) + y,
+          renderSize,
+          renderSize);
+      g.setColor(color.darker().darker());
+      g.drawRect(
+          (int) (point.getX() * renderSize - renderSize / 2) + x,
+          (int) (point.getY() * renderSize - renderSize / 2) + y,
+          renderSize,
+          renderSize);
+    }
+  }
+
   public Point2D getCenter() {
     return center;
   }

@@ -197,17 +197,17 @@ Note:
   xxCm: 5.92 cm  
   yyCm: 4.7 cm
 
-  - resume.png
-    xxCm: 6.33 cm
-    yyCm: 7.56 cm
+- resume.png
+  xxCm: 6.33 cm
+  yyCm: 7.56 cm
 
-  - restart.png
-    xxCm: 6.33 cm
-    yyCm: 9.26 cm
+- restart.png
+  xxCm: 6.33 cm
+  yyCm: 9.26 cm
 
-  - exit.png
-    xxCm: 6.33 cm
-    yyCm: 12.55 cm
+- exit.png
+  xxCm: 6.33 cm
+  yyCm: 12.55 cm
 
 - gameoverSingle.png
   xxCm: 5.92 cm
@@ -250,4 +250,3 @@ Note:
 - gameOverExit.png
   xxCm: 11.87 cm
   yyCm: 8.77 cm
-

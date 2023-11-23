@@ -34,7 +34,7 @@ public class Tetromino {
   private int speedModifier = 1;
 
   private int rotationStatus = UP;
-  private int shapeID;
+  private int shapeID = 0;
 
   private boolean softDrop = false;
   private boolean hardDrop = false;
@@ -55,6 +55,7 @@ public class Tetromino {
       final int shapeID) {
 
     this.board = board;
+    this.shapeID = shapeID;
 
     Color shapeColor = new Color(
         shapeData.rgb[0],
@@ -271,7 +272,6 @@ public class Tetromino {
       softDrop = true;
       speedModifier = Levels.softDropMultiplier;
     } else if (!hardDrop) {
-      softDrop = false;
       speedModifier = 1;
     }
 
