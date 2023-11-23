@@ -70,7 +70,7 @@ public class GameOver extends GameState {
         SCALE);
 
   }
-  
+
   public void setUsername(final String username) {
     this.username = username;
   }
@@ -91,6 +91,7 @@ public class GameOver extends GameState {
     g.drawImage(gameOverBackground, GAME_WIDTH / 4 - 50, GAME_HEIGHT / 4 - 50, GAME_WIDTH / 2 + 100,
         GAME_HEIGHT / 2 + 100, null);
 
+        
     returnMenuButton.render(g);
     retryButton.render(g);
 
