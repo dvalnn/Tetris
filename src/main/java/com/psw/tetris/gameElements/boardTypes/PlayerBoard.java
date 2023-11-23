@@ -107,7 +107,7 @@ public class PlayerBoard extends Board {
     }
     if (activeTetro.getShape().getMinY() <= 0) {
       System.out.println("[Board] Game Over!");
-      GameStateHandler.setActiveState(GameStatesEnum.GAME_OVER);
+      GameStateHandler.switchState(GameStatesEnum.GAME_OVER);
     }
 
   }

@@ -46,10 +46,10 @@ public class PlayingMP extends GameState {
   private final int PLAYER_X_OFFSET = GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2 + 13;
   private final int OPPONENT_X_OFFSET = 3 * GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2 + 10;
   private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2 + 18;
-  
+
   private final BufferedImage background;
   private final BufferedImage foreground;
-  
+
   BoardSettings playerBoardSet = new BoardSettings(
       BOARD_SQUARE,
       PLAYER_X_OFFSET,
@@ -162,7 +162,7 @@ public class PlayingMP extends GameState {
   @Override
   public void keyPressed(final KeyEvent e) {
     if (matchOver) {
-      GameStateHandler.setActiveState(GameStatesEnum.GAME_OVER);
+      GameStateHandler.switchState(GameStatesEnum.GAME_OVER);
       return;
     }
     // same controls as playing.java
