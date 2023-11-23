@@ -62,7 +62,6 @@ public class Board {
   }
 
   protected List<BoardLine> board;
-
   protected final BoardSettings set;
 
   protected int playerScore = 0;

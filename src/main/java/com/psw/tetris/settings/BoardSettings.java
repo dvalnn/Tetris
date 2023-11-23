@@ -20,6 +20,12 @@ public class BoardSettings {
   public final int scoreRenderX;
   public final int scoreRenderY;
 
+  public final int nextRenderX;
+  public final int nextRenderY;
+
+  public final int holdRenderX;
+  public final int holdRenderY;
+
   public final Color backgroundColor;
   public final Color gridColor;
 
@@ -47,5 +53,12 @@ public class BoardSettings {
 
     this.scoreRenderX = xOffset + 255;
     this.scoreRenderY = yOffset + 472;
+
+    this.nextRenderX = xOffset + 210;
+    this.nextRenderY = yOffset + 40;
+
+    this.holdRenderX = xOffset - 220;
+    this.holdRenderY = yOffset + 40;
+
   }
 }
