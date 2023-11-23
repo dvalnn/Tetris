@@ -16,13 +16,14 @@ import java.awt.image.BufferedImage;
 import java.net.InetAddress;
 import java.util.List;
 
-import com.psw.tetris.gameElements.shapeTypes.Shape;
-import com.psw.tetris.gameElements.shapeTypes.ShapeMP;
+import com.psw.tetris.gameElements.Board;
 import com.psw.tetris.gameElements.boardTypes.MPBoard;
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
+import com.psw.tetris.gameElements.shapeTypes.Shape;
+import com.psw.tetris.gameElements.shapeTypes.ShapeMP;
+import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.main.Game;
 import com.psw.tetris.settings.BoardSettings;
 import com.psw.tetris.utils.LoadSave;
@@ -50,30 +51,31 @@ public class PlayingMP extends GameState {
   private final BufferedImage background;
   private final BufferedImage foreground;
 
-  BoardSettings playerBoardSet = new BoardSettings(
-      BOARD_SQUARE,
-      PLAYER_X_OFFSET,
-      Y_OFFSET,
-      boardColor,
-      boardColor.brighter());
-
-  BoardSettings opponentBoardSet = new BoardSettings(
-      BOARD_SQUARE,
-      OPPONENT_X_OFFSET,
-      Y_OFFSET,
-      boardColor,
-      boardColor.brighter());
-
   public PlayingMP() {
     super(GameStatesEnum.PLAYING_MP);
-    playerBoard = new PlayerBoard(playerBoardSet);
+
+    playerBoard = new PlayerBoard(
+        new BoardSettings(
+            BOARD_SQUARE,
+            PLAYER_X_OFFSET,
+            Y_OFFSET,
+            boardColor,
+            boardColor.brighter()));
+
     background = LoadSave.loadBackground("multiplayerGame.png");
     foreground = LoadSave.loadBackground("multiEssentials.png");
   }
 
   public void addBoardMP(final String username, final InetAddress address, final int port) {
     System.out.println("[PlayingMP] Adding board for " + username);
-    opponentBoard = new MPBoard(opponentBoardSet, username);
+    opponentBoard = new MPBoard(
+        new BoardSettings(
+            BOARD_SQUARE,
+            OPPONENT_X_OFFSET,
+            Y_OFFSET,
+            boardColor,
+            boardColor.brighter()));
+
     shapeMP = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
   }
 
@@ -227,5 +229,13 @@ public class PlayingMP extends GameState {
 
   public ShapeMP getShapeMP() {
     return shapeMP;
+  }
+
+  public Board getPlayerBoard() {
+    return playerBoard;
+  }
+
+  public Board getOpponentBoard() {
+    return opponentBoard;
   }
 }

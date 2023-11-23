@@ -23,11 +23,11 @@ public class Score {
   static {
     scoreMap.put(Action.NONE, 0);
 
-    scoreMap.put(Action.SINGLE, 100); // TODO: implement
-    scoreMap.put(Action.DOUBLE, 300); // TODO: implement
-    scoreMap.put(Action.TRIPLE, 500); // TODO: implement
-    scoreMap.put(Action.TETRIS, 800); // TODO: implement
-    scoreMap.put(Action.B2B_TETRIS, 1200); // TODO: implement
+    scoreMap.put(Action.SINGLE, 100);
+    scoreMap.put(Action.DOUBLE, 300);
+    scoreMap.put(Action.TRIPLE, 500);
+    scoreMap.put(Action.TETRIS, 800);
+    scoreMap.put(Action.B2B_TETRIS, 1200);
 
     scoreMap.put(Action.MINI_T_SPIN, 100); // TODO: implement
     scoreMap.put(Action.MINI_T_SPIN_SINGLE, 200); // TODO: implement

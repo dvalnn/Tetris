@@ -68,6 +68,8 @@ public class Board {
   protected int playerLevel = 0;
   protected int playerLines = 0;
 
+  private String username = null;
+
   private int tickCounter = 0;
   private int seconds = 0;
   private int minutes = 0;
@@ -132,6 +134,12 @@ public class Board {
     g2.drawString(String.format("%02d:%02d", minutes, seconds),
         set.timerRenderX,
         set.timerRenderY);
+
+    if (username != null) {
+      g2.setColor(Color.BLACK);
+      g2.setFont(g2.getFont().deriveFont(20f));
+      g2.drawString(username, set.nameRenderX, set.nameRenderY);
+    }
   }
 
   public List<BoardLine> getBoard() {
@@ -140,5 +148,13 @@ public class Board {
 
   public Color getBackgroundColor() {
     return set.backgroundColor;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(final String username) {
+    this.username = username;
   }
 }

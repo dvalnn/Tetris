@@ -29,6 +29,9 @@ public class BoardSettings {
   public final Color backgroundColor;
   public final Color gridColor;
 
+  public final int nameRenderX;
+  public final int nameRenderY;
+
   public BoardSettings(
       final int squareSize,
       final int xOffset,
@@ -60,5 +63,7 @@ public class BoardSettings {
     this.holdRenderX = xOffset - 220;
     this.holdRenderY = yOffset + 40;
 
+    this.nameRenderX = xOffset + 60;
+    this.nameRenderY = yOffset + 520;
   }
 }

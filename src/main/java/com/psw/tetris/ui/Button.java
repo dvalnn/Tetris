@@ -55,6 +55,10 @@ public class Button {
     return bounds;
   }
 
+  public Point getAnchorPoint() {
+    return new Point(xPos, yPos);
+  }
+
   public boolean contains(final Point p) {
     if (bounds == null) {
       return false;
