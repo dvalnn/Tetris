@@ -35,6 +35,7 @@ public class AboutUs extends GameState {
     private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
 
     //TODO: change this to a proper text file
+    
     private final String text = """
             DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN 
             DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
