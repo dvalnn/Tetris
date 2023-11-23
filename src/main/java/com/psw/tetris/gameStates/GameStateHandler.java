@@ -2,6 +2,7 @@ package com.psw.tetris.gameStates;
 
 import java.util.HashMap;
 
+import com.psw.tetris.gameStates.stateTypes.AboutUs;
 import com.psw.tetris.gameStates.stateTypes.ChangeKeybinds;
 import com.psw.tetris.gameStates.stateTypes.GameModeSelect;
 import com.psw.tetris.gameStates.stateTypes.GameOver;
@@ -19,6 +20,7 @@ public final class GameStateHandler {
     MAIN_MENU,
     SETTINGS,
     LEADERBOARD,
+    ABOUT_US,
     CHANGE_KEYBINDS,
     GAME_MODE_SELECT,
     LOBBY,
@@ -42,6 +44,7 @@ public final class GameStateHandler {
     addState(new MainMenu());
     addState(new Settings());
     addState(new Leaderboard());
+    addState(new AboutUs());
     addState(new ChangeKeybinds());
     addState(new GameModeSelect());
     addState(new Lobby());
