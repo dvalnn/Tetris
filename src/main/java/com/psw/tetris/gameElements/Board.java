@@ -71,8 +71,8 @@ public class Board {
   private String username = null;
 
   private int tickCounter = 0;
-  private int seconds = 0;
-  private int minutes = 0;
+  private static int seconds = 0;
+  private static int minutes = 0;
 
   public Board(BoardSettings settings) {
     this.set = settings;
@@ -153,6 +153,14 @@ public class Board {
   public String getUsername() {
     return username;
   }
+
+  public static int getTimeSeconds() {
+    return seconds;
+  }
+  public static int getTimeMinutes() {
+    return minutes;
+  }
+  //writes the getter for the time 
 
   public void setUsername(final String username) {
     this.username = username;
