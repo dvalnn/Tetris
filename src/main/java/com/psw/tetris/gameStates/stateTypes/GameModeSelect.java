@@ -12,7 +12,6 @@ import java.awt.image.BufferedImage;
 
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.main.Game;
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.SwitchGameStateAction;
 import com.psw.tetris.utils.LoadSave;
@@ -32,26 +31,25 @@ public class GameModeSelect extends GameState {
   private final int returnButtonX = 40;
   private final int returnButtonY = 620;
 
-  private final Button<GameStatesEnum, Void> playButton = new Button<GameStatesEnum, Void>(
+  private SwitchGameStateAction switchStateAction = new SwitchGameStateAction();
+
+  private final Button playButton = new Button(
       pButtonX,
       pButtonY,
       LoadSave.loadImage(SINGLE_PLAYER),
-      buttonScale,
-      new SwitchGameStateAction());
+      buttonScale);
 
-  private final Button<GameStatesEnum, Void> onlineButton = new Button<GameStatesEnum, Void>(
+  private final Button onlineButton = new Button(
       mpButtonX,
       mpButtonY,
       LoadSave.loadImage(MULTIPLAYER),
-      buttonScale,
-      new SwitchGameStateAction());
+      buttonScale);
 
-  private final Button<GameStatesEnum, Void> returnButton = new Button<GameStatesEnum, Void>(
+  private final Button returnButton = new Button(
       returnButtonX,
       returnButtonY,
       LoadSave.loadImage(RETURN_BUTTON),
-      buttonScale,
-      new SwitchGameStateAction());
+      buttonScale);
 
   public GameModeSelect() {
     super(GameStatesEnum.GAME_MODE_SELECT);
@@ -68,14 +66,22 @@ public class GameModeSelect extends GameState {
 
   @Override
   public void mouseClicked(final MouseEvent e) {
-    if (playButton.getBounds().contains(e.getPoint())) {
-      playButton.execAction(GameStatesEnum.LOBBY);
-    } else if (onlineButton.getBounds().contains(e.getPoint())) {
-      Game.initNetworking();
-      onlineButton.execAction(GameStatesEnum.PLAYING_MP);
-    } else if (returnButton.getBounds().contains(e.getPoint())) {
-      returnButton.execAction(GameStatesEnum.MAIN_MENU);
-    }
+
+    playButton.execIfClicked(
+        e.getPoint(),
+        switchStateAction,
+        GameStatesEnum.LOBBY);
+
+    playButton.execIfClicked(
+        e.getPoint(),
+        switchStateAction,
+        GameStatesEnum.PLAYING_MP);
+
+    onlineButton.execIfClicked(
+        e.getPoint(),
+        switchStateAction,
+        GameStatesEnum.LOBBY); // TODO: add lobby mp
+
   }
 
 }

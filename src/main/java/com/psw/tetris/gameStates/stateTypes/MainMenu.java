@@ -117,7 +117,7 @@ public class MainMenu extends GameState {
     aboutUsButton.execIfClicked(
         e.getPoint(),
         switchStateAction,
-        GameStatesEnum.MAIN_MENU);
+        GameStatesEnum.MAIN_MENU); // TODO: implement about us section;
 
     exitButton.execIfClicked(
         e.getPoint(),
