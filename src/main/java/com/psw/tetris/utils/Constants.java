@@ -27,6 +27,7 @@ public class Constants {
       public static final String RETURN_BUTTON = BUTTON_PATH + "returnButton.png";
       public static final String SETTINGS = BUTTON_PATH + "settings.png";
       public static final String SINGLE_PLAYER = BUTTON_PATH + "singlePlayer.png";
+      public static final String CHANGE_GAME_INPUTS = BUTTON_PATH + "changeGameInputs.png";
     }
   }
 

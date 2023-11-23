@@ -23,11 +23,7 @@ import com.psw.tetris.utils.LoadSave;
 
 public class ChangeKeybinds extends GameState {
 
-    // background
-    // botão de return
-    // botões de keybinds
-    // logica de trocar keybinds // doneee
-    // logica de resetar para defaults keybinds // doneee
+
     private enum keyAction {
         ROTATE_LEFT,
         ROTATE_RIGHT,
@@ -189,22 +185,22 @@ public class ChangeKeybinds extends GameState {
             buttonMoveLeft.execAction(keyAction.MOVE_LEFT);
 
         } else if (buttonSoftDrop.getBounds().contains(e.getPoint())) {
-            buttonReset.execAction(keyAction.SOFT_DROP);
+            buttonSoftDrop.execAction(keyAction.SOFT_DROP);
 
         } else if (buttonHardDrop.getBounds().contains(e.getPoint())) {
-            buttonReset.execAction(keyAction.HARD_DROP);
+            buttonHardDrop.execAction(keyAction.HARD_DROP);
 
         } else if (buttonHold.getBounds().contains(e.getPoint())) {
-            buttonReset.execAction(keyAction.HOLD);
+            buttonHold.execAction(keyAction.HOLD);
 
         } else if (buttonPause.getBounds().contains(e.getPoint())) {
-            buttonReset.execAction(keyAction.PAUSE);
+            buttonPause.execAction(keyAction.PAUSE);
 
         } else if (buttonReset.getBounds().contains(e.getPoint())) {
             buttonReset.execAction(keyAction.RESET);
 
         } else if (buttonReturn.getBounds().contains(e.getPoint())) {
-            buttonReturn.execAction(GameStatesEnum.MAIN_MENU);
+            buttonReturn.execAction(GameStatesEnum.SETTINGS);
         }
     }
 
