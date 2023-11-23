@@ -17,6 +17,8 @@ import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.settings.BoardSettings;
 import com.psw.tetris.utils.JsonShapeParser;
+import com.psw.tetris.gameplay.Score;
+import com.psw.tetris.gameplay.Levels;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
 
@@ -25,11 +27,9 @@ public class PlayerBoard extends Board {
   // TODO: implement 6 Tetrominos
   private Tetromino activeTetro; // active
   private Tetromino nextTetro; // next
-  // private Tetromino nextTetro2; // next
-  // private Tetromino nextTetro3; // next
-  // private Tetromino nextTetro4; // next
-  // private Tetromino nextTetro5; // next
-  // private Tetromino nextTetro6; // next
+  private Tetromino nextTetro2; // next
+  private Tetromino nextTetro3; // next
+  private Tetromino nextTetro4; // next
 
   private Tetromino holdTetro; // hold
 
@@ -48,6 +48,9 @@ public class PlayerBoard extends Board {
 
     activeTetro = tetrominoFactory(shapeData);
     nextTetro = tetrominoFactory(shapeData);
+    nextTetro2 = tetrominoFactory(shapeData);
+    nextTetro3 = tetrominoFactory(shapeData);
+    nextTetro4 = tetrominoFactory(shapeData);
   }
 
   private Tetromino tetrominoFactory(ArrayList<JsonShape> shapeData) {
@@ -78,16 +81,20 @@ public class PlayerBoard extends Board {
       return;
 
     if (holdTetro == null) {
-      holdTetro = activeTetro;
-      activeTetro = tetrominoFactory(shapeData);
-      nextTetro = tetrominoFactory(shapeData);
+      holdTetro = tetrominoFactory(activeTetro.getShapeID());
+      activeTetro = nextTetro;
+      nextTetro = nextTetro2;
+      nextTetro2 = nextTetro3;
+      nextTetro3 = nextTetro4;
+      nextTetro4 = tetrominoFactory(shapeData);
+
       blockHoldTetromino = true;
       return;
     }
 
     final Tetromino aux = activeTetro;
-    activeTetro = tetrominoFactory(activeTetro.getShapeID());
-    holdTetro = aux;
+    activeTetro = tetrominoFactory(holdTetro.getShapeID());
+    holdTetro = tetrominoFactory(aux.getShapeID());
     blockHoldTetromino = true;
   }
 
@@ -105,13 +112,13 @@ public class PlayerBoard extends Board {
 
   }
 
-  private void clearRow(final int row) {
+  private void clearLine(final int row) {
     for (int col = 0; col < BOARD_WIDTH; col++) {
       board.get(row).setColor(col, set.backgroundColor);
     }
   }
 
-  private void shiftRowsDown(final int row) {
+  private void shiftLineDown(final int row) {
     for (int r = row; r > 0; r--) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
         board.get(r).setColor(col, board.get(r - 1).getIndexRGB(col));
@@ -119,8 +126,8 @@ public class PlayerBoard extends Board {
     }
   }
 
-  private void checkRows() {
-    int rowsCleared = 0;
+  private void checkLines() {
+    int linesCleared = 0;
 
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       boolean full = true;
@@ -131,13 +138,15 @@ public class PlayerBoard extends Board {
         }
       }
       if (full) {
-        rowsCleared++;
-        clearRow(row);
-        shiftRowsDown(row);
+        linesCleared++;
+        clearLine(row);
+        shiftLineDown(row);
       }
     }
 
-    System.out.println("[Board] Cleared " + rowsCleared + " rows!");
+    Score.registerLinesCleared(linesCleared);
+    Levels.registerLinesCleared(linesCleared);
+
   }
 
   // NOTE: This method is only used for debugging purposes
@@ -160,7 +169,10 @@ public class PlayerBoard extends Board {
   // it is not used in the actual game.
   // PERF: This method is very inefficient. It iterates over
   // the entire board every time the mouse is clicked.
-  private void toggleBlockOnMousePosition(final int x, final int y, final boolean add) {
+  private void toggleBlockOnMousePosition(
+      final int x,
+      final int y,
+      final boolean add) {
 
     // NOTE: for each grid square, expand it fmom board coordinates
     // to screen coordinates and check if the mouse is in it
@@ -170,8 +182,8 @@ public class PlayerBoard extends Board {
     // it might be in the future
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
-        final int x1 = (int) (col * set.squareSize - set.squareSize / 2) + (int) set.xOffset;
-        final int y1 = (int) (row * set.squareSize - set.squareSize / 2) + (int) set.yOffset;
+        final int x1 = (int) (col * set.squareSize - set.squareSize / 2) + set.xOffset;
+        final int y1 = (int) (row * set.squareSize - set.squareSize / 2) + set.yOffset;
         final int x2 = x1 + set.squareSize;
         final int y2 = y1 + set.squareSize;
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
@@ -209,6 +221,15 @@ public class PlayerBoard extends Board {
   }
 
   public void update() {
+    // update the score. This is done in this class
+    // and not direcly on the parent class so that
+    // the player and the opponent can have different
+    // score values, as both PlayerBoard and BoardMP
+    // extend Board.
+    playerScore = Score.getScore();
+    playerLevel = Levels.getCurrentLevel() + 1;
+    playerLines = Levels.getTotalLinesCleared();
+
     // NOTE: This is only used for debugging purposes
     // TODO: Remove this
     if (paused)
@@ -218,15 +239,44 @@ public class PlayerBoard extends Board {
     if (!activeTetro.isActive()) {
 
       addTetrominoToPile();
-      checkRows();
+      checkLines();
       activeTetro = nextTetro;
-      nextTetro = tetrominoFactory(shapeData);
+      nextTetro = nextTetro2;
+      nextTetro2 = nextTetro3;
+      nextTetro3 = nextTetro4;
+      nextTetro4 = tetrominoFactory(shapeData);
     }
   }
 
   public void render(final Graphics g) {
     super.render(g);
     activeTetro.render(g);
+
+    nextTetro.getShape().renderAt(
+        g,
+        set.nextRenderX,
+        set.nextRenderY);
+
+    nextTetro2.getShape().renderAt(
+        g,
+        set.nextRenderX,
+        set.nextRenderY + 100);
+
+    nextTetro3.getShape().renderAt(
+        g,
+        set.nextRenderX,
+        set.nextRenderY + 200);
+
+    nextTetro4.getShape().renderAt(
+        g,
+        set.nextRenderX,
+        set.nextRenderY + 300);
+
+    if (holdTetro != null)
+      holdTetro.getShape().renderAt(
+          g,
+          set.holdRenderX,
+          set.holdRenderY);
 
     // NOTE: This is only used for debugging purposes
     // TODO: Remove this

@@ -69,7 +69,7 @@ public class GameModeSelect extends GameState {
   @Override
   public void mouseClicked(final MouseEvent e) {
     if (playButton.getBounds().contains(e.getPoint())) {
-      playButton.execAction(GameStatesEnum.PLAYING);
+      playButton.execAction(GameStatesEnum.LOBBY);
     } else if (onlineButton.getBounds().contains(e.getPoint())) {
       Game.initNetworking();
       onlineButton.execAction(GameStatesEnum.PLAYING_MP);

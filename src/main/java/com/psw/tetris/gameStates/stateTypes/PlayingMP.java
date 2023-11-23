@@ -12,6 +12,7 @@ import static com.psw.tetris.utils.Constants.GameConstants.UPS_SET;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.net.InetAddress;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.main.Game;
 import com.psw.tetris.settings.BoardSettings;
+import com.psw.tetris.utils.LoadSave;
 
 public class PlayingMP extends GameState {
 
@@ -41,10 +43,13 @@ public class PlayingMP extends GameState {
 
   // calculate the offsets so that the boards are centered
   // and the player's board is on the left and the opponent's
-  private final int PLAYER_X_OFFSET = GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2;
-  private final int OPPONENT_X_OFFSET = 3 * GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2;
-  private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2;
-
+  private final int PLAYER_X_OFFSET = GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2 + 13;
+  private final int OPPONENT_X_OFFSET = 3 * GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2 + 10;
+  private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2 + 18;
+  
+  private final BufferedImage background;
+  private final BufferedImage foreground;
+  
   BoardSettings playerBoardSet = new BoardSettings(
       BOARD_SQUARE,
       PLAYER_X_OFFSET,
@@ -62,6 +67,8 @@ public class PlayingMP extends GameState {
   public PlayingMP() {
     super(GameStatesEnum.PLAYING_MP);
     playerBoard = new PlayerBoard(playerBoardSet);
+    background = LoadSave.loadBackground("multiplayerGame.png");
+    foreground = LoadSave.loadBackground("multiEssentials.png");
   }
 
   public void addBoardMP(final String username, final InetAddress address, final int port) {
@@ -125,6 +132,8 @@ public class PlayingMP extends GameState {
 
   @Override
   public void render(final Graphics g) {
+    g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+    g.drawImage(foreground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
     if (opponentBoard == null) {
       // TODO: make this look nicer
       g.setColor(Color.WHITE);
@@ -138,8 +147,8 @@ public class PlayingMP extends GameState {
       g.drawString("Opponent disconnected!", GAME_WIDTH / 2, GAME_HEIGHT / 2);
     } else {
       // draw line separating the two boards
-      g.setColor(Color.WHITE);
-      g.drawLine(GAME_WIDTH / 2, 0, GAME_WIDTH / 2, GAME_HEIGHT);
+      // g.setColor(Color.WHITE);
+      // g.drawLine(GAME_WIDTH / 2, 0, GAME_WIDTH / 2, GAME_HEIGHT);
 
       // draw opponent board
       opponentBoard.render(g);

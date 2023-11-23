@@ -49,6 +49,21 @@ public class Button<T, V> {
     initBounds();
   }
 
+  public Button(
+      final int xPos,
+      final int yPos,
+      final BufferedImage image,
+      final double imgScale) {
+
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.image = image;
+    this.imgScale = imgScale;
+    this.action = null;
+
+    initBounds();
+  }
+
   private void initBounds() {
     if (image == null) {
       return;
@@ -63,6 +78,21 @@ public class Button<T, V> {
 
   public V execAction(final T args) {
     return action.exec(args);
+  }
+
+  public boolean isClicked(final Point p) {
+    if (bounds == null) {
+      return false;
+    }
+    return bounds.contains(p);
+  }
+
+  public V ifClickedExec(final Point p, ButtonAction<T, V> act, final T args) {
+    if (isClicked(p)) {
+      return act.exec(args);
+    }
+
+    return null;
   }
 
   public void render(final Graphics g) {

@@ -16,6 +16,8 @@ import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
 import com.psw.tetris.gameElements.shapeTypes.GhostShape;
 import com.psw.tetris.gameElements.shapeTypes.JsonShape;
 import com.psw.tetris.gameElements.shapeTypes.Shape;
+import com.psw.tetris.gameplay.Levels;
+import com.psw.tetris.gameplay.Score;
 import com.psw.tetris.utils.WallKickData;
 
 public class Tetromino {
@@ -24,15 +26,18 @@ public class Tetromino {
   private final PlayerBoard board;
 
   private final int HORIZONTAL_SPEED = 20;
-  private final int VERTICAL_SLOW = 1;
-  private final int VERTICAL_FAST = 20;
-  private final int VERTICAL_INSTANT = 20000;
 
   private int verticalMoveTick = 0;
   private int horizontalMoveTick = 0;
-  private int verticalSpeed = VERTICAL_SLOW;
+
+  private int verticalSpeed = 0;
+  private int speedModifier = 1;
+
   private int rotationStatus = UP;
-  private int shapeID;
+  private int shapeID = 0;
+
+  private boolean softDrop = false;
+  private boolean hardDrop = false;
 
   private boolean right, left, down, drop;
   private boolean active = true;
@@ -50,6 +55,7 @@ public class Tetromino {
       final int shapeID) {
 
     this.board = board;
+    this.shapeID = shapeID;
 
     Color shapeColor = new Color(
         shapeData.rgb[0],
@@ -66,8 +72,6 @@ public class Tetromino {
     shape.initPosition();
 
     ghost = new GhostShape(shape);
-
-    System.out.println("[Tetromino] New Shape: " + shape);
   }
 
   private boolean sideColides(final int dir) {
@@ -183,13 +187,13 @@ public class Tetromino {
 
     final boolean colision = bottomColides(shape);
 
-    if (colision && verticalSpeed == VERTICAL_INSTANT) {
+    if (colision && hardDrop) {
       active = false;
       return;
     }
 
     if (colision && !deactivating) {
-      System.out.println("[Tetromino] Deactivating");
+      // System.out.println("[Tetromino] Deactivating");
       deactivating = true;
       deactivationTickCounter = 0;
       return;
@@ -197,7 +201,8 @@ public class Tetromino {
 
     if (colision && deactivating) {
       deactivationTickCounter++;
-      System.out.println("[Tetromino] Deactivation tick: " + deactivationTickCounter);
+      // System.out.println("[Tetromino] Deactivation tick: " +
+      // deactivationTickCounter);
       if (deactivationTickCounter >= DEACTIVATION_TICKS) {
         active = false;
       }
@@ -208,9 +213,13 @@ public class Tetromino {
     deactivating = false;
 
     verticalMoveTick++;
-    if (verticalMoveTick * verticalSpeed >= UPS_SET) {
+    if (verticalMoveTick * speedModifier >= verticalSpeed) {
       shape.move(0, 1);
       verticalMoveTick = 0;
+      if (hardDrop)
+        Score.scoreHardDrop();
+      else if (softDrop)
+        Score.scoreSoftDrop();
     }
   }
 
@@ -254,18 +263,22 @@ public class Tetromino {
       updateGhost = false;
     }
 
+    verticalSpeed = Levels.getLevelSpeed();
+
     if (drop) {
-      verticalSpeed = VERTICAL_INSTANT;
-    } else if (down && verticalSpeed != VERTICAL_INSTANT) {
-      verticalSpeed = VERTICAL_FAST;
-    } else if (verticalSpeed != VERTICAL_INSTANT) {
-      verticalSpeed = VERTICAL_SLOW;
+      hardDrop = true;
+      speedModifier = Levels.hardDropMultiplier;
+    } else if (down && !hardDrop) {
+      softDrop = true;
+      speedModifier = Levels.softDropMultiplier;
+    } else if (!hardDrop) {
+      speedModifier = 1;
     }
 
     move(DOWN);
 
     // if the vertical speed is instant, the shape should not move horizontally
-    if (verticalSpeed == VERTICAL_INSTANT)
+    if (hardDrop)
       return;
 
     horizontalMoveTick++;
