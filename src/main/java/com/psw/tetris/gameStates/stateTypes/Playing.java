@@ -21,12 +21,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import com.psw.tetris.gameElements.Board;
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
-import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.utils.LoadSave;
 import com.psw.tetris.gameStates.GameState;
-
+import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.settings.BoardSettings;
+import com.psw.tetris.utils.LoadSave;
 
 public class Playing extends GameState {
 
@@ -209,5 +209,9 @@ public class Playing extends GameState {
 
   @Override
   public void windowLostFocus() {
+  }
+
+  public Board getBoard() {
+    return board;
   }
 }

@@ -1,18 +1,22 @@
 package com.psw.tetris.main;
 
-import static com.psw.tetris.utils.Constants.GameConstants.*;
+import static com.psw.tetris.utils.Constants.GameConstants.FPS_SET;
+import static com.psw.tetris.utils.Constants.GameConstants.UPS_SET;
 
-import com.psw.tetris.gameStates.GameStateHandler;
-import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.gameStates.stateTypes.PlayingMP;
-import com.psw.tetris.networking.GameClient;
-import com.psw.tetris.networking.GameServer;
-import com.psw.tetris.networking.packets.Packet00Login;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.net.InetAddress;
+
 import javax.swing.JOptionPane;
+
+import com.psw.tetris.gameStates.GameStateHandler;
+import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.psw.tetris.gameStates.stateTypes.Playing;
+import com.psw.tetris.gameStates.stateTypes.PlayingMP;
+import com.psw.tetris.networking.GameClient;
+import com.psw.tetris.networking.GameServer;
+import com.psw.tetris.networking.packets.Packet00Login;
 
 public class Game implements Runnable {
 
@@ -26,6 +30,8 @@ public class Game implements Runnable {
   private static boolean serverActive = false;
   private static boolean clientActive = false;
   private static boolean exit = false;
+
+  private static String username = null;
 
   public Game() {
     GameStateHandler.init();
@@ -176,6 +182,22 @@ public class Game implements Runnable {
 
   public static void exit() {
     exit = true;
+  }
+
+  public static void setUsername(final String username) {
+
+    Game.username = username;
+
+    ((Playing) (GameStateHandler.getState(GameStatesEnum.PLAYING)))
+        .getBoard().setUsername(username);
+
+    ((PlayingMP) (GameStateHandler.getState(GameStatesEnum.PLAYING_MP)))
+        .getPlayerBoard().setUsername(username);
+
+  }
+
+  public static final String getUsername() {
+    return username;
   }
 
   public boolean isServerActive() {

@@ -7,11 +7,9 @@ import com.psw.tetris.settings.BoardSettings;
 
 // Class to represent the board of a multiplayer opponent
 public class MPBoard extends Board {
-  private final String username;
 
-  public MPBoard(BoardSettings set, final String username) {
+  public MPBoard(BoardSettings set) {
     super(set);
-    this.username = username;
   }
 
   public void update(final int row, final Color[] colorLine) {
@@ -20,7 +18,4 @@ public class MPBoard extends Board {
     }
   }
 
-  public String getUsername() {
-    return username;
-  }
 }
