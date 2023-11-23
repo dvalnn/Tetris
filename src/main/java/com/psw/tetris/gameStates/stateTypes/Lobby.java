@@ -2,7 +2,18 @@ package com.psw.tetris.gameStates.stateTypes;
 
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
+import static com.psw.tetris.utils.Constants.UI.Buttons.BUTTON_PATH;
 import static com.psw.tetris.utils.Constants.UI.Buttons.RETURN_BUTTON;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
@@ -10,27 +21,56 @@ import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.SwitchGameStateAction;
 import com.psw.tetris.utils.LoadSave;
 
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-
 public class Lobby extends GameState {
 
-  private final BufferedImage background = LoadSave.loadBackground("multiWaiting.png");
   private static final GameStatesEnum stateID = GameStatesEnum.LOBBY;
 
-  private static final double buttonScale = 0.25;
-  private static final int returnButtonX = 40;
-  private static final int returnButtonY = 620;
+  private final BufferedImage background = LoadSave.loadBackground("multiWaiting.png");
 
-  private static final Button returnButton = new Button(
+  private final double buttonScale = 0.25;
+  private final int returnButtonX = 40;
+  private final int returnButtonY = 620;
+
+  private final int inputFieldX = GAME_WIDTH / 2;
+  private final int inputFieldY = GAME_HEIGHT / 2;
+  private final int inputMaxLength = 10;
+  private String inputText = "";
+
+  private final Button returnButton = new Button(
       returnButtonX,
       returnButtonY,
       LoadSave.loadImage(RETURN_BUTTON),
       buttonScale);
 
+  private final Button inputFieldButton = new Button(
+      inputFieldX,
+      inputFieldY,
+      LoadSave.loadImage(BUTTON_PATH + "playerName.png"),
+      buttonScale);
+
   public Lobby() {
     super(stateID);
+  }
+
+  @Override
+  public void keyPressed(KeyEvent e) {
+    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+      inputFieldButton.exec(
+          new SwitchGameStateAction(),
+          GameStatesEnum.PLAYING);
+    }
+
+    if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+      inputText = StringUtils.chop(inputText);
+      return;
+    }
+
+    // convert key code to caracter and append to String
+    // check if character is alphanumeric
+    char c = e.getKeyChar();
+    if (inputText.length() < inputMaxLength && Character.isLetterOrDigit(c)) {
+      inputText += c;
+    }
   }
 
   @Override
@@ -39,13 +79,23 @@ public class Lobby extends GameState {
         e.getPoint(),
         new SwitchGameStateAction(),
         GameStatesEnum.MAIN_MENU);
-
   }
 
   @Override
   public void render(Graphics g) {
     g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
     returnButton.render(g);
+    inputFieldButton.render(g);
+
+    g.setColor(Color.WHITE);
+    g.setFont(g.getFont().deriveFont(30f));
+    Graphics2D g2 = (Graphics2D) g;
+
+    g2.setRenderingHint(
+        RenderingHints.KEY_ANTIALIASING,
+        RenderingHints.VALUE_ANTIALIAS_ON);
+
+    g2.drawString(inputText, inputFieldX + 180, inputFieldY + 32);
   }
 
 }

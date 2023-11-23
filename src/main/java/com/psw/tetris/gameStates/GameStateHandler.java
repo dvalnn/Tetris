@@ -2,8 +2,6 @@ package com.psw.tetris.gameStates;
 
 import java.util.HashMap;
 
-
-
 import com.psw.tetris.gameStates.stateTypes.ChangeKeybinds;
 import com.psw.tetris.gameStates.stateTypes.GameModeSelect;
 import com.psw.tetris.gameStates.stateTypes.GameOver;
