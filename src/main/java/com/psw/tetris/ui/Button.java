@@ -6,9 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-public class Button<T, V> {
-
-  private final ButtonAction<T, V> action;
+public class Button {
 
   private final int xPos;
   private final int yPos;
@@ -18,33 +16,15 @@ public class Button<T, V> {
   private Rectangle bounds;
 
   public Button(
-      final int xPos,
-      final int yPos,
-      final BufferedImage image,
-      final double imgScale,
-      final ButtonAction<T, V> action) {
-
-    this.xPos = xPos;
-    this.yPos = yPos;
-    this.image = image;
-    this.imgScale = imgScale;
-    this.action = action;
-
-    initBounds();
-  }
-
-  public Button(
       final Point center,
       final BufferedImage image,
-      final double imgScale,
-      final ButtonAction<T, V> action) {
+      final double imgScale) {
 
     xPos = (int) (center.getX() - image.getWidth() * imgScale / 2);
     yPos = (int) (center.getY() - image.getHeight() * imgScale / 2);
 
     this.image = image;
     this.imgScale = imgScale;
-    this.action = action;
 
     initBounds();
   }
@@ -59,7 +39,6 @@ public class Button<T, V> {
     this.yPos = yPos;
     this.image = image;
     this.imgScale = imgScale;
-    this.action = null;
 
     initBounds();
   }
@@ -76,8 +55,11 @@ public class Button<T, V> {
     return bounds;
   }
 
-  public V execAction(final T args) {
-    return action.exec(args);
+  public boolean contains(final Point p) {
+    if (bounds == null) {
+      return false;
+    }
+    return bounds.contains(p);
   }
 
   public boolean isClicked(final Point p) {
@@ -87,7 +69,18 @@ public class Button<T, V> {
     return bounds.contains(p);
   }
 
-  public V ifClickedExec(final Point p, ButtonAction<T, V> act, final T args) {
+  public <T, V> V exec(ButtonAction<T, V> act, final T args) {
+    return act.exec(args);
+  }
+
+  public <T, V> V execIf(boolean Cond, ButtonAction<T, V> act, final T args) {
+    if (Cond) {
+      return act.exec(args);
+    }
+    return null;
+  }
+
+  public <T, V> V execIfClicked(final Point p, ButtonAction<T, V> act, final T args) {
     if (isClicked(p)) {
       return act.exec(args);
     }

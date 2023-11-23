@@ -23,7 +23,7 @@ public class Lobby extends GameState {
   private static final int returnButtonX = 40;
   private static final int returnButtonY = 620;
 
-  private static final Button<GameStatesEnum, Void> returnButton = new Button<GameStatesEnum, Void>(
+  private static final Button returnButton = new Button(
       returnButtonX,
       returnButtonY,
       LoadSave.loadImage(RETURN_BUTTON),
@@ -35,7 +35,7 @@ public class Lobby extends GameState {
 
   @Override
   public void mouseClicked(MouseEvent e) {
-    returnButton.ifClickedExec(
+    returnButton.execIfClicked(
         e.getPoint(),
         new SwitchGameStateAction(),
         GameStatesEnum.MAIN_MENU);

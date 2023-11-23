@@ -23,11 +23,12 @@ public class TitleScreen extends GameState {
   private final int buttonX = GAME_WIDTH / 2;
   private final int buttonY = GAME_HEIGHT - 100;
 
-  private final Button<GameStatesEnum, Void> button = new Button<GameStatesEnum, Void>(
+  private final Button button = new Button(
       new Point(buttonX, buttonY),
       LoadSave.loadImage(PRESS_ENTER),
-      0.25,
-      new SwitchGameStateAction());
+      0.25);
+
+  private final SwitchGameStateAction btnAction = new SwitchGameStateAction();
 
   public TitleScreen() {
     super(GameStatesEnum.TITLE_SCREEN);
@@ -40,19 +41,19 @@ public class TitleScreen extends GameState {
     button.render(g);
   }
 
-  
   @Override
   public void mouseClicked(final MouseEvent e) {
-    if (button.getBounds().contains(e.getPoint())) {
-      button.execAction(GameStatesEnum.MAIN_MENU);
-    }
+    button.execIfClicked(
+        e.getPoint(),
+        btnAction,
+        GameStatesEnum.MAIN_MENU);
   }
 
   @Override
   public void keyPressed(final KeyEvent e) {
     switch (e.getKeyCode()) {
       case KeyEvent.VK_ENTER:
-        button.execAction(GameStatesEnum.MAIN_MENU);
+        button.exec(btnAction, GameStatesEnum.MAIN_MENU);
         break;
     }
   }

@@ -22,11 +22,11 @@ import com.psw.tetris.utils.LoadSave;
 
 public class MainMenu extends GameState {
 
-  private final Button<GameStatesEnum, Void> newGameButton;
-  private final Button<GameStatesEnum, Void> leaderboardButton;
-  private final Button<GameStatesEnum, Void> settingsButton;
-  private final Button<GameStatesEnum, Void> aboutUsButton;
-  private final Button<Void, Void> exitButton;
+  private final Button newGameButton;
+  private final Button leaderboardButton;
+  private final Button settingsButton;
+  private final Button aboutUsButton;
+  private final Button exitButton;
 
   private final BufferedImage newGameButtonImage = LoadSave.loadImage(NEW_GAME);
   private final BufferedImage leaderboardButtonImage = LoadSave.loadImage(LEADERBOARD);
@@ -34,7 +34,7 @@ public class MainMenu extends GameState {
   private final BufferedImage aboutUsButtonImage = LoadSave.loadImage(ABOUT_US);
   private final BufferedImage exitButtonImage = LoadSave.loadImage(EXIT_GAME);
 
-  private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
+  private final SwitchGameStateAction switchStateAction = new SwitchGameStateAction();
   private final ButtonAction<Void, Void> quitGameAction = (Void) -> {
     Game.exit();
     return null;
@@ -51,44 +51,39 @@ public class MainMenu extends GameState {
     super(GameStatesEnum.MAIN_MENU);
 
     menuBackground = LoadSave.loadBackground("mainMenu.png");
-    newGameButton = new Button<GameStatesEnum, Void>(
+    newGameButton = new Button(
         FIRST_BUTTON_X,
         FIRST_BUTTON_Y,
         newGameButtonImage,
-        SCALE,
-        switchGameStateAction);
+        SCALE);
 
     final int secondButtonY = (int) (FIRST_BUTTON_Y + newGameButton.getBounds().getHeight() + BUTTON_SPACING);
-    leaderboardButton = new Button<GameStatesEnum, Void>(
+    leaderboardButton = new Button(
         FIRST_BUTTON_X,
         secondButtonY,
         leaderboardButtonImage,
-        SCALE,
-        switchGameStateAction);
+        SCALE);
 
     final int thirdButtonY = (int) (secondButtonY + leaderboardButton.getBounds().getHeight() + BUTTON_SPACING);
-    settingsButton = new Button<GameStatesEnum, Void>(
+    settingsButton = new Button(
         FIRST_BUTTON_X,
         thirdButtonY,
         settingsButtonImage,
-        SCALE,
-        switchGameStateAction);
+        SCALE);
 
     final int fourthButtonY = (int) (thirdButtonY + settingsButton.getBounds().getHeight() + BUTTON_SPACING);
-    aboutUsButton = new Button<GameStatesEnum, Void>(
+    aboutUsButton = new Button(
         FIRST_BUTTON_X,
         fourthButtonY,
         aboutUsButtonImage,
-        SCALE,
-        switchGameStateAction);
+        SCALE);
 
     final int fifthButtonY = (int) (fourthButtonY + aboutUsButton.getBounds().getHeight() + BUTTON_SPACING);
-    exitButton = new Button<Void, Void>(
+    exitButton = new Button(
         FIRST_BUTTON_X,
         fifthButtonY,
         exitButtonImage,
-        SCALE,
-        quitGameAction);
+        SCALE);
   }
 
   @Override
@@ -104,30 +99,30 @@ public class MainMenu extends GameState {
 
   @Override
   public void mouseClicked(final MouseEvent e) {
-    if (newGameButton.getBounds().contains(e.getPoint())) {
-      newGameButton.execAction(GameStatesEnum.GAME_MODE_SELECT);
-      return;
-    }
-    if (leaderboardButton.getBounds().contains(e.getPoint())) {
-      // TODO: implement this feature
-      // leaderboardButton.execAction(GameStatesEnum.LEADERBOARD);
-      return;
-    }
-    if (settingsButton.getBounds().contains(e.getPoint())) {
-      // TODO: implement this feature
-      // settingsButton.execAction(GameStatesEnum.SETTINGS);
-      settingsButton.execAction(GameStatesEnum.SETTINGS);
-      return;
-    }
-    if (aboutUsButton.getBounds().contains(e.getPoint())) {
-      // TODO: implement this feature
-      // aboutUsButton.execAction(GameStatesEnum.ABOUT_US);
-      return;
-    }
-    if (exitButton.getBounds().contains(e.getPoint())) {
-      exitButton.execAction(null);
-      return;
-    }
+    newGameButton.execIfClicked(
+        e.getPoint(),
+        switchStateAction,
+        GameStatesEnum.GAME_MODE_SELECT);
+
+    leaderboardButton.execIfClicked(
+        e.getPoint(),
+        switchStateAction,
+        GameStatesEnum.MAIN_MENU); // TODO: implement leaderboard;
+
+    settingsButton.execIfClicked(
+        e.getPoint(),
+        switchStateAction,
+        GameStatesEnum.SETTINGS);
+
+    aboutUsButton.execIfClicked(
+        e.getPoint(),
+        switchStateAction,
+        GameStatesEnum.MAIN_MENU);
+
+    exitButton.execIfClicked(
+        e.getPoint(),
+        quitGameAction,
+        null);
   }
 
 }
