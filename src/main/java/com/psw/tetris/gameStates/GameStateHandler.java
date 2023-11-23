@@ -2,18 +2,26 @@ package com.psw.tetris.gameStates;
 
 import java.util.HashMap;
 
+
+
+import com.psw.tetris.gameStates.stateTypes.ChangeKeybinds;
 import com.psw.tetris.gameStates.stateTypes.GameModeSelect;
 import com.psw.tetris.gameStates.stateTypes.GameOver;
+import com.psw.tetris.gameStates.stateTypes.LeaderBoard;
 import com.psw.tetris.gameStates.stateTypes.Lobby;
 import com.psw.tetris.gameStates.stateTypes.MainMenu;
 import com.psw.tetris.gameStates.stateTypes.Playing;
 import com.psw.tetris.gameStates.stateTypes.PlayingMP;
+import com.psw.tetris.gameStates.stateTypes.Settings;
 import com.psw.tetris.gameStates.stateTypes.TitleScreen;
 
 public final class GameStateHandler {
   public enum GameStatesEnum {
     TITLE_SCREEN,
     MAIN_MENU,
+    SETTINGS,
+    LEADERBOARD,
+    CHANGE_KEYBINDS,
     GAME_MODE_SELECT,
     LOBBY,
     PLAYING,
@@ -34,6 +42,9 @@ public final class GameStateHandler {
 
     addState(new TitleScreen());
     addState(new MainMenu());
+    addState(new Settings());
+    addState(new LeaderBoard());
+    addState(new ChangeKeybinds());
     addState(new GameModeSelect());
     addState(new Lobby());
     addState(new PlayingMP());

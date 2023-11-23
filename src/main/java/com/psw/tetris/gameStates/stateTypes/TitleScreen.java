@@ -40,6 +40,7 @@ public class TitleScreen extends GameState {
     button.render(g);
   }
 
+  
   @Override
   public void mouseClicked(final MouseEvent e) {
     if (button.getBounds().contains(e.getPoint())) {

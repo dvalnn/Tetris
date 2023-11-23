@@ -4,13 +4,14 @@ public class Constants {
 
   public static final String USER_DIR = System.getProperty("user.dir");
   public static final String RESOURCES_PATH = USER_DIR + "/src/main/resources";
+  
+  public static final String KEYBINDINGS_PATH = RESOURCES_PATH + "/keybinds.json";
 
   public static class UI {
     public static final String BACKGROUND_PATH = RESOURCES_PATH + "/backgrounds/";
 
     public static class Buttons {
       private static final String BUTTON_PATH = RESOURCES_PATH + "/buttons/";
-
       public static final String ABOUT_US = BUTTON_PATH + "aboutUs.png";
       public static final String EXIT_GAME = BUTTON_PATH + "exitGame.png";
       public static final String HOST_GAME = BUTTON_PATH + "hostGame.png";
@@ -26,6 +27,7 @@ public class Constants {
       public static final String RETURN_BUTTON = BUTTON_PATH + "returnButton.png";
       public static final String SETTINGS = BUTTON_PATH + "settings.png";
       public static final String SINGLE_PLAYER = BUTTON_PATH + "singlePlayer.png";
+      public static final String CHANGE_GAME_INPUTS = BUTTON_PATH + "changeGameInputs.png";
     }
   }
 
