@@ -72,16 +72,15 @@ public class GameModeSelect extends GameState {
         switchStateAction,
         GameStatesEnum.LOBBY);
 
-    playButton.execIfClicked(
-        e.getPoint(),
-        switchStateAction,
-        GameStatesEnum.PLAYING_MP);
-
     onlineButton.execIfClicked(
         e.getPoint(),
         switchStateAction,
         GameStatesEnum.LOBBY); // TODO: add lobby mp
 
+    returnButton.execIfClicked(
+        e.getPoint(),
+        switchStateAction,
+        GameStatesEnum.MAIN_MENU);
   }
 
 }
