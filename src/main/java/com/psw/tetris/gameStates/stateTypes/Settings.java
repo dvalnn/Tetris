@@ -25,12 +25,12 @@ import com.psw.tetris.utils.LoadSave;
 
 public class Settings extends GameState {
 
-    private final Button<Void, Void> buttonPlusVolume;
-    private final Button<Void, Void> buttonMinusVolume;
-    private final Button<Void, Void> buttonPlusEffects;
-    private final Button<Void, Void> buttonMinusEffects;
-    private final Button<GameStatesEnum, Void> buttonChangeGameInputs;
-    private final Button<GameStatesEnum, Void> buttonReturn;
+    private final Button buttonPlusVolume;
+    private final Button buttonMinusVolume;
+    private final Button buttonPlusEffects;
+    private final Button buttonMinusEffects;
+    private final Button buttonChangeGameInputs;
+    private final Button buttonReturn;
 
     private final BufferedImage plusVolumeButtonImage = LoadSave.loadImage(PLUS_V1);
     private final BufferedImage minusVolumeButtonImage = LoadSave.loadImage(MINUS_V1);
@@ -41,19 +41,9 @@ public class Settings extends GameState {
 
     private final BufferedImage settingsBackground;
 
-    private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
-
-    private final ButtonAction<Void, Void> volumeManager = (Void) -> {
-        return null;
-    };
-    private final ButtonAction<Void, Void> effectManager = (Void) -> {
-        return null;
-    };
-
-
     private final double SMALL_BUTTON_SCALE = 0.25;
     private final double CGI_BUTTON_SCALE = 0.29;  
-    private final double RETURN_BUTTON_SCALE = 0.35;
+    private final double RETURN_BUTTON_SCALE = 0.29;//0.35;
 
     private final int FIRST_SMALL_BUTTON_X = 420;
     private final int SECOND_SMALL_BUTTON_X = 500;   
@@ -67,56 +57,60 @@ public class Settings extends GameState {
     private final int returnButtonX = 40;
     private final int returnButtonY = 620;
 
+    private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
+
+    private final ButtonAction<Void, Void> volumeManager = (Void) -> {
+        return null;
+    };
+    private final ButtonAction<Void, Void> effectManager = (Void) -> {
+        return null;
+    };
+
+
     public Settings() {
         super(GameStatesEnum.SETTINGS);
 
         settingsBackground = LoadSave.loadBackground("settings.png");
 
-        buttonPlusVolume = new Button<Void, Void>(
+        buttonPlusVolume = new Button(
                 FIRST_SMALL_BUTTON_X,
                 FIRST_BUTTON_Y,
                 plusVolumeButtonImage,
-                SMALL_BUTTON_SCALE,
-                volumeManager);
+                SMALL_BUTTON_SCALE);
 
-        buttonMinusVolume = new Button<Void, Void>(
+        buttonMinusVolume = new Button(
                 SECOND_SMALL_BUTTON_X,
                 FIRST_BUTTON_Y,
                 minusVolumeButtonImage,
-                SMALL_BUTTON_SCALE,
-                volumeManager);
+                SMALL_BUTTON_SCALE);
 
         final int secondButtonY = (int) (FIRST_BUTTON_Y + buttonPlusVolume.getBounds().getHeight() + SMALLER_BUTTON_SPACING);
         
-        buttonPlusEffects = new Button<Void, Void>(
+        buttonPlusEffects = new Button(
                 FIRST_SMALL_BUTTON_X,
                 secondButtonY,
                 plusEffectsButtonImage,
-                SMALL_BUTTON_SCALE,
-                effectManager);
+                SMALL_BUTTON_SCALE);
         
-        buttonMinusEffects = new Button<Void, Void>(
+        buttonMinusEffects = new Button(
                 SECOND_SMALL_BUTTON_X,
                 secondButtonY,
                 minusEffectsButtonImage,
-                SMALL_BUTTON_SCALE,
-                effectManager);
+                SMALL_BUTTON_SCALE);
 
 
-        buttonChangeGameInputs = new Button<GameStatesEnum, Void>(
+        buttonChangeGameInputs = new Button(
                 cgiButtonX,
                 cgiButtonY,
                 changeGameInputsButtonImage,
-                CGI_BUTTON_SCALE,
-                switchGameStateAction);
+                CGI_BUTTON_SCALE);
 
 
-        buttonReturn = new Button<GameStatesEnum, Void>(
+        buttonReturn = new Button(
                 returnButtonX,
                 returnButtonY,
                 returnButtonImage,
-                RETURN_BUTTON_SCALE,
-                switchGameStateAction);
+                RETURN_BUTTON_SCALE);
 
 
     }
@@ -134,32 +128,37 @@ public class Settings extends GameState {
 
     @Override
     public void mouseClicked(final MouseEvent e) {
-
-        if (buttonPlusVolume.getBounds().contains(e.getPoint())) {
-            buttonPlusVolume.execAction(null);
-        }
-
-        else if(buttonMinusVolume.getBounds().contains(e.getPoint())) {
-            buttonMinusVolume.execAction(null);
-        } 
-
-        else if(buttonPlusEffects.getBounds().contains(e.getPoint())) {
-            buttonPlusEffects.execAction(null);
-        } 
-
-        else if(buttonMinusEffects.getBounds().contains(e.getPoint())) {
-            buttonMinusEffects.execAction(null);
-        } 
-
-        else if(buttonChangeGameInputs.getBounds().contains(e.getPoint())) {
-            buttonChangeGameInputs.execAction(GameStatesEnum.CHANGE_KEYBINDS);
-        } 
-
-        else if(buttonReturn.getBounds().contains(e.getPoint())) {
-            buttonReturn.execAction(GameStatesEnum.MAIN_MENU);
-        }
-
+        buttonPlusVolume.execIfClicked(
+            e.getPoint(),
+            volumeManager,
+            null);
+        
+        buttonMinusVolume.execIfClicked(
+            e.getPoint(),
+            volumeManager,
+            null);
+        
+        buttonPlusEffects.execIfClicked(
+            e.getPoint(),
+            effectManager,
+            null);
+        
+        buttonMinusEffects.execIfClicked(
+            e.getPoint(),
+            effectManager,
+            null);
+        
+        buttonChangeGameInputs.execIfClicked(
+            e.getPoint(),
+            switchGameStateAction,
+            GameStatesEnum.CHANGE_KEYBINDS);
+        
+        buttonReturn.execIfClicked(
+            e.getPoint(),
+            switchGameStateAction,
+            GameStatesEnum.MAIN_MENU);
     }
+    
 
 
 }
