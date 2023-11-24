@@ -24,6 +24,7 @@ import java.awt.image.BufferedImage;
 import com.psw.tetris.gameElements.Board;
 import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
 import com.psw.tetris.gameStates.GameState;
+import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.settings.BoardSettings;
 import com.psw.tetris.utils.LoadSave;
@@ -145,7 +146,10 @@ public class Playing extends GameState {
         break;
 
       case (KeyEvent.VK_P):
-        board.togglePause();
+        // changes the game state to pause
+        GameStateHandler.switchState(GameStatesEnum.PAUSE);
+
+        // board.togglePause();
         break;
 
       // NOTE: these keybinds are only for debugging purposes

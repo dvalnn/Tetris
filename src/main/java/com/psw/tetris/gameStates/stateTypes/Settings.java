@@ -24,12 +24,12 @@ import com.psw.tetris.utils.LoadSave;
 
 public class Settings extends GameState {
 
-    private final Button buttonPlusVolume;
-    private final Button buttonMinusVolume;
-    private final Button buttonPlusEffects;
-    private final Button buttonMinusEffects;
-    private final Button buttonChangeGameInputs;
-    private final Button buttonReturn;
+    private final Button plusVolumeButton;
+    private final Button minusVolumeButton;
+    private final Button plusEffectsButton;
+    private final Button minusEffectsButton;
+    private final Button changeGameInputsButton;
+    private final Button returnButton;
 
     private final BufferedImage plusVolumeButtonImage = LoadSave.loadImage(PLUS_V1);
     private final BufferedImage minusVolumeButtonImage = LoadSave.loadImage(MINUS_V1);
@@ -71,41 +71,41 @@ public class Settings extends GameState {
 
         settingsBackground = LoadSave.loadBackground("settings.png");
 
-        buttonPlusVolume = new Button(
+        plusVolumeButton = new Button(
                 FIRST_SMALL_BUTTON_X,
                 FIRST_BUTTON_Y,
                 plusVolumeButtonImage,
                 SMALL_BUTTON_SCALE);
 
-        buttonMinusVolume = new Button(
+        minusVolumeButton = new Button(
                 SECOND_SMALL_BUTTON_X,
                 FIRST_BUTTON_Y,
                 minusVolumeButtonImage,
                 SMALL_BUTTON_SCALE);
 
-        final int secondButtonY = (int) (FIRST_BUTTON_Y + buttonPlusVolume.getBounds().getHeight() + SMALLER_BUTTON_SPACING);
+        final int secondButtonY = (int) (FIRST_BUTTON_Y + plusVolumeButton.getBounds().getHeight() + SMALLER_BUTTON_SPACING);
         
-        buttonPlusEffects = new Button(
+        plusEffectsButton = new Button(
                 FIRST_SMALL_BUTTON_X,
                 secondButtonY,
                 plusEffectsButtonImage,
                 SMALL_BUTTON_SCALE);
         
-        buttonMinusEffects = new Button(
+        minusEffectsButton = new Button(
                 SECOND_SMALL_BUTTON_X,
                 secondButtonY,
                 minusEffectsButtonImage,
                 SMALL_BUTTON_SCALE);
 
 
-        buttonChangeGameInputs = new Button(
+        changeGameInputsButton = new Button(
                 cgiButtonX,
                 cgiButtonY,
                 changeGameInputsButtonImage,
                 CGI_BUTTON_SCALE);
 
 
-        buttonReturn = new Button(
+        returnButton = new Button(
                 returnButtonX,
                 returnButtonY,
                 returnButtonImage,
@@ -118,42 +118,42 @@ public class Settings extends GameState {
     public void render(final Graphics g) {
 
         g.drawImage(settingsBackground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-        buttonPlusVolume.render(g);
-        buttonMinusVolume.render(g);
-        buttonPlusEffects.render(g);
-        buttonMinusEffects.render(g);
-        buttonChangeGameInputs.render(g);
-        buttonReturn.render(g);
+        plusVolumeButton.render(g);
+        minusVolumeButton.render(g);
+        plusEffectsButton.render(g);
+        minusEffectsButton.render(g);
+        changeGameInputsButton.render(g);
+        returnButton.render(g);
     }
 
     @Override
     public void mouseClicked(final MouseEvent e) {
-        buttonPlusVolume.execIfClicked(
+        plusVolumeButton.execIfClicked(
             e.getPoint(),
             volumeManager,
             null);
         
-        buttonMinusVolume.execIfClicked(
+        minusVolumeButton.execIfClicked(
             e.getPoint(),
             volumeManager,
             null);
         
-        buttonPlusEffects.execIfClicked(
+        plusEffectsButton.execIfClicked(
             e.getPoint(),
             effectManager,
             null);
         
-        buttonMinusEffects.execIfClicked(
+        minusEffectsButton.execIfClicked(
             e.getPoint(),
             effectManager,
             null);
         
-        buttonChangeGameInputs.execIfClicked(
+        changeGameInputsButton.execIfClicked(
             e.getPoint(),
             switchGameStateAction,
             GameStatesEnum.CHANGE_KEYBINDS);
         
-        buttonReturn.execIfClicked(
+        returnButton.execIfClicked(
             e.getPoint(),
             switchGameStateAction,
             GameStatesEnum.MAIN_MENU);

@@ -1,22 +1,26 @@
 package com.psw.tetris.gameStates.stateTypes;
 
+import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+
+import com.psw.tetris.utils.LoadSave;
+
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
 import static com.psw.tetris.utils.Constants.UI.Buttons.MULTIPLAYER;
 import static com.psw.tetris.utils.Constants.UI.Buttons.RETURN_BUTTON;
 import static com.psw.tetris.utils.Constants.UI.Buttons.SINGLE_PLAYER;
 
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.SwitchGameStateAction;
-import com.psw.tetris.utils.LoadSave;
 
 public class GameModeSelect extends GameState {
+  
 
   private final BufferedImage background;
 

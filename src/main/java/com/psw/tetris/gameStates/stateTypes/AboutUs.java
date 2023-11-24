@@ -1,15 +1,5 @@
 package com.psw.tetris.gameStates.stateTypes;
 
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
-import static com.psw.tetris.utils.Constants.UI.Buttons.RETURN_BUTTON;
-
-import com.psw.tetris.gameStates.GameState;
-import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.ui.Button;
-import com.psw.tetris.ui.SwitchGameStateAction;
-import com.psw.tetris.utils.LoadSave;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,9 +7,23 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.event.MouseEvent;
 
+import com.psw.tetris.utils.LoadSave;
+
+import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
+import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
+import static com.psw.tetris.utils.Constants.UI.Buttons.RETURN_BUTTON;
+
+import com.psw.tetris.gameStates.GameState;
+import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+
+import com.psw.tetris.ui.Button;
+import com.psw.tetris.ui.SwitchGameStateAction;
+
+
+
 public class AboutUs extends GameState {
 
-    private final Button buttonReturn;
+    private final Button returnButton;
 
     private final BufferedImage returnButtonImage = LoadSave.loadImage(RETURN_BUTTON);
     private final BufferedImage aboutUsBackground;
@@ -56,13 +60,13 @@ public class AboutUs extends GameState {
 
         aboutUsBackground = LoadSave.loadBackground("aboutUs.png");
 
-        buttonReturn = new Button(returnButtonX, returnButtonY, returnButtonImage, RETURN_BUTTON_SCALE);
+        returnButton = new Button(returnButtonX, returnButtonY, returnButtonImage, RETURN_BUTTON_SCALE);
     }
 
     @Override
     public void render(final Graphics g) {
         g.drawImage(aboutUsBackground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-        buttonReturn.render(g);
+        returnButton.render(g);
 
         // text elements rendering (score and level)
         g.setColor(Color.WHITE);
@@ -81,7 +85,7 @@ public class AboutUs extends GameState {
 
     @Override
     public void mouseClicked(final MouseEvent e) {
-        buttonReturn.execIfClicked(
+        returnButton.execIfClicked(
                 e.getPoint(),
                 switchGameStateAction,
                 GameStatesEnum.MAIN_MENU);
