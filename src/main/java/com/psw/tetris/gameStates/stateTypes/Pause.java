@@ -8,6 +8,7 @@ import com.psw.tetris.ui.SwitchGameStateAction;
 import com.psw.tetris.utils.LoadSave;
 
 import com.psw.tetris.gameStates.GameState;
+import com.psw.tetris.gameStates.GameStateHandler;
 
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
@@ -30,8 +31,6 @@ public class Pause extends GameState {
     private final BufferedImage exitButtonImage = LoadSave.loadImage(EXIT_BUTTON);
 
     private final BufferedImage pauseBackground;
-    private final BufferedImage background;
-    private final BufferedImage foreground;
 
     private final double BUTTON_SCALE = 0.29;
 
@@ -51,8 +50,6 @@ public class Pause extends GameState {
         super(GameStatesEnum.PAUSE);
 
         pauseBackground = LoadSave.loadBackground("gamePaused.png");
-        background = LoadSave.loadBackground("singlePlayerGame.png");
-        foreground = LoadSave.loadBackground("singleEssentials2.png");
 
 
         resumeButton = new Button(
@@ -78,11 +75,7 @@ public class Pause extends GameState {
     @Override
     public void render(final Graphics g) {
 
-
-
-        g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-        g.drawImage(foreground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-
+        GameStateHandler.getState(GameStatesEnum.PLAYING).render(g);
 
         g.drawImage(pauseBackground, 420, GAME_HEIGHT / 4 , GAME_WIDTH / 4 + 100,
                 GAME_HEIGHT / 2 -25, null);

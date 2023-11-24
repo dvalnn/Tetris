@@ -17,6 +17,7 @@ import static com.psw.tetris.utils.Constants.UI.Buttons.GAME_OVER_RETRY;
 
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.GameState;
+import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameplay.Levels;
 import com.psw.tetris.gameplay.Score;
 
@@ -39,8 +40,6 @@ public class GameOver extends GameState {
   private final BufferedImage retryButtonImage = LoadSave.loadImage(GAME_OVER_RETRY);
 
   private final BufferedImage gameOverBackground;
-  private final BufferedImage background;
-  private final BufferedImage foreground;
 
   private String username;
   private int score;
@@ -59,8 +58,6 @@ public class GameOver extends GameState {
     super(GameStatesEnum.GAME_OVER);
 
     gameOverBackground = LoadSave.loadBackground("gameOverSingle.png");
-    background = LoadSave.loadBackground("singlePlayerGame.png");
-    foreground = LoadSave.loadBackground("singleEssentials2.png");
 
     returnMenuButton = new Button(
         FIRST_BUTTON_X,
@@ -85,12 +82,11 @@ public class GameOver extends GameState {
 
     score = Score.getScore();
     linesCleared = Levels.getTotalLinesCleared();
-
     minutes = Board.getTimeMinutes();
     seconds = Board.getTimeSeconds();
 
-    g.drawImage(foreground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-    g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+    GameStateHandler.getState(GameStatesEnum.PLAYING).render(g);
+
 
     g.drawImage(gameOverBackground, GAME_WIDTH / 4 - 50, GAME_HEIGHT / 4 - 50, GAME_WIDTH / 2 + 100,
         GAME_HEIGHT / 2 + 100, null);
@@ -107,6 +103,7 @@ public class GameOver extends GameState {
         RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
 
+    
     g2.drawString(username, GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2 - 130);
 
     g2.drawString("" + score, GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2 - 68);
