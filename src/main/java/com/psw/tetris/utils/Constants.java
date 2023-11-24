@@ -25,12 +25,15 @@ public class Constants {
       public static final String PLUS_V2 = BUTTON_PATH + "plusv2.png";
       public static final String PRESS_ENTER = BUTTON_PATH + "pressEnter.png";
       public static final String RETURN_BUTTON = BUTTON_PATH + "returnButton.png";
+      public static final String RESUME_BUTTON = BUTTON_PATH + "resume.png";
+      public static final String RESTART_BUTTON = BUTTON_PATH + "restart.png";
+      public static final String EXIT_BUTTON = BUTTON_PATH + "exit.png";
       public static final String SETTINGS = BUTTON_PATH + "settings.png";
       public static final String SINGLE_PLAYER = BUTTON_PATH + "singlePlayer.png";
       public static final String CHANGE_GAME_INPUTS = BUTTON_PATH + "changeGameInputs.png";
       public static final String GAME_OVER_RETRY = BUTTON_PATH + "gameOverRetry.png";
       public static final String GAME_OVER_MAIN_MENU = BUTTON_PATH + "gameOverExit.png";
-      
+
     }
   }
 

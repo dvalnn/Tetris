@@ -1,10 +1,5 @@
 package com.psw.tetris.gameStates.stateTypes;
 
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
-import static com.psw.tetris.utils.Constants.UI.Buttons.GAME_OVER_MAIN_MENU;
-import static com.psw.tetris.utils.Constants.UI.Buttons.GAME_OVER_RETRY;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -13,15 +8,25 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.FileWriter;
 
+import com.psw.tetris.utils.LoadSave;
+
+import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
+import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
+import static com.psw.tetris.utils.Constants.UI.Buttons.GAME_OVER_MAIN_MENU;
+import static com.psw.tetris.utils.Constants.UI.Buttons.GAME_OVER_RETRY;
+
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameplay.Levels;
 import com.psw.tetris.gameplay.Score;
-import com.google.gson.Gson;
+
 import com.psw.tetris.gameElements.Board;
-import com.psw.tetris.gameStates.GameState;
+import com.google.gson.Gson;
+
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.SwitchGameStateAction;
-import com.psw.tetris.utils.LoadSave;
+
+
 
 //TODO reset the game when the user clicks on the retry button
 
@@ -86,7 +91,6 @@ public class GameOver extends GameState {
 
     g.drawImage(foreground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
     g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-    g.drawImage(foreground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
 
     g.drawImage(gameOverBackground, GAME_WIDTH / 4 - 50, GAME_HEIGHT / 4 - 50, GAME_WIDTH / 2 + 100,
         GAME_HEIGHT / 2 + 100, null);

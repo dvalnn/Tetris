@@ -9,6 +9,7 @@ import com.psw.tetris.gameStates.stateTypes.GameOver;
 import com.psw.tetris.gameStates.stateTypes.Leaderboard;
 import com.psw.tetris.gameStates.stateTypes.Lobby;
 import com.psw.tetris.gameStates.stateTypes.MainMenu;
+import com.psw.tetris.gameStates.stateTypes.Pause;
 import com.psw.tetris.gameStates.stateTypes.Playing;
 import com.psw.tetris.gameStates.stateTypes.PlayingMP;
 import com.psw.tetris.gameStates.stateTypes.Settings;
@@ -26,6 +27,7 @@ public final class GameStateHandler {
     LOBBY,
     PLAYING,
     PLAYING_MP,
+    PAUSE,
     GAME_OVER;
   }
 
@@ -48,8 +50,9 @@ public final class GameStateHandler {
     addState(new ChangeKeybinds());
     addState(new GameModeSelect());
     addState(new Lobby());
-    addState(new PlayingMP());
     addState(new Playing());
+    addState(new PlayingMP());
+    addState(new Pause());
     addState(new GameOver());
   }
 
