@@ -8,10 +8,9 @@ import com.psw.tetris.utils.LoadSave;
 
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
-import static com.psw.tetris.utils.Constants.UI.Buttons.MULTIPLAYER;
+import static com.psw.tetris.utils.Constants.UI.Buttons.HOST_GAME;
+import static com.psw.tetris.utils.Constants.UI.Buttons.JOIN_GAME;
 import static com.psw.tetris.utils.Constants.UI.Buttons.RETURN_BUTTON;
-import static com.psw.tetris.utils.Constants.UI.Buttons.SINGLE_PLAYER;
-
 
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
@@ -19,9 +18,9 @@ import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.SwitchGameStateAction;
 
-public class GameModeSelect extends GameState {
-  
+public class GameModeSelectMP extends GameState{
 
+  
   private final BufferedImage background;
 
   private final double buttonScale = 0.35;
@@ -37,16 +36,16 @@ public class GameModeSelect extends GameState {
 
   private SwitchGameStateAction switchStateAction = new SwitchGameStateAction();
 
-  private final Button playButton = new Button(
+  private final Button hostButton = new Button(
       pButtonX,
       pButtonY,
-      LoadSave.loadImage(SINGLE_PLAYER),
+      LoadSave.loadImage(HOST_GAME),
       buttonScale);
 
-  private final Button onlineButton = new Button(
+  private final Button joinButton = new Button(
       mpButtonX,
       mpButtonY,
-      LoadSave.loadImage(MULTIPLAYER),
+      LoadSave.loadImage(JOIN_GAME),
       buttonScale);
 
   private final Button returnButton = new Button(
@@ -55,36 +54,36 @@ public class GameModeSelect extends GameState {
       LoadSave.loadImage(RETURN_BUTTON),
       buttonScale);
 
-  public GameModeSelect() {
-    super(GameStatesEnum.GAME_MODE_SELECT);
-    background = LoadSave.loadBackground("newGame.png");
+  public GameModeSelectMP() {
+    super(GameStatesEnum.GAME_MODE_SELECT_MP);
+    background = LoadSave.loadBackground("multiplayer.png");
   }
 
   @Override
   public void render(final Graphics g) {
     g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-    playButton.render(g);
-    onlineButton.render(g);
+    hostButton.render(g);
+    joinButton.render(g);
     returnButton.render(g);
   }
 
   @Override
   public void mouseClicked(final MouseEvent e) {
 
-    playButton.execIfClicked(
+    hostButton.execIfClicked(
         e.getPoint(),
         switchStateAction,
-        GameStatesEnum.LOBBY);
+        GameStatesEnum.HOST_GAME);
 
-    onlineButton.execIfClicked(
+    joinButton.execIfClicked(
         e.getPoint(),
         switchStateAction,
-        GameStatesEnum.GAME_MODE_SELECT_MP); // TODO: add lobby mp
+        GameStatesEnum.JOIN_GAME); // TODO: add lobby mp
 
     returnButton.execIfClicked(
         e.getPoint(),
         switchStateAction,
-        GameStatesEnum.MAIN_MENU);
+        GameStatesEnum.GAME_MODE_SELECT);
   }
 
 }

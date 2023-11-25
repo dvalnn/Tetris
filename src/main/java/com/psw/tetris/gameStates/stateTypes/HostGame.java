@@ -23,76 +23,95 @@ import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.SwitchGameStateAction;
 import com.psw.tetris.utils.LoadSave;
 
-public class Lobby extends GameState {
+public class HostGame extends GameState {
 
-  private final BufferedImage background = LoadSave.loadBackground("multiWaiting.png");
+  private final Button returnButton;
+  private final Button nameInputFieldButton;
+
+  private final BufferedImage returnButtonImage = LoadSave.loadImage(RETURN_BUTTON);
+  private final BufferedImage nameInputFieldButtonImage = LoadSave.loadImage(BUTTON_PATH + "playerName.png");
+
+  private final BufferedImage background;
 
   private final int returnButtonX = 40;
   private final int returnButtonY = 620;
 
   private final int inputFieldButtonCenterX = GAME_WIDTH / 2;
-  private final int inputFieldButtonCenterY = GAME_HEIGHT / 2;
+  private final int nameInputFieldButtonCenterY = GAME_HEIGHT / 2;
 
   private final int inputFieldX = 270;
   private final int inputFieldY = 42;
 
-  private final int inputMaxLength = 10;
-  private String inputText = "";
+  private final int nameMaxLength = 10;
 
-  private final Button returnButton = new Button(
-      returnButtonX,
-      returnButtonY,
-      LoadSave.loadImage(RETURN_BUTTON),
-      0.29);
+  private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
 
-  private final Button inputFieldButton = new Button(
-      new Point(inputFieldButtonCenterX, inputFieldButtonCenterY),
-      LoadSave.loadImage(BUTTON_PATH + "playerName.png"),
-      0.35);
+  private String nameInputText = "";
 
-  public Lobby() {
-    super(GameStatesEnum.LOBBY);
+  // TODO: Add connection with the multiplayer logic
+  // TODO: Add a way to get the IP address
+
+  public HostGame() {
+    super(GameStatesEnum.HOST_GAME);
+
+    background = LoadSave.loadBackground("multiWaiting.png");
+
+    returnButton = new Button(
+        returnButtonX,
+        returnButtonY,
+        returnButtonImage,
+        0.29);
+
+    nameInputFieldButton = new Button(
+        new Point(inputFieldButtonCenterX, nameInputFieldButtonCenterY),
+        nameInputFieldButtonImage,
+        0.35);
+
   }
 
   @Override
   public void keyPressed(KeyEvent e) {
     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-      inputFieldButton.exec(
-          new SwitchGameStateAction(),
-          GameStatesEnum.PLAYING);
+
+        Game.initNetworking();
+
+        nameInputFieldButton.exec(
+            switchGameStateAction,
+            GameStatesEnum.PLAYING_MP);
+        return;
     }
 
     if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
       returnButton.exec(
-          new SwitchGameStateAction(),
+          switchGameStateAction,
           GameStatesEnum.GAME_MODE_SELECT);
     }
 
     if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-      inputText = StringUtils.chop(inputText);
-      return;
+
+        nameInputText = StringUtils.chop(nameInputText);
+        return;
     }
 
-    char c = e.getKeyChar();
-    if (inputText.length() < inputMaxLength && Character.isDefined(c))
-      inputText += c;
-
-    Game.setUsername(inputText);
+      char c = e.getKeyChar();
+      if (nameInputText.length() < nameMaxLength && Character.isDefined(c))
+        nameInputText += c;
+      Game.setUsername(nameInputText);
   }
 
   @Override
   public void mouseClicked(MouseEvent e) {
     returnButton.execIfClicked(
         e.getPoint(),
-        new SwitchGameStateAction(),
-        GameStatesEnum.MAIN_MENU);
+        switchGameStateAction,
+        GameStatesEnum.GAME_MODE_SELECT_MP);
   }
 
   @Override
   public void render(Graphics g) {
     g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
     returnButton.render(g);
-    inputFieldButton.render(g);
+    nameInputFieldButton.render(g);
 
     g.setColor(Color.WHITE);
     g.setFont(g.getFont().deriveFont(30f));
@@ -103,9 +122,8 @@ public class Lobby extends GameState {
         RenderingHints.VALUE_ANTIALIAS_ON);
 
     g2.drawString(
-        inputText,
-        inputFieldButton.getAnchorPoint().x + inputFieldX,
-        inputFieldButton.getAnchorPoint().y + inputFieldY);
+        nameInputText,
+        nameInputFieldButton.getAnchorPoint().x + inputFieldX,
+        nameInputFieldButton.getAnchorPoint().y + inputFieldY);
   }
-
 }
