@@ -33,6 +33,7 @@ public class Constants {
       public static final String CHANGE_GAME_INPUTS = BUTTON_PATH + "changeGameInputs.png";
       public static final String GAME_OVER_RETRY = BUTTON_PATH + "gameOverRetry.png";
       public static final String GAME_OVER_MAIN_MENU = BUTTON_PATH + "gameOverExit.png";
+    
 
     }
   }
