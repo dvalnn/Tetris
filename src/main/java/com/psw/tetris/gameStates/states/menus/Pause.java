@@ -1,7 +1,6 @@
 package com.psw.tetris.gameStates.states.menus;
 
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.main.Game;
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.ButtonAction;
 import com.psw.tetris.ui.SwitchStateAction;
@@ -40,11 +39,6 @@ public class Pause extends GameState {
   private final int EXIT_BUTTON_SPACING = 75;
 
   private final SwitchStateAction switchGameStateAction = new SwitchStateAction();
-
-  private final ButtonAction<Void, Void> quitGameAction = (Void) -> {
-    Game.exit();
-    return null;
-  };
 
   public Pause() {
     super(GameStatesEnum.PAUSE);
@@ -100,7 +94,6 @@ public class Pause extends GameState {
         switchGameStateAction,
         GameStatesEnum.PLAYING);
 
-    // TODO: implement restart functon
     restartButton.execIfClicked(
         e.getPoint(),
         reloadAndSwitch,
@@ -108,8 +101,8 @@ public class Pause extends GameState {
 
     exitButton.execIfClicked(
         e.getPoint(),
-        quitGameAction,
-        null);
+        switchGameStateAction,
+        GameStatesEnum.MAIN_MENU);
   }
 
 }
