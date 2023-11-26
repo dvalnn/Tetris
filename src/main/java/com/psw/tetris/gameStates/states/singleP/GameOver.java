@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileWriter;
 
 import com.google.gson.Gson;
-import com.psw.tetris.gameElements.Board;
+import com.psw.tetris.gameElements.gameplay.GameTime;
 import com.psw.tetris.gameElements.gameplay.Levels;
 import com.psw.tetris.gameElements.gameplay.Score;
 import com.psw.tetris.gameStates.GameState;
@@ -23,8 +23,6 @@ import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.SwitchStateAction;
 import com.psw.tetris.utils.LoadSave;
-
-//TODO reset the game when the user clicks on the retry button
 
 public class GameOver extends GameState {
 
@@ -39,8 +37,6 @@ public class GameOver extends GameState {
   private String username;
   private int score;
   private int linesCleared;
-  private int minutes;
-  private int seconds;
 
   private final double SCALE = 0.25;
   private final int FIRST_BUTTON_X = 290;
@@ -77,8 +73,6 @@ public class GameOver extends GameState {
 
     score = Score.getScore();
     linesCleared = Levels.getTotalLinesCleared();
-    minutes = Board.getTimeMinutes();
-    seconds = Board.getTimeSeconds();
 
     GameStateHandler.getState(GameStatesEnum.PLAYING).render(g);
 
@@ -102,7 +96,7 @@ public class GameOver extends GameState {
 
     g2.drawString("" + linesCleared, GAME_WIDTH / 2 - 150, GAME_HEIGHT / 2 - 7);
 
-    g2.drawString(String.format("%02d:%02d", minutes, seconds), GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2 + 55);
+    g2.drawString(GameTime.getTimeStr(), GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2 + 55);
 
     // jsonWrite("src/test/resources/test.json", username, score);
     // TODO: missing the leaderboard field

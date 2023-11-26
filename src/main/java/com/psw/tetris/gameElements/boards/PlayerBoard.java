@@ -12,6 +12,7 @@ import java.util.Random;
 
 import com.psw.tetris.gameElements.Board;
 import com.psw.tetris.gameElements.Tetromino;
+import com.psw.tetris.gameElements.gameplay.GameTime;
 import com.psw.tetris.gameElements.gameplay.Levels;
 import com.psw.tetris.gameElements.gameplay.Score;
 import com.psw.tetris.gameElements.shapes.JsonShape;
@@ -43,6 +44,9 @@ public class PlayerBoard extends Board {
 
   public PlayerBoard(BoardSettings set) {
     super(set);
+
+    Score.reset();
+    GameTime.reset();
 
     shapeData = JsonShapeParser.parseAllJsonShapes(RESOURCES_PATH + "/shapes/");
 
@@ -229,6 +233,8 @@ public class PlayerBoard extends Board {
     playerScore = Score.getScore();
     playerLevel = Levels.getCurrentLevel() + 1;
     playerLines = Levels.getTotalLinesCleared();
+
+    GameTime.tick();
 
     // NOTE: This is only used for debugging purposes
     // TODO: Remove this

@@ -134,7 +134,7 @@ public class Score {
     score += 2;
   }
 
-  public static void resetScore() {
+  public static void reset() {
     score = 0;
   }
 

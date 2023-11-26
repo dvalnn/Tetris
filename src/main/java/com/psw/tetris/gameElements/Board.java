@@ -10,6 +10,7 @@ import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.psw.tetris.gameElements.gameplay.GameTime;
 import com.psw.tetris.settings.BoardSettings;
 
 public class Board {
@@ -70,10 +71,6 @@ public class Board {
 
   private String username = null;
 
-  private int tickCounter = 0;
-  private static int seconds = 0;
-  private static int minutes = 0;
-
   public Board(BoardSettings settings) {
     this.set = settings;
 
@@ -106,17 +103,6 @@ public class Board {
       }
     }
 
-    tickCounter++;
-
-    if (tickCounter >= 60) {
-      seconds++;
-      tickCounter = 0;
-    }
-    if (seconds >= 60) {
-      minutes++;
-      seconds = 0;
-    }
-
     // text elements rendering (score and level)
     g.setColor(Color.WHITE);
     g.setFont(g.getFont().deriveFont(30f));
@@ -131,7 +117,7 @@ public class Board {
 
     g2.drawString("" + playerLevel, set.levelRenderX, set.levelRenderY);
     g2.drawString("" + playerLines, set.linesRenderX, set.linesRenderY);
-    g2.drawString(String.format("%02d:%02d", minutes, seconds),
+    g2.drawString(GameTime.getTimeStr(),
         set.timerRenderX,
         set.timerRenderY);
 
@@ -153,14 +139,6 @@ public class Board {
   public String getUsername() {
     return username;
   }
-
-  public static int getTimeSeconds() {
-    return seconds;
-  }
-  public static int getTimeMinutes() {
-    return minutes;
-  }
-  //writes the getter for the time 
 
   public void setUsername(final String username) {
     this.username = username;
