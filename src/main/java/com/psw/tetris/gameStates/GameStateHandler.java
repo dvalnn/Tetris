@@ -17,6 +17,7 @@ import com.psw.tetris.gameStates.stateTypes.Playing;
 import com.psw.tetris.gameStates.stateTypes.PlayingMP;
 import com.psw.tetris.gameStates.stateTypes.Settings;
 import com.psw.tetris.gameStates.stateTypes.TitleScreen;
+import com.psw.tetris.main.Game;
 
 public final class GameStateHandler {
   public enum GameStatesEnum {
@@ -44,10 +45,21 @@ public final class GameStateHandler {
     statesMap.put(state.getStateID(), state);
   }
 
+  public static void reloadState(final GameStatesEnum state) {
+    GameState newInstance;
+    try {
+      newInstance = statesMap.get(state).getClass().getDeclaredConstructor().newInstance();
+      statesMap.replace(state, newInstance);
+    } catch (Exception e) {
+      System.err.println("Failed to reload state: " + state);
+      e.printStackTrace();
+      Game.exit();
+    }
+  }
+
   public static void init() {
 
     activeState = GameStatesEnum.TITLE_SCREEN;
-
     addState(new TitleScreen());
     addState(new MainMenu());
     addState(new Settings());
