@@ -18,7 +18,7 @@ import com.psw.tetris.gameStates.GameState;
 
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.ButtonAction;
-import com.psw.tetris.ui.SwitchGameStateAction;
+import com.psw.tetris.ui.SwitchStateAction;
 
 public class ChangeKeybinds extends GameState {
 
@@ -62,7 +62,7 @@ public class ChangeKeybinds extends GameState {
 
   private Keybindings keybind = new Keybindings();
 
-  private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
+  private final SwitchStateAction switchGameStateAction = new SwitchStateAction();
   private final ButtonAction<keyAction, Void> changeKeyAction = (keyAction a) -> {
     Action = a;
     return null;

@@ -17,7 +17,7 @@ import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.main.Game;
 import com.psw.tetris.ui.Button;
 import com.psw.tetris.ui.ButtonAction;
-import com.psw.tetris.ui.SwitchGameStateAction;
+import com.psw.tetris.ui.SwitchStateAction;
 import com.psw.tetris.utils.LoadSave;
 
 public class MainMenu extends GameState {
@@ -34,7 +34,7 @@ public class MainMenu extends GameState {
   private final BufferedImage aboutUsButtonImage = LoadSave.loadImage(ABOUT_US);
   private final BufferedImage exitButtonImage = LoadSave.loadImage(EXIT_GAME);
 
-  private final SwitchGameStateAction switchStateAction = new SwitchGameStateAction();
+  private final SwitchStateAction switchStateAction = new SwitchStateAction();
   private final ButtonAction<Void, Void> quitGameAction = (Void) -> {
     Game.exit();
     return null;

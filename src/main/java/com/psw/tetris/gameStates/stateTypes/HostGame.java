@@ -20,7 +20,7 @@ import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.main.Game;
 import com.psw.tetris.ui.Button;
-import com.psw.tetris.ui.SwitchGameStateAction;
+import com.psw.tetris.ui.SwitchStateAction;
 import com.psw.tetris.utils.LoadSave;
 
 public class HostGame extends GameState {
@@ -44,7 +44,7 @@ public class HostGame extends GameState {
 
   private final int nameMaxLength = 10;
 
-  private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
+  private final SwitchStateAction switchGameStateAction = new SwitchStateAction();
 
   private String nameInputText = "";
 
@@ -73,12 +73,12 @@ public class HostGame extends GameState {
   public void keyPressed(KeyEvent e) {
     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
-        Game.initNetworking();
+      Game.initNetworking();
 
-        nameInputFieldButton.exec(
-            switchGameStateAction,
-            GameStatesEnum.PLAYING_MP);
-        return;
+      nameInputFieldButton.exec(
+          switchGameStateAction,
+          GameStatesEnum.PLAYING_MP);
+      return;
     }
 
     if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -89,14 +89,14 @@ public class HostGame extends GameState {
 
     if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 
-        nameInputText = StringUtils.chop(nameInputText);
-        return;
+      nameInputText = StringUtils.chop(nameInputText);
+      return;
     }
 
-      char c = e.getKeyChar();
-      if (nameInputText.length() < nameMaxLength && Character.isDefined(c))
-        nameInputText += c;
-      Game.setUsername(nameInputText);
+    char c = e.getKeyChar();
+    if (nameInputText.length() < nameMaxLength && Character.isDefined(c))
+      nameInputText += c;
+    Game.setUsername(nameInputText);
   }
 
   @Override

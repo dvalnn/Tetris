@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.ui.Button;
-import com.psw.tetris.ui.SwitchGameStateAction;
+import com.psw.tetris.ui.SwitchStateAction;
 import com.psw.tetris.utils.LoadSave;
 
 public class TitleScreen extends GameState {
@@ -28,7 +28,7 @@ public class TitleScreen extends GameState {
       LoadSave.loadImage(PRESS_ENTER),
       0.25);
 
-  private final SwitchGameStateAction btnAction = new SwitchGameStateAction();
+  private final SwitchStateAction btnAction = new SwitchStateAction();
 
   public TitleScreen() {
     super(GameStatesEnum.TITLE_SCREEN);

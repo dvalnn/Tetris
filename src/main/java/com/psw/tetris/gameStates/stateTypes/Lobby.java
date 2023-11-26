@@ -17,10 +17,12 @@ import java.awt.image.BufferedImage;
 import org.apache.commons.lang3.StringUtils;
 
 import com.psw.tetris.gameStates.GameState;
+import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.main.Game;
 import com.psw.tetris.ui.Button;
-import com.psw.tetris.ui.SwitchGameStateAction;
+import com.psw.tetris.ui.ButtonAction;
+import com.psw.tetris.ui.SwitchStateAction;
 import com.psw.tetris.utils.LoadSave;
 
 public class Lobby extends GameState {
@@ -54,17 +56,25 @@ public class Lobby extends GameState {
     super(GameStatesEnum.LOBBY);
   }
 
+  SwitchStateAction switchStateAction = new SwitchStateAction();
+
+  ButtonAction<GameStatesEnum, Void> reloadAndSwitch = (state) -> {
+    GameStateHandler.reloadState(state);
+    switchStateAction.exec(state);
+    return null;
+  };
+
   @Override
   public void keyPressed(KeyEvent e) {
     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
       inputFieldButton.exec(
-          new SwitchGameStateAction(),
+          reloadAndSwitch,
           GameStatesEnum.PLAYING);
     }
 
     if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
       returnButton.exec(
-          new SwitchGameStateAction(),
+          reloadAndSwitch,
           GameStatesEnum.GAME_MODE_SELECT);
     }
 
@@ -84,7 +94,7 @@ public class Lobby extends GameState {
   public void mouseClicked(MouseEvent e) {
     returnButton.execIfClicked(
         e.getPoint(),
-        new SwitchGameStateAction(),
+        new SwitchStateAction(),
         GameStatesEnum.MAIN_MENU);
   }
 

@@ -16,11 +16,10 @@ import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 
 import com.psw.tetris.ui.Button;
-import com.psw.tetris.ui.SwitchGameStateAction;
+import com.psw.tetris.ui.SwitchStateAction;
 
-public class GameModeSelectMP extends GameState{
+public class GameModeSelectMP extends GameState {
 
-  
   private final BufferedImage background;
 
   private final double buttonScale = 0.35;
@@ -34,7 +33,7 @@ public class GameModeSelectMP extends GameState{
   private final int returnButtonX = 40;
   private final int returnButtonY = 620;
 
-  private SwitchGameStateAction switchStateAction = new SwitchGameStateAction();
+  private SwitchStateAction switchStateAction = new SwitchStateAction();
 
   private final Button hostButton = new Button(
       pButtonX,

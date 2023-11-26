@@ -17,78 +17,76 @@ import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 
 import com.psw.tetris.ui.Button;
-import com.psw.tetris.ui.SwitchGameStateAction;
-
-
+import com.psw.tetris.ui.SwitchStateAction;
 
 public class AboutUs extends GameState {
 
-    private final Button returnButton;
+  private final Button returnButton;
 
-    private final BufferedImage returnButtonImage = LoadSave.loadImage(RETURN_BUTTON);
-    private final BufferedImage aboutUsBackground;
+  private final BufferedImage returnButtonImage = LoadSave.loadImage(RETURN_BUTTON);
+  private final BufferedImage aboutUsBackground;
 
-    private final double RETURN_BUTTON_SCALE = 0.29;
+  private final double RETURN_BUTTON_SCALE = 0.29;
 
-    private final int returnButtonX = 40;
-    private final int returnButtonY = 620;
+  private final int returnButtonX = 40;
+  private final int returnButtonY = 620;
 
-    private int textRenderX = 80;
-    private int textRenderY = 100;
+  private int textRenderX = 80;
+  private int textRenderY = 100;
 
-    private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
+  private final SwitchStateAction switchGameStateAction = new SwitchStateAction();
 
-    //TODO: change this to a proper text file
-    
-    private final String text = """
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN 
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-            """;
+  // TODO: change this to a proper text file
 
-    public AboutUs() {
-        super(GameStatesEnum.ABOUT_US);
+  private final String text = """
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
+      """;
 
-        aboutUsBackground = LoadSave.loadBackground("aboutUs.png");
+  public AboutUs() {
+    super(GameStatesEnum.ABOUT_US);
 
-        returnButton = new Button(returnButtonX, returnButtonY, returnButtonImage, RETURN_BUTTON_SCALE);
-    }
+    aboutUsBackground = LoadSave.loadBackground("aboutUs.png");
 
-    @Override
-    public void render(final Graphics g) {
-        g.drawImage(aboutUsBackground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-        returnButton.render(g);
+    returnButton = new Button(returnButtonX, returnButtonY, returnButtonImage, RETURN_BUTTON_SCALE);
+  }
 
-        // text elements rendering (score and level)
-        g.setColor(Color.WHITE);
-        g.setFont(g.getFont().deriveFont(30f));
-        Graphics2D g2 = (Graphics2D) g;
+  @Override
+  public void render(final Graphics g) {
+    g.drawImage(aboutUsBackground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+    returnButton.render(g);
 
-        g2.setRenderingHint(
-                RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+    // text elements rendering (score and level)
+    g.setColor(Color.WHITE);
+    g.setFont(g.getFont().deriveFont(30f));
+    Graphics2D g2 = (Graphics2D) g;
 
-        textRenderY = 100;
-        for (String line : text.split("\n"))
-            g2.drawString(line,textRenderX, textRenderY += g.getFontMetrics().getHeight());
+    g2.setRenderingHint(
+        RenderingHints.KEY_ANTIALIASING,
+        RenderingHints.VALUE_ANTIALIAS_ON);
 
-    }
+    textRenderY = 100;
+    for (String line : text.split("\n"))
+      g2.drawString(line, textRenderX, textRenderY += g.getFontMetrics().getHeight());
 
-    @Override
-    public void mouseClicked(final MouseEvent e) {
-        returnButton.execIfClicked(
-                e.getPoint(),
-                switchGameStateAction,
-                GameStatesEnum.MAIN_MENU);
-    }
+  }
+
+  @Override
+  public void mouseClicked(final MouseEvent e) {
+    returnButton.execIfClicked(
+        e.getPoint(),
+        switchGameStateAction,
+        GameStatesEnum.MAIN_MENU);
+  }
 
 }

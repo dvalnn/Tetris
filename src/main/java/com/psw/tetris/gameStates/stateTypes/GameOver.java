@@ -25,9 +25,7 @@ import com.psw.tetris.gameElements.Board;
 import com.google.gson.Gson;
 
 import com.psw.tetris.ui.Button;
-import com.psw.tetris.ui.SwitchGameStateAction;
-
-
+import com.psw.tetris.ui.SwitchStateAction;
 
 //TODO reset the game when the user clicks on the retry button
 
@@ -52,7 +50,7 @@ public class GameOver extends GameState {
   private final int FIRST_BUTTON_Y = 450;
   private final int FIFTH_BUTTON_X = 420;
 
-  private final SwitchGameStateAction switchGameStateAction = new SwitchGameStateAction();
+  private final SwitchStateAction switchGameStateAction = new SwitchStateAction();
 
   public GameOver() {
     super(GameStatesEnum.GAME_OVER);
@@ -87,11 +85,9 @@ public class GameOver extends GameState {
 
     GameStateHandler.getState(GameStatesEnum.PLAYING).render(g);
 
-
     g.drawImage(gameOverBackground, GAME_WIDTH / 4 - 50, GAME_HEIGHT / 4 - 50, GAME_WIDTH / 2 + 100,
         GAME_HEIGHT / 2 + 100, null);
 
-        
     returnMenuButton.render(g);
     retryButton.render(g);
 
@@ -103,7 +99,6 @@ public class GameOver extends GameState {
         RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
 
-    
     g2.drawString(username, GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2 - 130);
 
     g2.drawString("" + score, GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2 - 68);
