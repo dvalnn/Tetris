@@ -1,4 +1,4 @@
-package com.psw.tetris.gameplay;
+package com.psw.tetris.gameElements.gameplay;
 
 import java.util.HashMap;
 

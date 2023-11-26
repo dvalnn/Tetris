@@ -1,12 +1,6 @@
 package com.psw.tetris.gameElements;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.awt.geom.Point2D;
-
-import org.junit.jupiter.api.Test;
-
-import com.psw.tetris.gameElements.shapeTypes.Shape;
+import com.psw.tetris.gameElements.shapes.Shape;
 
 public class TestRotate {
   Shape shape;
@@ -41,6 +35,5 @@ public class TestRotate {
   // assertEquals(rotationPoints[i], points[i]);
   // }
   // }
-
 
 }

@@ -17,10 +17,10 @@ import java.net.InetAddress;
 import java.util.List;
 
 import com.psw.tetris.gameElements.Board;
-import com.psw.tetris.gameElements.boardTypes.MPBoard;
-import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
-import com.psw.tetris.gameElements.shapeTypes.Shape;
-import com.psw.tetris.gameElements.shapeTypes.ShapeMP;
+import com.psw.tetris.gameElements.boards.MPBoard;
+import com.psw.tetris.gameElements.boards.PlayerBoard;
+import com.psw.tetris.gameElements.shapes.Shape;
+import com.psw.tetris.gameElements.shapes.ShapeMP;
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;

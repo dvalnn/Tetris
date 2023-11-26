@@ -1,17 +1,19 @@
 package com.psw.tetris.gameElements;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
-
-import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
-import com.psw.tetris.settings.BoardSettings;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.awt.Color;
 
-public class PlayerBoardTest { 
+import org.junit.jupiter.api.Test;
+
+import com.psw.tetris.gameElements.boards.PlayerBoard;
+import com.psw.tetris.settings.BoardSettings;
+
+public class PlayerBoardTest {
   private PlayerBoard board;
   private BoardSettings set;
-
 
   @Test
   public void holdTetrominoTest() {

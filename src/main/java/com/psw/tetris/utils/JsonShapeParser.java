@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.gson.Gson;
-import com.psw.tetris.gameElements.shapeTypes.JsonShape;
+import com.psw.tetris.gameElements.shapes.JsonShape;
 
 public class JsonShapeParser {
 

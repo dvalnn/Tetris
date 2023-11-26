@@ -1,4 +1,4 @@
-package com.psw.tetris.gameElements.shapeTypes;
+package com.psw.tetris.gameElements.shapes;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;

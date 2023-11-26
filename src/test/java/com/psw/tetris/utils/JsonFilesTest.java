@@ -5,18 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.Gson;
-
 import com.google.gson.GsonBuilder;
-import com.psw.tetris.gameElements.shapeTypes.JsonShape;
+import com.psw.tetris.gameElements.shapes.JsonShape;
 
-public class JsonFilesTest { 
+public class JsonFilesTest {
 
   JsonShape shape = new JsonShape();
 
@@ -38,8 +36,7 @@ public class JsonFilesTest {
         () -> assertEquals(expected.rgb[1], actual.rgb[1]),
         () -> assertEquals(expected.rgb[2], actual.rgb[2]),
         () -> assertEquals(expected.id, actual.id),
-        () -> assertEquals(expected.rotates, actual.rotates)
-        );
+        () -> assertEquals(expected.rotates, actual.rotates));
   }
 
   @Test
@@ -99,7 +96,6 @@ public class JsonFilesTest {
     assertEquals(3, files.size());
   }
 
-  
   @Test
   public void verifyJsonData() {
     final String dir = "src/test/resources/shapes/";

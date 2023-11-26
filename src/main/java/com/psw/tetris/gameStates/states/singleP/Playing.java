@@ -22,7 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import com.psw.tetris.gameElements.Board;
-import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
+import com.psw.tetris.gameElements.boards.PlayerBoard;
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;

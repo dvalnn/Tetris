@@ -85,6 +85,14 @@ public class Pause extends GameState {
     exitButton.render(g);
   }
 
+  SwitchStateAction switchStateAction = new SwitchStateAction();
+
+  ButtonAction<GameStatesEnum, Void> reloadAndSwitch = (state) -> {
+    GameStateHandler.reloadState(state);
+    switchStateAction.exec(state);
+    return null;
+  };
+
   @Override
   public void mouseClicked(final MouseEvent e) {
     resumeButton.execIfClicked(
@@ -95,7 +103,7 @@ public class Pause extends GameState {
     // TODO: implement restart functon
     restartButton.execIfClicked(
         e.getPoint(),
-        switchGameStateAction,
+        reloadAndSwitch,
         GameStatesEnum.PLAYING);
 
     exitButton.execIfClicked(

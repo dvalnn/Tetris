@@ -1,4 +1,4 @@
-package com.psw.tetris.gameElements.shapeTypes;
+package com.psw.tetris.gameElements.shapes;
 
 import static com.psw.tetris.utils.Constants.GameConstants.BOARD_WIDTH;
 

@@ -1,7 +1,6 @@
-package com.psw.tetris.gameElements.shapeTypes;
+package com.psw.tetris.gameElements.shapes;
 
 import java.awt.geom.Point2D;
-
 
 public class JsonShape {
   public Point2D.Double center = null;

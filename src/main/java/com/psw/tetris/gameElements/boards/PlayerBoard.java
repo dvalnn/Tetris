@@ -1,8 +1,8 @@
-package com.psw.tetris.gameElements.boardTypes;
+package com.psw.tetris.gameElements.boards;
 
+import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 import static com.psw.tetris.utils.Constants.GameConstants.BOARD_HEIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.BOARD_WIDTH;
-import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.psw.tetris.gameElements.Board;
-import com.psw.tetris.gameElements.shapeTypes.JsonShape;
 import com.psw.tetris.gameElements.Tetromino;
+import com.psw.tetris.gameElements.gameplay.Levels;
+import com.psw.tetris.gameElements.gameplay.Score;
+import com.psw.tetris.gameElements.shapes.JsonShape;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.settings.BoardSettings;
 import com.psw.tetris.utils.JsonShapeParser;
-import com.psw.tetris.gameplay.Score;
-import com.psw.tetris.gameplay.Levels;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
 

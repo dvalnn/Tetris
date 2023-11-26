@@ -1,4 +1,4 @@
-package com.psw.tetris.gameElements.boardTypes;
+package com.psw.tetris.gameElements.boards;
 
 import java.awt.Color;
 

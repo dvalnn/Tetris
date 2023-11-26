@@ -1,4 +1,4 @@
-package com.psw.tetris.gameplay;
+package com.psw.tetris.gameElements.gameplay;
 
 public class Levels {
 

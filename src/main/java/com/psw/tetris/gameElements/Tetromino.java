@@ -12,12 +12,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
-import com.psw.tetris.gameElements.boardTypes.PlayerBoard;
-import com.psw.tetris.gameElements.shapeTypes.GhostShape;
-import com.psw.tetris.gameElements.shapeTypes.JsonShape;
-import com.psw.tetris.gameElements.shapeTypes.Shape;
-import com.psw.tetris.gameplay.Levels;
-import com.psw.tetris.gameplay.Score;
+import com.psw.tetris.gameElements.boards.PlayerBoard;
+import com.psw.tetris.gameElements.gameplay.Levels;
+import com.psw.tetris.gameElements.gameplay.Score;
+import com.psw.tetris.gameElements.shapes.GhostShape;
+import com.psw.tetris.gameElements.shapes.JsonShape;
+import com.psw.tetris.gameElements.shapes.Shape;
 import com.psw.tetris.utils.WallKickData;
 
 public class Tetromino {
