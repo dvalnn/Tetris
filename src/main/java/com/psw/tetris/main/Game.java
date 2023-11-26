@@ -12,9 +12,9 @@ import javax.swing.JOptionPane;
 
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-import com.psw.tetris.gameStates.stateTypes.Playing;
-import com.psw.tetris.gameStates.stateTypes.PlayingMP;
-import com.psw.tetris.gameStates.stateTypes.GameOver;
+import com.psw.tetris.gameStates.states.multiP.PlayingMP;
+import com.psw.tetris.gameStates.states.singleP.GameOver;
+import com.psw.tetris.gameStates.states.singleP.Playing;
 import com.psw.tetris.networking.GameClient;
 import com.psw.tetris.networking.GameServer;
 import com.psw.tetris.networking.packets.Packet00Login;
@@ -117,6 +117,7 @@ public class Game implements Runnable {
 
   public void update() {
     GameStateHandler.getActiveState().update();
+    // System.out.println(GameStateHandler.getActiveStateID().name());
   }
 
   public void render(final Graphics g) {
@@ -194,14 +195,12 @@ public class Game implements Runnable {
 
     ((PlayingMP) (GameStateHandler.getState(GameStatesEnum.PLAYING_MP)))
         .getPlayerBoard().setUsername(username);
-    
-    //creates the same setter for GameOver
 
+    // creates the same setter for GameOver
     ((GameOver) (GameStateHandler.getState(GameStatesEnum.GAME_OVER)))
         .setUsername(username);
 
   }
-
 
   public static final String getUsername() {
     return username;

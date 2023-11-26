@@ -1,4 +1,4 @@
-package com.psw.tetris.gameStates.stateTypes;
+package com.psw.tetris.gameStates.states.multiP;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;

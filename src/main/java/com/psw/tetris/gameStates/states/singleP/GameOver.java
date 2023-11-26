@@ -1,4 +1,4 @@
-package com.psw.tetris.gameStates.stateTypes;
+package com.psw.tetris.gameStates.states.singleP;
 
 import java.awt.Color;
 import java.awt.Graphics;

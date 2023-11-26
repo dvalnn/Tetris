@@ -1,4 +1,4 @@
-package com.psw.tetris.gameStates.stateTypes;
+package com.psw.tetris.gameStates.states.multiP;
 
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;

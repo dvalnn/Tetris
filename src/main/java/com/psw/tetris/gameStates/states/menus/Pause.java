@@ -1,4 +1,4 @@
-package com.psw.tetris.gameStates.stateTypes;
+package com.psw.tetris.gameStates.states.menus;
 
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.main.Game;

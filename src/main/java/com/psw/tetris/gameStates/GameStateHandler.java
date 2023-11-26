@@ -2,21 +2,21 @@ package com.psw.tetris.gameStates;
 
 import java.util.HashMap;
 
-import com.psw.tetris.gameStates.stateTypes.AboutUs;
-import com.psw.tetris.gameStates.stateTypes.ChangeKeybinds;
-import com.psw.tetris.gameStates.stateTypes.GameModeSelect;
-import com.psw.tetris.gameStates.stateTypes.GameModeSelectMP;
-import com.psw.tetris.gameStates.stateTypes.GameOver;
-import com.psw.tetris.gameStates.stateTypes.Leaderboard;
-import com.psw.tetris.gameStates.stateTypes.Lobby;
-import com.psw.tetris.gameStates.stateTypes.HostGame;
-import com.psw.tetris.gameStates.stateTypes.JoinGame;
-import com.psw.tetris.gameStates.stateTypes.MainMenu;
-import com.psw.tetris.gameStates.stateTypes.Pause;
-import com.psw.tetris.gameStates.stateTypes.Playing;
-import com.psw.tetris.gameStates.stateTypes.PlayingMP;
-import com.psw.tetris.gameStates.stateTypes.Settings;
-import com.psw.tetris.gameStates.stateTypes.TitleScreen;
+import com.psw.tetris.gameStates.states.menus.AboutUs;
+import com.psw.tetris.gameStates.states.menus.ChangeKeybinds;
+import com.psw.tetris.gameStates.states.menus.GameModeSelect;
+import com.psw.tetris.gameStates.states.menus.Leaderboard;
+import com.psw.tetris.gameStates.states.menus.MainMenu;
+import com.psw.tetris.gameStates.states.menus.Pause;
+import com.psw.tetris.gameStates.states.menus.Settings;
+import com.psw.tetris.gameStates.states.menus.TitleScreen;
+import com.psw.tetris.gameStates.states.multiP.GameModeSelectMP;
+import com.psw.tetris.gameStates.states.multiP.HostGame;
+import com.psw.tetris.gameStates.states.multiP.JoinGame;
+import com.psw.tetris.gameStates.states.multiP.PlayingMP;
+import com.psw.tetris.gameStates.states.singleP.GameOver;
+import com.psw.tetris.gameStates.states.singleP.Lobby;
+import com.psw.tetris.gameStates.states.singleP.Playing;
 import com.psw.tetris.main.Game;
 
 public final class GameStateHandler {

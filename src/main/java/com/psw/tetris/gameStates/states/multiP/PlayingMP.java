@@ -1,4 +1,4 @@
-package com.psw.tetris.gameStates.stateTypes;
+package com.psw.tetris.gameStates.states.multiP;
 
 import static com.psw.tetris.utils.Constants.Directions.LEFT;
 import static com.psw.tetris.utils.Constants.Directions.RIGHT;
