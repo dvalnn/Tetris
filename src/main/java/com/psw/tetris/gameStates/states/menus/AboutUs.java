@@ -26,7 +26,7 @@ public class AboutUs extends GameState {
   private final BufferedImage returnButtonImage = LoadSave.loadImage(RETURN_BUTTON);
   private final BufferedImage aboutUsBackground;
 
-  private final double RETURN_BUTTON_SCALE = 0.29;
+  private final double RETURN_BUTTON_SCALE = 0.050;
 
   private final int returnButtonX = 40;
   private final int returnButtonY = 620;

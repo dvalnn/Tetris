@@ -42,7 +42,7 @@ public class MainMenu extends GameState {
 
   private final BufferedImage menuBackground;
 
-  private final double SCALE = 0.25;
+  private final double SCALE = 0.050;
   private final int FIRST_BUTTON_X = 100;
   private final int FIRST_BUTTON_Y = 300;
   private final int BUTTON_SPACING = 25;

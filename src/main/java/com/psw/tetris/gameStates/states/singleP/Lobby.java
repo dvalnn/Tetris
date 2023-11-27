@@ -45,12 +45,12 @@ public class Lobby extends GameState {
       returnButtonX,
       returnButtonY,
       LoadSave.loadImage(RETURN_BUTTON),
-      0.29);
+      0.050);
 
   private final Button inputFieldButton = new Button(
       new Point(inputFieldButtonCenterX, inputFieldButtonCenterY),
       LoadSave.loadImage(BUTTON_PATH + "playerName.png"),
-      0.35);
+      0.050);
 
   public Lobby() {
     super(GameStatesEnum.LOBBY);

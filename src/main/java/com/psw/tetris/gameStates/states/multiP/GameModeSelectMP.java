@@ -22,7 +22,7 @@ public class GameModeSelectMP extends GameState {
 
   private final BufferedImage background;
 
-  private final double buttonScale = 0.35;
+  private final double buttonScale = 0.050;
 
   private final int pButtonX = 316;
   private final int pButtonY = 334;
