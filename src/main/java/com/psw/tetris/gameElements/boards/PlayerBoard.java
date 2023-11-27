@@ -46,6 +46,7 @@ public class PlayerBoard extends Board {
     super(set);
 
     Score.reset();
+    Levels.reset();
     GameTime.reset();
 
     shapeData = JsonShapeParser.parseAllJsonShapes(RESOURCES_PATH + "/shapes/");
