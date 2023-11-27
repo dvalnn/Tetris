@@ -46,14 +46,14 @@ public class TitleScreen extends GameState {
     button.execIfClicked(
         e.getPoint(),
         btnAction,
-        GameStatesEnum.MAIN_MENU);
+        GameStatesEnum.USERNAME);
   }
 
   @Override
   public void keyPressed(final KeyEvent e) {
     switch (e.getKeyCode()) {
       case KeyEvent.VK_ENTER:
-        button.exec(btnAction, GameStatesEnum.MAIN_MENU);
+        button.exec(btnAction, GameStatesEnum.USERNAME);
         break;
     }
   }

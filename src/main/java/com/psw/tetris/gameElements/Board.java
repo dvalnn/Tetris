@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.psw.tetris.gameElements.gameplay.GameTime;
+import com.psw.tetris.main.Game;
 import com.psw.tetris.settings.BoardSettings;
 
 public class Board {
@@ -69,7 +70,7 @@ public class Board {
   protected int playerLevel = 0;
   protected int playerLines = 0;
 
-  private String username = null;
+  private String username = Game.getUsername();
 
   public Board(BoardSettings settings) {
     this.set = settings;
