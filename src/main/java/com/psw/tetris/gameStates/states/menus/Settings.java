@@ -38,9 +38,9 @@ public class Settings extends GameState {
 
   private final BufferedImage settingsBackground;
 
-  private final double SMALL_BUTTON_SCALE = 0.25;
-  private final double CGI_BUTTON_SCALE = 0.29;
-  private final double RETURN_BUTTON_SCALE = 0.29;// 0.35;
+  private final double SMALL_BUTTON_SCALE = 0.050;
+  private final double CGI_BUTTON_SCALE = 0.050;
+  private final double RETURN_BUTTON_SCALE = 0.050;// 0.35;
 
   private final int FIRST_SMALL_BUTTON_X = 420;
   private final int SECOND_SMALL_BUTTON_X = 500;

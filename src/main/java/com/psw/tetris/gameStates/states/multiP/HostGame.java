@@ -60,12 +60,12 @@ public class HostGame extends GameState {
         returnButtonX,
         returnButtonY,
         returnButtonImage,
-        0.29);
+        0.050);
 
     nameInputFieldButton = new Button(
         new Point(inputFieldButtonCenterX, nameInputFieldButtonCenterY),
         nameInputFieldButtonImage,
-        0.35);
+        0.050);
 
   }
 

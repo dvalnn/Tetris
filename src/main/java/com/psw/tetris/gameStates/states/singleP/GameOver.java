@@ -39,7 +39,7 @@ public class GameOver extends GameState {
   private int score;
   private int linesCleared;
 
-  private final double SCALE = 0.25;
+  private final double SCALE = 0.050;
   private final int FIRST_BUTTON_X = 290;
   private final int FIRST_BUTTON_Y = 450;
   private final int FIFTH_BUTTON_X = 420;

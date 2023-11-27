@@ -26,7 +26,7 @@ public class TitleScreen extends GameState {
   private final Button button = new Button(
       new Point(buttonX, buttonY),
       LoadSave.loadImage(PRESS_ENTER),
-      0.25);
+      0.050);
 
   private final SwitchStateAction btnAction = new SwitchStateAction();
 

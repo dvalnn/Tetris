@@ -21,7 +21,7 @@ public class Leaderboard extends GameState {
   private final BufferedImage returnButtonImage = LoadSave.loadImage(RETURN_BUTTON);
   private final BufferedImage leaderBoardBackground;
 
-  private final double RETURN_BUTTON_SCALE = 0.35;
+  private final double RETURN_BUTTON_SCALE = 0.050;
 
   private final int returnButtonX = 40;
   private final int returnButtonY = 620;

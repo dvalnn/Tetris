@@ -31,7 +31,7 @@ public class Pause extends GameState {
 
   private final BufferedImage pauseBackground;
 
-  private final double BUTTON_SCALE = 0.29;
+  private final double BUTTON_SCALE = 0.050;
 
   private final int ButtonX = 450;
   private final int ButtonY = 230;
