@@ -22,6 +22,6 @@
     }
   ],
   "rgb": [0, 255, 255],
-  "id": "IShape",
+  "name": "IShape",
   "rotates": true
 }

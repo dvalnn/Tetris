@@ -11,6 +11,8 @@ public class GhostShape extends Shape {
         MasterShape.getCenter(),
         MasterShape.getPoints(),
         MasterShape.getColor(),
+        MasterShape.getId(),
+        true,
         MasterShape.getRenderSize(),
         MasterShape.getRenderOffset());
 

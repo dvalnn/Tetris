@@ -57,15 +57,8 @@ public class Tetromino {
     this.board = board;
     this.shapeID = shapeID;
 
-    Color shapeColor = new Color(
-        shapeData.rgb[0],
-        shapeData.rgb[1],
-        shapeData.rgb[2]);
-
     shape = new Shape(
-        shapeData.center,
-        shapeData.points,
-        shapeColor,
+        shapeData,
         renderSize,
         renderOrigin);
 

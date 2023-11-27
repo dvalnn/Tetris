@@ -21,6 +21,7 @@ import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.ui.Button;
+import com.psw.tetris.ui.ButtonAction;
 import com.psw.tetris.ui.SwitchStateAction;
 import com.psw.tetris.utils.LoadSave;
 
@@ -103,10 +104,6 @@ public class GameOver extends GameState {
 
   }
 
-  // write a function that writes all the data : score and name , to a json file
-  // write a function that reads the data from the json file and displays it on
-  // the leaderboard
-
   public void jsonWrite(final String pathWithFilename, final String name, final int score) {
     // writes the name and score to a json file
     try {
@@ -122,6 +119,14 @@ public class GameOver extends GameState {
 
   }
 
+  SwitchStateAction switchStateAction = new SwitchStateAction();
+
+  ButtonAction<GameStatesEnum, Void> reloadAndSwitch = (state) -> {
+    GameStateHandler.reloadState(state);
+    switchStateAction.exec(state);
+    return null;
+  };
+
   @Override
   public void mouseClicked(final MouseEvent e) {
     returnMenuButton.execIfClicked(
@@ -131,7 +136,7 @@ public class GameOver extends GameState {
 
     retryButton.execIfClicked(
         e.getPoint(),
-        switchGameStateAction,
+        reloadAndSwitch,
         GameStatesEnum.PLAYING);
   }
 

@@ -10,6 +10,8 @@ public class Shape {
 
   protected Point2D center;
   protected Point2D[] points;
+  private String id;
+  private boolean rotates;
   protected Color color;
 
   protected int minX, maxX, minY, maxY;
@@ -21,6 +23,8 @@ public class Shape {
       final Point2D center,
       final Point2D[] points,
       final Color color,
+      final String name,
+      final boolean rotates,
       final int renderSize,
       final Point2D renderOrigin) {
 
@@ -31,6 +35,34 @@ public class Shape {
     }
 
     this.color = new Color(color.getRGB());
+    this.id = name;
+    this.rotates = rotates;
+
+    this.renderSize = renderSize;
+    this.renderOffset = renderOrigin;
+
+    calculateMinMaxCoords();
+  }
+
+  public Shape(
+      JsonShape shapeData,
+      final int renderSize,
+      final Point2D renderOrigin) {
+
+    this.center = (Point2D) shapeData.center.clone();
+    this.points = new Point2D[shapeData.points.length];
+    for (int i = 0; i < shapeData.points.length; i++) {
+      this.points[i] = (Point2D) shapeData.points[i].clone();
+    }
+
+    this.color = new Color(
+        shapeData.rgb[0],
+        shapeData.rgb[1],
+        shapeData.rgb[2]);
+
+    this.id = shapeData.name;
+    this.rotates = shapeData.rotates;
+
     this.renderSize = renderSize;
     this.renderOffset = renderOrigin;
 
@@ -68,6 +100,9 @@ public class Shape {
   }
 
   public void rotate(final double angle) {
+    if (!rotates)
+      return;
+
     for (final Point2D point : points) {
       final double x = point.getX() - center.getX();
       final double y = point.getY() - center.getY();
@@ -131,6 +166,10 @@ public class Shape {
 
   public Color getColor() {
     return color;
+  }
+
+  public String getId() {
+    return id;
   }
 
   public int getMinX() {

@@ -6,6 +6,6 @@ public class JsonShape {
   public Point2D.Double center = null;
   public Point2D.Double[] points = null;
   public int rgb[] = null;
-  public String id = null;
+  public String name = null;
   public boolean rotates = false;
 }

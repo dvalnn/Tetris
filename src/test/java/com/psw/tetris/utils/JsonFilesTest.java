@@ -35,7 +35,7 @@ public class JsonFilesTest {
         () -> assertEquals(expected.rgb[0], actual.rgb[0]),
         () -> assertEquals(expected.rgb[1], actual.rgb[1]),
         () -> assertEquals(expected.rgb[2], actual.rgb[2]),
-        () -> assertEquals(expected.id, actual.id),
+        () -> assertEquals(expected.name, actual.name),
         () -> assertEquals(expected.rotates, actual.rotates));
   }
 
@@ -57,7 +57,7 @@ public class JsonFilesTest {
     shape.rgb[0] = 11;
     shape.rgb[1] = 12;
     shape.rgb[2] = 13;
-    shape.id = "shapeI";
+    shape.name = "shapeI";
     shape.rotates = true;
 
     final String json = gson.toJson(shape);

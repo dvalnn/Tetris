@@ -22,6 +22,6 @@
     }
   ],
   "rgb": [255, 165, 0],
-  "id": "LShape",
+  "name": "LShape",
   "rotates": true
 }

@@ -27,6 +27,12 @@ public class Levels {
       2 // 29 + (max level)
   };
 
+  public static void reset() {
+    Levels.currentLevel = 0;
+    Levels.levelLinesCleared = 0;
+    Levels.totalLinesCleared = 0;
+  }
+
   public static int getTotalLinesCleared() {
     return totalLinesCleared;
   }
@@ -50,7 +56,5 @@ public class Levels {
 
     if (currentLevel > maxLevel)
       currentLevel = maxLevel;
-
   }
-
 }
