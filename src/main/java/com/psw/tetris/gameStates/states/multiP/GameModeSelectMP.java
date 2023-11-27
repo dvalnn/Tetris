@@ -1,25 +1,33 @@
 package com.psw.tetris.gameStates.states.multiP;
 
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-
-import com.psw.tetris.utils.LoadSave;
-
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
+import static com.psw.tetris.utils.Constants.UI.Buttons.BUTTON_PATH;
 import static com.psw.tetris.utils.Constants.UI.Buttons.HOST_GAME;
 import static com.psw.tetris.utils.Constants.UI.Buttons.JOIN_GAME;
 import static com.psw.tetris.utils.Constants.UI.Buttons.RETURN_BUTTON;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.InetAddressValidator;
+
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-
+import com.psw.tetris.main.Game;
 import com.psw.tetris.ui.Button;
+import com.psw.tetris.ui.ButtonAction;
 import com.psw.tetris.ui.SwitchStateAction;
+import com.psw.tetris.utils.LoadSave;
 
 public class GameModeSelectMP extends GameState {
-
   private final BufferedImage background;
 
   private final double buttonScale = 0.35;
@@ -33,7 +41,21 @@ public class GameModeSelectMP extends GameState {
   private final int returnButtonX = 40;
   private final int returnButtonY = 620;
 
+  private final int inputFieldButtonCenterX = GAME_WIDTH / 2;
+  private final int inputFieldButtonCenterY = GAME_HEIGHT / 2 + 200;
+  private final int inputFieldX = 270;
+  private final int inputFieldY = 42;
+
+  private final int inputMaxLength = 15;
+  private String inputText = "127.0.0.1";
+  private Boolean defaultText = true;
+  private Boolean validIP = true;
+
   private SwitchStateAction switchStateAction = new SwitchStateAction();
+  private final Button inputFieldButton = new Button(
+      new Point(inputFieldButtonCenterX, inputFieldButtonCenterY),
+      LoadSave.loadImage(BUTTON_PATH + "playerName.png"), // change to IP Adress
+      0.35);
 
   private final Button hostButton = new Button(
       pButtonX,
@@ -64,20 +86,74 @@ public class GameModeSelectMP extends GameState {
     hostButton.render(g);
     joinButton.render(g);
     returnButton.render(g);
+
+    inputFieldButton.render(g);
+
+    g.setColor(Color.WHITE);
+    g.setFont(g.getFont().deriveFont(30f));
+    Graphics2D g2 = (Graphics2D) g;
+
+    g2.setRenderingHint(
+        RenderingHints.KEY_ANTIALIASING,
+        RenderingHints.VALUE_ANTIALIAS_ON);
+
+    g2.drawString(
+        "Host IPV4: " + inputText,
+        inputFieldButton.getAnchorPoint().x + inputFieldX,
+        inputFieldButton.getAnchorPoint().y + inputFieldY);
   }
+
+  @Override
+  public void keyPressed(KeyEvent e) {
+    if (defaultText) {
+      inputText = "";
+      defaultText = false;
+    }
+
+    if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+      inputText = StringUtils.chop(inputText);
+      return;
+    }
+
+    char c = e.getKeyChar();
+    if (inputText.length() < inputMaxLength && Character.isDefined(c))
+      inputText += c;
+
+  }
+
+  ButtonAction<Void, Void> initHostAndSwitch = (Void) -> {
+    Game.hostMultiplayer();
+    switchStateAction.exec(GameStatesEnum.PLAYING_MP);
+    return null;
+  };
+
+  ButtonAction<String, Boolean> initClientAndSwitch = ipAddress -> {
+    // verify ip address
+    if (!InetAddressValidator.getInstance().isValid(ipAddress))
+      return false;
+
+    Game.connectMultiplayer(ipAddress);
+    switchStateAction.exec(GameStatesEnum.PLAYING_MP);
+    return true;
+  };
 
   @Override
   public void mouseClicked(final MouseEvent e) {
 
     hostButton.execIfClicked(
         e.getPoint(),
-        switchStateAction,
-        GameStatesEnum.HOST_GAME);
+        initHostAndSwitch,
+        null);
 
-    joinButton.execIfClicked(
+    validIP = joinButton.execIfClicked(
         e.getPoint(),
-        switchStateAction,
-        GameStatesEnum.JOIN_GAME); // TODO: add lobby mp
+        initClientAndSwitch,
+        inputText);
+
+    if (validIP != null && !validIP) {
+      inputText = "";
+      validIP = true;
+    }
 
     returnButton.execIfClicked(
         e.getPoint(),

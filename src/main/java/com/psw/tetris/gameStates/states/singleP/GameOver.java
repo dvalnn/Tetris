@@ -92,11 +92,8 @@ public class GameOver extends GameState {
         RenderingHints.VALUE_ANTIALIAS_ON);
 
     g2.drawString(username, GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2 - 130);
-
     g2.drawString("" + score, GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2 - 68);
-
     g2.drawString("" + linesCleared, GAME_WIDTH / 2 - 150, GAME_HEIGHT / 2 - 7);
-
     g2.drawString(GameTime.getTimeStr(), GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2 + 55);
 
     // jsonWrite("src/test/resources/test.json", username, score);

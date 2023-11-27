@@ -12,8 +12,6 @@ import com.psw.tetris.gameStates.states.menus.Settings;
 import com.psw.tetris.gameStates.states.menus.TitleScreen;
 import com.psw.tetris.gameStates.states.menus.Username;
 import com.psw.tetris.gameStates.states.multiP.GameModeSelectMP;
-import com.psw.tetris.gameStates.states.multiP.HostGame;
-import com.psw.tetris.gameStates.states.multiP.JoinGame;
 import com.psw.tetris.gameStates.states.multiP.PlayingMP;
 import com.psw.tetris.gameStates.states.singleP.GameOver;
 import com.psw.tetris.gameStates.states.singleP.Playing;
@@ -30,8 +28,6 @@ public final class GameStateHandler {
     CHANGE_KEYBINDS,
     GAME_MODE_SELECT,
     GAME_MODE_SELECT_MP,
-    HOST_GAME,
-    JOIN_GAME,
     PLAYING,
     PLAYING_MP,
     PAUSE,
@@ -69,8 +65,6 @@ public final class GameStateHandler {
     addState(new GameModeSelect());
     addState(new GameModeSelectMP());
     addState(new Username());
-    addState(new HostGame());
-    addState(new JoinGame());
     addState(new Playing());
     addState(new PlayingMP());
     addState(new Pause());
