@@ -8,13 +8,10 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.net.InetAddress;
 
-import javax.swing.JOptionPane;
-
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.states.multiP.PlayingMP;
 import com.psw.tetris.gameStates.states.singleP.GameOver;
-import com.psw.tetris.gameStates.states.singleP.Playing;
 import com.psw.tetris.networking.GameClient;
 import com.psw.tetris.networking.GameServer;
 import com.psw.tetris.networking.packets.Packet00Login;
@@ -50,24 +47,21 @@ public class Game implements Runnable {
     gameThread.start();
   }
 
-  public static void initNetworking() {
+  public static void connectMultiplayer(final String ipAddress) {
+    // TODO: make this safer by checking if the IP address is valid
+    // and return if it is not
+    final Packet00Login loginPacket = new Packet00Login(Game.username);
+    client = new GameClient(ipAddress, loginPacket.getUsername());
+    client.start();
+    loginPacket.writeData(client);
+    clientActive = true;
+  }
+
+  public static void hostMultiplayer() {
     // TODO: make this a dialog box instead of a yes/no option
-    if (JOptionPane.showConfirmDialog(null, "Run as server?") == JOptionPane.YES_OPTION) {
-      final String hostName = JOptionPane.showInputDialog("Enter server name:").trim();
-      server = new GameServer(hostName);
-      server.start();
-      serverActive = true;
-    } else {
-      // TODO: make this safer by checking if the IP address is valid
-      // TODO: make this a text field instead of a dialog box
-      final String ipAddress = JOptionPane.showInputDialog("Enter server IP address:").trim();
-      System.out.println("Connecting to " + ipAddress);
-      final Packet00Login loginPacket = new Packet00Login(JOptionPane.showInputDialog("Enter username:"));
-      client = new GameClient(ipAddress, loginPacket.getUsername());
-      client.start();
-      loginPacket.writeData(client);
-      clientActive = true;
-    }
+    server = new GameServer(Game.username);
+    server.start();
+    serverActive = true;
   }
 
   public void terminateConnection() {
@@ -190,13 +184,11 @@ public class Game implements Runnable {
 
     Game.username = username;
 
-    ((Playing) (GameStateHandler.getState(GameStatesEnum.PLAYING)))
-        .getBoard().setUsername(username);
-
+    // TODO: remove this
     ((PlayingMP) (GameStateHandler.getState(GameStatesEnum.PLAYING_MP)))
         .getPlayerBoard().setUsername(username);
 
-    // creates the same setter for GameOver
+    // TODO: check if this is necessary
     ((GameOver) (GameStateHandler.getState(GameStatesEnum.GAME_OVER)))
         .setUsername(username);
 

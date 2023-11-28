@@ -10,18 +10,17 @@ import com.psw.tetris.gameStates.states.menus.MainMenu;
 import com.psw.tetris.gameStates.states.menus.Pause;
 import com.psw.tetris.gameStates.states.menus.Settings;
 import com.psw.tetris.gameStates.states.menus.TitleScreen;
+import com.psw.tetris.gameStates.states.menus.Username;
 import com.psw.tetris.gameStates.states.multiP.GameModeSelectMP;
-import com.psw.tetris.gameStates.states.multiP.HostGame;
-import com.psw.tetris.gameStates.states.multiP.JoinGame;
 import com.psw.tetris.gameStates.states.multiP.PlayingMP;
 import com.psw.tetris.gameStates.states.singleP.GameOver;
-import com.psw.tetris.gameStates.states.singleP.Lobby;
 import com.psw.tetris.gameStates.states.singleP.Playing;
 import com.psw.tetris.main.Game;
 
 public final class GameStateHandler {
   public enum GameStatesEnum {
     TITLE_SCREEN,
+    USERNAME,
     MAIN_MENU,
     SETTINGS,
     LEADERBOARD,
@@ -29,9 +28,6 @@ public final class GameStateHandler {
     CHANGE_KEYBINDS,
     GAME_MODE_SELECT,
     GAME_MODE_SELECT_MP,
-    LOBBY,
-    HOST_GAME,
-    JOIN_GAME,
     PLAYING,
     PLAYING_MP,
     PAUSE,
@@ -68,9 +64,7 @@ public final class GameStateHandler {
     addState(new ChangeKeybinds());
     addState(new GameModeSelect());
     addState(new GameModeSelectMP());
-    addState(new Lobby());
-    addState(new HostGame());
-    addState(new JoinGame());
+    addState(new Username());
     addState(new Playing());
     addState(new PlayingMP());
     addState(new Pause());

@@ -11,8 +11,10 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import com.psw.tetris.gameStates.GameState;
+import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.ui.Button;
+import com.psw.tetris.ui.ButtonAction;
 import com.psw.tetris.ui.SwitchStateAction;
 import com.psw.tetris.utils.LoadSave;
 
@@ -64,13 +66,19 @@ public class GameModeSelect extends GameState {
     returnButton.render(g);
   }
 
+  ButtonAction<GameStatesEnum, Void> reloadAndSwitch = (state) -> {
+    GameStateHandler.reloadState(state);
+    switchStateAction.exec(state);
+    return null;
+  };
+
   @Override
   public void mouseClicked(final MouseEvent e) {
 
     playButton.execIfClicked(
         e.getPoint(),
-        switchStateAction,
-        GameStatesEnum.LOBBY);
+        reloadAndSwitch,
+        GameStatesEnum.PLAYING);
 
     onlineButton.execIfClicked(
         e.getPoint(),

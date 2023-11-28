@@ -51,7 +51,7 @@ public class BoardSettings {
     this.linesRenderY = yOffset + 310;
     this.levelRenderX = xOffset - 120;
     this.levelRenderY = yOffset + 390;
-    this.timerRenderX = xOffset - 120;
+    this.timerRenderX = xOffset - 150;
     this.timerRenderY = yOffset + 472;
 
     this.scoreRenderX = xOffset + 255;
