@@ -26,8 +26,10 @@ import com.psw.tetris.gameElements.boards.PlayerBoard;
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.psw.tetris.main.Game;
 import com.psw.tetris.settings.BoardSettings;
 import com.psw.tetris.utils.LoadSave;
+
 
 public class Playing extends GameState {
 
@@ -104,111 +106,124 @@ public class Playing extends GameState {
 
   @Override
   public void keyPressed(final KeyEvent e) {
-    switch (e.getKeyCode()) {
-      case (KeyEvent.VK_Z):
-        board.getTetromino().rotate(LEFT);
-        break;
 
-      case (KeyEvent.VK_X):
-        board.getTetromino().rotate(RIGHT);
-        break;
+    if (e.getKeyCode() == Game.getKeybind().rotatesLeft) {
+      board.getTetromino().rotate(LEFT);
+      return;
 
-      case (KeyEvent.VK_LEFT):
-        board.getTetromino().setLeft(true);
-        break;
-
-      case (KeyEvent.VK_DOWN):
-        board.getTetromino().setDown(true);
-        break;
-
-      case (KeyEvent.VK_RIGHT):
-        board.getTetromino().setRight(true);
-        break;
-
-      case (KeyEvent.VK_SPACE):
-        board.getTetromino().setDrop(true);
-        break;
-
-      case (KeyEvent.VK_C):
-        board.holdTetromino();
-        break;
-
-      case (KeyEvent.VK_G):
-        // board.toggleGrid();
-        break;
-
-      case (KeyEvent.VK_D):
-        board.toggleDebugMode();
-        break;
-
-      case (KeyEvent.VK_R):
-        board.reset();
-        break;
-
-      case (KeyEvent.VK_P):
-        // changes the game state to pause
-        GameStateHandler.switchState(GameStatesEnum.PAUSE);
-
-        // board.togglePause();
-        break;
-
-      // NOTE: these keybinds are only for debugging purposes
-      // TODO: remove these keybinds
-      case (KeyEvent.VK_1):
-        board.setTetromino(I);
-        break;
-
-      case (KeyEvent.VK_2):
-        board.setTetromino(T);
-        break;
-
-      case (KeyEvent.VK_3):
-        board.setTetromino(O);
-        break;
-
-      case (KeyEvent.VK_4):
-        board.setTetromino(J);
-        break;
-
-      case (KeyEvent.VK_5):
-        board.setTetromino(L);
-        break;
-
-      case (KeyEvent.VK_6):
-        board.setTetromino(S);
-        break;
-
-      case (KeyEvent.VK_7):
-        board.setTetromino(Z);
-        break;
-
-      default:
-        break;
     }
+    if (e.getKeyCode() == Game.getKeybind().rotatesRight) {
+      board.getTetromino().rotate(RIGHT);
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().movesLeft) {
+      board.getTetromino().setLeft(true);
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().movesRight) {
+      board.getTetromino().setRight(true);
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().softDrop) {
+      board.getTetromino().setDown(true);
+      return;
+
+    }
+
+    if (e.getKeyCode() == Game.getKeybind().hardDrop) {
+      board.getTetromino().setDrop(true);
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().hold) {
+      board.holdTetromino();
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().debug) {
+      board.toggleDebugMode();
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().restart) {
+      board.reset();
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().pause) {
+      // changes the game state to pause
+      GameStateHandler.switchState(GameStatesEnum.PAUSE);
+      return;
+    }
+    if (e.getKeyCode() == Game.getKeybind().toggleGrid) {
+      //board.toggleGrid();
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().debugIShape) {
+      board.setTetromino(I);
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().debugJShape) {
+      board.setTetromino(J);
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().debugLShape) {
+      board.setTetromino(L);
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().debugOShape) {
+      board.setTetromino(O);
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().debugSShape) {
+      board.setTetromino(S);
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().debugTShape) {
+      board.setTetromino(T);
+      return;
+
+    }
+    if (e.getKeyCode() == Game.getKeybind().debugZShape) {
+      board.setTetromino(Z);
+      return;
+    }
+    
+    return;
   }
 
   @Override
   public void keyReleased(final KeyEvent e) {
-    switch (e.getKeyCode()) {
-      case (KeyEvent.VK_LEFT):
+
+    if (e.getKeyCode() == Game.getKeybind().movesLeft) {
         board.getTetromino().setLeft(false);
-        break;
-
-      case (KeyEvent.VK_DOWN):
-        board.getTetromino().setDown(false);
-        break;
-
-      case (KeyEvent.VK_RIGHT):
-        board.getTetromino().setRight(false);
-        break;
-
-      case (KeyEvent.VK_SPACE):
-        board.getTetromino().setDrop(false);
-        break;
-
-      default:
-        break;
+      return;
     }
+
+    if (e.getKeyCode() == Game.getKeybind().softDrop) {
+        board.getTetromino().setDown(false);
+      return;
+    }
+
+    if (e.getKeyCode() == Game.getKeybind().movesRight) {
+        board.getTetromino().setRight(false);
+      return;
+    }
+
+    if (e.getKeyCode() == Game.getKeybind().hardDrop) {
+        board.getTetromino().setDrop(false);
+      return;
+    }
+    return;
   }
 
   @Override

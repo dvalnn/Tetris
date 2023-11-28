@@ -1,5 +1,5 @@
 {
-  "rotatesLeft": 90,
+  "rotatesLeft": 521,
   "rotatesRight": 88,
   "movesLeft": 37,
   "movesRight": 39,
@@ -19,4 +19,3 @@
   "debugTShape": 54,
   "debugZShape": 55
 }
-

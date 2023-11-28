@@ -15,8 +15,11 @@ import com.psw.tetris.gameStates.states.singleP.GameOver;
 import com.psw.tetris.networking.GameClient;
 import com.psw.tetris.networking.GameServer;
 import com.psw.tetris.networking.packets.Packet00Login;
+import com.psw.tetris.utils.Keybindings;
 
 public class Game implements Runnable {
+
+  private static Keybindings keybind = new Keybindings();  
 
   private final GameWindow gameWindow;
   private final GamePanel gamePanel;
@@ -30,6 +33,8 @@ public class Game implements Runnable {
   private static boolean exit = false;
 
   private static String username = null;
+
+
 
   public Game() {
     GameStateHandler.init();
@@ -220,5 +225,14 @@ public class Game implements Runnable {
 
   public GameServer getServer() {
     return server;
+  }
+  public static Keybindings getKeybind() {
+    return keybind;
+  }
+  public static void setKeybind(Keybindings keybind) {
+    Game.keybind = keybind;
+  }
+  public static void resetKeybind() {
+    Game.keybind = new Keybindings();
   }
 }
