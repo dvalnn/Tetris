@@ -4,8 +4,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class Keybindings {
+
   public int rotatesLeft = 90;
   public int rotatesRight = 88;
   public int movesLeft = 37;
@@ -28,6 +30,7 @@ public class Keybindings {
 
   public static Keybindings loadFromFile(final String pathWithFilename) {
     try {
+
       final FileReader reader = new FileReader(pathWithFilename);
       final Keybindings keybindings = new Gson().fromJson(reader, Keybindings.class);
       reader.close();
@@ -39,8 +42,11 @@ public class Keybindings {
 
   // saves the currnet keybindings to a file
   public static void saveToFile(Keybindings newKeybindings, final String pathWithFilename) {
+    final Gson gson = new GsonBuilder()
+        .setPrettyPrinting()
+        .create();
     try {
-      final String json = new Gson().toJson(newKeybindings);
+      final String json = gson.toJson(newKeybindings);
       final FileWriter writer = new FileWriter(pathWithFilename);
       writer.write(json);
       writer.close();
