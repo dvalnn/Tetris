@@ -1,0 +1,35 @@
+{
+    "name": "LEADERBOARD",
+    "imagePath": "",
+    "color": [0, 0, 0],
+    "assets": [
+      {
+        "type": "image",
+        "name": "leaderboard",
+        "imagePath": "/buttonsV2/bannerLeaderboard.png",
+        "x": 27.9,
+        "y": 5.6,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "topScores",
+        "imagePath": "/buttonsV2/topScores.png",
+        "x": 25.6,
+        "y": 22.1,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "returnToMainMenu",
+        "imagePath": "/buttonsV2/return.png",
+        "x": 2.6,
+        "y": 87.0,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      }
+    ]
+  }
+  

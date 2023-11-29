@@ -1,25 +1,20 @@
 package com.psw.tetris.gameStates.states.menus;
 
+import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
+import static com.psw.tetris.utils.Constants.KEYBINDINGS_PATH;
+
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
-import com.psw.tetris.utils.Keybindings;
-import com.psw.tetris.utils.LoadSave;
-
-import static com.psw.tetris.utils.Constants.*;
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
-import static com.psw.tetris.utils.Constants.UI.Buttons.NEW_GAME;
-
+import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.main.Game;
-import com.psw.tetris.gameStates.GameState;
-
-import com.psw.tetris.ui.Button;
-import com.psw.tetris.ui.ButtonAction;
+import com.psw.tetris.ui.ImageElement;
 import com.psw.tetris.ui.SwitchStateAction;
+import com.psw.tetris.utils.Keybindings;
+import com.psw.tetris.ui.ButtonAction;
+import com.psw.tetris.ui.Frame;
 
 public class ChangeKeybinds extends GameState {
 
@@ -32,40 +27,13 @@ public class ChangeKeybinds extends GameState {
     SOFT_DROP,
     HARD_DROP,
     HOLD,
-    PAUSE,
-    RESET;
+    PAUSE;
   }
+  private keyAction Action = keyAction.OFF;
 
-  private keyAction Action = keyAction.ROTATE_LEFT;
+  private final Frame frame;
+  private final SwitchStateAction switchState = new SwitchStateAction();
 
-  private final Button rotateLeftButton;
-  private final Button rotateRightButton;
-  private final Button moveRightButton;
-  private final Button moveLeftButton;
-  private final Button softDropButton;
-  private final Button hardDropButton;
-  private final Button holdButton;
-  private final Button pauseButton;
-  private final Button resetButton;
-  private final Button resetKeybindsButton;
-  private final Button returnButton;
-
-  private final BufferedImage rotateLeftButtonImage = LoadSave.loadImage(NEW_GAME);
-  private final BufferedImage rotateRightButtonImage = LoadSave.loadImage(NEW_GAME);
-  private final BufferedImage moveRightButtonImage = LoadSave.loadImage(NEW_GAME);
-  private final BufferedImage moveLeftButtonImage = LoadSave.loadImage(NEW_GAME);
-  private final BufferedImage softDropButtonImage = LoadSave.loadImage(NEW_GAME);
-  private final BufferedImage hardDropButtonImage = LoadSave.loadImage(NEW_GAME);
-  private final BufferedImage holdButtonImage = LoadSave.loadImage(NEW_GAME);
-  private final BufferedImage pauseButtonImage = LoadSave.loadImage(NEW_GAME);
-  private final BufferedImage resetButtonImage = LoadSave.loadImage(NEW_GAME);
-  private final BufferedImage resetKeybidingsButtonImage = LoadSave.loadImage(NEW_GAME);
-
-  private final BufferedImage returnButtonImage = LoadSave.loadImage(NEW_GAME);
-
-  private final BufferedImage keyBackground;
-
-  private final SwitchStateAction switchGameStateAction = new SwitchStateAction();
   private final ButtonAction<keyAction, Void> changeKeyAction = (keyAction a) -> {
     Action = a;
     return null;
@@ -76,163 +44,53 @@ public class ChangeKeybinds extends GameState {
     return null;
   };
 
-  private final double SCALE = 0.02;
-  private final int FIRST_BUTTON_X = 100;
-  private final int FIRST_BUTTON_Y = 200;
-  private final int FIFTH_BUTTON_X = 700;
-  private final int BUTTON_SPACING = 25;
-
   public ChangeKeybinds() {
     super(GameStatesEnum.CHANGE_KEYBINDS);
-
-    keyBackground = LoadSave.loadBackground("aboutUs.png");
-
-    rotateLeftButton = new Button(
-        FIRST_BUTTON_X,
-        FIRST_BUTTON_Y,
-        rotateLeftButtonImage,
-        SCALE);
-
-    final int secondButtonY = (int) (FIRST_BUTTON_Y + rotateLeftButton.getBounds().getHeight() + BUTTON_SPACING);
-    rotateRightButton = new Button(
-        FIRST_BUTTON_X,
-        secondButtonY,
-        rotateRightButtonImage,
-        SCALE);
-
-    final int thirdButtonY = (int) (secondButtonY + rotateRightButton.getBounds().getHeight() + BUTTON_SPACING);
-    moveRightButton = new Button(
-        FIRST_BUTTON_X,
-        thirdButtonY,
-        moveRightButtonImage,
-        SCALE);
-    final int fourthButtonY = (int) (thirdButtonY + moveRightButton.getBounds().getHeight() + BUTTON_SPACING);
-    moveLeftButton = new Button(
-        FIRST_BUTTON_X,
-        fourthButtonY,
-        moveLeftButtonImage,
-        SCALE);
-    final int fifthButtonY = (int) (fourthButtonY + moveLeftButton.getBounds().getHeight() + BUTTON_SPACING);
-    softDropButton = new Button(
-        FIRST_BUTTON_X,
-        fifthButtonY,
-        softDropButtonImage,
-        SCALE);
-
-    hardDropButton = new Button(
-        FIFTH_BUTTON_X,
-        FIRST_BUTTON_Y,
-        hardDropButtonImage,
-        SCALE);
-
-    holdButton = new Button(
-        FIFTH_BUTTON_X,
-        secondButtonY,
-        holdButtonImage,
-        SCALE);
-
-    pauseButton = new Button(
-        FIFTH_BUTTON_X,
-        thirdButtonY,
-        pauseButtonImage,
-        SCALE);
-
-    resetButton = new Button(
-        FIFTH_BUTTON_X,
-        fourthButtonY,
-        resetButtonImage,
-        SCALE);
-    
-    resetKeybindsButton = new Button(
-        FIFTH_BUTTON_X+100,
-        fifthButtonY+200,
-        resetKeybidingsButtonImage,
-        SCALE);
-
-    returnButton = new Button(
-        FIFTH_BUTTON_X,
-        fifthButtonY,
-        returnButtonImage,
-        SCALE);
+    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/changeKeybinds.json");
   }
 
   @Override
   public void render(final Graphics g) {
-
-    g.drawImage(keyBackground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-    rotateLeftButton.render(g);
-    rotateRightButton.render(g);
-    moveRightButton.render(g);
-    moveLeftButton.render(g);
-    softDropButton.render(g);
-    hardDropButton.render(g);
-    holdButton.render(g);
-    pauseButton.render(g);
-    resetButton.render(g);
-    resetKeybindsButton.render(g);
-    returnButton.render(g);
+    frame.render(g);
   }
 
-  // actions ainda a definir
   @Override
   public void mouseClicked(final MouseEvent e) {
 
-    rotateLeftButton.execIfClicked(
-        e.getPoint(),
-        changeKeyAction,
-        keyAction.ROTATE_LEFT);
+    int x = e.getX();
+    int y = e.getY();
+  
+      ((ImageElement) frame.getElement("changeKeybindRotateLeft"))
+          .execIfClicked(x, y, changeKeyAction, keyAction.ROTATE_LEFT);
 
-    rotateRightButton.execIfClicked(
-        e.getPoint(),
-        changeKeyAction,
-        keyAction.ROTATE_RIGHT);
+      ((ImageElement) frame.getElement("changeKeybindRotateRight"))
+          .execIfClicked(x, y, changeKeyAction, keyAction.ROTATE_RIGHT);
 
-    moveRightButton.execIfClicked(
-        e.getPoint(),
-        changeKeyAction,
-        keyAction.MOVE_RIGHT);
+      ((ImageElement) frame.getElement("changeKeybindMoveRight"))
+          .execIfClicked(x, y, changeKeyAction, keyAction.MOVE_RIGHT);
 
-    moveLeftButton.execIfClicked(
-        e.getPoint(),
-        changeKeyAction,
-        keyAction.MOVE_LEFT);
+      ((ImageElement) frame.getElement("changeKeybindMoveLeft"))
+          .execIfClicked(x, y, changeKeyAction, keyAction.MOVE_LEFT);
 
-    softDropButton.execIfClicked(
-        e.getPoint(),
-        changeKeyAction,
-        keyAction.SOFT_DROP);
+      ((ImageElement) frame.getElement("changeKeybindSoftDrop"))
+          .execIfClicked(x, y, changeKeyAction, keyAction.SOFT_DROP);
 
-    hardDropButton.execIfClicked(
-        e.getPoint(),
-        changeKeyAction,
-        keyAction.HARD_DROP);
+      ((ImageElement) frame.getElement("changeKeybindHardDrop"))
+          .execIfClicked(x, y, changeKeyAction, keyAction.HARD_DROP);
 
-    holdButton.execIfClicked(
-        e.getPoint(),
-        changeKeyAction,
-        keyAction.HOLD);
+      ((ImageElement) frame.getElement("changeKeybindHold"))
+          .execIfClicked(x, y, changeKeyAction, keyAction.HOLD);
 
-    pauseButton.execIfClicked(
-        e.getPoint(),
-        changeKeyAction,
-        keyAction.PAUSE);
+      ((ImageElement) frame.getElement("changeKeybindPause"))
+          .execIfClicked(x, y, changeKeyAction, keyAction.PAUSE);
 
-    resetButton.execIfClicked(
-        e.getPoint(),
-        changeKeyAction,
-        keyAction.RESET);
+      ((ImageElement) frame.getElement("changeKeybindReset"))
+          .execIfClicked(x, y, resetKeyAction, null);
 
-    resetKeybindsButton.execIfClicked(
-        e.getPoint(),
-        resetKeyAction,
-        null);
+      ((ImageElement) frame.getElement("returnToMainMenu"))
+          .execIfClicked(x, y, switchState, GameStatesEnum.SETTINGS);
 
-    returnButton.execIfClicked(
-        e.getPoint(),
-        switchGameStateAction,
-        GameStatesEnum.SETTINGS);
   }
-
   @Override
   public void keyPressed(final KeyEvent e) {
     switch (Action) {
@@ -259,10 +117,6 @@ public class ChangeKeybinds extends GameState {
         break;
       case PAUSE:
       Game.getKeybind().pause = e.getKeyCode();
-        break;
-      case RESET:
-      //Game.resetKeybind();
-      Game.getKeybind().restart = e.getKeyCode();
         break;
       default:
         return;
