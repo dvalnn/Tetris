@@ -8,26 +8,33 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.psw.tetris.utils.LoadSave;
 
-public class UiFrame {
+public class Frame {
 
   private String name;
   private String imagePath;
   private int[] color;
-  private ArrayList<UiElement> assets;
+  private ArrayList<FrameElement> assets;
 
   private transient Color backgroundColor;
   private transient BufferedImage backgroundImg;
 
-  // TODO: add better error handling
-  public static UiFrame loadFromJson(String jsonPath) {
+  private static HashMap<String, Class<? extends FrameElement>> assetTypes = new HashMap<String, Class<? extends FrameElement>>();
+
+  static {
+    assetTypes.put("image", ImageElement.class);
+  }
+
+  // TODO: add better error handling, refactor this
+  public static Frame loadFromJson(String jsonPath) {
     Gson gson = new Gson();
-    UiFrame frame = new UiFrame();
+    Frame frame = new Frame();
 
     JsonObject json = LoadSave.loadJson(
         jsonPath,
@@ -46,24 +53,27 @@ public class UiFrame {
         frame.color[2]);
 
     JsonArray assetArray = json.get("assets").getAsJsonArray();
-    frame.assets = new ArrayList<UiElement>(assetArray.size());
+    frame.assets = new ArrayList<FrameElement>(assetArray.size());
 
     for (int i = 0; i < assetArray.size(); i++) {
       assetArray.get(i);
       JsonObject asset = assetArray.get(i).getAsJsonObject();
+      String type = asset.get("type").getAsString();
 
-      if (asset.get("type").getAsString().equals("image")) {
-        ImageElement button = gson.fromJson(asset, ImageElement.class);
-        button.init();
-        frame.addAsset(button);
-      }
+      Class<? extends FrameElement> classOfT = assetTypes.get(type);
+      if (classOfT == null)
+        continue;
+
+      FrameElement assetObj = gson.fromJson(asset, classOfT);
+      assetObj.init();
+      frame.assets.add(assetObj);
     }
 
     return frame;
   }
 
   public <T> T getAsset(String name, Class<T> classOfT) {
-    for (UiElement asset : assets) {
+    for (FrameElement asset : assets) {
       if (asset.getName().equals(name))
         return classOfT.cast(asset);
     }
@@ -71,16 +81,16 @@ public class UiFrame {
   }
 
   // TODO: look into optimizing this
-  public void addAsset(final UiElement asset) {
+  public void addAsset(final FrameElement asset) {
     if (assets == null)
-      assets = new ArrayList<UiElement>();
+      assets = new ArrayList<FrameElement>();
 
     assets.add(asset);
     // sort assets by render priority
     for (int i = 0; i < assets.size(); i++) {
       for (int j = i + 1; j < assets.size(); j++) {
         if (assets.get(i).getRenderPriority() > assets.get(j).getRenderPriority()) {
-          final UiElement temp = assets.get(i);
+          final FrameElement temp = assets.get(i);
           assets.set(i, assets.get(j));
           assets.set(j, temp);
         }
@@ -106,13 +116,13 @@ public class UiFrame {
       g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     }
 
-    for (final UiElement asset : assets) {
+    for (final FrameElement asset : assets) {
       asset.render(g);
     }
   }
 
   public void update() {
-    for (final UiElement asset : assets) {
+    for (final FrameElement asset : assets) {
       asset.update();
     }
   }

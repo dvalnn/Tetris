@@ -2,7 +2,7 @@ package com.psw.tetris.ui;
 
 import java.awt.Graphics;
 
-public interface UiElement {
+public interface FrameElement {
 
   public void render(Graphics g);
 
@@ -19,5 +19,7 @@ public interface UiElement {
   public String getName();
 
   public String getType();
+
+  public void init();
 
 }

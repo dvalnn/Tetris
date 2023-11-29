@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 import com.psw.tetris.utils.LoadSave;
 
-public class ImageElement implements UiElement {
+public class ImageElement implements FrameElement {
 
   public static class Builder {
     private ImageElement button;
@@ -84,6 +84,7 @@ public class ImageElement implements UiElement {
     return null;
   }
 
+  @Override
   public void init() {
     if (enabled && image == null) {
       image = LoadSave.loadImage(RESOURCES_PATH + imagePath);

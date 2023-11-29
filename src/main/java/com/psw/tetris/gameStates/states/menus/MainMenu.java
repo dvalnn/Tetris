@@ -10,11 +10,11 @@ import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.main.Game;
 import com.psw.tetris.ui.ImageElement;
 import com.psw.tetris.ui.SwitchStateAction;
-import com.psw.tetris.ui.UiFrame;
+import com.psw.tetris.ui.Frame;
 
 public class MainMenu extends GameState {
 
-  private UiFrame frame;
+  private Frame frame;
   private final ImageElement newGameButton;
   private final ImageElement aboutButton;
   private final ImageElement settingsButton;
@@ -26,7 +26,7 @@ public class MainMenu extends GameState {
   public MainMenu() {
     super(GameStatesEnum.MAIN_MENU);
     String path = RESOURCES_PATH + "/frames/mainMenu.json";
-    frame = UiFrame.loadFromJson(path);
+    frame = Frame.loadFromJson(path);
 
     newGameButton = frame.getAsset("newGame", ImageElement.class);
     aboutButton = frame.getAsset("aboutUs", ImageElement.class);

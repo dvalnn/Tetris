@@ -10,17 +10,17 @@ import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.ui.ImageElement;
 import com.psw.tetris.ui.SwitchStateAction;
-import com.psw.tetris.ui.UiFrame;
+import com.psw.tetris.ui.Frame;
 
 public class TitleScreen extends GameState {
 
-  private final UiFrame frame;
+  private final Frame frame;
   private final ImageElement button;
   private final SwitchStateAction action = new SwitchStateAction();
 
   public TitleScreen() {
     super(GameStatesEnum.TITLE_SCREEN);
-    frame = UiFrame.loadFromJson(RESOURCES_PATH + "/frames/titleScreen.json");
+    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/titleScreen.json");
     button = frame.getAsset("enterButton", ImageElement.class);
   }
 

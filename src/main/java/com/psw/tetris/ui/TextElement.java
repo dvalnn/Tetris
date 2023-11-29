@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-public class TextElement implements UiElement {
+public class TextElement implements FrameElement {
 
   public enum Alignment {
     LEFT, CENTER, RIGHT;
@@ -254,5 +254,9 @@ public class TextElement implements UiElement {
   @Override
   public void disable() {
     enabled = false;
+  }
+
+  @Override
+  public void init() {
   }
 }
