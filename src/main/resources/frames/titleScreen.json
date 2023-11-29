@@ -1,0 +1,25 @@
+{
+  "name": "TITLE_SCREEN",
+  "imagePath": "",
+  "color": [0, 0, 0],
+  "assets": [
+    {
+      "type": "image",
+      "name": "title",
+      "imagePath": "/buttonsV2/titleTotris.png",
+      "x": 217,
+      "y": 163,
+      "imageScale": 0.666,
+      "renderPriority": 1
+    },
+    {
+      "type": "image",
+      "name": "enterButton",
+      "imagePath": "/buttonsV2/enterButton.png",
+      "x": 189,
+      "y": 524,
+      "imageScale": 0.666,
+      "renderPriority": 1
+    }
+  ]
+}

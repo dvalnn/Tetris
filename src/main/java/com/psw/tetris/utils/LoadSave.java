@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 
 public class LoadSave {
 
+  // TODO: REMOVE THIS
   public static BufferedImage loadBackground(final String path) {
     return loadImage(BACKGROUND_PATH + path);
   }
@@ -54,7 +55,6 @@ public class LoadSave {
       System.out.println("Failed to save json: " + string);
       e.printStackTrace();
     }
-
   }
 
 }
