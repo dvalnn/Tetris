@@ -15,11 +15,6 @@ import com.psw.tetris.ui.Frame;
 public class MainMenu extends GameState {
 
   private Frame frame;
-  private final ImageElement newGameButton;
-  private final ImageElement aboutButton;
-  private final ImageElement settingsButton;
-  private final ImageElement leaderboardButton;
-  private final ImageElement exitButton;
 
   private SwitchStateAction switchState = new SwitchStateAction();
 
@@ -28,11 +23,6 @@ public class MainMenu extends GameState {
     String path = RESOURCES_PATH + "/frames/mainMenu.json";
     frame = Frame.loadFromJson(path);
 
-    newGameButton = frame.getAsset("newGame", ImageElement.class);
-    aboutButton = frame.getAsset("aboutUs", ImageElement.class);
-    settingsButton = frame.getAsset("settings", ImageElement.class);
-    leaderboardButton = frame.getAsset("leaderboard", ImageElement.class);
-    exitButton = frame.getAsset("exitGame", ImageElement.class);
   }
 
   @Override
@@ -51,18 +41,26 @@ public class MainMenu extends GameState {
     int x = e.getX();
     int y = e.getY();
 
-    newGameButton.execIfClicked(x, y, switchState, GameStatesEnum.GAME_MODE_SELECT);
-    aboutButton.execIfClicked(x, y, switchState, GameStatesEnum.ABOUT_US);
-    settingsButton.execIfClicked(x, y, switchState, GameStatesEnum.SETTINGS);
-    leaderboardButton.execIfClicked(x, y, switchState, GameStatesEnum.LEADERBOARD);
+    ((ImageElement) frame.getAsset("newGame"))
+        .execIfClicked(x, y, switchState, GameStatesEnum.GAME_MODE_SELECT);
 
-    exitButton.execIfClicked(
-        x, y,
-        (Void) -> {
-          Game.exit();
-          return null;
-        },
-        null);
+    ((ImageElement) frame.getAsset("aboutUs"))
+        .execIfClicked(x, y, switchState, GameStatesEnum.ABOUT_US);
+
+    ((ImageElement) frame.getAsset("settings"))
+        .execIfClicked(x, y, switchState, GameStatesEnum.SETTINGS);
+
+    ((ImageElement) frame.getAsset("leaderboard"))
+        .execIfClicked(x, y, switchState, GameStatesEnum.LEADERBOARD);
+
+    ((ImageElement) frame.getAsset("exit"))
+        .execIfClicked(
+            x, y,
+            (Void) -> {
+              Game.exit();
+              return null;
+            },
+            null);
   }
 
 }

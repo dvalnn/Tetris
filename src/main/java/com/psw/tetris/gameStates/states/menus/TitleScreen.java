@@ -15,13 +15,11 @@ import com.psw.tetris.ui.Frame;
 public class TitleScreen extends GameState {
 
   private final Frame frame;
-  private final ImageElement button;
   private final SwitchStateAction action = new SwitchStateAction();
 
   public TitleScreen() {
     super(GameStatesEnum.TITLE_SCREEN);
     frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/titleScreen.json");
-    button = frame.getAsset("enterButton", ImageElement.class);
   }
 
   @Override
@@ -31,11 +29,8 @@ public class TitleScreen extends GameState {
 
   @Override
   public void mouseClicked(final MouseEvent e) {
-    button.execIfClicked(
-        e.getX(),
-        e.getY(),
-        action,
-        GameStatesEnum.USERNAME);
+    ((ImageElement) frame.getAsset("enterButton"))
+        .execIfClicked(e.getX(), e.getY(), action, GameStatesEnum.USERNAME);
   }
 
   @Override
