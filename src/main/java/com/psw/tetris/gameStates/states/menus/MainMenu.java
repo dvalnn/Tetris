@@ -1,127 +1,67 @@
 package com.psw.tetris.gameStates.states.menus;
 
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
-import static com.psw.tetris.utils.Constants.UI.Buttons.ABOUT_US;
-import static com.psw.tetris.utils.Constants.UI.Buttons.EXIT_GAME;
-import static com.psw.tetris.utils.Constants.UI.Buttons.LEADERBOARD;
-import static com.psw.tetris.utils.Constants.UI.Buttons.NEW_GAME;
-import static com.psw.tetris.utils.Constants.UI.Buttons.SETTINGS;
+import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
-import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.GameState;
+import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.main.Game;
-import com.psw.tetris.ui.Button;
-import com.psw.tetris.ui.ButtonAction;
+import com.psw.tetris.ui.ButtonElement;
 import com.psw.tetris.ui.SwitchStateAction;
-import com.psw.tetris.utils.LoadSave;
+import com.psw.tetris.ui.UiFrame;
 
 public class MainMenu extends GameState {
 
-  private final Button newGameButton;
-  private final Button leaderboardButton;
-  private final Button settingsButton;
-  private final Button aboutUsButton;
-  private final Button exitButton;
+  private UiFrame frame;
+  private final ButtonElement newGameButton;
+  private final ButtonElement aboutButton;
+  private final ButtonElement settingsButton;
+  private final ButtonElement leaderboardButton;
+  private final ButtonElement exitButton;
 
-  private final BufferedImage newGameButtonImage = LoadSave.loadImage(NEW_GAME);
-  private final BufferedImage leaderboardButtonImage = LoadSave.loadImage(LEADERBOARD);
-  private final BufferedImage settingsButtonImage = LoadSave.loadImage(SETTINGS);
-  private final BufferedImage aboutUsButtonImage = LoadSave.loadImage(ABOUT_US);
-  private final BufferedImage exitButtonImage = LoadSave.loadImage(EXIT_GAME);
-
-  private final SwitchStateAction switchStateAction = new SwitchStateAction();
-  private final ButtonAction<Void, Void> quitGameAction = (Void) -> {
-    Game.exit();
-    return null;
-  };
-
-  private final BufferedImage menuBackground;
-
-  private final double SCALE = 0.050;
-  private final int FIRST_BUTTON_X = 100;
-  private final int FIRST_BUTTON_Y = 300;
-  private final int BUTTON_SPACING = 25;
+  private SwitchStateAction switchState = new SwitchStateAction();
 
   public MainMenu() {
     super(GameStatesEnum.MAIN_MENU);
+    String path = RESOURCES_PATH + "/frames/mainMenu.json";
+    frame = UiFrame.loadFromJson(path);
 
-    menuBackground = LoadSave.loadBackground("mainMenu.png");
-    newGameButton = new Button(
-        FIRST_BUTTON_X,
-        FIRST_BUTTON_Y,
-        newGameButtonImage,
-        SCALE);
-
-    final int secondButtonY = (int) (FIRST_BUTTON_Y + newGameButton.getBounds().getHeight() + BUTTON_SPACING);
-    leaderboardButton = new Button(
-        FIRST_BUTTON_X,
-        secondButtonY,
-        leaderboardButtonImage,
-        SCALE);
-
-    final int thirdButtonY = (int) (secondButtonY + leaderboardButton.getBounds().getHeight() + BUTTON_SPACING);
-    settingsButton = new Button(
-        FIRST_BUTTON_X,
-        thirdButtonY,
-        settingsButtonImage,
-        SCALE);
-
-    final int fourthButtonY = (int) (thirdButtonY + settingsButton.getBounds().getHeight() + BUTTON_SPACING);
-    aboutUsButton = new Button(
-        FIRST_BUTTON_X,
-        fourthButtonY,
-        aboutUsButtonImage,
-        SCALE);
-
-    final int fifthButtonY = (int) (fourthButtonY + aboutUsButton.getBounds().getHeight() + BUTTON_SPACING);
-    exitButton = new Button(
-        FIRST_BUTTON_X,
-        fifthButtonY,
-        exitButtonImage,
-        SCALE);
+    newGameButton = frame.getAsset("newGame", ButtonElement.class);
+    aboutButton = frame.getAsset("aboutUs", ButtonElement.class);
+    settingsButton = frame.getAsset("settings", ButtonElement.class);
+    leaderboardButton = frame.getAsset("leaderboard", ButtonElement.class);
+    exitButton = frame.getAsset("exitGame", ButtonElement.class);
   }
 
   @Override
-  public void render(final Graphics g) {
-    g.drawImage(menuBackground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-
-    newGameButton.render(g);
-    leaderboardButton.render(g);
-    settingsButton.render(g);
-    aboutUsButton.render(g);
-    exitButton.render(g);
+  public void render(Graphics g) {
+    frame.render(g);
   }
 
   @Override
-  public void mouseClicked(final MouseEvent e) {
-    newGameButton.execIfClicked(
-        e.getPoint(),
-        switchStateAction,
-        GameStatesEnum.GAME_MODE_SELECT);
+  public void update() {
+    frame.update();
+  }
 
-    leaderboardButton.execIfClicked(
-        e.getPoint(),
-        switchStateAction,
-        GameStatesEnum.LEADERBOARD); // TODO: implement leaderboard;
+  @Override
+  public void mouseClicked(MouseEvent e) {
 
-    settingsButton.execIfClicked(
-        e.getPoint(),
-        switchStateAction,
-        GameStatesEnum.SETTINGS);
+    int x = e.getX();
+    int y = e.getY();
 
-    aboutUsButton.execIfClicked(
-        e.getPoint(),
-        switchStateAction,
-        GameStatesEnum.ABOUT_US); // TODO: implement about us section;
+    newGameButton.execIfClicked(x, y, switchState, GameStatesEnum.GAME_MODE_SELECT);
+    aboutButton.execIfClicked(x, y, switchState, GameStatesEnum.ABOUT_US);
+    settingsButton.execIfClicked(x, y, switchState, GameStatesEnum.SETTINGS);
+    leaderboardButton.execIfClicked(x, y, switchState, GameStatesEnum.LEADERBOARD);
 
     exitButton.execIfClicked(
-        e.getPoint(),
-        quitGameAction,
+        x, y,
+        (Void) -> {
+          Game.exit();
+          return null;
+        },
         null);
   }
 
