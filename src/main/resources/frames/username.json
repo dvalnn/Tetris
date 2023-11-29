@@ -1,0 +1,51 @@
+{
+  "name": "USERNAME",
+  "imagePath": "",
+  "color": [0, 0, 0],
+  "assets": [
+    {
+      "type": "image",
+      "name": "banner",
+      "imagePath": "/buttonsV2/bannerChooseName.png",
+      "x": 27.1,
+      "y": 5.5,
+      "imageScale": 0.666,
+      "renderPriority": 1
+    },
+    {
+      "type": "image",
+      "name": "inputField",
+      "imagePath": "/buttonsV2/insertUsername.png",
+      "x": 14.8,
+      "y": 45.37,
+      "imageScale": 0.666,
+      "renderPriority": 1,
+      "textElement": {
+        "type": "text",
+        "name": "inputText",
+        "text": "Type your username here",
+        "clearDefaultText": true,
+        "x": 24.8,
+        "y": 65,
+        "size": 26.6,
+        "anchorPoint": "parent",
+        "font": "SansSerif",
+        "fontType": "plain",
+        "color": [0, 0, 0],
+        "align": "LEFT",
+        "editable": true,
+        "maxLength": 10,
+        "renderPriority": 1
+      }
+    },
+    {
+      "type": "image",
+      "name": "startButton",
+      "imagePath": "/buttonsV2/start.png",
+      "x": 77.1,
+      "y": 87.04,
+      "imageScale": 0.666,
+      "renderPriority": 1
+    }
+  ]
+}
