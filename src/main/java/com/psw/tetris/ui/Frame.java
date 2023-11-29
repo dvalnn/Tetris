@@ -17,17 +17,18 @@ import com.psw.tetris.utils.LoadSave;
 
 public class Frame {
 
+  private transient Color backgroundColor;
+  private transient BufferedImage backgroundImg;
+
   private String name;
   private String imagePath;
   private int[] color;
   private ArrayList<FrameElement> assets;
 
-  private transient Color backgroundColor;
-  private transient BufferedImage backgroundImg;
-
-  private static HashMap<String, Class<? extends FrameElement>> assetTypes = new HashMap<String, Class<? extends FrameElement>>();
-
+  private static HashMap<String, Class<? extends FrameElement>> assetTypes;
   static {
+    assetTypes = new HashMap<String, Class<? extends FrameElement>>();
+    // Initialize assetTypes here
     assetTypes.put("image", ImageElement.class);
   }
 
@@ -72,40 +73,27 @@ public class Frame {
     return frame;
   }
 
-  public <T> T getAsset(String name, Class<T> classOfT) {
+  public Object getAsset(String name) {
+    if (assets == null)
+      return null;
+
     for (FrameElement asset : assets) {
       if (asset.getName().equals(name))
-        return classOfT.cast(asset);
+        return asset;
     }
     return null;
   }
 
-  // TODO: look into optimizing this
   public void addAsset(final FrameElement asset) {
     if (assets == null)
       assets = new ArrayList<FrameElement>();
 
     assets.add(asset);
-    // sort assets by render priority
-    for (int i = 0; i < assets.size(); i++) {
-      for (int j = i + 1; j < assets.size(); j++) {
-        if (assets.get(i).getRenderPriority() > assets.get(j).getRenderPriority()) {
-          final FrameElement temp = assets.get(i);
-          assets.set(i, assets.get(j));
-          assets.set(j, temp);
-        }
-      }
-    }
+    assets.sort((a, b) -> a.getRenderPriority() - b.getRenderPriority());
   }
 
-  // TODO: look into optimizing this
   public void removeAsset(final String name) {
-    for (int i = 0; i < assets.size(); i++) {
-      if (assets.get(i).getName().equals(name)) {
-        assets.remove(i);
-        return;
-      }
-    }
+    assets.removeIf((asset) -> asset.getName().equals(name));
   }
 
   public void render(Graphics g) {
