@@ -24,7 +24,6 @@ public class TextBuilderTest {
         .fontType("bold")
         .size("mockSize")
         .alignment("mockAlignment")
-        .renderPriority(0)
         .x(10)
         .y(19)
         .build();

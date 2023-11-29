@@ -20,7 +20,6 @@ public class ButtonTest {
         .x(0)
         .y(0)
         .imageScale(1)
-        .renderPriority(1)
         .build();
 
     assertNotNull(mockButton);
@@ -32,7 +31,6 @@ public class ButtonTest {
         .fontType("bold")
         .size("mockSize")
         .alignment("mockAlignment")
-        .renderPriority(0)
         .x(10)
         .y(19)
         .build();
