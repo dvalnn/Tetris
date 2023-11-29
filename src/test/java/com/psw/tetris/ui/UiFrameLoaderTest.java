@@ -24,10 +24,6 @@ public class UiFrameLoaderTest {
     assertNotNull(name);
     assertEquals("MAIN_MENU", name);
 
-    String img = json.get("imagePath").getAsString();
-    assertNotNull(img);
-    assertEquals("/backgrounds/mainMenu.png", img);
-
     JsonArray assetArray = json.get("assets").getAsJsonArray();
     assertNotNull(assetArray);
     assertEquals(assetArray.size(), 6);
@@ -37,8 +33,8 @@ public class UiFrameLoaderTest {
     for (int i = 0; i < assetArray.size(); i++) {
       assetArray.get(i);
       JsonObject asset = assetArray.get(i).getAsJsonObject();
-      if (asset.get("type").getAsString().equals("button")) {
-        ButtonElement button = gson.fromJson(asset, ButtonElement.class);
+      if (asset.get("type").getAsString().equals("image")) {
+        ImageElement button = gson.fromJson(asset, ImageElement.class);
         assertNotNull(button);
         assertEquals(button.getName(), asset.get("name").getAsString());
       }

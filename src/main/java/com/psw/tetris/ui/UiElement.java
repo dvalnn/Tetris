@@ -8,7 +8,9 @@ public interface UiElement {
 
   public void update();
 
-  public void setVisible(boolean visible);
+  public void enable();
+
+  public void disable();
 
   public int getRenderPriority();
 

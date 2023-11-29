@@ -14,13 +14,12 @@ public class ButtonTest {
 
   @Test
   public void test() {
-    ButtonElement mockButton = new ButtonElement.Builder()
+    ImageElement mockButton = new ImageElement.Builder()
         .name("testButton")
         .imagePath("/buttonsV2/newGame.png")
         .x(0)
         .y(0)
         .imageScale(1)
-        .visible(true)
         .renderPriority(1)
         .build();
 
@@ -36,7 +35,6 @@ public class ButtonTest {
         .renderPriority(0)
         .x(10)
         .y(19)
-        .visible("mockVisible")
         .build();
 
     mockButton.setTextElement(mockText);

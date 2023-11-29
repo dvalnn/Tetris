@@ -30,7 +30,7 @@ public class UiFrame {
     UiFrame frame = new UiFrame();
 
     JsonObject json = LoadSave.loadJson(
-        "src/test/resources/mainMenu.json",
+        jsonPath,
         JsonObject.class);
 
     frame.name = json.get("name").getAsString();
@@ -52,8 +52,8 @@ public class UiFrame {
       assetArray.get(i);
       JsonObject asset = assetArray.get(i).getAsJsonObject();
 
-      if (asset.get("type").getAsString().equals("button")) {
-        ButtonElement button = gson.fromJson(asset, ButtonElement.class);
+      if (asset.get("type").getAsString().equals("image")) {
+        ImageElement button = gson.fromJson(asset, ImageElement.class);
         button.init();
         frame.addAsset(button);
       }

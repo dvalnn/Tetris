@@ -9,13 +9,13 @@ import java.awt.image.BufferedImage;
 
 import com.psw.tetris.utils.LoadSave;
 
-public class ButtonElement implements UiElement {
+public class ImageElement implements UiElement {
 
   public static class Builder {
-    private ButtonElement button;
+    private ImageElement button;
 
     public Builder() {
-      button = new ButtonElement();
+      button = new ImageElement();
     }
 
     public Builder name(String name) {
@@ -43,11 +43,6 @@ public class ButtonElement implements UiElement {
       return this;
     }
 
-    public Builder visible(boolean visible) {
-      button.visible = visible;
-      return this;
-    }
-
     public Builder renderPriority(int renderPriority) {
       button.renderPriority = renderPriority;
       return this;
@@ -58,7 +53,7 @@ public class ButtonElement implements UiElement {
       return this;
     }
 
-    public ButtonElement build() {
+    public ImageElement build() {
       return button;
     }
 
@@ -70,7 +65,6 @@ public class ButtonElement implements UiElement {
   private int x;
   private int y;
   private double imageScale;
-  private boolean visible;
   private int renderPriority;
   private TextElement textElement;
 
@@ -93,11 +87,11 @@ public class ButtonElement implements UiElement {
   public void init() {
     if (enabled && image == null) {
       image = LoadSave.loadImage(RESOURCES_PATH + imagePath);
-      enabled = image != null;
     }
 
     if (image == null) {
       System.out.println("Failed to load image: " + RESOURCES_PATH + imagePath);
+      enabled = false;
       return;
     }
 
@@ -111,7 +105,7 @@ public class ButtonElement implements UiElement {
 
   @Override
   public void render(final Graphics g) {
-    if (!visible || !enabled)
+    if (!enabled)
       return;
 
     g.drawImage(
@@ -134,11 +128,8 @@ public class ButtonElement implements UiElement {
 
   @Override
   public void update() {
-  }
-
-  @Override
-  public void setVisible(boolean visible) {
-    this.visible = visible;
+    if (!enabled)
+      return;
   }
 
   @Override
@@ -161,6 +152,17 @@ public class ButtonElement implements UiElement {
     return "button";
   }
 
+  @Override
+  public void enable() {
+    enabled = true;
+
+  }
+
+  @Override
+  public void disable() {
+    enabled = false;
+  }
+
   public Rectangle getBounds() {
     return bounds;
   }
@@ -172,5 +174,4 @@ public class ButtonElement implements UiElement {
   public void setTextElement(TextElement textElement) {
     this.textElement = textElement;
   }
-
 }

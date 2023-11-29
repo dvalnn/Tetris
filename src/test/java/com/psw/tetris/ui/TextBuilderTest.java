@@ -27,7 +27,6 @@ public class TextBuilderTest {
         .renderPriority(0)
         .x(10)
         .y(19)
-        .visible("mockVisible")
         .build();
 
     // serialize mockText

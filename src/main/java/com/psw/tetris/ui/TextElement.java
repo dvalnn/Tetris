@@ -114,16 +114,6 @@ public class TextElement implements UiElement {
       return this;
     }
 
-    public Builder visible(String visible) {
-      try {
-        textAsset.visible = Boolean.parseBoolean(visible);
-      } catch (NumberFormatException e) {
-        textAsset.visible = true;
-      }
-
-      return this;
-    }
-
     public Builder size(int size) {
       textAsset.size = size;
       return this;
@@ -141,11 +131,6 @@ public class TextElement implements UiElement {
 
     public Builder y(int y) {
       textAsset.y = y;
-      return this;
-    }
-
-    public Builder visible(boolean visible) {
-      textAsset.visible = visible;
       return this;
     }
 
@@ -171,11 +156,11 @@ public class TextElement implements UiElement {
 
   // dont serialize this
   private transient int fontTypeInt;
-  private transient boolean visible = true;
+  private transient boolean enabled = true;
 
   @Override
   public void render(Graphics g) {
-    if (!visible | text == null)
+    if (!enabled | text == null)
       return;
 
     Graphics2D g2d = (Graphics2D) g;
@@ -236,11 +221,9 @@ public class TextElement implements UiElement {
 
   @Override
   public void update() {
-  }
+    if (!enabled)
+      return;
 
-  @Override
-  public void setVisible(boolean visible) {
-    this.visible = visible;
   }
 
   @Override
@@ -261,5 +244,15 @@ public class TextElement implements UiElement {
   @Override
   public String getType() {
     return "text";
+  }
+
+  @Override
+  public void enable() {
+    enabled = true;
+  }
+
+  @Override
+  public void disable() {
+    enabled = false;
   }
 }

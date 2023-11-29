@@ -8,18 +8,18 @@ import java.awt.event.MouseEvent;
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.main.Game;
-import com.psw.tetris.ui.ButtonElement;
+import com.psw.tetris.ui.ImageElement;
 import com.psw.tetris.ui.SwitchStateAction;
 import com.psw.tetris.ui.UiFrame;
 
 public class MainMenu extends GameState {
 
   private UiFrame frame;
-  private final ButtonElement newGameButton;
-  private final ButtonElement aboutButton;
-  private final ButtonElement settingsButton;
-  private final ButtonElement leaderboardButton;
-  private final ButtonElement exitButton;
+  private final ImageElement newGameButton;
+  private final ImageElement aboutButton;
+  private final ImageElement settingsButton;
+  private final ImageElement leaderboardButton;
+  private final ImageElement exitButton;
 
   private SwitchStateAction switchState = new SwitchStateAction();
 
@@ -28,11 +28,11 @@ public class MainMenu extends GameState {
     String path = RESOURCES_PATH + "/frames/mainMenu.json";
     frame = UiFrame.loadFromJson(path);
 
-    newGameButton = frame.getAsset("newGame", ButtonElement.class);
-    aboutButton = frame.getAsset("aboutUs", ButtonElement.class);
-    settingsButton = frame.getAsset("settings", ButtonElement.class);
-    leaderboardButton = frame.getAsset("leaderboard", ButtonElement.class);
-    exitButton = frame.getAsset("exitGame", ButtonElement.class);
+    newGameButton = frame.getAsset("newGame", ImageElement.class);
+    aboutButton = frame.getAsset("aboutUs", ImageElement.class);
+    settingsButton = frame.getAsset("settings", ImageElement.class);
+    leaderboardButton = frame.getAsset("leaderboard", ImageElement.class);
+    exitButton = frame.getAsset("exitGame", ImageElement.class);
   }
 
   @Override
