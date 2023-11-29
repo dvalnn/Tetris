@@ -10,23 +10,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.psw.tetris.utils.LoadSave;
 
-public class ButtonTest {
+public class TextBuilderTest {
+
+  public TextElement mockText;
 
   @Test
   public void test() {
-    ButtonElement mockButton = new ButtonElement.Builder()
-        .name("testButton")
-        .imagePath("/buttonsV2/newGame.png")
-        .x(0)
-        .y(0)
-        .imageScale(1)
-        .visible(true)
-        .renderPriority(1)
-        .build();
 
-    assertNotNull(mockButton);
-
-    TextElement mockText = new TextElement.Builder()
+    mockText = new TextElement.Builder()
         .name("mockText")
         .text("mockText")
         .font("mockFont")
@@ -39,23 +30,21 @@ public class ButtonTest {
         .visible("mockVisible")
         .build();
 
-    mockButton.setTextElement(mockText);
-    assertNotNull(mockButton.getTextElement());
-
-    // serialize mockButton
+    // serialize mockText
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    String json = gson.toJson(mockButton);
+    String json = gson.toJson(mockText);
     TextElement desirealized = gson.fromJson(json, TextElement.class);
 
     assertNotNull(desirealized);
-    assertEquals(desirealized.getName(), mockButton.getName());
+    assertEquals(desirealized.getName(), mockText.getName());
 
     try {
-      LoadSave.saveJson("src/test/resources/ButtonElement.json", mockButton);
+      LoadSave.saveJson("src/test/resources/TextAsset.json", mockText);
     } catch (Exception e) {
       e.printStackTrace();
       Assertions.fail();
     }
+
   }
 
 }
