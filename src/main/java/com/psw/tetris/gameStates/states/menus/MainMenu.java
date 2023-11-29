@@ -41,19 +41,19 @@ public class MainMenu extends GameState {
     int x = e.getX();
     int y = e.getY();
 
-    ((ImageElement) frame.getAsset("newGame"))
+    ((ImageElement) frame.getElement("newGame"))
         .execIfClicked(x, y, switchState, GameStatesEnum.GAME_MODE_SELECT);
 
-    ((ImageElement) frame.getAsset("aboutUs"))
+    ((ImageElement) frame.getElement("aboutUs"))
         .execIfClicked(x, y, switchState, GameStatesEnum.ABOUT_US);
 
-    ((ImageElement) frame.getAsset("settings"))
+    ((ImageElement) frame.getElement("settings"))
         .execIfClicked(x, y, switchState, GameStatesEnum.SETTINGS);
 
-    ((ImageElement) frame.getAsset("leaderboard"))
+    ((ImageElement) frame.getElement("leaderboard"))
         .execIfClicked(x, y, switchState, GameStatesEnum.LEADERBOARD);
 
-    ((ImageElement) frame.getAsset("exit"))
+    ((ImageElement) frame.getElement("exitGame"))
         .execIfClicked(
             x, y,
             (Void) -> {

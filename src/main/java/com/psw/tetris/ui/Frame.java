@@ -73,7 +73,7 @@ public class Frame {
     return frame;
   }
 
-  public Object getAsset(String name) {
+  public Object getElement(String name) {
     if (assets == null)
       return null;
 
@@ -84,7 +84,7 @@ public class Frame {
     return null;
   }
 
-  public void addAsset(final FrameElement asset) {
+  public void addElement(final FrameElement asset) {
     if (assets == null)
       assets = new ArrayList<FrameElement>();
 
@@ -92,7 +92,7 @@ public class Frame {
     assets.sort((a, b) -> a.getRenderPriority() - b.getRenderPriority());
   }
 
-  public void removeAsset(final String name) {
+  public void removeElement(final String name) {
     assets.removeIf((asset) -> asset.getName().equals(name));
   }
 

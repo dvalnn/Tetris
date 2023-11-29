@@ -29,7 +29,7 @@ public class TitleScreen extends GameState {
 
   @Override
   public void mouseClicked(final MouseEvent e) {
-    ((ImageElement) frame.getAsset("enterButton"))
+    ((ImageElement) frame.getElement("enterButton"))
         .execIfClicked(e.getX(), e.getY(), action, GameStatesEnum.USERNAME);
   }
 
