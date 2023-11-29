@@ -1,0 +1,107 @@
+{
+    "name": "CHANGE_KEYBINDS",
+    "imagePath": "",
+    "color": [0, 0, 0],
+    "assets": [
+      {
+        "type": "image",
+        "name": "changeKeybinds",
+        "imagePath": "/buttonsV2/bannerChangeKeybind.png",
+        "x": 27.9,
+        "y": 5.5,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeKeybindRotateLeft",
+        "imagePath": "/buttonsV2/keybind.png",
+        "x": 7,
+        "y": 24.3,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeKeybindRotateRight",
+        "imagePath": "/buttonsV2/keybind.png",
+        "x": 7,
+        "y": 38.4,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeKeybindMoveLeft",
+        "imagePath": "/buttonsV2/keybind.png",
+        "x": 7,
+        "y": 52.6,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeKeybindMoveRight",
+        "imagePath": "/buttonsV2/keybind.png",
+        "x": 7,
+        "y": 66.8,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeKeybindSoftDrop",
+        "imagePath": "/buttonsV2/keybind.png",
+        "x": 52.6,
+        "y": 24.3,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeKeybindHardDrop",
+        "imagePath": "/buttonsV2/keybind.png",
+        "x": 52.6,
+        "y": 38.4,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeKeybindPause",
+        "imagePath": "/buttonsV2/keybind.png",
+        "x": 52.6,
+        "y": 52.6,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeKeybindHold",
+        "imagePath": "/buttonsV2/keybind.png",
+        "x": 52.6,
+        "y": 66.8,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeKeybindReset",
+        "imagePath": "/buttonsV2/reset.png",
+        "x": 27.1,
+        "y": 87.0,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "returnToMainMenu",
+        "imagePath": "/buttonsV2/return.png",
+        "x": 2.6,
+        "y": 87.0,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      }
+    ]
+  }
+  
