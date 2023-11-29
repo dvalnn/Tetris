@@ -1,6 +1,5 @@
 package com.psw.tetris.ui;
 
-import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -13,12 +12,12 @@ import com.psw.tetris.utils.LoadSave;
 
 public class TextBuilderTest {
 
-  public TextAsset mockText;
+  public TextElement mockText;
 
   @Test
   public void test() {
 
-    mockText = new TextAsset.Builder()
+    mockText = new TextElement.Builder()
         .name("mockText")
         .text("mockText")
         .font("mockFont")
@@ -34,7 +33,7 @@ public class TextBuilderTest {
     // serialize mockText
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     String json = gson.toJson(mockText);
-    TextAsset desirealized = gson.fromJson(json, TextAsset.class);
+    TextElement desirealized = gson.fromJson(json, TextElement.class);
 
     assertNotNull(desirealized);
     assertEquals(desirealized.getName(), mockText.getName());
