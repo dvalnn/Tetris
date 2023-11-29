@@ -47,8 +47,6 @@ public class Settings extends GameState {
     ((ImageElement) frame.getElement("changeUsername"))
         .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.USERNAME);
        
-        
-
     /*((ImageElement) frame.getElement("volumeManager"))
         .execIfClicked(e.getX(), e.getY(), volumeManager,null);
 
