@@ -19,7 +19,22 @@
         "x": 7,
         "y": 24.3,
         "imageScale": 0.666,
-        "renderPriority": 1
+        "renderPriority": 1,
+        "textElement": {
+          "type": "text",
+          "name": "keybinds",
+          "text": "Rotate Left",
+          "x": 24.8,
+          "y": 65,
+          "size": 26.6,
+          "anchorPoint": "parent",
+          "font": "SansSerif",
+          "fontType": "plain",
+          "color": [0, 0, 0],
+          "align": "LEFT",
+          "editable": true,
+          "maxLength": 1
+        }
       },
       {
         "type": "image",
@@ -28,7 +43,22 @@
         "x": 7,
         "y": 38.4,
         "imageScale": 0.666,
-        "renderPriority": 1
+        "renderPriority": 1,
+        "textElement": {
+          "type": "text",
+          "name": "keybinds",
+          "text": "",
+          "x": 24.8,
+          "y": 65,
+          "size": 26.6,
+          "anchorPoint": "parent",
+          "font": "SansSerif",
+          "fontType": "plain",
+          "color": [0, 0, 0],
+          "align": "LEFT",
+          "editable": true,
+          "maxLength": 1
+        }
       },
       {
         "type": "image",
@@ -37,7 +67,22 @@
         "x": 7,
         "y": 52.6,
         "imageScale": 0.666,
-        "renderPriority": 1
+        "renderPriority": 1,
+        "textElement": {
+          "type": "text",
+          "name": "keybinds",
+          "text": "",
+          "x": 24.8,
+          "y": 65,
+          "size": 26.6,
+          "anchorPoint": "parent",
+          "font": "SansSerif",
+          "fontType": "plain",
+          "color": [0, 0, 0],
+          "align": "LEFT",
+          "editable": true,
+          "maxLength": 1
+        }
       },
       {
         "type": "image",
@@ -46,7 +91,22 @@
         "x": 7,
         "y": 66.8,
         "imageScale": 0.666,
-        "renderPriority": 1
+        "renderPriority": 1,
+        "textElement": {
+          "type": "text",
+          "name": "keybinds",
+          "text": "",
+          "x": 24.8,
+          "y": 65,
+          "size": 26.6,
+          "anchorPoint": "parent",
+          "font": "SansSerif",
+          "fontType": "plain",
+          "color": [0, 0, 0],
+          "align": "LEFT",
+          "editable": true,
+          "maxLength": 1
+        }
       },
       {
         "type": "image",
@@ -55,7 +115,22 @@
         "x": 52.6,
         "y": 24.3,
         "imageScale": 0.666,
-        "renderPriority": 1
+        "renderPriority": 1,
+        "textElement": {
+          "type": "text",
+          "name": "keybinds",
+          "text": "",
+          "x": 24.8,
+          "y": 65,
+          "size": 26.6,
+          "anchorPoint": "parent",
+          "font": "SansSerif",
+          "fontType": "plain",
+          "color": [0, 0, 0],
+          "align": "LEFT",
+          "editable": true,
+          "maxLength": 1
+        }
       },
       {
         "type": "image",
@@ -64,7 +139,22 @@
         "x": 52.6,
         "y": 38.4,
         "imageScale": 0.666,
-        "renderPriority": 1
+        "renderPriority": 1,
+        "textElement": {
+          "type": "text",
+          "name": "keybinds",
+          "text": "",
+          "x": 24.8,
+          "y": 65,
+          "size": 26.6,
+          "anchorPoint": "parent",
+          "font": "SansSerif",
+          "fontType": "plain",
+          "color": [0, 0, 0],
+          "align": "LEFT",
+          "editable": true,
+          "maxLength": 1
+        }
       },
       {
         "type": "image",
@@ -73,7 +163,22 @@
         "x": 52.6,
         "y": 52.6,
         "imageScale": 0.666,
-        "renderPriority": 1
+        "renderPriority": 1,
+        "textElement": {
+          "type": "text",
+          "name": "keybinds",
+          "text": "",
+          "x": 24.8,
+          "y": 65,
+          "size": 26.6,
+          "anchorPoint": "parent",
+          "font": "SansSerif",
+          "fontType": "plain",
+          "color": [0, 0, 0],
+          "align": "LEFT",
+          "editable": true,
+          "maxLength": 1
+        }
       },
       {
         "type": "image",
@@ -82,11 +187,26 @@
         "x": 52.6,
         "y": 66.8,
         "imageScale": 0.666,
-        "renderPriority": 1
+        "renderPriority": 1,
+        "textElement": {
+          "type": "text",
+          "name": "keybinds",
+          "text": "",
+          "x": 24.8,
+          "y": 65,
+          "size": 26.6,
+          "anchorPoint": "parent",
+          "font": "SansSerif",
+          "fontType": "plain",
+          "color": [0, 0, 0],
+          "align": "LEFT",
+          "editable": true,
+          "maxLength": 1
+        }
       },
       {
         "type": "image",
-        "name": "changeKeybindReset",
+        "name": "Reset",
         "imagePath": "/buttonsV2/reset.png",
         "x": 27.1,
         "y": 87.0,
@@ -95,7 +215,7 @@
       },
       {
         "type": "image",
-        "name": "returnToMainMenu",
+        "name": "returnToSettings",
         "imagePath": "/buttonsV2/return.png",
         "x": 2.6,
         "y": 87.0,
