@@ -1,9 +1,17 @@
 package com.psw.tetris.ui;
 
+import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
+import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
+import static com.psw.tetris.utils.Constants.GameConstants.UPS_SET;
+
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
 
 public class TextElement implements FrameElement {
 
@@ -146,29 +154,109 @@ public class TextElement implements FrameElement {
 
   private String name;
   private String text;
-  private int x;
-  private int y;
-  private int size;
+  private String textFile;
+  private double x;
+  private double y;
+  private double angle;
+  private String anchorPoint;
   private String font;
   private String fontType;
+  private int size;
+  private int[] color;
   private Alignment align;
+  private boolean editable;
+  private boolean clearDefaultText;
+  private int maxLength;
   private int renderPriority;
 
   // dont serialize this
   private transient int fontTypeInt;
   private transient boolean enabled = true;
+  private transient int xAbs, yAbs;
+  private transient Color textColor;
+  private transient FrameElement parent;
+  private transient boolean hasFocus;
+  private transient boolean textFromFile;
+  private transient String[] fileLines;
 
-  @Override
-  public void render(Graphics g) {
-    if (!enabled | text == null)
+  private transient int animationTick = 0;
+  private transient int animationSpeed = UPS_SET / 2;
+  private transient boolean animationUp = true;
+
+  public void setParent(FrameElement parent) {
+    this.parent = parent;
+  }
+
+  public void giveFocus() {
+    hasFocus = true;
+    if (clearDefaultText)
+      text = "";
+    clearDefaultText = false;
+  }
+
+  public void removeFocus() {
+    hasFocus = false;
+    if (text.charAt(text.length() - 1) == '|')
+      text = text.substring(0, text.length() - 1);
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public int setMaxLength(int maxLength) {
+    return this.maxLength = maxLength;
+  }
+
+  public int getMaxLength() {
+    return maxLength;
+  }
+
+  public void keyboardInput(KeyEvent e) {
+    if (!enabled | !hasFocus | !editable)
       return;
 
-    Graphics2D g2d = (Graphics2D) g;
+    if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+      if (text.length() > 0) {
+        if (text.contains("|") && text.length() == 1) {
+          return;
+        }
 
-    if (font == null)
+        if (text.contains("|")) {
+          text = text.substring(0, text.length() - 2);
+          text += "|";
+          return;
+        }
+
+        text = text.substring(0, text.length() - 1);
+      }
+      return;
+    }
+
+    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+      removeFocus();
+      return;
+    }
+
+    if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED && text.length() < maxLength) {
+      if (text.contains("|")) {
+        text = text.substring(0, text.length() - 1) + e.getKeyChar() + "|";
+        return;
+      }
+      text += e.getKeyChar();
+
+      return;
+    }
+  }
+
+  @Override
+  public void init() {
+    if (font == null | font.isEmpty())
       font = DEFAULT_FONT;
-    if (fontTypeInt == 0)
-      fontTypeInt = DEFAULT_TYPE;
     if (size == 0)
       size = DEFAULT_SIZE;
     if (align == null)
@@ -189,7 +277,50 @@ public class TextElement implements FrameElement {
         break;
     }
 
+    if (anchorPoint.equals("game")) {
+      xAbs = (int) x / 100 * GAME_WIDTH;
+      yAbs = (int) y / 100 * GAME_HEIGHT;
+    } else if (anchorPoint.equals("parent")) {
+      xAbs = parent.getAnchorPoint().x + (int) (x / 100 * parent.getDimensions().x);
+      yAbs = parent.getAnchorPoint().y + (int) (y / 100 * parent.getDimensions().y);
+      angle = parent.getRotation();
+    }
+
+    if (color != null) {
+      textColor = new Color(color[0], color[1], color[2]);
+    } else {
+      textColor = Color.WHITE;
+    }
+    // TODO: load text from file
+    if (textFile != null && !textFile.isEmpty()) {
+      String loadedText = ""; // TODO: load text from file
+      fileLines = loadedText.split("\n");
+      textFromFile = true;
+    }
+  }
+
+  private void renderTextFile(Graphics2D g2d, int textHeight) {
+    int yLine = yAbs;
+
+    for (String line : fileLines) {
+      int textWidth = g2d.getFontMetrics().stringWidth(line);
+      drawAligned(g2d, line, textWidth, yLine);
+      yLine += textHeight;
+    }
+  }
+
+  private void renderText(Graphics2D g2d, int textHeight) {
+    int textWidth = g2d.getFontMetrics().stringWidth(text);
+    drawAligned(g2d, text, textWidth, yAbs);
+  }
+
+  @Override
+  public void render(Graphics g) {
+
+    Graphics2D g2d = (Graphics2D) g;
+
     g2d.setFont(new Font(font, fontTypeInt, size));
+    g2d.setColor(textColor);
 
     int textHeight = g2d.getFontMetrics().getHeight();
 
@@ -197,24 +328,29 @@ public class TextElement implements FrameElement {
         RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
 
-    for (String line : text.split("\n")) {
-      int textWidth = g2d.getFontMetrics().stringWidth(line);
-      drawAligned(g2d, line, textWidth);
-      y += textHeight;
+    AffineTransform orig = g2d.getTransform();
+    if (angle != 0)
+      g2d.rotate(Math.toRadians(angle));
+
+    if (textFromFile) {
+      renderTextFile(g2d, textHeight);
+    } else {
+      renderText(g2d, textHeight);
     }
+
+    g2d.setTransform(orig);
   }
 
-  public void drawAligned(Graphics2D g2d, String line, int textWidth) {
-
+  public void drawAligned(Graphics2D g2d, String line, int textWidth, int yLine) {
     switch (align) {
       case LEFT:
-        g2d.drawString(line, x, y);
+        g2d.drawString(line, xAbs, yLine);
         break;
       case CENTER:
-        g2d.drawString(line, x - textWidth / 2, y);
+        g2d.drawString(line, xAbs - textWidth / 2, yLine);
         break;
       case RIGHT:
-        g2d.drawString(line, x - textWidth, y);
+        g2d.drawString(line, xAbs - textWidth, yLine);
         break;
     }
   }
@@ -223,6 +359,22 @@ public class TextElement implements FrameElement {
   public void update() {
     if (!enabled)
       return;
+
+    if (!editable || !hasFocus)
+      return;
+
+    animationTick++;
+    if (animationTick >= animationSpeed) {
+      animationTick = 0;
+      animationUp = !animationUp;
+
+      if (animationUp) {
+        text += "|";
+      } else if (text.length() > 0 && text.charAt(text.length() - 1) == '|') {
+        text = text.substring(0, text.length() - 1);
+      }
+
+    }
 
   }
 
@@ -257,6 +409,19 @@ public class TextElement implements FrameElement {
   }
 
   @Override
-  public void init() {
+  public Point getAnchorPoint() {
+    return new Point(xAbs, yAbs);
+  }
+
+  @Override
+  public Point getDimensions() {
+    if (textFromFile)
+      return new Point(fileLines[0].length(), fileLines.length);
+    return new Point(text.length(), 1);
+  }
+
+  @Override
+  public double getRotation() {
+    return angle;
   }
 }

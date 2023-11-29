@@ -6,7 +6,11 @@ import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import com.psw.tetris.utils.LoadSave;
@@ -67,6 +71,7 @@ public class ImageElement implements FrameElement {
   private double x;
   private double y;
   private double imageScale;
+  private double angle;
   private int renderPriority;
   private TextElement textElement;
 
@@ -110,6 +115,11 @@ public class ImageElement implements FrameElement {
         (int) (image.getWidth() * imageScale),
         (int) (image.getHeight() * imageScale));
 
+    if (textElement != null) {
+      textElement.setParent(this);
+      textElement.init();
+    }
+
   }
 
   @Override
@@ -117,7 +127,17 @@ public class ImageElement implements FrameElement {
     if (!enabled)
       return;
 
-    g.drawImage(
+    Graphics2D g2d = (Graphics2D) g;
+
+    g2d.setRenderingHint(
+        RenderingHints.KEY_ANTIALIASING,
+        RenderingHints.VALUE_ANTIALIAS_ON);
+
+    AffineTransform orig = g2d.getTransform();
+    if (angle != 0)
+      g2d.rotate(Math.toRadians(angle));
+
+    g2d.drawImage(
         image,
         xAbs,
         yAbs,
@@ -130,6 +150,8 @@ public class ImageElement implements FrameElement {
     g.setColor(Color.RED);
     g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
+    g2d.setTransform(orig);
+
     if (textElement != null) {
       textElement.render(g);
     }
@@ -139,6 +161,11 @@ public class ImageElement implements FrameElement {
   public void update() {
     if (!enabled)
       return;
+
+    if (textElement != null) {
+      textElement.update();
+    }
+
   }
 
   @Override
@@ -182,5 +209,22 @@ public class ImageElement implements FrameElement {
 
   public void setTextElement(TextElement textElement) {
     this.textElement = textElement;
+  }
+
+  @Override
+  public Point getAnchorPoint() {
+    return new Point(xAbs, yAbs);
+  }
+
+  @Override
+  public Point getDimensions() {
+    return new Point(
+        (int) (image.getWidth() * imageScale),
+        (int) (image.getHeight() * imageScale));
+  }
+
+  @Override
+  public double getRotation() {
+    return angle;
   }
 }

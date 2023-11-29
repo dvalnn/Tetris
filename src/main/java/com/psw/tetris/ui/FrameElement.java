@@ -1,6 +1,7 @@
 package com.psw.tetris.ui;
 
 import java.awt.Graphics;
+import java.awt.Point;
 
 public interface FrameElement {
 
@@ -21,5 +22,11 @@ public interface FrameElement {
   public String getType();
 
   public void init();
+
+  public Point getAnchorPoint();
+
+  public Point getDimensions();
+
+  public double getRotation();
 
 }
