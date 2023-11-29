@@ -9,8 +9,7 @@
       "imagePath": "/buttonsV2/titleTotris.png",
       "x": 16.9,
       "y": 22.6,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
@@ -18,8 +17,7 @@
       "imagePath": "/buttonsV2/enterButton.png",
       "x": 14.8,
       "y": 72.8,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     }
   ]
 }

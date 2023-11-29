@@ -30,6 +30,7 @@ public class Frame {
     assetTypes = new HashMap<String, Class<? extends FrameElement>>();
     // Initialize assetTypes here
     assetTypes.put("image", ImageElement.class);
+    assetTypes.put("text", TextElement.class);
   }
 
   // TODO: add better error handling, refactor this
@@ -89,7 +90,6 @@ public class Frame {
       assets = new ArrayList<FrameElement>();
 
     assets.add(asset);
-    assets.sort((a, b) -> a.getRenderPriority() - b.getRenderPriority());
   }
 
   public void removeElement(final String name) {

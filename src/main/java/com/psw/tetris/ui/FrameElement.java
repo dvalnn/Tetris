@@ -13,10 +13,6 @@ public interface FrameElement {
 
   public void disable();
 
-  public int getRenderPriority();
-
-  public void setRenderPriority(int priority);
-
   public String getName();
 
   public String getType();

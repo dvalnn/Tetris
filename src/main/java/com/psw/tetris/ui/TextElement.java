@@ -92,16 +92,6 @@ public class TextElement implements FrameElement {
       return this;
     }
 
-    public Builder renderPriority(String renderPriority) {
-      try {
-        textAsset.renderPriority = Integer.parseInt(renderPriority);
-      } catch (NumberFormatException e) {
-        textAsset.renderPriority = 0;
-      }
-
-      return this;
-    }
-
     public Builder x(String x) {
       try {
         textAsset.x = Integer.parseInt(x);
@@ -127,11 +117,6 @@ public class TextElement implements FrameElement {
       return this;
     }
 
-    public Builder renderPriority(int renderPriority) {
-      textAsset.renderPriority = renderPriority;
-      return this;
-    }
-
     public Builder x(int x) {
       textAsset.x = x;
       return this;
@@ -147,11 +132,13 @@ public class TextElement implements FrameElement {
     }
   }
 
+  // NOTE: Default values - not serialized
   public static final int DEFAULT_SIZE = 20;
   public static final String DEFAULT_FONT = "SansSerif";
   public static final int DEFAULT_TYPE = Font.PLAIN;
   public static final String DEFAULT_TYPE_NAME = "plain";
 
+  // NOTE: Json fields
   private String name;
   private String text;
   private String textFile;
@@ -167,9 +154,8 @@ public class TextElement implements FrameElement {
   private boolean editable;
   private boolean clearDefaultText;
   private int maxLength;
-  private int renderPriority;
 
-  // dont serialize this
+  // NOTE: not serialized
   private transient int fontTypeInt;
   private transient boolean enabled = true;
   private transient int xAbs, yAbs;
@@ -376,16 +362,6 @@ public class TextElement implements FrameElement {
 
     }
 
-  }
-
-  @Override
-  public int getRenderPriority() {
-    return renderPriority;
-  }
-
-  @Override
-  public void setRenderPriority(int priority) {
-    renderPriority = priority;
   }
 
   @Override

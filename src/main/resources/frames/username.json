@@ -9,12 +9,11 @@
       "imagePath": "/buttonsV2/bannerChooseName.png",
       "x": 27.1,
       "y": 5.5,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
-      "name": "inputField",
+      "name": "rotatesLeft",
       "imagePath": "/buttonsV2/insertUsername.png",
       "x": 14.8,
       "y": 45.37,
@@ -22,9 +21,7 @@
       "renderPriority": 1,
       "textElement": {
         "type": "text",
-        "name": "inputText",
-        "text": "Type your username here",
-        "clearDefaultText": true,
+        "name": "keybing",
         "x": 24.8,
         "y": 65,
         "size": 26.6,
@@ -34,8 +31,7 @@
         "color": [0, 0, 0],
         "align": "LEFT",
         "editable": true,
-        "maxLength": 10,
-        "renderPriority": 1
+        "maxLength": 1
       }
     },
     {
@@ -44,8 +40,7 @@
       "imagePath": "/buttonsV2/start.png",
       "x": 77.1,
       "y": 87.04,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     }
   ]
 }

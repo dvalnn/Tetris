@@ -49,11 +49,6 @@ public class ImageElement implements FrameElement {
       return this;
     }
 
-    public Builder renderPriority(int renderPriority) {
-      button.renderPriority = renderPriority;
-      return this;
-    }
-
     public Builder textElement(TextElement textElement) {
       button.textElement = textElement;
       return this;
@@ -65,16 +60,16 @@ public class ImageElement implements FrameElement {
 
   }
 
+  // NOTE: json fields
   private String name;
   private String imagePath;
-
   private double x;
   private double y;
   private double imageScale;
   private double angle;
-  private int renderPriority;
   private TextElement textElement;
 
+  // NOTE: not serialized
   private transient int xAbs;
   private transient int yAbs;
   private transient Rectangle bounds;
@@ -165,17 +160,6 @@ public class ImageElement implements FrameElement {
     if (textElement != null) {
       textElement.update();
     }
-
-  }
-
-  @Override
-  public int getRenderPriority() {
-    return renderPriority;
-  }
-
-  @Override
-  public void setRenderPriority(int priority) {
-    renderPriority = priority;
   }
 
   @Override
@@ -191,7 +175,6 @@ public class ImageElement implements FrameElement {
   @Override
   public void enable() {
     enabled = true;
-
   }
 
   @Override
