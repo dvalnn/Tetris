@@ -1,6 +1,8 @@
 package com.psw.tetris.ui;
 
 import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
+import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
+import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -62,12 +64,14 @@ public class ImageElement implements FrameElement {
   private String name;
   private String imagePath;
 
-  private int x;
-  private int y;
+  private double x;
+  private double y;
   private double imageScale;
   private int renderPriority;
   private TextElement textElement;
 
+  private transient int xAbs;
+  private transient int yAbs;
   private transient Rectangle bounds;
   private transient BufferedImage image;
   private transient boolean enabled = true;
@@ -96,9 +100,13 @@ public class ImageElement implements FrameElement {
       return;
     }
 
+    // convert percentual coordinates to absolute coordinates
+    xAbs = (int) (x / 100 * GAME_WIDTH);
+    yAbs = (int) (y / 100 * GAME_HEIGHT);
+
     bounds = new Rectangle(
-        x,
-        y,
+        xAbs,
+        yAbs,
         (int) (image.getWidth() * imageScale),
         (int) (image.getHeight() * imageScale));
 
@@ -111,8 +119,8 @@ public class ImageElement implements FrameElement {
 
     g.drawImage(
         image,
-        x,
-        y,
+        xAbs,
+        yAbs,
         (int) (image.getWidth() * imageScale),
         (int) (image.getHeight() * imageScale),
         null);

@@ -7,8 +7,8 @@
       "type": "image",
       "name": "title",
       "imagePath": "/buttonsV2/titleTotris.png",
-      "x": 217,
-      "y": 163,
+      "x": 16.9,
+      "y": 22.6,
       "imageScale": 0.666,
       "renderPriority": 1
     },
@@ -16,8 +16,8 @@
       "type": "image",
       "name": "enterButton",
       "imagePath": "/buttonsV2/enterButton.png",
-      "x": 189,
-      "y": 524,
+      "x": 14.8,
+      "y": 72.8,
       "imageScale": 0.666,
       "renderPriority": 1
     }
