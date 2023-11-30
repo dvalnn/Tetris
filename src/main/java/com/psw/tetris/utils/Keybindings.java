@@ -1,13 +1,6 @@
 package com.psw.tetris.utils;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 public class Keybindings {
-
   public int rotatesLeft = 90;
   public int rotatesRight = 88;
   public int movesLeft = 37;
@@ -27,19 +20,4 @@ public class Keybindings {
   public int debugSShape = 53;
   public int debugTShape = 54;
   public int debugZShape = 55;
-  
-  // saves the currnet keybindings to a file
-  public static void saveToFile(Keybindings newKeybindings, final String pathWithFilename) {
-    final Gson gson = new GsonBuilder()
-        .setPrettyPrinting()
-        .create();
-    try {
-      final String json = gson.toJson(newKeybindings);
-      final FileWriter writer = new FileWriter(pathWithFilename);
-      writer.write(json);
-      writer.close();
-    } catch (final Exception e) {
-      e.printStackTrace();
-    }
-  }
 }
