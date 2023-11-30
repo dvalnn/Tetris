@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.net.InetAddress;
 
+import com.psw.tetris.gameElements.Sound;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.states.multiP.PlayingMP;
@@ -53,6 +54,7 @@ public class Game implements Runnable {
   private void startGameLoop() {
     gameThread = new Thread(this);
     gameThread.start();
+    new Thread(new Sound()).start();
   }
 
   public static void connectMultiplayer(final String ipAddress) {
