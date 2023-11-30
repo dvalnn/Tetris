@@ -7,6 +7,7 @@ import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -132,12 +133,22 @@ public class ImageElement implements FrameElement {
     if (angle != 0)
       g2d.rotate(Math.toRadians(angle));
 
+    int scaledWidth = (int) (image.getWidth() * imageScale);
+    int scaledHeight = (int) (image.getHeight() * imageScale);
+
+    Image scaledImage;
+    if (imageScale != 1.0) {
+      scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+    } else {
+      scaledImage = image;
+    }
+
     g2d.drawImage(
-        image,
+        scaledImage,
         xAbs,
         yAbs,
-        (int) (image.getWidth() * imageScale),
-        (int) (image.getHeight() * imageScale),
+        scaledWidth,
+        scaledHeight,
         null);
 
     // draw the collision box
