@@ -1,5 +1,6 @@
 package com.psw.tetris.main;
 
+import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 import static com.psw.tetris.utils.Constants.GameConstants.FPS_SET;
 import static com.psw.tetris.utils.Constants.GameConstants.UPS_SET;
 
@@ -11,15 +12,15 @@ import java.net.InetAddress;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.states.multiP.PlayingMP;
-import com.psw.tetris.gameStates.states.singleP.GameOver;
 import com.psw.tetris.networking.GameClient;
 import com.psw.tetris.networking.GameServer;
 import com.psw.tetris.networking.packets.Packet00Login;
 import com.psw.tetris.utils.Keybindings;
+import com.psw.tetris.utils.LoadSave;
 
 public class Game implements Runnable {
 
-  private static Keybindings keybind = new Keybindings();  
+  private static Keybindings keybinds;
 
   private final GameWindow gameWindow;
   private final GamePanel gamePanel;
@@ -34,7 +35,9 @@ public class Game implements Runnable {
 
   private static String username = null;
 
-
+  static {
+    keybinds = LoadSave.loadJson(RESOURCES_PATH + "/config/keybinds.json", Keybindings.class);
+  }
 
   public Game() {
     GameStateHandler.init();
@@ -192,11 +195,6 @@ public class Game implements Runnable {
     // TODO: remove this
     ((PlayingMP) (GameStateHandler.getState(GameStatesEnum.PLAYING_MP)))
         .getPlayerBoard().setUsername(username);
-
-    // TODO: check if this is necessary
-    ((GameOver) (GameStateHandler.getState(GameStatesEnum.GAME_OVER)))
-        .setUsername(username);
-
   }
 
   public static final String getUsername() {
@@ -226,13 +224,16 @@ public class Game implements Runnable {
   public GameServer getServer() {
     return server;
   }
-  public static Keybindings getKeybind() {
-    return keybind;
+
+  public static Keybindings getKeybinds() {
+    return keybinds;
   }
-  public static void setKeybind(Keybindings keybind) {
-    Game.keybind = keybind;
+
+  public static void setKeybinds(Keybindings keybind) {
+    Game.keybinds = keybind;
   }
+
   public static void resetKeybind() {
-    Game.keybind = new Keybindings();
+    Game.keybinds = new Keybindings();
   }
 }

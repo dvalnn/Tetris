@@ -1,92 +1,34 @@
 package com.psw.tetris.gameStates.states.menus;
 
-import java.awt.Color;
+import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
+
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.awt.event.MouseEvent;
-
-import com.psw.tetris.utils.LoadSave;
-
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
-import static com.psw.tetris.utils.Constants.UI.Buttons.RETURN_BUTTON;
 
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
-
-import com.psw.tetris.ui.Button;
+import com.psw.tetris.ui.ImageElement;
 import com.psw.tetris.ui.SwitchStateAction;
+import com.psw.tetris.ui.Frame;
 
 public class AboutUs extends GameState {
 
-  private final Button returnButton;
-
-  private final BufferedImage returnButtonImage = LoadSave.loadImage(RETURN_BUTTON);
-  private final BufferedImage aboutUsBackground;
-
-  private final double RETURN_BUTTON_SCALE = 0.050;
-
-  private final int returnButtonX = 40;
-  private final int returnButtonY = 620;
-
-  private int textRenderX = 80;
-  private int textRenderY = 100;
-
-  private final SwitchStateAction switchGameStateAction = new SwitchStateAction();
-
-  // TODO: change this to a proper text file
-
-  private final String text = """
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      DAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUNDAHYUN
-      """;
+  private final Frame frame;
+  private final SwitchStateAction stateAction = new SwitchStateAction();
 
   public AboutUs() {
     super(GameStatesEnum.ABOUT_US);
-
-    aboutUsBackground = LoadSave.loadBackground("aboutUs.png");
-
-    returnButton = new Button(returnButtonX, returnButtonY, returnButtonImage, RETURN_BUTTON_SCALE);
+    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/aboutUs.json");
   }
 
   @Override
   public void render(final Graphics g) {
-    g.drawImage(aboutUsBackground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-    returnButton.render(g);
-
-    // text elements rendering (score and level)
-    g.setColor(Color.WHITE);
-    g.setFont(g.getFont().deriveFont(30f));
-    Graphics2D g2 = (Graphics2D) g;
-
-    g2.setRenderingHint(
-        RenderingHints.KEY_ANTIALIASING,
-        RenderingHints.VALUE_ANTIALIAS_ON);
-
-    textRenderY = 100;
-    for (String line : text.split("\n"))
-      g2.drawString(line, textRenderX, textRenderY += g.getFontMetrics().getHeight());
-
+    frame.render(g);
   }
 
   @Override
   public void mouseClicked(final MouseEvent e) {
-    returnButton.execIfClicked(
-        e.getPoint(),
-        switchGameStateAction,
-        GameStatesEnum.MAIN_MENU);
+    ((ImageElement) frame.getElement("returnToMainMenu"))
+        .execIfClicked(e.getX(), e.getY(), stateAction, GameStatesEnum.MAIN_MENU);
   }
-
 }

@@ -1,86 +1,75 @@
 package com.psw.tetris.gameStates.states.menus;
 
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_HEIGHT;
-import static com.psw.tetris.utils.Constants.GameConstants.GAME_WIDTH;
-import static com.psw.tetris.utils.Constants.UI.Buttons.BUTTON_PATH;
+import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-
-import org.apache.commons.lang3.StringUtils;
+import java.awt.event.MouseEvent;
 
 import com.psw.tetris.gameStates.GameState;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.main.Game;
-import com.psw.tetris.ui.Button;
+import com.psw.tetris.ui.Frame;
+import com.psw.tetris.ui.ImageElement;
 import com.psw.tetris.ui.SwitchStateAction;
-import com.psw.tetris.utils.LoadSave;
 
 public class Username extends GameState {
 
-  private final BufferedImage background = LoadSave.loadBackground("mainMenu.png");
-
-  private final int inputFieldButtonCenterX = GAME_WIDTH / 2;
-  private final int inputFieldButtonCenterY = GAME_HEIGHT / 2;
-  private final int inputFieldX = 270;
-  private final int inputFieldY = 42;
-
-  private final int inputMaxLength = 10;
-  private String inputText = "";
-
-  private final Button inputFieldButton = new Button(
-      new Point(inputFieldButtonCenterX, inputFieldButtonCenterY),
-      LoadSave.loadImage(BUTTON_PATH + "playerName.png"),
-      0.050);
+  private final Frame frame;
 
   public Username() {
     super(GameStatesEnum.USERNAME);
+    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/username.json");
   }
 
-  SwitchStateAction switchStateAction = new SwitchStateAction();
+  SwitchStateAction switchAction = new SwitchStateAction();
+
+  @Override
+  public void mouseClicked(MouseEvent e) {
+    // HACK: to make sure the input field is only focused when the user clicks
+    // we need to first remove focus from the input field, then check if the
+    // user clicked on the input field, and if so, give focus back to the
+    // input field. Maybe the input field should have a method that checks if
+    // it was clicked, and if so, gives focus to itself. But this works too.
+    ImageElement inputField = ((ImageElement) frame.getElement("inputField"));
+    inputField.getTextElement().removeFocus();
+    inputField.execIfClicked(
+        e.getX(),
+        e.getY(),
+        (Void) -> {
+          inputField.getTextElement().giveFocus();
+          return null;
+        },
+        null);
+
+    ((ImageElement) frame.getElement("startButton"))
+        .execIfClicked(
+            e.getX(),
+            e.getY(),
+            (state) -> {
+              Game.setUsername(inputField.getTextElement().getText());
+              switchAction.exec(state);
+              return null;
+            },
+            GameStatesEnum.MAIN_MENU);
+
+  }
 
   @Override
   public void keyPressed(KeyEvent e) {
-    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-      Game.setUsername(inputText);
-      inputFieldButton.exec(
-          switchStateAction,
-          GameStatesEnum.MAIN_MENU);
-    }
-
-    if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-      inputText = StringUtils.chop(inputText);
-      return;
-    }
-
-    char c = e.getKeyChar();
-    if (inputText.length() < inputMaxLength && Character.isDefined(c))
-      inputText += c;
-
+    // NOTE: the input field will only update if it has focus
+    ((ImageElement) frame.getElement("inputField"))
+        .getTextElement().keyboardInput(e);
   }
 
   @Override
   public void render(Graphics g) {
-    g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-    inputFieldButton.render(g);
+    frame.render(g);
+  }
 
-    g.setColor(Color.WHITE);
-    g.setFont(g.getFont().deriveFont(30f));
-    Graphics2D g2 = (Graphics2D) g;
-
-    g2.setRenderingHint(
-        RenderingHints.KEY_ANTIALIASING,
-        RenderingHints.VALUE_ANTIALIAS_ON);
-
-    g2.drawString(
-        inputText,
-        inputFieldButton.getAnchorPoint().x + inputFieldX,
-        inputFieldButton.getAnchorPoint().y + inputFieldY);
+  @Override
+  public void update() {
+    frame.update();
   }
 
 }

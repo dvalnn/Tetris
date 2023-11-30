@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.psw.tetris.gameElements.shapes.JsonShape;
 
-public class JsonFilesTest {
+public class ShapeLoadTest {
 
   JsonShape shape = new JsonShape();
 

@@ -1,44 +1,57 @@
 package com.psw.tetris.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.psw.tetris.gameStates.GameStateHandler;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.psw.tetris.utils.LoadSave;
 
 public class ButtonTest {
 
-  // ButtonAction<Integer, Integer> add2 = (Integer value) -> {
-  // return value + 2;
-  // };
-  //
-  // Button<Integer, Integer> button = new Button<Integer, Integer>(0, 0, null, 0,
-  // add2);
-  //
-  // Button<GameStateHandler.GameStatesEnum, Void> stateButton = new
-  // Button<GameStateHandler.GameStatesEnum, Void>(
-  // 0,
-  // 0,
-  // null,
-  // 0,
-  // new SwitchStateAction());
-  //
-  // @Test
-  // public void testInterface() {
-  // assertEquals(4, add2.exec(2));
-  // }
-  //
-  // @Test
-  // public void testButtonGenericAction() {
-  // assertEquals(4, button.execAction(2));
-  // }
-  //
-  // @Test
-  // public void testButtonStateAction() {
-  // // set current using the button
-  // stateButton.execAction(GameStateHandler.GameStatesEnum.PLAYING);
-  // // get current state
-  // GameStateHandler.GameStatesEnum state = GameStateHandler.getActiveStateID();
-  // assertEquals(state, GameStateHandler.GameStatesEnum.PLAYING);
-  // }
+  @Test
+  public void test() {
+    ImageElement mockButton = new ImageElement.Builder()
+        .name("testButton")
+        .imagePath("/buttonsV2/newGame.png")
+        .x(0)
+        .y(0)
+        .imageScale(1)
+        .build();
+
+    assertNotNull(mockButton);
+
+    TextElement mockText = new TextElement.Builder()
+        .name("mockText")
+        .text("mockText")
+        .font("mockFont")
+        .fontType("bold")
+        .size("mockSize")
+        .alignment("mockAlignment")
+        .x(10)
+        .y(19)
+        .build();
+
+    mockButton.setTextElement(mockText);
+    assertNotNull(mockButton.getTextElement());
+
+    // serialize mockButton
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    String json = gson.toJson(mockButton);
+    TextElement desirealized = gson.fromJson(json, TextElement.class);
+
+    assertNotNull(desirealized);
+    assertEquals(desirealized.getName(), mockButton.getName());
+
+    try {
+      LoadSave.saveJson("src/test/resources/ButtonElement.json", mockButton);
+    } catch (Exception e) {
+      e.printStackTrace();
+      Assertions.fail();
+    }
+  }
+
 }
