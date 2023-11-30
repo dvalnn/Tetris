@@ -27,19 +27,7 @@ public class Keybindings {
   public int debugSShape = 53;
   public int debugTShape = 54;
   public int debugZShape = 55;
-
-  public static Keybindings loadFromFile(final String pathWithFilename) {
-    try {
-
-      final FileReader reader = new FileReader(pathWithFilename);
-      final Keybindings keybindings = new Gson().fromJson(reader, Keybindings.class);
-      reader.close();
-      return keybindings;
-    } catch (final Exception e) {
-      return new Keybindings();
-    }
-  }
-
+  
   // saves the currnet keybindings to a file
   public static void saveToFile(Keybindings newKeybindings, final String pathWithFilename) {
     final Gson gson = new GsonBuilder()

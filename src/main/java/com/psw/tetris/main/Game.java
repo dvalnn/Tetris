@@ -1,10 +1,12 @@
 package com.psw.tetris.main;
 
+import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 import static com.psw.tetris.utils.Constants.GameConstants.FPS_SET;
 import static com.psw.tetris.utils.Constants.GameConstants.UPS_SET;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.RenderingHints.Key;
 import java.awt.geom.Point2D;
 import java.net.InetAddress;
 
@@ -16,10 +18,11 @@ import com.psw.tetris.networking.GameClient;
 import com.psw.tetris.networking.GameServer;
 import com.psw.tetris.networking.packets.Packet00Login;
 import com.psw.tetris.utils.Keybindings;
+import com.psw.tetris.utils.LoadSave;
 
 public class Game implements Runnable {
 
-  private static Keybindings keybind = new Keybindings();  
+  private static Keybindings keybinds;
 
   private final GameWindow gameWindow;
   private final GamePanel gamePanel;
@@ -34,6 +37,9 @@ public class Game implements Runnable {
 
   private static String username = null;
 
+  static{
+    keybinds = LoadSave.loadJson(RESOURCES_PATH + "/keybinds.json", Keybindings.class);
+  }
 
 
   public Game() {
@@ -226,13 +232,13 @@ public class Game implements Runnable {
   public GameServer getServer() {
     return server;
   }
-  public static Keybindings getKeybind() {
-    return keybind;
+  public static Keybindings getKeybinds() {
+    return keybinds;
   }
-  public static void setKeybind(Keybindings keybind) {
-    Game.keybind = keybind;
+  public static void setKeybinds(Keybindings keybind) {
+    Game.keybinds = keybind;
   }
   public static void resetKeybind() {
-    Game.keybind = new Keybindings();
+    Game.keybinds = new Keybindings();
   }
 }
