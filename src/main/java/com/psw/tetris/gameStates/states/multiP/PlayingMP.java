@@ -1,5 +1,6 @@
 package com.psw.tetris.gameStates.states.multiP;
 
+import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 import static com.psw.tetris.utils.Constants.Directions.LEFT;
 import static com.psw.tetris.utils.Constants.Directions.RIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.BOARD_HEIGHT;
@@ -12,7 +13,6 @@ import static com.psw.tetris.utils.Constants.GameConstants.UPS_SET;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.net.InetAddress;
 import java.util.List;
 
@@ -26,7 +26,7 @@ import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.main.Game;
 import com.psw.tetris.settings.BoardSettings;
-import com.psw.tetris.utils.LoadSave;
+import com.psw.tetris.ui.Frame;
 
 public class PlayingMP extends GameState {
 
@@ -48,8 +48,7 @@ public class PlayingMP extends GameState {
   private final int OPPONENT_X_OFFSET = 3 * GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2 + 10;
   private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2 + 18;
 
-  private final BufferedImage background;
-  private final BufferedImage foreground;
+  private Frame frame;
 
   public PlayingMP() {
     super(GameStatesEnum.PLAYING_MP);
@@ -62,8 +61,7 @@ public class PlayingMP extends GameState {
             boardColor,
             boardColor.brighter()));
 
-    background = LoadSave.loadBackground("multiplayerGame.png");
-    foreground = LoadSave.loadBackground("multiEssentials.png");
+    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/multiplayer.json");
   }
 
   public void addBoardMP(final String username, final InetAddress address, final int port) {
@@ -115,6 +113,8 @@ public class PlayingMP extends GameState {
 
   @Override
   public void update() {
+    frame.update();
+
     if (opponentBoard == null || opponentDisconnected) {
       return;
     }
@@ -134,8 +134,8 @@ public class PlayingMP extends GameState {
 
   @Override
   public void render(final Graphics g) {
-    g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-    g.drawImage(foreground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+    frame.render(g);
+
     if (opponentBoard == null) {
       // TODO: make this look nicer
       g.setColor(Color.WHITE);
