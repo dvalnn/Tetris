@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 
 import javax.sound.sampled.Clip;
 
+import com.psw.tetris.gameElements.Sound;
 import com.psw.tetris.utils.LoadSave;
 
 public class ImageElement implements FrameElement {

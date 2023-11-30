@@ -1,4 +1,4 @@
-package com.psw.tetris.ui;
+package com.psw.tetris.gameElements;
 
 import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 

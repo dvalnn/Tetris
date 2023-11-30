@@ -9,13 +9,13 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.net.InetAddress;
 
+import com.psw.tetris.gameElements.Sound;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.states.multiP.PlayingMP;
 import com.psw.tetris.networking.GameClient;
 import com.psw.tetris.networking.GameServer;
 import com.psw.tetris.networking.packets.Packet00Login;
-import com.psw.tetris.ui.Sound;
 import com.psw.tetris.utils.Keybindings;
 import com.psw.tetris.utils.LoadSave;
 
