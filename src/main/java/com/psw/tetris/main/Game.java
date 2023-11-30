@@ -37,10 +37,9 @@ public class Game implements Runnable {
 
   private static String username = null;
 
-  static{
-    keybinds = LoadSave.loadJson(RESOURCES_PATH + "/keybinds.json", Keybindings.class);
+  static {
+    keybinds = LoadSave.loadJson(RESOURCES_PATH + "/config/keybinds.json", Keybindings.class);
   }
-
 
   public Game() {
     GameStateHandler.init();
@@ -232,12 +231,15 @@ public class Game implements Runnable {
   public GameServer getServer() {
     return server;
   }
+
   public static Keybindings getKeybinds() {
     return keybinds;
   }
+
   public static void setKeybinds(Keybindings keybind) {
     Game.keybinds = keybind;
   }
+
   public static void resetKeybind() {
     Game.keybinds = new Keybindings();
   }
