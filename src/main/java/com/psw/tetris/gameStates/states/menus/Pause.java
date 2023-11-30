@@ -46,7 +46,7 @@ public class Pause extends GameState {
         .execIfClicked(e.getX(), e.getY(), reloadAndSwitch, GameStatesEnum.PLAYING);
 
     ((ImageElement) frame.getElement("returnToMainMenu"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.CHANGE_KEYBINDS);
+        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MAIN_MENU);
   }
 
 }
