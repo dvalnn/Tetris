@@ -30,7 +30,16 @@ Here is how you can do it:
 mvn compile
 mvn exec:java
 ```
-You the game should start up immediately after maven finished the build tasks.
+The game should start up immediately after maven finished the build tasks.
+
+#### Compiling and running Unit Testing
+
+```bash
+mvn compile
+mvn test
+```
+The game tests should run immediately  after maven finished the build tasks.
+
 
 ## Controls:
 
@@ -40,6 +49,4 @@ You the game should start up immediately after maven finished the build tasks.
 
 ### Changing keybinds:
 
-All keybinds can be costumized under src/gameStates/Playing.java
- 
-In game configuration is a WIP and will be implemented in the future.
+All keybinds can be costumized in the game via settings menu

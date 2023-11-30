@@ -12,7 +12,6 @@ import java.net.InetAddress;
 import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.gameStates.states.multiP.PlayingMP;
-import com.psw.tetris.gameStates.states.singleP.GameOver;
 import com.psw.tetris.networking.GameClient;
 import com.psw.tetris.networking.GameServer;
 import com.psw.tetris.networking.packets.Packet00Login;
@@ -196,11 +195,6 @@ public class Game implements Runnable {
     // TODO: remove this
     ((PlayingMP) (GameStateHandler.getState(GameStatesEnum.PLAYING_MP)))
         .getPlayerBoard().setUsername(username);
-
-    // TODO: check if this is necessary
-    ((GameOver) (GameStateHandler.getState(GameStatesEnum.GAME_OVER)))
-        .setUsername(username);
-
   }
 
   public static final String getUsername() {

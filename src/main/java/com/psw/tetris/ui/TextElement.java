@@ -182,7 +182,7 @@ public class TextElement implements FrameElement {
 
   public void removeFocus() {
     hasFocus = false;
-    if (text.charAt(text.length() - 1) == '|')
+    if ((text.charAt(text.length() - 1) == '|') || !text.isEmpty())
       text = text.substring(0, text.length() - 1);
   }
 
@@ -264,8 +264,8 @@ public class TextElement implements FrameElement {
     }
 
     if (anchorPoint.equals("game")) {
-      xAbs = (int) x / 100 * GAME_WIDTH;
-      yAbs = (int) y / 100 * GAME_HEIGHT;
+      xAbs = (int) (x / 100 * GAME_WIDTH);
+      yAbs = (int) (y / 100 * GAME_HEIGHT);
     } else if (anchorPoint.equals("parent")) {
       xAbs = parent.getAnchorPoint().x + (int) (x / 100 * parent.getDimensions().x);
       yAbs = parent.getAnchorPoint().y + (int) (y / 100 * parent.getDimensions().y);
