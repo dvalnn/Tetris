@@ -1,5 +1,6 @@
 package com.psw.tetris.gameStates.states.singleP;
 
+import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 import static com.psw.tetris.utils.Constants.Directions.LEFT;
 import static com.psw.tetris.utils.Constants.Directions.RIGHT;
 import static com.psw.tetris.utils.Constants.GameConstants.BOARD_HEIGHT;
@@ -19,7 +20,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 import com.psw.tetris.gameElements.Board;
 import com.psw.tetris.gameElements.boards.PlayerBoard;
@@ -28,22 +28,20 @@ import com.psw.tetris.gameStates.GameStateHandler;
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
 import com.psw.tetris.main.Game;
 import com.psw.tetris.settings.BoardSettings;
-import com.psw.tetris.utils.LoadSave;
-
+import com.psw.tetris.ui.Frame;
 
 public class Playing extends GameState {
 
   private final PlayerBoard board;
   private final Color boardColor = new Color(20, 20, 20);
 
-  private final BufferedImage background;
-  private final BufferedImage foreground;
-
   private final int X_OFFSET = (GAME_WIDTH - BOARD_WIDTH * BOARD_SQUARE) / 2 + 10;
   private final int Y_OFFSET = (GAME_HEIGHT - BOARD_HEIGHT * BOARD_SQUARE) / 2 + 18;
 
   private boolean mouseButton1Pressed = false;
   private boolean mouseButton3Pressed = false;
+
+  private Frame frame;
 
   public Playing() {
     super(GameStatesEnum.PLAYING);
@@ -56,19 +54,18 @@ public class Playing extends GameState {
         boardColor.brighter());
 
     board = new PlayerBoard(set);
-    background = LoadSave.loadBackground("singlePlayerGame.png");
-    foreground = LoadSave.loadBackground("singleEssentials2.png");
+    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/playing.json");
   }
 
   @Override
   public void update() {
+    // frame.update();
     board.update();
   }
 
   @Override
   public void render(final Graphics g) {
-    g.drawImage(background, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-    g.drawImage(foreground, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+    frame.render(g);
     board.render(g);
   }
 
@@ -159,7 +156,7 @@ public class Playing extends GameState {
       return;
     }
     if (e.getKeyCode() == Game.getKeybinds().toggleGrid) {
-      //board.toggleGrid();
+      // board.toggleGrid();
       return;
 
     }
@@ -197,7 +194,7 @@ public class Playing extends GameState {
       board.setTetromino(Z);
       return;
     }
-    
+
     return;
   }
 
@@ -205,22 +202,22 @@ public class Playing extends GameState {
   public void keyReleased(final KeyEvent e) {
 
     if (e.getKeyCode() == Game.getKeybinds().movesLeft) {
-        board.getTetromino().setLeft(false);
+      board.getTetromino().setLeft(false);
       return;
     }
 
     if (e.getKeyCode() == Game.getKeybinds().softDrop) {
-        board.getTetromino().setDown(false);
+      board.getTetromino().setDown(false);
       return;
     }
 
     if (e.getKeyCode() == Game.getKeybinds().movesRight) {
-        board.getTetromino().setRight(false);
+      board.getTetromino().setRight(false);
       return;
     }
 
     if (e.getKeyCode() == Game.getKeybinds().hardDrop) {
-        board.getTetromino().setDrop(false);
+      board.getTetromino().setDrop(false);
       return;
     }
     return;

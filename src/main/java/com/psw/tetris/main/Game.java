@@ -6,7 +6,6 @@ import static com.psw.tetris.utils.Constants.GameConstants.UPS_SET;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.RenderingHints.Key;
 import java.awt.geom.Point2D;
 import java.net.InetAddress;
 
