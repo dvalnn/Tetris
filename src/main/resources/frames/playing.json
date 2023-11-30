@@ -1,0 +1,16 @@
+{
+  "name": "PLAYING",
+  "imagePath": "",
+  "color": [0, 0, 0],
+  "assets": [
+    {
+      "type": "image",
+      "name": "gameUI",
+      "imagePath": "/buttonsV2/singlePlayerGame.png",
+      "x": 26.25,
+      "y": 15.185,
+      "imageScale": 0.666,
+      "renderPriority": 1
+    }
+  ]
+}

@@ -71,6 +71,7 @@ public class ImageElement implements FrameElement {
   private double y;
   private double imageScale;
   private double angle;
+  private boolean enabled = true;
   private TextElement textElement;
 
   // NOTE: not serialized
@@ -78,14 +79,16 @@ public class ImageElement implements FrameElement {
   private transient int yAbs;
   private transient Rectangle bounds;
   private transient BufferedImage image;
-  private transient boolean enabled = true;
   private transient Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH + "/sounds/clickSound.wav");;
+  private transient Image scaledImage;
 
   public <T, R> R execIfClicked(
       final int x,
       final int y,
       ButtonAction<T, R> lambda,
       T args) {
+    if (!enabled)
+      return null;
 
 
     
@@ -100,7 +103,7 @@ public class ImageElement implements FrameElement {
 
   @Override
   public void init() {
-    if (enabled && image == null) {
+    if (image == null) {
       image = LoadSave.loadImage(RESOURCES_PATH + imagePath);
     }
 
@@ -139,16 +142,16 @@ public class ImageElement implements FrameElement {
         RenderingHints.VALUE_ANTIALIAS_ON);
 
     AffineTransform orig = g2d.getTransform();
+
     if (angle != 0)
       g2d.rotate(Math.toRadians(angle));
 
     int scaledWidth = (int) (image.getWidth() * imageScale);
     int scaledHeight = (int) (image.getHeight() * imageScale);
 
-    Image scaledImage;
-    if (imageScale != 1.0) {
+    if (imageScale != 1.0 && scaledImage == null) {
       scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
-    } else {
+    } else if (scaledImage == null) {
       scaledImage = image;
     }
 

@@ -1,3 +1,4 @@
+
 package com.psw.tetris.gameStates.states.multiP;
 
 import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
@@ -11,19 +12,21 @@ import com.psw.tetris.ui.Frame;
 import com.psw.tetris.ui.ImageElement;
 import com.psw.tetris.ui.SwitchStateAction;
 
-public class GameModeSelectMP extends GameState {
-
+public class Connecting extends GameState {
   private Frame frame;
   SwitchStateAction switchState = new SwitchStateAction();
 
-  public GameModeSelectMP() {
-    super(GameStatesEnum.MODE_SELECT_MP);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/modeSelectMP.json");
+  public Connecting() {
+    super(GameStatesEnum.CONNECTING);
+    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/connecting.json");
   }
 
   @Override
   public void render(Graphics g) {
     frame.render(g);
+
+    // TODO: switch banner and toggle start button
+    // when a player connects to the server
   }
 
   @Override
@@ -37,13 +40,8 @@ public class GameModeSelectMP extends GameState {
     int x = e.getX();
     int y = e.getY();
 
-    ((ImageElement) frame.getElement("host"))
-        .execIfClicked(x, y, switchState, GameStatesEnum.HOST);
-
-    ((ImageElement) frame.getElement("join"))
-        .execIfClicked(x, y, switchState, GameStatesEnum.JOIN);
-
+    // TODO: the return button should shutdonw the client
     ((ImageElement) frame.getElement("return"))
-        .execIfClicked(x, y, switchState, GameStatesEnum.MODE_SELECT);
+        .execIfClicked(x, y, switchState, GameStatesEnum.JOIN);
   }
 }

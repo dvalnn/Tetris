@@ -18,7 +18,6 @@ public class GameModeSelect extends GameState {
   private final Frame frame;
   private final SwitchStateAction switchState = new SwitchStateAction();
 
-
   ButtonAction<GameStatesEnum, Void> reloadAndSwitch = (state) -> {
     GameStateHandler.reloadState(state);
     switchState.exec(state);
@@ -26,7 +25,7 @@ public class GameModeSelect extends GameState {
   };
 
   public GameModeSelect() {
-    super(GameStatesEnum.GAME_MODE_SELECT);
+    super(GameStatesEnum.MODE_SELECT);
     frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/gameModeSelect.json");
   }
 
@@ -42,7 +41,7 @@ public class GameModeSelect extends GameState {
         .execIfClicked(e.getX(), e.getY(), reloadAndSwitch, GameStatesEnum.PLAYING);
 
     ((ImageElement) frame.getElement("multiplayer"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.GAME_MODE_SELECT_MP);
+        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MODE_SELECT_MP);
 
     ((ImageElement) frame.getElement("returnToMainMenu"))
         .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MAIN_MENU);
