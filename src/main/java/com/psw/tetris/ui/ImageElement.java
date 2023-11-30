@@ -75,6 +75,7 @@ public class ImageElement implements FrameElement {
   private transient int yAbs;
   private transient Rectangle bounds;
   private transient BufferedImage image;
+  private transient Image scaledImage;
   private transient boolean enabled = true;
 
   public <T, R> R execIfClicked(
@@ -130,16 +131,16 @@ public class ImageElement implements FrameElement {
         RenderingHints.VALUE_ANTIALIAS_ON);
 
     AffineTransform orig = g2d.getTransform();
+
     if (angle != 0)
       g2d.rotate(Math.toRadians(angle));
 
     int scaledWidth = (int) (image.getWidth() * imageScale);
     int scaledHeight = (int) (image.getHeight() * imageScale);
 
-    Image scaledImage;
-    if (imageScale != 1.0) {
+    if (imageScale != 1.0 && scaledImage == null) {
       scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
-    } else {
+    } else if (scaledImage == null) {
       scaledImage = image;
     }
 

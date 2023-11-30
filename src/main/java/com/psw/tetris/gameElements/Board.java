@@ -89,6 +89,10 @@ public class Board {
 
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
+        // Remove this to render the background color
+        if (board.get(row).getIndexRGB(col) == set.backgroundColor.getRGB())
+          continue;
+
         g.setColor(board.get(row).getIndexColorCopy(col));
         g.fillRect(
             (int) (col * set.squareSize - set.squareSize / 2) + set.xOffset,
@@ -115,9 +119,9 @@ public class Board {
 
     // TODO: Center the text properly
     g2.drawString("" + playerScore, set.scoreRenderX, set.scoreRenderY);
-
     g2.drawString("" + playerLevel, set.levelRenderX, set.levelRenderY);
     g2.drawString("" + playerLines, set.linesRenderX, set.linesRenderY);
+
     g2.drawString(GameTime.getTimeStr(),
         set.timerRenderX,
         set.timerRenderY);

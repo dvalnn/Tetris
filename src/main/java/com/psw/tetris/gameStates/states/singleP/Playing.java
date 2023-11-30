@@ -59,7 +59,7 @@ public class Playing extends GameState {
 
   @Override
   public void update() {
-    // frame.update();
+    frame.update();
     board.update();
   }
 
