@@ -241,6 +241,8 @@ public class TextElement implements FrameElement {
 
   @Override
   public void init() {
+    if (text == null)
+      text = "";
     if (font == null | font.isEmpty())
       font = DEFAULT_FONT;
     if (size == 0)

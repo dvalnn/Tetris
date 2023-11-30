@@ -1,11 +1,7 @@
 {
   "name": "CONNECTING",
   "imagePath": "",
-  "color": [
-    0,
-    0,
-    0
-  ],
+  "color": [0, 0, 0],
   "assets": [
     {
       "type": "image",
@@ -58,6 +54,15 @@
         "clearDefaultText": true,
         "maxLength": 10
       }
+    },
+    {
+      "type": "image",
+      "name": "return",
+      "imagePath": "/buttonsV2/return.png",
+      "x": 2.6,
+      "y": 87,
+      "imageScale": 0.666
     }
   ]
 }
+

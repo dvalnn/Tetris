@@ -68,6 +68,7 @@ public class ImageElement implements FrameElement {
   private double y;
   private double imageScale;
   private double angle;
+  private boolean enabled = true;
   private TextElement textElement;
 
   // NOTE: not serialized
@@ -76,13 +77,14 @@ public class ImageElement implements FrameElement {
   private transient Rectangle bounds;
   private transient BufferedImage image;
   private transient Image scaledImage;
-  private transient boolean enabled = true;
 
   public <T, R> R execIfClicked(
       final int x,
       final int y,
       ButtonAction<T, R> lambda,
       T args) {
+    if (!enabled)
+      return null;
 
     if (bounds.contains(x, y)) {
       return lambda.exec(args);
@@ -92,7 +94,7 @@ public class ImageElement implements FrameElement {
 
   @Override
   public void init() {
-    if (enabled && image == null) {
+    if (image == null) {
       image = LoadSave.loadImage(RESOURCES_PATH + imagePath);
     }
 
