@@ -14,6 +14,8 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import javax.sound.sampled.Clip;
+
 import com.psw.tetris.utils.LoadSave;
 
 public class ImageElement implements FrameElement {
@@ -76,6 +78,7 @@ public class ImageElement implements FrameElement {
   private transient Rectangle bounds;
   private transient BufferedImage image;
   private transient boolean enabled = true;
+  private transient Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH + "/sounds/clickSound.wav");;
 
   public <T, R> R execIfClicked(
       final int x,
@@ -83,9 +86,14 @@ public class ImageElement implements FrameElement {
       ButtonAction<T, R> lambda,
       T args) {
 
+
+    
     if (bounds.contains(x, y)) {
+        Sound.playEffect(clipEffect);
+        ///Sound.setMusicVolume(3.0f); //TODO fix this : implement a volume calculator
       return lambda.exec(args);
     }
+
     return null;
   }
 

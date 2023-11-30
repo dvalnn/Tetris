@@ -15,6 +15,7 @@ import com.psw.tetris.gameStates.states.multiP.PlayingMP;
 import com.psw.tetris.networking.GameClient;
 import com.psw.tetris.networking.GameServer;
 import com.psw.tetris.networking.packets.Packet00Login;
+import com.psw.tetris.ui.Sound;
 import com.psw.tetris.utils.Keybindings;
 import com.psw.tetris.utils.LoadSave;
 
@@ -53,6 +54,7 @@ public class Game implements Runnable {
   private void startGameLoop() {
     gameThread = new Thread(this);
     gameThread.start();
+    new Thread(new Sound()).start();
   }
 
   public static void connectMultiplayer(final String ipAddress) {
