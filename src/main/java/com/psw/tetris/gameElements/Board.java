@@ -89,10 +89,6 @@ public class Board {
 
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
-        // Remove this to render the background color
-        if (board.get(row).getIndexRGB(col) == set.backgroundColor.getRGB())
-          continue;
-
         g.setColor(board.get(row).getIndexColorCopy(col));
         g.fillRect(
             (int) (col * set.squareSize - set.squareSize / 2) + set.xOffset,
