@@ -115,9 +115,9 @@ public class Board {
 
     // TODO: Center the text properly
     g2.drawString("" + playerScore, set.scoreRenderX, set.scoreRenderY);
-
     g2.drawString("" + playerLevel, set.levelRenderX, set.levelRenderY);
     g2.drawString("" + playerLines, set.linesRenderX, set.linesRenderY);
+
     g2.drawString(GameTime.getTimeStr(),
         set.timerRenderX,
         set.timerRenderY);

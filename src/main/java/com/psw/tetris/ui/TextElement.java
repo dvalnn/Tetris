@@ -182,7 +182,7 @@ public class TextElement implements FrameElement {
 
   public void removeFocus() {
     hasFocus = false;
-    if ((text.charAt(text.length() - 1) == '|') || !text.isEmpty())
+    if (!text.isEmpty() && (text.charAt(text.length() - 1) == '|'))
       text = text.substring(0, text.length() - 1);
   }
 
@@ -241,6 +241,8 @@ public class TextElement implements FrameElement {
 
   @Override
   public void init() {
+    if (text == null)
+      text = "";
     if (font == null | font.isEmpty())
       font = DEFAULT_FONT;
     if (size == 0)

@@ -42,7 +42,7 @@ public class MainMenu extends GameState {
     int y = e.getY();
 
     ((ImageElement) frame.getElement("newGame"))
-        .execIfClicked(x, y, switchState, GameStatesEnum.GAME_MODE_SELECT);
+        .execIfClicked(x, y, switchState, GameStatesEnum.MODE_SELECT);
 
     ((ImageElement) frame.getElement("aboutUs"))
         .execIfClicked(x, y, switchState, GameStatesEnum.ABOUT_US);
