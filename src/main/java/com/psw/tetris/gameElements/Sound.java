@@ -2,6 +2,7 @@ package com.psw.tetris.gameElements;
 
 import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
 
+import java.awt.Image;
 import java.io.File;
 
 import javax.sound.sampled.AudioInputStream;
@@ -10,6 +11,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
 import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.psw.tetris.ui.ImageElement;
 import com.psw.tetris.gameStates.GameStateHandler;
 
 // this class implemnts the sound effects for the game
@@ -37,6 +39,8 @@ public class Sound implements Runnable {
 
     playMusic(menuMusic);
 
+    clipEffect = ImageElement.getClipEffect();
+
     while (true) {
       GameStatesEnum newState = GameStateHandler.getActiveStateID();
 
@@ -52,12 +56,14 @@ public class Sound implements Runnable {
         playMusic(gameMusic);
       } else if (oldState.equals(GameStatesEnum.PLAYING)) {
         gameMusic.stop();
+
         playMusic(menuMusic);
       }
 
       oldState = newState;
     }
   }
+
 
   public static Clip setFileMusic(String filename) {
     try {

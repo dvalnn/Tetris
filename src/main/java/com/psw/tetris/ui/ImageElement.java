@@ -79,8 +79,7 @@ public class ImageElement implements FrameElement {
   private transient int yAbs;
   private transient Rectangle bounds;
   private transient BufferedImage image;
-  // private transient Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH +
-  // "/sounds/clickSound.wav");;
+  private transient static Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH +"/sounds/clickSound.wav");
   private transient Image scaledImage;
 
   public <T, R> R execIfClicked(
@@ -93,7 +92,7 @@ public class ImageElement implements FrameElement {
       return null;
 
     if (bounds.contains(x, y)) {
-      // Sound.playEffect(clipEffect);
+      Sound.playEffect(clipEffect);
       return lambda.exec(args);
     }
 
@@ -231,5 +230,9 @@ public class ImageElement implements FrameElement {
   @Override
   public double getRotation() {
     return angle;
+  }
+
+  public static Clip getClipEffect() {
+    return clipEffect;
   }
 }
