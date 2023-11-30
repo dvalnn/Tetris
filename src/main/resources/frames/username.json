@@ -13,7 +13,7 @@
     },
     {
       "type": "image",
-      "name": "rotatesLeft",
+      "name": "inputField",
       "imagePath": "/buttonsV2/insertUsername.png",
       "x": 14.8,
       "y": 45.37,
@@ -21,7 +21,8 @@
       "renderPriority": 1,
       "textElement": {
         "type": "text",
-        "name": "keybing",
+        "name": "inputText",
+        "text": "Type your name here",
         "x": 24.8,
         "y": 65,
         "size": 26.6,
@@ -31,7 +32,8 @@
         "color": [0, 0, 0],
         "align": "LEFT",
         "editable": true,
-        "maxLength": 1
+        "clearDefaultText": true,
+        "maxLength": 10
       }
     },
     {
