@@ -79,7 +79,8 @@ public class ImageElement implements FrameElement {
   private transient int yAbs;
   private transient Rectangle bounds;
   private transient BufferedImage image;
-  private transient Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH + "/sounds/clickSound.wav");;
+  // private transient Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH +
+  // "/sounds/clickSound.wav");;
   private transient Image scaledImage;
 
   public <T, R> R execIfClicked(
@@ -87,14 +88,12 @@ public class ImageElement implements FrameElement {
       final int y,
       ButtonAction<T, R> lambda,
       T args) {
+
     if (!enabled)
       return null;
 
-
-    
     if (bounds.contains(x, y)) {
-        Sound.playEffect(clipEffect);
-        ///Sound.setMusicVolume(3.0f); //TODO fix this : implement a volume calculator
+      // Sound.playEffect(clipEffect);
       return lambda.exec(args);
     }
 
