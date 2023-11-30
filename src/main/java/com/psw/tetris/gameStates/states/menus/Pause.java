@@ -32,20 +32,21 @@ public class Pause extends GameState {
 
   @Override
   public void render(final Graphics g) {
+    GameStateHandler.getState(GameStatesEnum.PLAYING).render(g);
     frame.render(g);
   }
 
   @Override
   public void mouseClicked(final MouseEvent e) {
-    
-        ((ImageElement) frame.getElement("resume"))
-            .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.PLAYING);
-    
-        ((ImageElement) frame.getElement("restart"))
-            .execIfClicked(e.getX(), e.getY(), reloadAndSwitch, GameStatesEnum.PLAYING);
-    
-        ((ImageElement) frame.getElement("returnToMainMenu"))
-            .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.CHANGE_KEYBINDS);
+
+    ((ImageElement) frame.getElement("resume"))
+        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.PLAYING);
+
+    ((ImageElement) frame.getElement("restart"))
+        .execIfClicked(e.getX(), e.getY(), reloadAndSwitch, GameStatesEnum.PLAYING);
+
+    ((ImageElement) frame.getElement("returnToMainMenu"))
+        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.CHANGE_KEYBINDS);
   }
 
 }

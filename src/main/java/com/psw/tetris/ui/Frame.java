@@ -49,10 +49,11 @@ public class Frame {
       frame.backgroundImg = LoadSave.loadImage(RESOURCES_PATH + frame.imagePath);
 
     frame.color = gson.fromJson(json.get("color"), int[].class);
-    frame.backgroundColor = new Color(
-        frame.color[0],
-        frame.color[1],
-        frame.color[2]);
+    if (frame.color != null)
+      frame.backgroundColor = new Color(
+          frame.color[0],
+          frame.color[1],
+          frame.color[2]);
 
     JsonArray assetArray = json.get("assets").getAsJsonArray();
     frame.assets = new ArrayList<FrameElement>(assetArray.size());
