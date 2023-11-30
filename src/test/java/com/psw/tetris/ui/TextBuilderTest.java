@@ -28,13 +28,12 @@ public class TextBuilderTest {
         .y(19)
         .build();
 
-    // serialize mockText
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     String json = gson.toJson(mockText);
-    TextElement desirealized = gson.fromJson(json, TextElement.class);
+    TextElement deserialized = gson.fromJson(json, TextElement.class);
 
-    assertNotNull(desirealized);
-    assertEquals(desirealized.getName(), mockText.getName());
+    assertNotNull(deserialized);
+    assertEquals(deserialized.getName(), mockText.getName());
 
     try {
       LoadSave.saveJson("src/test/resources/TextAsset.json", mockText);
