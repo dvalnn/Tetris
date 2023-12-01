@@ -141,12 +141,11 @@ public class Game implements Runnable {
     double deltaFrame = 0;
     double deltaUpdate = 0;
 
-    // int frames = 0;
-    // int updates = 0;
+    int frames = 0;
+    int updates = 0;
 
     long previousTime = System.nanoTime();
-
-    // long lastCheck = System.currentTimeMillis();
+    long lastCheck = System.currentTimeMillis();
 
     // Game Loop
     while (true) {
@@ -159,24 +158,26 @@ public class Game implements Runnable {
       // ensures that the game logic is updated at a constant rate
       if (deltaUpdate >= 1) {
         update();
-        // updates++;
+        updates++;
         deltaUpdate--;
       }
 
       // ensures that the game is rendered at a constant rate
       if (deltaFrame >= 1) {
         gamePanel.repaint();
-        // frames++;
+        frames++;
         deltaFrame--;
       }
 
       // prints the FPS and UPS every second
-      // if (System.currentTimeMillis() - lastCheck >= 1000) {
-      // lastCheck = System.currentTimeMillis();
-      // System.out.println("FPS " + frames + " | UPS " + updates);
-      // frames = 0;
-      // updates = 0;
-      // }
+      if (System.currentTimeMillis() - lastCheck >= 1000) {
+        lastCheck = System.currentTimeMillis();
+        System.out.println("FPS " + frames + " | UPS " + updates);
+        frames = 0;
+        updates = 0;
+      }
+
+      Thread.yield();
 
       if (exit)
         break;

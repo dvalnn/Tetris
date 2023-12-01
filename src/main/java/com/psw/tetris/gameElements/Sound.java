@@ -35,6 +35,7 @@ public class Sound implements Runnable {
 
     gameMusic = setFileMusic(RESOURCES_PATH + "/sounds/tetrisThemeOld.wav");
     setMusicVolume(-20.0f);
+    
     GameStatesEnum oldState = GameStateHandler.getActiveStateID();
 
     playMusic(menuMusic);
@@ -63,7 +64,6 @@ public class Sound implements Runnable {
       oldState = newState;
     }
   }
-
 
   public static Clip setFileMusic(String filename) {
     try {
