@@ -62,15 +62,6 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
           <version>3.0.0</version>
-          <!-- Use the latest version -->
-          <configuration>
-            <mainClass>com.psw.tetris.main.MainClass</mainClass>
-            <arguments>
-              <argument />
-              <argument />
-              <!-- Add any other command-line arguments your application needs -->
-            </arguments>
-          </configuration>
         </plugin>
 
         <!-- clean lifecycle, see
