@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.menus;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -18,7 +18,7 @@ public class AboutUs extends GameState {
 
   public AboutUs() {
     super(GameStatesEnum.ABOUT_US);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/aboutUs.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "aboutUs.json");
   }
 
   @Override

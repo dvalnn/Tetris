@@ -1,5 +1,7 @@
 package com.apontadores.gameStates.states.menus;
 
+import static com.apontadores.utils.Constants.FRAMES_PATH;
+import static com.apontadores.utils.Constants.KEYBINDINGS_PATH;
 import static com.apontadores.utils.Constants.RESOURCES_PATH;
 
 import java.awt.Graphics;
@@ -42,13 +44,13 @@ public class ChangeKeybinds extends GameState {
   private final ButtonAction<Void, Void> resetKeyAction = (Void) -> {
     Game.resetKeybind();
     updateKeybinds();
-    LoadSave.saveJson(RESOURCES_PATH + "/config/keybinds.json", Game.getKeybinds());
+    LoadSave.saveJson(RESOURCES_PATH + "keybinds.json", Game.getKeybinds());
     return null;
   };
 
   public ChangeKeybinds() {
     super(GameStatesEnum.CHANGE_KEYBINDS);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/changeKeybinds.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "changeKeybinds.json");
 
     ((ImageElement) frame.getElement("changeKeybindRotateLeft"))
         .getTextElement()
@@ -210,7 +212,7 @@ public class ChangeKeybinds extends GameState {
       default:
         return;
     }
-    LoadSave.saveJson(RESOURCES_PATH + "/config/keybinds.json", Game.getKeybinds());
+    LoadSave.saveJson(KEYBINDINGS_PATH + "keybinds.json", Game.getKeybinds());
 
     Action = keyAction.OFF;
   }

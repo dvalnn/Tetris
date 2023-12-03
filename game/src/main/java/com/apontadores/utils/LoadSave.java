@@ -1,7 +1,5 @@
 package com.apontadores.utils;
 
-import static com.apontadores.utils.Constants.UI.BACKGROUND_PATH;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
@@ -14,11 +12,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class LoadSave {
-
-  // TODO: REMOVE THIS
-  public static BufferedImage loadBackground(final String path) {
-    return loadImage(BACKGROUND_PATH + path);
-  }
 
   public static BufferedImage loadImage(final String path) {
     BufferedImage image = null;

@@ -16,7 +16,6 @@ import static com.apontadores.gameElements.gameplay.Score.getScore;
 import static com.apontadores.gameStates.GameStateHandler.GameStatesEnum.GAME_OVER;
 import static com.apontadores.gameStates.GameStateHandler.getActiveState;
 import static com.apontadores.utils.Constants.RESOURCES_PATH;
-import static com.apontadores.utils.Constants.UI.Buttons.LEADERBOARD;
 
 public class LeaderBoard implements Serializable {
   private static int index;

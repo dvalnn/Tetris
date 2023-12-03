@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.singleP;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -30,7 +30,7 @@ public class GameOver extends GameState {
 
   public GameOver() {
     super(GameStatesEnum.GAME_OVER);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/gameOverSingle.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "gameOverSingle.json");
   }
 
   @Override

@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.menus;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -20,7 +20,7 @@ public class MainMenu extends GameState {
 
   public MainMenu() {
     super(GameStatesEnum.MAIN_MENU);
-    String path = RESOURCES_PATH + "/frames/mainMenu.json";
+    String path = FRAMES_PATH + "mainMenu.json";
     frame = Frame.loadFromJson(path);
 
   }

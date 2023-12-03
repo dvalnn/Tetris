@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.singleP;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 import static com.apontadores.utils.Constants.Directions.LEFT;
 import static com.apontadores.utils.Constants.Directions.RIGHT;
 import static com.apontadores.utils.Constants.GameConstants.BOARD_HEIGHT;
@@ -54,7 +54,7 @@ public class Playing extends GameState {
         boardColor.brighter());
 
     board = new PlayerBoard(set);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/playing.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "playing.json");
   }
 
   @Override

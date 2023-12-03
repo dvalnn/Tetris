@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.menus;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -18,7 +18,7 @@ public class Leaderboard extends GameState {
 
   public Leaderboard() {
     super(GameStatesEnum.LEADERBOARD);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/leaderboard.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "leaderboard.json");
   }
 
   @Override
