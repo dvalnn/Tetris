@@ -13,6 +13,7 @@ import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.TextElement;
+import com.apontadores.utils.LeaderBoard;
 import com.apontadores.ui.SwitchStateAction;
 import com.apontadores.ui.ButtonAction;
 import com.apontadores.ui.Frame;
@@ -21,6 +22,7 @@ public class GameOver extends GameState {
 
   private final Frame frame;
   SwitchStateAction switchState = new SwitchStateAction();
+  private boolean isLeaderBoardUpdated = false;
 
   ButtonAction<GameStatesEnum, Void> reloadAndSwitch = (state) -> {
     GameStateHandler.reloadState(state);
@@ -51,6 +53,13 @@ public class GameOver extends GameState {
 
   @Override
   public void update() {
+    if (!isLeaderBoardUpdated) {
+      LeaderBoard.saveScoreToLeaderBoard();
+      isLeaderBoardUpdated = true;
+    }
+
+    ((TextElement) frame.getElement("level"))
+        .setText(String.valueOf(Levels.getCurrentLevel()));
 
     ((TextElement) frame.getElement("totalScore"))
         .setText(String.valueOf(Score.getScore()));

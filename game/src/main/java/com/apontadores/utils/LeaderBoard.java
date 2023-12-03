@@ -34,6 +34,18 @@ public class LeaderBoard implements Serializable {
     index = 0;
   }
 
+  public static void saveScoreToLeaderBoard() {
+    // saves new score to file and updates the leaderboard
+    // if the score is better than the 10th best score
+    // if not it does nothing
+  }
+
+  public static String loadLeaderboard() {
+    // loads the leaderboard from file
+    // and returns a string with the leaderboard
+    return null;
+  }
+
   public static void update() throws IOException {
 
     if (GameStateHandler.getActiveStateID().equals(GameStatesEnum.GAME_OVER)) {
