@@ -4,6 +4,7 @@ import java.io.*;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Formatter;
 
@@ -38,6 +39,14 @@ public class LeaderBoard implements Serializable {
     // saves new score to file and updates the leaderboard
     // if the score is better than the 10th best score
     // if not it does nothing
+   // Arrays.sort(TopScore);
+   // for (LeaderBoard TotalScore : TopScore) {
+     // if (element > memberToCompare) {
+    //if (TopScore[i+1].TotalScore > TopScore[i].TotalScore)
+
+
+
+
   }
 
   public static String loadLeaderboard() {
@@ -80,7 +89,7 @@ public class LeaderBoard implements Serializable {
           System.out.println(topScores.TotalScore);
           System.out.println(topScores.LastLevel);
           System.out.println(topScores.TimePlayed);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | IOException e) {
           throw new RuntimeException(e);
         }
       }
