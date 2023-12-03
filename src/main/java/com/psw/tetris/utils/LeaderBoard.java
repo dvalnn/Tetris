@@ -39,6 +39,10 @@ public class LeaderBoard implements Serializable {
 
     if (GameStateHandler.getActiveStateID().equals(GameStatesEnum.GAME_OVER)) {
 
+      if (index == 10) {
+        // FIXME: do something to not crash when index == 10
+        return; // FIXME: this is a temporary fix
+      }
       TopScore[index].TotalScore = getScore();
       TopScore[index].LastLevel = getCurrentLevel();// in progress
       TopScore[index].TimePlayed = getTimeStr();// in progress
@@ -60,8 +64,8 @@ public class LeaderBoard implements Serializable {
         try {
           FileInputStream f2 = new FileInputStream(RESOURCES_PATH + "/Scores.txt");
           ObjectInputStream in = new ObjectInputStream(f2);
-          LeaderBoard topScores = (LeaderBoard) in.readObject();
           in.close();
+          LeaderBoard topScores = (LeaderBoard) in.readObject();
           System.out.println(topScores.TotalScore);
           System.out.println(topScores.LastLevel);
           System.out.println(topScores.TimePlayed);
