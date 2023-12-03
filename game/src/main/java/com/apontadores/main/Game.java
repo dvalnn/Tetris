@@ -1,5 +1,6 @@
 package com.apontadores.main;
 
+import static com.apontadores.utils.Constants.KEYBINDINGS_PATH;
 import static com.apontadores.utils.Constants.RESOURCES_PATH;
 import static com.apontadores.utils.Constants.GameConstants.FPS_SET;
 import static com.apontadores.utils.Constants.GameConstants.UPS_SET;
@@ -39,7 +40,7 @@ public class Game implements Runnable {
   private static String username = null;
 
   static {
-    keybinds = LoadSave.loadJson(RESOURCES_PATH + "/config/keybinds.json", Keybindings.class);
+    keybinds = LoadSave.loadJson(KEYBINDINGS_PATH + "keybinds.json", Keybindings.class);
   }
 
   public Game() {
