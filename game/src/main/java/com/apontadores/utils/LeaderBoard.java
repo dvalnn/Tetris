@@ -1,4 +1,4 @@
-package com.psw.tetris.utils;
+package com.apontadores.utils;
 
 import java.io.*;
 import java.io.Serializable;
@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Formatter;
 
-import com.psw.tetris.gameStates.GameStateHandler;
-import com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum;
+import com.apontadores.gameStates.GameStateHandler;
+import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 
-import static com.psw.tetris.gameElements.gameplay.GameTime.getTimeStr;
-import static com.psw.tetris.gameElements.gameplay.Levels.getCurrentLevel;
-import static com.psw.tetris.gameElements.gameplay.Score.getScore;
-import static com.psw.tetris.gameStates.GameStateHandler.GameStatesEnum.GAME_OVER;
-import static com.psw.tetris.gameStates.GameStateHandler.getActiveState;
-import static com.psw.tetris.utils.Constants.RESOURCES_PATH;
-import static com.psw.tetris.utils.Constants.UI.Buttons.LEADERBOARD;
+import static com.apontadores.gameElements.gameplay.GameTime.getTimeStr;
+import static com.apontadores.gameElements.gameplay.Levels.getCurrentLevel;
+import static com.apontadores.gameElements.gameplay.Score.getScore;
+import static com.apontadores.gameStates.GameStateHandler.GameStatesEnum.GAME_OVER;
+import static com.apontadores.gameStates.GameStateHandler.getActiveState;
+import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.UI.Buttons.LEADERBOARD;
 
 public class LeaderBoard implements Serializable {
   private static int index;
