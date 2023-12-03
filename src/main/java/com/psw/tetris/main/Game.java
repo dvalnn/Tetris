@@ -7,6 +7,7 @@ import static com.psw.tetris.utils.Constants.GameConstants.UPS_SET;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.net.InetAddress;
 
 import com.psw.tetris.gameStates.GameStateHandler;
@@ -16,6 +17,7 @@ import com.psw.tetris.networking.GameClient;
 import com.psw.tetris.networking.GameServer;
 import com.psw.tetris.networking.packets.Packet00Login;
 import com.psw.tetris.utils.Keybindings;
+import com.psw.tetris.utils.LeaderBoard;
 import com.psw.tetris.utils.LoadSave;
 
 public class Game implements Runnable {
@@ -118,8 +120,14 @@ public class Game implements Runnable {
   }
 
   public void update() {
-    GameStateHandler.getActiveState().update();
-    // System.out.println(GameStateHandler.getActiveStateID().name());
+
+    try {
+      GameStateHandler.getActiveState().update();
+      LeaderBoard.update();
+    } catch (IOException e) {
+      e.printStackTrace();
+      // System.out.println(GameStateHandler.getActiveStateID().name());
+    }
   }
 
   public void render(final Graphics g) {
