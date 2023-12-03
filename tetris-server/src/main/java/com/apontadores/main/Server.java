@@ -2,101 +2,105 @@ package com.apontadores.main;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import com.apontadores.multithreading.Room;
-import com.apontadores.multithreading.ServerThread;
-import com.apontadores.packets.Packet00Login;
+import com.apontadores.entities.Player;
+import com.apontadores.entities.Room;
+import com.apontadores.packets.Packet01Login;
 
-public class Server {
+public class Server implements Runnable {
 
-  public class roomThreadPair {
-    public Room room;
-    public Thread thread;
-
-    public roomThreadPair(Room room, Thread thread) {
-      this.room = room;
-      this.thread = thread;
-    }
-  }
+  public static final int MAX_PACKET_SIZE = 1024;
 
   private final int port;
-  private final int maxPacketSize = 1024;
 
-  private ArrayList<roomThreadPair> rooms;
+  private ArrayList<Room> rooms;
+
+  private boolean forceExit = false;
 
   Server(final int port) throws Exception {
     this.port = port;
     rooms = new ArrayList<>();
-    start();
   }
 
-  public void start() throws SocketException {
+  public void close() {
+    System.out.println("[Server] Closing server");
+    System.out.flush();
+    forceExit = true;
+  }
+
+  @Override
+  public void run() {
     // configurantion for the connection listener loop
-    byte recvBuf[] = new byte[maxPacketSize];
-    DatagramSocket connectionSocket = new DatagramSocket(port);
-    DatagramPacket loginPacket = new DatagramPacket(recvBuf, maxPacketSize);
+    byte recvBuf[] = new byte[MAX_PACKET_SIZE];
+    DatagramSocket connectionSocket;
+    try {
+      connectionSocket = new DatagramSocket(port);
+    } catch (SocketException e) {
+      System.out.println("[Server] Failed to open socket");
+      return;
+    }
+    DatagramPacket loginDatagram = new DatagramPacket(recvBuf, MAX_PACKET_SIZE);
 
     while (true) {
+      if (forceExit) {
+        System.out.println("[Server] Terminating thread");
+        return;
+      }
+
       try {
         System.out.println("[Server] Listening on port " + port);
         System.out.flush();
-        connectionSocket.receive(loginPacket);
+        connectionSocket.receive(loginDatagram);
       } catch (Exception e) {
         connectionSocket.close();
         System.out.println("[Server] Connection closed");
         exitIfNoThreads();
       }
 
-      Room newRoom = parsePacket(
-          loginPacket.getData(),
-          loginPacket.getAddress(),
-          loginPacket.getPort());
+      Packet01Login loginPacket = Packet01Login.fromBytes(
+          loginDatagram.getData(),
+          loginDatagram.getLength());
 
-      if (newRoom == null)
+      if (loginPacket == null) {
+        System.out.println("[Server] Invalid packet");
         continue;
+      }
 
-      Thread newThread = null;
+      Room room = findRoom(loginPacket.getRoomName());
+      if (room != null && room.isFull()) {
+        System.out.println("[Server] Room is full");
+        // TODO: send a message to the client
+        continue;
+      }
+
+      if (room != null) {
+        room.addPlayerToQueue(new Player(
+            loginPacket.getUsername(),
+            loginDatagram.getAddress(),
+            loginDatagram.getPort()));
+
+        continue;
+      }
+
       try {
-        newThread = new Thread(new ServerThread(newRoom));
-      } catch (Exception e) {
-        System.out.println("[Server] Failed to create new thread");
+        room = new Room(
+            loginPacket.getRoomName().hashCode(),
+            loginPacket.getRoomName());
+      } catch (SocketException e) {
+        System.out.println("[Server] Failed to create room");
         continue;
       }
 
-      roomThreadPair newPair = new roomThreadPair(newRoom, newThread);
-      if (roomIsDuplicate(newRoom))
-        continue;
+      room.addPlayerToQueue(new Player(
+          loginPacket.getUsername(),
+          loginDatagram.getAddress(),
+          loginDatagram.getPort()));
 
-      newPair.thread.start();
-      rooms.add(newPair);
-      deleteFinishedRooms();
-    }
-  }
+      rooms.add(room);
 
-  private boolean roomIsDuplicate(Room newRoom) {
-    for (roomThreadPair pair : rooms) {
-      if (pair.room.name.equals(newRoom.name)) {
-        System.out.println("[Server] Room already exists");
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  private void deleteFinishedRooms() {
-    ArrayList<roomThreadPair> toRemove = new ArrayList<>();
-    for (roomThreadPair pair : rooms) {
-      if (pair.room.isFinished() || !pair.thread.isAlive()) {
-        toRemove.add(pair);
-      }
-    }
-    for (roomThreadPair pair : toRemove) {
-      rooms.remove(pair);
-      System.out.println("[Server] Room " + pair.room.name + " removed");
+      new Thread(room).start();
     }
   }
 
@@ -107,19 +111,18 @@ public class Server {
     }
   }
 
-  private Room parsePacket(byte[] data, InetAddress address, int port) {
-    Packet00Login packet = Packet00Login.fromDatagram(data);
-    if (packet == null) {
-      System.out.println("[Server] Invalid login packet");
+  public Room findRoom(final String roomName) {
+    if (rooms.size() == 0) {
       return null;
     }
 
-    System.out.println("[Server] Login for " + packet.getUsername());
-    System.out.println("[Server] Address: " + address.toString());
-    System.out.println("[Server] Port: " + port);
+    for (final Room r : rooms) {
+      if (r.getName().equals(roomName)) {
+        return r;
+      }
+    }
 
-    Room room = new Room(rooms.size(), address, port, packet.getUsername());
-    return room;
+    return null;
   }
 
 }

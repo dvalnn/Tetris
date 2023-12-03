@@ -7,9 +7,10 @@ public class MainClass {
   public static void main(String[] args) {
     System.out.println("Hello World!");
     try {
-      new Server(MainClass.defaultPort);
+      new Thread(new Server(MainClass.defaultPort)).start();
     } catch (Exception e) {
       e.printStackTrace();
     }
+
   }
 }

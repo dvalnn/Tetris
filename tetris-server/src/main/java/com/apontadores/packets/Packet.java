@@ -1,9 +1,10 @@
 package com.apontadores.packets;
 
-public abstract class Packet {
+public interface Packet {
   public static enum PacketTypes {
     INVALID(-1),
-    LOGIN(00),
+    REDIRECT(00),
+    LOGIN(01),
     HEARTBEAT(99);
 
     private final int packetId;
@@ -34,17 +35,13 @@ public abstract class Packet {
     return PacketTypes.INVALID;
   }
 
-  public static String readData(final byte[] data) {
-    final String message = new String(data).trim();
+  public static String readData(final byte[] data, int length) {
+    final String message = new String(data, 0, length).trim();
     return message;
   }
 
-  public byte packetId;
+  public byte[] getBytes();
 
-  public Packet(final int packetId) {
-    this.packetId = (byte) packetId;
-  }
-
-  public abstract byte[] getBytes();
+  public PacketTypes getType();
 
 }
