@@ -121,6 +121,9 @@ public class Game implements Runnable {
 
   public void update() {
 
+    if (!gamePanel.hasFocus())
+      gamePanel.requestFocus();
+
     try {
       GameStateHandler.getActiveState().update();
       LeaderBoard.update();
