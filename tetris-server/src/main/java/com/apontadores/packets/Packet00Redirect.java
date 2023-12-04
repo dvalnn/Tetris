@@ -1,16 +1,24 @@
 package com.apontadores.packets;
 
 import java.util.StringJoiner;
+import java.util.zip.CRC32;
 
 public class Packet00Redirect implements Packet {
 
   private final int port;
-  private final int checksum;
+  private final long checksum;
   private final PacketTypes type = PacketTypes.REDIRECT;
 
   public Packet00Redirect(final int port) {
     this.port = port;
-    checksum = port;
+    CRC32 crc32 = new CRC32();
+    crc32.update(String.valueOf(port).getBytes());
+    checksum = crc32.getValue();
+  }
+
+  public Packet00Redirect(final int port, final long checksum) {
+    this.port = port;
+    this.checksum = checksum;
   }
 
   public static Packet00Redirect fromBytes(byte[] bytes, int length) {
@@ -23,19 +31,22 @@ public class Packet00Redirect implements Packet {
     }
 
     int port = 0;
-    int checksum = 0;
+    long checksum = 0;
     try {
       port = Integer.parseInt(tokens[1]);
-      checksum = Integer.parseInt(tokens[2]);
+      checksum = Long.parseLong(tokens[2]);
     } catch (NumberFormatException e) {
       return null;
     }
 
-    if (checksum != port) {
+    CRC32 crc32 = new CRC32();
+    crc32.update(tokens[1].getBytes());
+    if (checksum != crc32.getValue()) {
+      System.out.println("[Packet00Redirect] Checksum failed");
       return null;
     }
 
-    return new Packet00Redirect(port);
+    return new Packet00Redirect(port, checksum);
   }
 
   @Override

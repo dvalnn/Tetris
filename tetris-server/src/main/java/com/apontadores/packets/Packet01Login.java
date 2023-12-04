@@ -1,6 +1,7 @@
 package com.apontadores.packets;
 
 import java.util.StringJoiner;
+import java.util.zip.CRC32;
 
 public class Packet01Login implements Packet {
 
@@ -17,33 +18,46 @@ public class Packet01Login implements Packet {
       return null;
     }
 
-    int checksum = 0;
+    long checksum = 0;
     try {
-      checksum = Integer.parseInt(tokens[3]);
+      checksum = Long.parseLong(tokens[3]);
     } catch (NumberFormatException e) {
       System.out.println("[Packet01Login] Checksum parse failed");
       return null;
     }
-    if (checksum != (tokens[1].hashCode() | tokens[2].hashCode())) {
+    CRC32 crc32 = new CRC32();
+    crc32.update((tokens[1] + tokens[2]).getBytes());
+    if (checksum != crc32.getValue()) {
       System.out.println("[Packet01Login] Checksum failed");
       return null;
     }
 
-    return new Packet01Login(tokens[1], tokens[2]);
+    return new Packet01Login(tokens[1], tokens[2], checksum);
   }
 
   private final String username;
   private final String roomName;
   private final PacketTypes type = PacketTypes.LOGIN;
 
-  private final int checksum;
+  private final long checksum;
+  private CRC32 crc32 = new CRC32();
 
   public Packet01Login(
       final String username,
       final String roomName) {
     this.username = username;
     this.roomName = roomName;
-    checksum = username.hashCode() | roomName.hashCode();
+    this.crc32.update((username + roomName).getBytes());
+    this.checksum = crc32.getValue();
+  }
+
+  public Packet01Login(
+      final String username,
+      final String roomName,
+      final long checksum) {
+    this.username = username;
+    this.roomName = roomName;
+    this.checksum = checksum;
   }
 
   @Override
@@ -57,7 +71,7 @@ public class Packet01Login implements Packet {
     joiner.add("01")
         .add(username)
         .add(roomName)
-        .add(Integer.toString(checksum));
+        .add(String.valueOf(checksum));
 
     return joiner.toString().getBytes();
   }
