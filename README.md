@@ -24,12 +24,17 @@ Here is how you can do it:
 
 #### Compiling and Running the game:
 - Clone the repository's main (github) or master (gitlab) branch
-- Go to the project root folder run the following commands:
+- Go to the project root directory run the following commands:
 
 ```bash
-mvn compile
+mvn clean install
+```
+- Then go to game directory and run:
+
+```bash
 mvn exec:java
 ```
+
 The game should start up immediately after maven finished the build tasks.
 
 #### Compiling and running Unit Testing
