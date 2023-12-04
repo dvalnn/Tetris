@@ -19,7 +19,7 @@ public class Server implements Runnable {
 
   private boolean forceExit = false;
 
-  Server(final int port) throws Exception {
+  Server(final int port) {
     this.port = port;
     rooms = new ArrayList<>();
   }

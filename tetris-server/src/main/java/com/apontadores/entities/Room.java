@@ -57,8 +57,8 @@ public class Room implements Runnable {
   }
 
   public static final int MAX_PLAYERS = 2;
-  public String name;
 
+  public final String name;
   public final int id;
 
   private boolean full;
@@ -67,8 +67,8 @@ public class Room implements Runnable {
 
   private ArrayBlockingQueue<Player> playerQueue;
   private ArrayBlockingQueue<DatagramPacket> outPacketQueue;
-
   private ArrayBlockingQueue<DatagramPacket> inPacketQueue;
+
   private RoomStatesEnum state = RoomStatesEnum.WAITING_P1;
   private DatagramSocket roomSocket;
 
