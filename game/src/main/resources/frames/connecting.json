@@ -1,0 +1,68 @@
+{
+  "name": "CONNECTING",
+  "imagePath": "",
+  "color": [0, 0, 0],
+  "assets": [
+    {
+      "type": "image",
+      "name": "tryConnection",
+      "imagePath": "/buttonsV2/bannerTryCon.png",
+      "x": 3.9,
+      "y": 57.778,
+      "imageScale": 0.666,
+      "enable": false
+    },
+    {
+      "type": "image",
+      "name": "conInterrupted",
+      "imagePath": "/buttonsV2/bannerConInterrupted.png",
+      "x": 3.9,
+      "y": 57.778,
+      "imageScale": 0.666,
+      "enable": false
+    },
+    {
+      "type": "image",
+      "name": "waitingStart",
+      "imagePath": "/buttonsV2/bannerWaitingForGameStart.png",
+      "x": 3.9,
+      "y": 57.778,
+      "imageScale": 0.666,
+      "enable": false
+    },
+    {
+      "type": "image",
+      "name": "connectedToPlayer",
+      "imagePath": "/buttonsV2/connectedTo.png",
+      "x": 27.92,
+      "y": 36.11,
+      "imageScale": 0.666,
+      "enable": false,
+      "textElement": {
+        "type": "text",
+        "name": "connectedToPlayerText",
+        "text": "Connected to Player 1",
+        "x": 46.1,
+        "y": 24.87,
+        "size": 26.6,
+        "anchorPoint": "parent",
+        "font": "SansSerif",
+        "fontType": "plain",
+        "color": [0, 0, 0],
+        "align": "LEFT",
+        "editable": true,
+        "clearDefaultText": true,
+        "maxLength": 10
+      }
+    },
+    {
+      "type": "image",
+      "name": "return",
+      "imagePath": "/buttonsV2/return.png",
+      "x": 2.6,
+      "y": 87,
+      "imageScale": 0.666
+    }
+  ]
+}
+

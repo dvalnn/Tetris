@@ -1,0 +1,11 @@
+{
+  "name": "mockText",
+  "x": 10,
+  "y": 19,
+  "size": 20,
+  "text": "mockText",
+  "align": "LEFT",
+  "font": "mockFont",
+  "fontType": "bold",
+  "renderPriority": 0
+}

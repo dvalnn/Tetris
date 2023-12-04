@@ -1,0 +1,63 @@
+{
+    "name": "SETTINGS",
+    "imagePath": "",
+    "color": [0, 0, 0],
+    "assets": [
+      {
+        "type": "image",
+        "name": "settings",
+        "imagePath": "/buttonsV2/bannerSettings.png",
+        "x": 27.9,
+        "y": 5.6,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "musicVolume",
+        "imagePath": "/buttonsV2/musicVol.png",
+        "x": 2.6,
+        "y": 25.6,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      }
+      ,
+      {
+        "type": "image",
+        "name": "effectsVolume",
+        "imagePath": "/buttonsV2/effectsVol.png",
+        "x": 2.6,
+        "y": 39.8,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeKeybinds",
+        "imagePath": "/buttonsV2/changeKeybinds.png",
+        "x": 2.6,
+        "y": 54.1,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "changeUsername",
+        "imagePath": "/buttonsV2/changeUsername.png",
+        "x": 2.6,
+        "y": 65.6,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      },
+      {
+        "type": "image",
+        "name": "returnToMainMenu",
+        "imagePath": "/buttonsV2/return.png",
+        "x": 2.6,
+        "y": 87.0,
+        "imageScale": 0.666,
+        "renderPriority": 1
+      }
+    ]
+  }
+  
