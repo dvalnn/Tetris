@@ -266,14 +266,14 @@ public class Room implements Runnable {
           state = RoomStatesEnum.WAITING_P2;
         } else {
           p2 = p;
+          playerRedirect.stop();
+          playerSync.start();
           state = RoomStatesEnum.STARTING;
         }
 
         break;
 
       case STARTING:
-        playerRedirect.stop();
-        playerSync.start();
         System.out.println("[Room] Not implemented");
         System.out.println("[Room] Terminating thread");
         exit = true;
