@@ -11,8 +11,9 @@ import java.net.InetAddress;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.apontadores.packets.Packet00Redirect;
-import com.apontadores.packets.Packet01Login;
+import com.apontadores.packets.RedirectPacket;
+import com.apontadores.packets.LoginPacket;
+import com.apontadores.packets.PacketException;
 
 public class ConnectionTests {
   private final static int PORT = 42069;
@@ -33,12 +34,12 @@ public class ConnectionTests {
 
     System.out.println("[TEST] mock client on port: " + mockClient.getLocalPort());
 
-    Packet01Login loginPacket = new Packet01Login(playerName, roomName);
+    LoginPacket loginPacket = new LoginPacket(playerName, roomName);
     InetAddress serverInetAddress = InetAddress.getByName(ConnectionTests.ADDRESS);
 
     DatagramPacket outPacket = new DatagramPacket(
-        loginPacket.getBytes(),
-        loginPacket.getBytes().length,
+        loginPacket.asBytes(),
+        loginPacket.asBytes().length,
         serverInetAddress,
         ConnectionTests.PORT);
 
@@ -51,18 +52,24 @@ public class ConnectionTests {
     mockClient.receive(inPacket);
     assertNotEquals(0, inPacket.getLength(), "[TEST] Received packet should not be empty");
 
-    Packet00Redirect redirectPacket = Packet00Redirect.fromBytes(
-        inPacket.getData(),
-        inPacket.getLength());
+    RedirectPacket redirectPacket;
+    try {
+      redirectPacket = new RedirectPacket().fromBytes(
+          inPacket.getData(),
+          inPacket.getLength());
+    } catch (PacketException e) {
+      Assertions.fail(e.getMessage());
+      mockClient.close();
+      return;
+    }
 
-    assertNotNull(redirectPacket);
     System.out.println(
         "[TEST] Received redirect port: "
             + redirectPacket.getPort());
 
     DatagramPacket outPacket2 = new DatagramPacket(
-        loginPacket.getBytes(),
-        loginPacket.getBytes().length,
+        loginPacket.asBytes(),
+        loginPacket.asBytes().length,
         serverInetAddress,
         redirectPacket.getPort());
 

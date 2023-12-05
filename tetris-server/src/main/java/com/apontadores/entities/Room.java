@@ -8,8 +8,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import com.apontadores.packets.Packet00Redirect;
-import com.apontadores.packets.Packet01Login;
+import com.apontadores.packets.RedirectPacket;
+import com.apontadores.packets.LoginPacket;
+import com.apontadores.packets.PacketException;
 
 public class Room implements Runnable {
 
@@ -63,7 +64,10 @@ public class Room implements Runnable {
 
   private boolean full;
   private Player p1;
+  private int p1TransactionCounter = 0;
+
   private Player p2;
+  private int p2TransactionCounter = 0;
 
   private ArrayBlockingQueue<Player> playerQueue;
   private ArrayBlockingQueue<DatagramPacket> outPacketQueue;
@@ -116,7 +120,7 @@ public class Room implements Runnable {
             // send a packet with the room's private port to the player
             System.out.println("[Room-playerRedirect] Sending redirect packet to player " + p.username);
             System.out.println("[Room-playerRedirect] Redirecting to port: " + roomSocket.getLocalPort());
-            byte data[] = new Packet00Redirect(roomSocket.getLocalPort()).getBytes();
+            byte data[] = new RedirectPacket(roomSocket.getLocalPort()).asBytes();
             DatagramPacket packet = new DatagramPacket(
                 data,
                 data.length,
@@ -238,8 +242,12 @@ public class Room implements Runnable {
     switch (state) {
       case WAITING_P1:
       case WAITING_P2:
-        Packet01Login packet = Packet01Login.fromBytes(data, dataLenght);
-        if (packet == null) {
+        LoginPacket packet;
+
+        try {
+          packet = new LoginPacket().fromBytes(data, dataLenght);
+        } catch (PacketException e) {
+          // TODO: log exception
           return;
         }
 

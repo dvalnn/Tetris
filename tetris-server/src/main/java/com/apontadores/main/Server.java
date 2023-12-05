@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 import com.apontadores.entities.Player;
 import com.apontadores.entities.Room;
-import com.apontadores.packets.Packet01Login;
+import com.apontadores.packets.LoginPacket;
+import com.apontadores.packets.PacketException;
 
 public class Server implements Runnable {
 
@@ -59,11 +60,13 @@ public class Server implements Runnable {
         exitIfNoThreads();
       }
 
-      Packet01Login loginPacket = Packet01Login.fromBytes(
-          loginDatagram.getData(),
-          loginDatagram.getLength());
-
-      if (loginPacket == null) {
+      LoginPacket loginPacket;
+      try {
+        loginPacket = new LoginPacket().fromBytes(
+            loginDatagram.getData(),
+            loginDatagram.getLength());
+      } catch (PacketException e) {
+        // TODO: log exception
         System.out.println("[Server] Invalid packet");
         continue;
       }
