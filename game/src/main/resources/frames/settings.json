@@ -19,7 +19,23 @@
         "x": 2.6,
         "y": 25.6,
         "imageScale": 0.666,
-        "renderPriority": 1
+        "renderPriority": 1,
+        "textElement": {
+          "type": "text",
+          "name": "inputTextVolume",
+          "text": "1",
+          "x": 70,
+          "y": 64,
+          "size": 26.6,
+          "anchorPoint": "parent",
+          "font": "SansSerif",
+          "fontType": "plain",
+          "color": [0, 0, 0],
+          "align": "LEFT",
+          "editable": true,
+          "clearDefaultText": true,
+          "maxLength": 3
+        }
       }
       ,
       {
@@ -29,7 +45,23 @@
         "x": 2.6,
         "y": 39.8,
         "imageScale": 0.666,
-        "renderPriority": 1
+        "renderPriority": 1,
+        "textElement": {
+          "type": "text",
+          "name": "inputTextVolume",
+          "text": "1",
+          "x": 70,
+          "y": 64,
+          "size": 26.6,
+          "anchorPoint": "parent",
+          "font": "SansSerif",
+          "fontType": "plain",
+          "color": [0, 0, 0],
+          "align": "LEFT",
+          "editable": true,
+          "clearDefaultText": true,
+          "maxLength": 3
+        }
       },
       {
         "type": "image",
