@@ -1,47 +1,34 @@
 package com.apontadores.packets;
 
+// generic packet structure:
+// first token is the packet type
+// second token is the transaction ID
+// third token is the checksum
+// rest of the tokens are packet specific
 public interface Packet {
-  public static enum PacketTypes {
-    INVALID(-1),
-    REDIRECT(00),
-    LOGIN(01),
-    HEARTBEAT(99);
+  public byte[] asBytes();
 
-    private final int packetId;
+  public String[] asTokens();
 
-    private PacketTypes(final int packetId) {
-      this.packetId = packetId;
-    }
+  public Packet fromBytes(byte[] bytes, int length) throws PacketException;
 
-    public int getId() {
-      return packetId;
-    }
-  }
+  public Packet fromTokens(String[] tokens) throws PacketException;
 
-  public static PacketTypes lookupPacket(final String packetId) {
+  public int getTransactionID();
+
+  public void setTransactionID(int transactionID);
+
+  public static int[] parseMetadata(String[] tokens) throws PacketException {
+    if (tokens.length < 3)
+      throw new PacketException("Invalid packet length");
+    int[] metadata = new int[3];
     try {
-      return lookupPacket(Integer.parseInt(packetId));
-    } catch (final NumberFormatException e) {
-      return PacketTypes.INVALID;
+      metadata[0] = Integer.parseInt(tokens[0]);
+      metadata[1] = Integer.parseInt(tokens[1]);
+    } catch (NumberFormatException e) {
+      throw new PacketException("Invalid metadata");
     }
+    return metadata;
   }
-
-  public static PacketTypes lookupPacket(final int id) {
-    for (final PacketTypes p : PacketTypes.values()) {
-      if (p.getId() == id) {
-        return p;
-      }
-    }
-    return PacketTypes.INVALID;
-  }
-
-  public static String readData(final byte[] data, int length) {
-    final String message = new String(data, 0, length).trim();
-    return message;
-  }
-
-  public byte[] getBytes();
-
-  public PacketTypes getType();
 
 }
