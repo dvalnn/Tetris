@@ -56,7 +56,7 @@ public class GameWindow extends JFrame {
 
           @Override
           public void windowClosing(final WindowEvent arg0) {
-            gamePanel.getGame().terminateConnection();
+            // gamePanel.getGame().terminateConnection();
           }
 
           @Override

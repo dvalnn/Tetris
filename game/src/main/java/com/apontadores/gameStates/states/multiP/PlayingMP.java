@@ -86,27 +86,27 @@ public class PlayingMP extends GameState {
   public void sendFullSync() {
     // send current player tetromino to opponent
     final Shape currentShape = playerBoard.getTetromino().getShape();
-    Game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
+    // Game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
 
     // send current player board to opponent
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       final PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
       final List<Color> colors = line.getColorsCopy();
-      Game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
+      // Game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
     }
   }
 
   public void sendPlayerState() {
     // send current player tetromino to opponent
     final Shape currentShape = playerBoard.getTetromino().getShape();
-    Game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
+    // Game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
 
     // send current player board to opponent
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       final PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
       final List<Color> colors = line.getColorsCopyIfChanged();
       if (colors != null) {
-        Game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
+        // Game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
       }
     }
   }
