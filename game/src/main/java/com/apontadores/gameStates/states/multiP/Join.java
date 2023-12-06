@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
+import com.apontadores.main.Game;
 import com.apontadores.ui.Frame;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
@@ -31,6 +32,14 @@ public class Join extends GameState {
 
   @Override
   public void update() {
+    if (Game.getClient() == null)
+      try {
+        Game.initClient();
+      } catch (Exception e) {
+        e.printStackTrace();
+        switchState.exec(GameStatesEnum.MAIN_MENU);
+      }
+
     frame.update();
   }
 
@@ -42,11 +51,26 @@ public class Join extends GameState {
 
     // TODO: when join button is clicked, submit ip to client
     ((ImageElement) frame.getElement("join"))
-        .execIfClicked(x, y, switchState, GameStatesEnum.CONNECTING);
+        .execIfClicked(x, y,
+            (state) -> {
+              if (Game.getClient().setServerAddress(
+                  ((ImageElement) frame.getElement("IP"))
+                      .getTextElement()
+                      .getText()))
+                switchState.exec(state);
+              return null;
+            },
+            GameStatesEnum.CONNECTING);
 
     // TODO: when make localhost button transition submit ip to client
     ((ImageElement) frame.getElement("localHost"))
-        .execIfClicked(x, y, switchState, GameStatesEnum.CONNECTING);
+        .execIfClicked(x, y,
+            (state) -> {
+              if (Game.getClient().setServerAddress("127.0.0.1"))
+                switchState.exec(state);
+              return null;
+            },
+            GameStatesEnum.CONNECTING);
 
     ((ImageElement) frame.getElement("return"))
         .execIfClicked(x, y, switchState, GameStatesEnum.MODE_SELECT_MP);

@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
+import com.apontadores.main.Game;
+import com.apontadores.networking.GameClient;
 import com.apontadores.ui.Frame;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
@@ -32,6 +34,13 @@ public class Connecting extends GameState {
   @Override
   public void update() {
     frame.update();
+
+    if (GameClient.ClientStatus.getStatus() == GameClient.ClientStatus.INACTIVE)
+      Game.getClient().start();
+
+    if (GameClient.ClientStatus.getStatus() != GameClient.ClientStatus.OK)
+      switchState.exec(GameStatesEnum.JOIN);
+
   }
 
   @Override
@@ -40,8 +49,14 @@ public class Connecting extends GameState {
     int x = e.getX();
     int y = e.getY();
 
-    // TODO: the return button should shutdonw the client
+    // TODO: the return button should shutdown the client
     ((ImageElement) frame.getElement("return"))
-        .execIfClicked(x, y, switchState, GameStatesEnum.JOIN);
+        .execIfClicked(x, y,
+            (state) -> {
+              Game.getClient().abortConnection();
+              switchState.exec(state);
+              return null;
+            },
+            GameStatesEnum.JOIN);
   }
 }
