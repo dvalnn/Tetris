@@ -15,4 +15,8 @@ public class Player {
     this.address = address;
     this.port = port;
   }
+
+  public Player clone() {
+    return new Player(username, address, port);
+  }
 }
