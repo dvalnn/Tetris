@@ -393,14 +393,24 @@ public class Room implements Runnable {
               dataLength,
               p2.address,
               p2.port));
+
+          p1.packetHit();
+          p2.packetMiss();
+
         } else if (datagramAddress.equals(p2.address) && datagramPort == p2.port) {
           outPacketQueue.add(new DatagramPacket(
               datagramData,
               dataLength,
               p1.address,
               p1.port));
+
+          p2.packetHit();
+          p1.packetMiss();
+
         } else {
           System.out.println("[Room] Invalid packet received");
+          p1.packetMiss();
+          p2.packetMiss();
         }
         break;
 
