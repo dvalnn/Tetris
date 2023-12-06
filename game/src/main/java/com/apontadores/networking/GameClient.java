@@ -1,148 +1,336 @@
 package com.apontadores.networking;
 
-import java.awt.Color;
-import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-import com.apontadores.main.Game;
-import com.apontadores.networking.packets.Packet;
-import com.apontadores.networking.packets.Packet.PacketTypes;
-import com.apontadores.networking.packets.Packet00Login;
-import com.apontadores.networking.packets.Packet01Disconnect;
-import com.apontadores.networking.packets.Packet03Board;
-import com.apontadores.networking.packets.Packet04Shape;
+import org.apache.commons.validator.routines.InetAddressValidator;
 
-public class GameClient extends Thread {
+import com.apontadores.main.Server;
+import com.apontadores.packets.LoginPacket;
+import com.apontadores.packets.PacketException;
+import com.apontadores.packets.RedirectPacket;
+
+public class GameClient implements Runnable {
+
+  public static enum ClientStatus {
+    INACTIVE,
+    USERNAME_TAKEN,
+    ROOM_FULL,
+    CONNECTION_ABORTED,
+    CONNECTION_TIMEOUT,
+    CONNECTION_ERROR,
+    CONNECTION_LOST,
+    SOCKET_ERROR,
+    OK;
+
+    private static ClientStatus status = INACTIVE;
+
+    private static final String[] statusMessages = {
+        "Client is inactive",
+        "Username is already taken",
+        "Room is full",
+        "Connection aborted",
+        "Connection timed out",
+        "Connection error",
+        "Connection lost",
+        "Server is active",
+    };
+
+    public static ClientStatus getStatus() {
+      return status;
+    }
+
+    public String getMessage() {
+      return statusMessages[this.ordinal()];
+    }
+
+  }
+
+  private enum ConnectionStage {
+    SERVER_LOGIN,
+    ROOM_LOGIN,
+    WAITING_FOR_PLAYERS,
+    WAITING_FOR_START,
+    IN_GAME,
+    POST_GAME,
+  }
+
+  private static final int DEFAULT_SERVER_PORT = 42069;
+  private static final int MAX_ERRORS = 10;
+  private static final int MAX_TIMEOUTS = 10;
+
+  private DatagramSocket socket;
+  private DatagramPacket inPacket;
+
+  private ConnectionStage conStage;
+
+  private int transactionID = 0;
+  private int serverPort = DEFAULT_SERVER_PORT;
+
+  private boolean abortConnection = false;
+
+  private String username;
+  private String roomName;
+
+  private int consecutiveErrorCount = 0;
+  private int timeoutCount = 0;
 
   private InetAddress serverAddress;
-  private int serverPort;
-  private DatagramSocket socket;
-  private String username;
 
-  public GameClient(final String ipAddress, final String username) {
-    System.out.println("[Client] Hello!");
+  public GameClient() throws IOException {
+    socket = new DatagramSocket();
+    socket.setSoTimeout(1000);
+    inPacket = new DatagramPacket(
+        new byte[Server.MAX_PACKET_SIZE],
+        Server.MAX_PACKET_SIZE);
 
-    this.serverPort = 1331;
+    conStage = ConnectionStage.SERVER_LOGIN;
+  }
+
+  public void setUsername(String username) {
     this.username = username;
-
-    try {
-      this.serverAddress = InetAddress.getByName(ipAddress);
-    } catch (final Exception e) {
-      e.printStackTrace();
-      return;
-    }
-    try {
-      this.socket = new DatagramSocket();
-    } catch (final Exception e) {
-      e.printStackTrace();
-    }
-    Game.setClientActive(true);
   }
 
-  public void parsePacket(final byte[] data, final InetAddress address, final int port) {
-    // System.out.println("[Client] Received: " + new String(data));
-    final String[] message = new String(data).split(",");
-    final PacketTypes type = Packet.lookupPacket(message[0]);
-
-    Packet packet = null;
-
-    switch (type) {
-      default:
-      case INVALID:
-        break;
-
-      case LOGIN:
-        packet = new Packet00Login(data);
-        handleLogin((Packet00Login) packet, address, port);
-        break;
-
-      case DISCONNECT:
-        packet = new Packet01Disconnect(data);
-        handleDisconnect((Packet01Disconnect) packet);
-        break;
-
-      case BOARD:
-        packet = new Packet03Board(data);
-        handleBoard((Packet03Board) packet);
-        break;
-
-      case SHAPE:
-        packet = new Packet04Shape(data);
-        handleShape((Packet04Shape) packet);
-    }
+  public void setRoomName(String roomName) {
+    this.roomName = roomName;
   }
 
-  private void handleShape(final Packet04Shape packet) {
-    if (packet.getUsername().equals(this.username)) {
-      return;
+  public void setServerPort(int serverPort) {
+    this.serverPort = serverPort;
+  }
+
+  public void abortConnection() {
+    abortConnection = true;
+  }
+
+  public boolean setServerAddress(String address) {
+    InetAddressValidator validator = new InetAddressValidator();
+    if (validator.isValidInet4Address(address)) {
+      try {
+        serverAddress = InetAddress.getByName(address);
+        return true;
+      } catch (Exception e) {
+        System.out.println("[CLIENT] Error setting server address: " + e.getMessage());
+        return false;
+      }
+    } else {
+      System.out.println("[CLIENT] Invalid server address");
+      return false;
     }
 
-    final Point2D[] points = packet.getPoints();
-    final Color color = packet.getColor();
-
-    Game.updateShapeMP(points, color);
   }
 
-  private void handleBoard(final Packet03Board packet) {
-    if (packet.getUsername().equals(this.username)) {
-      return;
-    }
-
-    final int row = packet.getRow();
-    final Color[] lineColors = packet.getLineColors();
-
-    Game.updateBoardMP(row, lineColors);
-  }
-
-  private void handleDisconnect(final Packet01Disconnect packet) {
-    System.out.println("[Client] " + packet.getUsername() + " has disconnected!");
-    Game.removePlayer(packet.getUsername());
-  }
-
-  private void handleLogin(final Packet00Login packet, final InetAddress address, final int port) {
-    System.out.println(
-        "[Client] Connected to " + packet.getUsername() + " at " + address.toString() + ":" + port);
-    Game.addPlayer(packet.getUsername(), address, port);
-  }
-
-  public void sendData(final byte[] data) {
-    final DatagramPacket packet = new DatagramPacket(data, data.length, serverAddress, serverPort);
-    try {
-      socket.send(packet);
-    } catch (final Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void sendShapeUpdate(final Point2D[] points, final Color color) {
-    final Packet packet = new Packet04Shape(username, points, color);
-    packet.writeData(this);
-  }
-
-  public void sendBoardUpdate(final int row, final Color[] color) {
-    final Packet packet = new Packet03Board(username, row, color);
-    packet.writeData(this);
-  }
-
-  public void terminateConnection() {
-    final Packet01Disconnect packet = new Packet01Disconnect(username);
-    packet.writeData(this);
+  public void start() {
+    new Thread(this).start();
+    ClientStatus.status = ClientStatus.OK;
   }
 
   @Override
   public void run() {
-    System.out.println("[Client] Running!");
-    final byte[] data = new byte[1024];
-    final DatagramPacket packet = new DatagramPacket(data, data.length);
     while (true) {
-      try {
-        socket.receive(packet);
-      } catch (final Exception e) {
-        e.printStackTrace();
+      if (abortConnection) {
+        ClientStatus.status = ClientStatus.CONNECTION_ABORTED;
+        break;
       }
-      parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
+
+      if (consecutiveErrorCount >= MAX_ERRORS) {
+        System.out.println("[CLIENT] Too many errors, aborting connection");
+        ClientStatus.status = ClientStatus.CONNECTION_ERROR;
+        abortConnection = true;
+        // TODO: try to send a disconnect packet
+        break;
+      }
+
+      if (timeoutCount >= MAX_TIMEOUTS) {
+        System.out.println("[CLIENT] Too many timeouts, aborting connection");
+        ClientStatus.status = ClientStatus.CONNECTION_TIMEOUT;
+        abortConnection = true;
+        // TODO: try to send a disconnect packet
+        break;
+      }
+
+      try {
+        System.out.println("[CLIENT] Listening on port " + socket.getLocalPort());
+        socket.receive(inPacket);
+        parsePacket(
+            inPacket.getData(),
+            inPacket.getLength(),
+            inPacket.getAddress(),
+            inPacket.getPort());
+
+      } catch (java.net.SocketTimeoutException e) {
+        try {
+          handleTimeout();
+        } catch (IOException e1) {
+          System.out.println("[CLIENT] socket error: " + e1.getMessage());
+          ClientStatus.status = ClientStatus.SOCKET_ERROR;
+          abortConnection = true;
+          break;
+        }
+      } catch (Exception e) {
+        System.out.println("[CLIENT] Error receiving packet: " + e.getMessage());
+        ClientStatus.status = ClientStatus.SOCKET_ERROR;
+        abortConnection = true;
+        break;
+      }
     }
+
+  }
+
+  private void handleTimeout() throws IOException {
+    switch (conStage) {
+      case SERVER_LOGIN:
+        sendLoginRequest();
+        timeoutCount++;
+        System.out.println("[CLIENT] Server Login timed out");
+        break;
+
+      case ROOM_LOGIN:
+        sendLoginRequest();
+        timeoutCount++;
+        System.out.println("[CLIENT] Room Login timed out");
+        break;
+
+      case WAITING_FOR_PLAYERS:
+        break;
+      case WAITING_FOR_START:
+        break;
+      case IN_GAME:
+        break;
+      case POST_GAME:
+        break;
+      default:
+        break;
+    }
+
+  }
+
+  private void parsePacket(
+      byte[] datagramData,
+      int datagramLength,
+      InetAddress datagramAddress,
+      int datagramPort) throws IOException {
+
+    switch (conStage) {
+      case SERVER_LOGIN:
+        handleServerLogin(
+            datagramData,
+            datagramLength,
+            datagramAddress,
+            datagramPort);
+        break;
+
+      case ROOM_LOGIN:
+        handleRoomLogin(
+            datagramData,
+            datagramLength,
+            datagramAddress,
+            datagramPort);
+
+        break;
+
+      case WAITING_FOR_PLAYERS:
+        System.out.println("[CLIENT] Waiting for players");
+        handleWaitingPlayers(
+            datagramData,
+            datagramLength,
+            datagramAddress,
+            datagramPort);
+
+        // socket.send(hearbeatPacket);
+        break;
+
+      case WAITING_FOR_START:
+        break;
+      case IN_GAME:
+        break;
+      case POST_GAME:
+        break;
+      default:
+        break;
+    }
+
+  }
+
+  private void handleWaitingPlayers(
+      byte[] datagramData,
+      int datagramLength,
+      InetAddress datagramAddress,
+      int datagramPort) {
+    consecutiveErrorCount = 0;
+  }
+
+  private void handleRoomLogin(
+      byte[] datagramData,
+      int datagramLength,
+      InetAddress datagramAddress,
+      int datagramPort) {
+
+    LoginPacket loginPacket;
+    try {
+      loginPacket = new LoginPacket().fromBytes(
+          inPacket.getData(),
+          inPacket.getLength());
+    } catch (PacketException e) {
+      consecutiveErrorCount++;
+      System.out.println("[CLIENT-Room-Login] Invalid packet");
+      return;
+    }
+
+    if (loginResponseIsValid(loginPacket)) {
+      System.out.println("[CLIENT] Login successful");
+      conStage = ConnectionStage.WAITING_FOR_PLAYERS;
+      consecutiveErrorCount = 0;
+    }
+  }
+
+  private void sendLoginRequest() throws IOException {
+    if (username == null || roomName == null)
+      return;
+    LoginPacket packet = new LoginPacket(username, roomName);
+    packet.setTransactionID(0);
+
+    DatagramPacket outPacket = new DatagramPacket(
+        packet.asBytes(),
+        packet.asBytes().length,
+        serverAddress,
+        serverPort);
+
+    socket.send(outPacket);
+  }
+
+  private boolean loginResponseIsValid(LoginPacket packet) {
+    System.out.println("[CLIENT] Checking login response");
+    System.out.println("[CLIENT] Username: " + packet.getUsername());
+    System.out.println("[CLIENT] Room name: " + packet.getRoomName());
+    return (packet.getUsername().equals(username) &&
+        packet.getRoomName().equals(roomName));
+  }
+
+  private void handleServerLogin(
+      byte[] data,
+      int dataLenght,
+      InetAddress address,
+      int port)
+      throws IOException {
+
+    RedirectPacket redirectPacket;
+    try {
+      redirectPacket = new RedirectPacket().fromBytes(
+          inPacket.getData(),
+          inPacket.getLength());
+    } catch (PacketException e) {
+      consecutiveErrorCount++;
+      System.out.println("[CLIENT-Server-Login] Invalid packet");
+      return;
+    }
+
+    serverPort = redirectPacket.getPort();
+    System.out.println("[CLIENT-Server-Login] Redirecting to port " + serverPort);
+    sendLoginRequest();
+    conStage = ConnectionStage.ROOM_LOGIN;
+    consecutiveErrorCount = 0;
   }
 }
