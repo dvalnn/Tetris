@@ -294,11 +294,11 @@ public class ChangeKeybinds extends GameState {
 
         ((ImageElement) frame.getElement("changeKeybindMoveRight"))
                 .getTextElement()
-                .setText("\u2192");
+                .setText("\u2190");
 
         ((ImageElement) frame.getElement("changeKeybindMoveLeft"))
                 .getTextElement()
-                .setText("\u2190");
+                .setText("\u2192");
 
         ((ImageElement) frame.getElement("changeKeybindSoftDrop"))
                 .getTextElement()
@@ -324,7 +324,7 @@ public class ChangeKeybinds extends GameState {
 
             ((ImageElement) frame.getElement(key))
                     .getTextElement()
-                    .setText("\u2190");
+                    .setText("\u2192");
 
             return true;
         }
@@ -332,7 +332,7 @@ public class ChangeKeybinds extends GameState {
 
             ((ImageElement) frame.getElement(key))
                     .getTextElement()
-                    .setText("\u2192");
+                    .setText("\u2190");
 
             return true;
         }
