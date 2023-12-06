@@ -375,17 +375,33 @@ public class Room implements Runnable {
         if (p1.isReady() && p2.isReady()) {
           System.out.println("[Room] Both players ready");
           // send game start packet
-          GameStartPacket gameStartPacket = new GameStartPacket();
-          gameStartPacket.setTransactionID(1);
-          sendPacket(gameStartPacket, p1);
-          sendPacket(gameStartPacket, p2);
+          GameStartPacket packet1 = new GameStartPacket(p1.username);
+          GameStartPacket packet2 = new GameStartPacket(p2.username);
+          packet1.setTransactionID(1);
+          packet2.setTransactionID(1);
+          sendPacket(packet2, p1);
+          sendPacket(packet1, p2);
           state = RoomStatesEnum.PLAYING;
+          System.out.println("[Starting Game]");
         }
         break;
 
       case PLAYING:
-        System.out.println("[Room] Game started");
-        state = RoomStatesEnum.FINISHED;
+        if (datagramAddress.equals(p1.address) && datagramPort == p1.port) {
+          outPacketQueue.add(new DatagramPacket(
+              datagramData,
+              dataLength,
+              p2.address,
+              p2.port));
+        } else if (datagramAddress.equals(p2.address) && datagramPort == p2.port) {
+          outPacketQueue.add(new DatagramPacket(
+              datagramData,
+              dataLength,
+              p1.address,
+              p1.port));
+        } else {
+          System.out.println("[Room] Invalid packet received");
+        }
         break;
 
       default:

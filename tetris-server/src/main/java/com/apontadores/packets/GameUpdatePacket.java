@@ -3,22 +3,32 @@ package com.apontadores.packets;
 import java.util.StringJoiner;
 import java.util.zip.CRC32;
 
-public class GameStartPacket implements Packet {
+public class GameUpdatePacket implements Packet {
 
-  public static final int PACKET_ID = 3;
-  public static final int TOKEN_COUNT = 4;
+  public static final int PACKET_ID = 4;
+  public static final int TOKEN_COUNT = 5;
+
+  public static final String[] updateTypes = {
+      "tetromino",
+      "board",
+      "score",
+      "gameover",
+      "retransmit",
+  };
 
   private int packetID;
   private int transactionID;
   private long checksum;
-  private String opponentName;
+  private String updateType;
+  private String updateData;
 
-  public GameStartPacket(String opponentName) {
+  public GameUpdatePacket(String updateType, String updateData) {
     packetID = PACKET_ID;
-    this.opponentName = opponentName;
+    this.updateType = updateType;
+    this.updateData = updateData;
 
     CRC32 crc = new CRC32();
-    crc.update(opponentName.getBytes());
+    crc.update((updateType + updateData).getBytes());
     checksum = crc.getValue();
   }
 
@@ -28,7 +38,8 @@ public class GameStartPacket implements Packet {
     joiner.add(String.valueOf(packetID))
         .add(String.valueOf(transactionID))
         .add(String.valueOf(checksum))
-        .add(opponentName);
+        .add(updateType)
+        .add(updateData);
 
     return joiner.toString().getBytes();
   }
@@ -39,37 +50,38 @@ public class GameStartPacket implements Packet {
         String.valueOf(packetID),
         String.valueOf(transactionID),
         String.valueOf(checksum),
-        String.valueOf(opponentName),
+        String.valueOf(updateType),
+        String.valueOf(updateData),
     };
   }
 
   @Override
   public Packet fromBytes(byte[] bytes, int length) throws PacketException {
-    String tokens[] = new String(bytes, 0, length).trim().split(",");
-    return fromTokens(tokens);
+    return fromTokens(new String(bytes, 0, length).trim().split(","));
   }
 
   @Override
   public Packet fromTokens(String[] tokens) throws PacketException {
+
     if (tokens.length != TOKEN_COUNT)
       throw new PacketException("Invalid packet length");
 
-    int metadata[] = Packet.parseMetadata(tokens);
-
+    int[] metadata = Packet.parseMetadata(tokens);
     packetID = metadata[0];
     transactionID = metadata[1];
 
     if (packetID != PACKET_ID)
       throw new PacketException("Invalid packet ID");
 
-    if (transactionID <= 0)
+    if (transactionID != 0)
       throw new PacketException("Invalid transaction ID");
 
     checksum = Long.parseLong(tokens[2]);
-    opponentName = tokens[3];
+    updateType = tokens[3];
+    updateData = tokens[4];
 
     CRC32 crc = new CRC32();
-    crc.update(opponentName.getBytes());
+    crc.update((updateType + updateData).getBytes());
     if (checksum != crc.getValue())
       throw new PacketException("Invalid checksum");
 
