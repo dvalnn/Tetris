@@ -19,9 +19,9 @@ public interface Packet {
   public void setTransactionID(int transactionID);
 
   public static int[] parseMetadata(String[] tokens) throws PacketException {
-    if (tokens.length < 3)
+    if (tokens.length < 2)
       throw new PacketException("Invalid packet length");
-    int[] metadata = new int[3];
+    int[] metadata = new int[2];
     try {
       metadata[0] = Integer.parseInt(tokens[0]);
       metadata[1] = Integer.parseInt(tokens[1]);

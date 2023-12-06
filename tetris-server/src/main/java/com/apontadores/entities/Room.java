@@ -4,12 +4,16 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import com.apontadores.packets.RedirectPacket;
+import com.apontadores.packets.GameStartPacket;
+import com.apontadores.packets.HeartbeatPacket;
 import com.apontadores.packets.LoginPacket;
+import com.apontadores.packets.Packet;
 import com.apontadores.packets.PacketException;
 
 public class Room implements Runnable {
@@ -58,20 +62,26 @@ public class Room implements Runnable {
   }
 
   public static final int MAX_PLAYERS = 2;
+  public static final int MAX_MISSES = 5;
 
   public final String name;
   public final int id;
 
   private boolean full;
   private Player p1;
-  private int p1TransactionCounter = 0;
-
   private Player p2;
-  private int p2TransactionCounter = 0;
 
+  private int timeoutCount = 0;
+  private static final int MAX_SOCKET_TIMEOUTS = 5;
+
+  // Player waiting list for the room
   private ArrayBlockingQueue<Player> playerQueue;
-  private ArrayBlockingQueue<DatagramPacket> outPacketQueue;
+
+  // incoming packets from the players to the server
   private ArrayBlockingQueue<DatagramPacket> inPacketQueue;
+
+  // outgoing packets from the server to the players
+  private ArrayBlockingQueue<DatagramPacket> outPacketQueue;
 
   private RoomStatesEnum state = RoomStatesEnum.WAITING_P1;
   private DatagramSocket roomSocket;
@@ -85,8 +95,6 @@ public class Room implements Runnable {
 
   private Service packetHandler;
 
-  private boolean exit = false;
-
   public Room(
       final int id,
       final String roomName)
@@ -98,6 +106,7 @@ public class Room implements Runnable {
     System.out.println("[Room] Created room: " + name + " with id: " + id);
 
     roomSocket = new DatagramSocket();
+    roomSocket.setSoTimeout(1000);
     outSocket = new DatagramSocket();
 
     playerQueue = new ArrayBlockingQueue<Player>(QUEUE_SIZE);
@@ -109,6 +118,8 @@ public class Room implements Runnable {
           @Override
           public void run() {
             if (state == RoomStatesEnum.STARTING) {
+              System.out.println("[Room-playerRedirect] Starting game");
+              System.out.println("[Room-playerRedirect] Terminating thread");
               this.cancel();
               return;
             }
@@ -138,7 +149,7 @@ public class Room implements Runnable {
               System.out.println("[Room] Failed to send redirect packet");
               System.out.println("[Room] Terminating thread");
               this.cancel();
-              exit = true;
+              state = RoomStatesEnum.FINISHED;
               return;
             }
           }
@@ -148,37 +159,39 @@ public class Room implements Runnable {
         new TimerTask() {
           @Override
           public void run() {
-
             if (state == RoomStatesEnum.FINISHED) {
               this.cancel();
               return;
             }
 
             DatagramPacket outPacket = outPacketQueue.poll();
-            if (outPacket == null || outPacket.getLength() == 0) {
+            if (outPacket == null) {
               return;
             }
 
             try {
               outSocket.send(outPacket);
             } catch (Exception e) {
-              System.out.println("[Room] Failed to send packet");
-              System.out.println("[Room] Terminating thread");
               this.cancel();
-              exit = true;
+              state = RoomStatesEnum.FINISHED;
               return;
             }
-
           }
-        }, 0, 10);
+        }, 0, 50);
 
     packetHandler = new Service(
         new TimerTask() {
           @Override
           public void run() {
-            DatagramPacket inPacket = inPacketQueue.poll();
-            if (inPacket == null)
+            if (state == RoomStatesEnum.FINISHED) {
+              this.cancel();
               return;
+            }
+
+            DatagramPacket inPacket = inPacketQueue.poll();
+            if (inPacket == null) {
+              return;
+            }
 
             parsePacket(
                 inPacket.getData(),
@@ -186,7 +199,7 @@ public class Room implements Runnable {
                 inPacket.getAddress(),
                 inPacket.getPort());
           }
-        }, 0, 5);
+        }, 0, 20);
 
     packetHandler.start();
     playerRedirect.start();
@@ -215,7 +228,24 @@ public class Room implements Runnable {
     System.out.println("[Room] Listening on port " + roomSocket.getLocalPort());
 
     while (true) {
-      if (exit || state == RoomStatesEnum.FINISHED) {
+      if (p1 != null && !p1.isAlive()) {
+        System.out.println("[Room] Player 1 timed out");
+        state = RoomStatesEnum.FINISHED;
+      }
+
+      if (p2 != null && !p2.isAlive()) {
+        System.out.println("[Room] Player 2 timed out");
+        state = RoomStatesEnum.FINISHED;
+      }
+
+      if (timeoutCount >= MAX_SOCKET_TIMEOUTS) {
+        System.out.println("[Room] Socket timed out " + timeoutCount + " times");
+        System.out.println("[Room] Terminating thread");
+        state = RoomStatesEnum.FINISHED;
+        return;
+      }
+
+      if (state == RoomStatesEnum.FINISHED) {
         return;
       }
 
@@ -224,8 +254,10 @@ public class Room implements Runnable {
             new byte[MAX_PACKET_SIZE],
             MAX_PACKET_SIZE);
         roomSocket.receive(packet);
-        System.out.println("[Room] Received packet");
         inPacketQueue.add(packet);
+      } catch (SocketTimeoutException t) {
+        timeoutCount++;
+        continue;
       } catch (final Exception e) {
         System.out.println("[Room] Failed to receive packet");
         System.out.println("[Room] Terminating thread");
@@ -235,134 +267,211 @@ public class Room implements Runnable {
     }
   }
 
+  public void sendPacket(Packet p, Player player) {
+    outPacketQueue.add(new DatagramPacket(
+        p.asBytes(),
+        p.asBytes().length,
+        player.address,
+        player.port));
+  }
+
   public void parsePacket(
-      byte[] data,
-      int dataLenght,
-      InetAddress address,
-      int port) {
+      byte[] datagramData,
+      int dataLength,
+      InetAddress datagramAddress,
+      int datagramPort) {
 
     switch (state) {
       case WAITING_P1:
-        handleP1Login(data, dataLenght, address, port);
+        p1 = handleLogin(
+            datagramData,
+            dataLength,
+            datagramAddress,
+            datagramPort);
+
+        if (p1 != null) {
+          System.out.println("[Room] Player 1 joined room " + name);
+          state = RoomStatesEnum.WAITING_P2;
+          System.out.println("[Room] New state: " + state.name());
+        }
         break;
 
       case WAITING_P2:
-        handleP2Login(data, dataLenght, address, port);
+        if (datagramAddress.equals(p1.address) && datagramPort == p1.port) {
+          HeartbeatPacket heartbeatPacket = checkForHeartbeatPacket(
+              datagramData,
+              dataLength,
+              datagramAddress,
+              datagramPort);
+
+          if (heartbeatPacket != null) {
+            sendPacket(heartbeatPacket, p1);
+            p1.packetHit();
+            p1.setReady(true);
+            return;
+          }
+
+          LoginPacket packet = checkForLoginPacket(
+              datagramData,
+              dataLength,
+              datagramAddress,
+              datagramPort);
+
+          if (packet != null) {
+            System.out.println("[Room] Player 1 re-sent a login packet");
+            System.out.println("[Room] Replying to " + p1.address + ":" + p1.port);
+            sendPacket(packet, p1);
+            p1.packetMiss();
+            return;
+          }
+
+          p1.packetMiss();
+          return;
+        }
+
+        p1.packetMiss();
+
+        p2 = handleLogin(
+            datagramData,
+            dataLength,
+            datagramAddress,
+            datagramPort);
+
+        if (p2 != null) {
+          full = true;
+          state = RoomStatesEnum.STARTING;
+        }
+
         break;
 
       case STARTING:
-        System.out.println("[Room] Not implemented");
-        System.out.println("[Room] Terminating thread");
-        exit = true;
+        if (datagramAddress.equals(p1.address) && datagramPort == p1.port) {
+          HeartbeatPacket heartbeatPacket = checkForHeartbeatPacket(
+              datagramData,
+              dataLength,
+              datagramAddress,
+              datagramPort);
+
+          if (heartbeatPacket != null) {
+            sendPacket(heartbeatPacket, p1);
+            p1.packetHit();
+          }
+        }
+
+        if (datagramAddress.equals(p2.address) && datagramPort == p2.port) {
+          HeartbeatPacket heartbeatPacket = checkForHeartbeatPacket(
+              datagramData,
+              dataLength,
+              datagramAddress,
+              datagramPort);
+
+          if (heartbeatPacket != null) {
+            sendPacket(heartbeatPacket, p2);
+            p2.packetHit();
+            p2.setReady(true);
+          }
+        }
+
+        if (p1.isReady() && p2.isReady()) {
+          System.out.println("[Room] Both players ready");
+          // send game start packet
+          GameStartPacket gameStartPacket = new GameStartPacket();
+          gameStartPacket.setTransactionID(1);
+          sendPacket(gameStartPacket, p1);
+          sendPacket(gameStartPacket, p2);
+          state = RoomStatesEnum.PLAYING;
+        }
+        break;
+
+      case PLAYING:
+        System.out.println("[Room] Game started");
+        state = RoomStatesEnum.FINISHED;
         break;
 
       default:
         System.out.println("[Room] Invalid state");
         System.out.println("[Room] Terminating thread");
-        exit = true;
+        state = RoomStatesEnum.FINISHED;
         break;
     }
 
   }
 
-  // FIXME: This method is a mess
-  public void handleP1Login(
-      byte[] data,
+  public Player handleLogin(
+      byte[] datagramData,
       int dataLenght,
-      InetAddress address,
-      int port) {
+      InetAddress datagramAddress,
+      int datagramPort) {
 
-    LoginPacket packetP1;
+    LoginPacket packet = checkForLoginPacket(
+        datagramData,
+        dataLenght,
+        datagramAddress,
+        datagramPort);
 
-    try {
-      packetP1 = new LoginPacket().fromBytes(data, dataLenght);
-    } catch (PacketException e) {
-      // TODO: log exception
-      return;
+    if (packet == null) {
+      return null;
     }
 
     Player player = playerQueue.poll();
     if (player == null) {
-      return;
+      return null;
     }
 
-    System.out.println("[Room-parsePacket] Processing P1 login packet");
+    System.out.println("[Room-parsePacket] Processing login packet for player "
+        + player.username);
 
-    if (!address.equals(player.address)) {
+    if (!datagramAddress.equals(player.address) || datagramPort != player.port) {
       System.out.println("[Room] Address mismatch");
-      return;
+      return null;
     }
 
-    p1 = (Player) player.clone();
-
-    System.out.println("[Room] Player 1 joined room " + name);
-    outPacketQueue.add(new DatagramPacket(
-        packetP1.asBytes(),
-        packetP1.asBytes().length,
-        address,
-        port));
-
-    state = RoomStatesEnum.WAITING_P2;
-  }
-
-  // FIXME: This method is a mess
-  public void handleP2Login(
-      byte[] data,
-      int dataLenght,
-      InetAddress address,
-      int port) {
-    LoginPacket packetP2;
-
-    try {
-      packetP2 = new LoginPacket().fromBytes(data, dataLenght);
-    } catch (PacketException e) {
-      // TODO: log exception
-      return;
-    }
-
-    if (address.equals(p1.address) && port == p1.port) {
-      System.out.println("[Room] Player 1 re-sent a login packet");
-      System.out.println("[Room] Replying to " + p1.address + ":" + p1.port);
-      outPacketQueue.add(new DatagramPacket(
-          packetP2.asBytes(),
-          packetP2.asBytes().length,
-          p1.address,
-          p1.port));
-
-      return;
-    }
-
-    if (packetP2.getUsername() == p1.username) {
-      System.out.println("[Room] Player 2 has the same username as player 1");
+    if (p1 != null && packet.getUsername().equals(p1.username)) {
+      System.out.println("[Room] Username already in use");
       // TODO: send error packet
-      return;
+      return null;
     }
 
-    Player player2 = playerQueue.poll();
-    if (player2 == null) {
-      return;
-    }
-
-    if (!address.equals(player2.address)) {
-      System.out.println("[Room] Address mismatch");
-      return;
-    }
-
-    System.out.println("[Room] Player 2 joined room " + name);
-
-    p2 = player2;
-
-    outPacketQueue.add(new DatagramPacket(
-        packetP2.asBytes(),
-        packetP2.asBytes().length,
-        p2.address,
-        p2.port));
-
-    state = RoomStatesEnum.STARTING;
+    sendPacket(packet, player);
+    return player;
   }
 
   public String getName() {
     return name;
+  }
+
+  public LoginPacket checkForLoginPacket(
+      byte[] datagramData,
+      int dataLenght,
+      InetAddress datagramAddress,
+      int datagramPort) {
+
+    LoginPacket packet;
+    try {
+      packet = new LoginPacket().fromBytes(datagramData, dataLenght);
+    } catch (PacketException e) {
+      System.out.println("[Room] Invalid login packet: " + e.getMessage());
+      return null;
+    }
+
+    return packet;
+  }
+
+  public HeartbeatPacket checkForHeartbeatPacket(
+      byte[] datagramData,
+      int dataLenght,
+      InetAddress datagramAddress,
+      int datagramPort) {
+
+    HeartbeatPacket packet;
+    try {
+      packet = new HeartbeatPacket().fromBytes(datagramData, dataLenght);
+    } catch (PacketException e) {
+      System.out.println("[Room] Invalid heartbeat packet" + e.getMessage());
+      return null;
+    }
+
+    return packet;
   }
 
 }
