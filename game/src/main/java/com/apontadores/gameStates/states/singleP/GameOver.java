@@ -58,8 +58,8 @@ public class GameOver extends GameState {
       isLeaderBoardUpdated = true;
     }
 
-    ((TextElement) frame.getElement("level"))
-        .setText(String.valueOf(Levels.getCurrentLevel()));
+    //((TextElement) frame.getElement("level"))
+    //    .setText(String.valueOf(Levels.getCurrentLevel()));
 
     ((TextElement) frame.getElement("totalScore"))
         .setText(String.valueOf(Score.getScore()));
