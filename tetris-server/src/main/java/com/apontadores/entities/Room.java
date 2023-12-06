@@ -89,7 +89,8 @@ public class Room implements Runnable {
 
   public Room(
       final int id,
-      final String roomName) throws SocketException {
+      final String roomName)
+      throws SocketException {
 
     this.id = id;
     this.name = roomName;
@@ -131,13 +132,13 @@ public class Room implements Runnable {
               System.out.println("[Room] Sending redirect packet to player " + p.username);
               System.out.println("[Room] Packet address : " + packet.getAddress());
               System.out.println("[Room] Packet port : " + packet.getPort());
-              outSocket.send(packet);
+              outPacketQueue.add(packet);
               System.out.println("[Room] Sent redirect packet to player " + p.username);
             } catch (Exception e) {
               System.out.println("[Room] Failed to send redirect packet");
-              // System.out.println("[Room] Terminating thread");
-              // this.cancel();
-              // exit = true;
+              System.out.println("[Room] Terminating thread");
+              this.cancel();
+              exit = true;
               return;
             }
           }
@@ -189,6 +190,7 @@ public class Room implements Runnable {
 
     packetHandler.start();
     playerRedirect.start();
+    playerSync.start();
   }
 
   public void addPlayerToQueue(final Player p) {
@@ -241,44 +243,11 @@ public class Room implements Runnable {
 
     switch (state) {
       case WAITING_P1:
+        handleP1Login(data, dataLenght, address, port);
+        break;
+
       case WAITING_P2:
-        LoginPacket packet;
-
-        try {
-          packet = new LoginPacket().fromBytes(data, dataLenght);
-        } catch (PacketException e) {
-          // TODO: log exception
-          return;
-        }
-
-        Player p = playerQueue.poll();
-        if (p == null) {
-          return;
-        }
-
-        System.out.println("[Room-parsePacket] Processing login packet");
-
-        if (!packet.getUsername().equals(p.username)) {
-          System.out.println("[Room] User mismatch");
-          return;
-        }
-
-        if (!address.equals(p.address)) {
-          System.out.println("[Room] Address mismatch");
-          return;
-        }
-
-        if (p1 == null) {
-          p1 = p;
-          System.out.println("[Room] Player 1 joined room " + name);
-          state = RoomStatesEnum.WAITING_P2;
-        } else {
-          p2 = p;
-          playerRedirect.stop();
-          playerSync.start();
-          state = RoomStatesEnum.STARTING;
-        }
-
+        handleP2Login(data, dataLenght, address, port);
         break;
 
       case STARTING:
@@ -293,6 +262,103 @@ public class Room implements Runnable {
         exit = true;
         break;
     }
+
+  }
+
+  // FIXME: This method is a mess
+  public void handleP1Login(
+      byte[] data,
+      int dataLenght,
+      InetAddress address,
+      int port) {
+
+    LoginPacket packetP1;
+
+    try {
+      packetP1 = new LoginPacket().fromBytes(data, dataLenght);
+    } catch (PacketException e) {
+      // TODO: log exception
+      return;
+    }
+
+    Player player = playerQueue.poll();
+    if (player == null) {
+      return;
+    }
+
+    System.out.println("[Room-parsePacket] Processing P1 login packet");
+
+    if (!address.equals(player.address)) {
+      System.out.println("[Room] Address mismatch");
+      return;
+    }
+
+    p1 = (Player) player.clone();
+
+    System.out.println("[Room] Player 1 joined room " + name);
+    outPacketQueue.add(new DatagramPacket(
+        packetP1.asBytes(),
+        packetP1.asBytes().length,
+        address,
+        port));
+
+    state = RoomStatesEnum.WAITING_P2;
+  }
+
+  // FIXME: This method is a mess
+  public void handleP2Login(
+      byte[] data,
+      int dataLenght,
+      InetAddress address,
+      int port) {
+    LoginPacket packetP2;
+
+    try {
+      packetP2 = new LoginPacket().fromBytes(data, dataLenght);
+    } catch (PacketException e) {
+      // TODO: log exception
+      return;
+    }
+
+    if (address.equals(p1.address) && port == p1.port) {
+      System.out.println("[Room] Player 1 re-sent a login packet");
+      System.out.println("[Room] Replying to " + p1.address + ":" + p1.port);
+      outPacketQueue.add(new DatagramPacket(
+          packetP2.asBytes(),
+          packetP2.asBytes().length,
+          p1.address,
+          p1.port));
+
+      return;
+    }
+
+    if (packetP2.getUsername() == p1.username) {
+      System.out.println("[Room] Player 2 has the same username as player 1");
+      // TODO: send error packet
+      return;
+    }
+
+    Player player2 = playerQueue.poll();
+    if (player2 == null) {
+      return;
+    }
+
+    if (!address.equals(player2.address)) {
+      System.out.println("[Room] Address mismatch");
+      return;
+    }
+
+    System.out.println("[Room] Player 2 joined room " + name);
+
+    p2 = player2;
+
+    outPacketQueue.add(new DatagramPacket(
+        packetP2.asBytes(),
+        packetP2.asBytes().length,
+        p2.address,
+        p2.port));
+
+    state = RoomStatesEnum.STARTING;
   }
 
   public String getName() {
