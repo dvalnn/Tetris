@@ -5,8 +5,6 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import com.apontadores.entities.Player;
-import com.apontadores.entities.Room;
 import com.apontadores.packets.LoginPacket;
 import com.apontadores.packets.PacketException;
 

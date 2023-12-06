@@ -1,4 +1,4 @@
-package com.apontadores.entities;
+package com.apontadores.main;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
