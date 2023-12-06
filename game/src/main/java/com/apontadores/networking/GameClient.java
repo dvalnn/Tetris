@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 import com.apontadores.main.Server;
+import com.apontadores.packets.HeartbeatPacket;
 import com.apontadores.packets.LoginPacket;
 import com.apontadores.packets.PacketException;
 import com.apontadores.packets.RedirectPacket;
@@ -45,7 +46,6 @@ public class GameClient implements Runnable {
     public String getMessage() {
       return statusMessages[this.ordinal()];
     }
-
   }
 
   private enum ConnectionStage {
@@ -69,15 +69,14 @@ public class GameClient implements Runnable {
   private int transactionID = 0;
   private int serverPort = DEFAULT_SERVER_PORT;
 
-  private boolean abortConnection = false;
-
   private String username;
   private String roomName;
 
-  private int consecutiveErrorCount = 0;
   private int timeoutCount = 0;
+  private int consecutiveErrorCount = 0;
 
   private InetAddress serverAddress;
+  private boolean abortConnection = false;
 
   public GameClient() throws IOException {
     socket = new DatagramSocket();
@@ -112,14 +111,14 @@ public class GameClient implements Runnable {
         serverAddress = InetAddress.getByName(address);
         return true;
       } catch (Exception e) {
-        System.out.println("[CLIENT] Error setting server address: " + e.getMessage());
+        System.out.println("[CLIENT] Error setting server address: "
+            + e.getMessage());
         return false;
       }
     } else {
       System.out.println("[CLIENT] Invalid server address");
       return false;
     }
-
   }
 
   public void start() {
@@ -152,7 +151,8 @@ public class GameClient implements Runnable {
       }
 
       try {
-        System.out.println("[CLIENT] Listening on port " + socket.getLocalPort());
+        System.out.println("[CLIENT] Listening on port "
+            + socket.getLocalPort());
         socket.receive(inPacket);
         parsePacket(
             inPacket.getData(),
@@ -164,19 +164,20 @@ public class GameClient implements Runnable {
         try {
           handleTimeout();
         } catch (IOException e1) {
-          System.out.println("[CLIENT] socket error: " + e1.getMessage());
+          System.out.println("[CLIENT] socket error: "
+              + e1.getMessage());
           ClientStatus.status = ClientStatus.SOCKET_ERROR;
           abortConnection = true;
           break;
         }
       } catch (Exception e) {
-        System.out.println("[CLIENT] Error receiving packet: " + e.getMessage());
+        System.out.println("[CLIENT] Error receiving packet: "
+            + e.getMessage());
         ClientStatus.status = ClientStatus.SOCKET_ERROR;
         abortConnection = true;
         break;
       }
     }
-
   }
 
   private void handleTimeout() throws IOException {
@@ -194,7 +195,20 @@ public class GameClient implements Runnable {
         break;
 
       case WAITING_FOR_PLAYERS:
+        timeoutCount++;
+        HeartbeatPacket heartbeatPacket = new HeartbeatPacket();
+        heartbeatPacket.setTransactionID(++transactionID);
+        System.out.println("[CLIENT] Sending heartbeat");
+        System.out.println("[CLIENT] Heartbeat transaction ID: "
+            + heartbeatPacket.getTransactionID());
+
+        socket.send(new DatagramPacket(
+            heartbeatPacket.asBytes(),
+            heartbeatPacket.asBytes().length,
+            serverAddress,
+            serverPort));
         break;
+
       case WAITING_FOR_START:
         break;
       case IN_GAME:
@@ -204,7 +218,6 @@ public class GameClient implements Runnable {
       default:
         break;
     }
-
   }
 
   private void parsePacket(
@@ -228,7 +241,6 @@ public class GameClient implements Runnable {
             datagramLength,
             datagramAddress,
             datagramPort);
-
         break;
 
       case WAITING_FOR_PLAYERS:
@@ -238,19 +250,33 @@ public class GameClient implements Runnable {
             datagramLength,
             datagramAddress,
             datagramPort);
-
-        // socket.send(hearbeatPacket);
         break;
 
       case WAITING_FOR_START:
+        System.out.println("[CLIENT] Waiting for start");
+        handleWaitingStart(
+            datagramData,
+            datagramLength,
+            datagramAddress,
+            datagramPort);
         break;
+
       case IN_GAME:
         break;
+
       case POST_GAME:
         break;
+
       default:
         break;
     }
+  }
+
+  private void handleWaitingStart(
+      byte[] datagramData,
+      int datagramLength,
+      InetAddress datagramAddress,
+      int datagramPort) {
 
   }
 
@@ -258,8 +284,33 @@ public class GameClient implements Runnable {
       byte[] datagramData,
       int datagramLength,
       InetAddress datagramAddress,
-      int datagramPort) {
-    consecutiveErrorCount = 0;
+      int datagramPort) throws IOException {
+
+    HeartbeatPacket heartbeatPacket;
+    try {
+      heartbeatPacket = new HeartbeatPacket().fromBytes(
+          inPacket.getData(),
+          inPacket.getLength());
+      System.out.println("[CLIENT] Received heartbeat");
+    } catch (PacketException e) {
+      consecutiveErrorCount++;
+      return;
+    }
+
+    if (heartbeatPacket.getTransactionID() != transactionID) {
+      consecutiveErrorCount++;
+      System.out.println("[CLIENT] Invalid transaction ID");
+    }
+
+    heartbeatPacket.setTransactionID(++transactionID);
+    System.out.println("[CLIENT] Sending heartbeat");
+    System.out.println("[CLIENT] Heartbeat transaction ID: "
+        + heartbeatPacket.getTransactionID());
+    socket.send(new DatagramPacket(
+        heartbeatPacket.asBytes(),
+        heartbeatPacket.asBytes().length,
+        serverAddress,
+        serverPort));
   }
 
   private void handleRoomLogin(
@@ -283,6 +334,7 @@ public class GameClient implements Runnable {
       System.out.println("[CLIENT] Login successful");
       conStage = ConnectionStage.WAITING_FOR_PLAYERS;
       consecutiveErrorCount = 0;
+      transactionID = 1;
     }
   }
 
@@ -328,7 +380,8 @@ public class GameClient implements Runnable {
     }
 
     serverPort = redirectPacket.getPort();
-    System.out.println("[CLIENT-Server-Login] Redirecting to port " + serverPort);
+    System.out.println("[CLIENT-Server-Login] Redirecting to port "
+        + serverPort);
     sendLoginRequest();
     conStage = ConnectionStage.ROOM_LOGIN;
     consecutiveErrorCount = 0;
