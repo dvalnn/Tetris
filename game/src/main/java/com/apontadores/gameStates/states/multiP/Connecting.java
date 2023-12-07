@@ -41,6 +41,9 @@ public class Connecting extends GameState {
     if (GameClient.ClientStatus.getStatus() != GameClient.ClientStatus.OK)
       switchState.exec(GameStatesEnum.JOIN);
 
+    if (GameClient.ClientStatus.getStatus() == GameClient.ClientStatus.OK)
+      if (GameClient.gameStarted())
+        switchState.exec(GameStatesEnum.PLAYING_MP);
   }
 
   @Override

@@ -3,7 +3,7 @@ package com.apontadores.packets;
 import java.util.StringJoiner;
 import java.util.zip.CRC32;
 
-public class GameUpdatePacket implements Packet {
+public class PlayerUpdatePacket implements Packet {
 
   public static final int PACKET_ID = 4;
   public static final int TOKEN_COUNT = 5;
@@ -22,7 +22,11 @@ public class GameUpdatePacket implements Packet {
   private String updateType;
   private String updateData;
 
-  public GameUpdatePacket(String updateType, String updateData) {
+  public PlayerUpdatePacket() {
+    packetID = PACKET_ID;
+  }
+
+  public PlayerUpdatePacket(String updateType, String updateData) {
     packetID = PACKET_ID;
     this.updateType = updateType;
     this.updateData = updateData;
@@ -56,12 +60,12 @@ public class GameUpdatePacket implements Packet {
   }
 
   @Override
-  public Packet fromBytes(byte[] bytes, int length) throws PacketException {
+  public PlayerUpdatePacket fromBytes(byte[] bytes, int length) throws PacketException {
     return fromTokens(new String(bytes, 0, length).trim().split(","));
   }
 
   @Override
-  public Packet fromTokens(String[] tokens) throws PacketException {
+  public PlayerUpdatePacket fromTokens(String[] tokens) throws PacketException {
 
     if (tokens.length != TOKEN_COUNT)
       throw new PacketException("Invalid packet length");
@@ -73,7 +77,7 @@ public class GameUpdatePacket implements Packet {
     if (packetID != PACKET_ID)
       throw new PacketException("Invalid packet ID");
 
-    if (transactionID != 0)
+    if (transactionID <= 0)
       throw new PacketException("Invalid transaction ID");
 
     checksum = Long.parseLong(tokens[2]);
@@ -96,6 +100,14 @@ public class GameUpdatePacket implements Packet {
   @Override
   public void setTransactionID(int transactionID) {
     this.transactionID = transactionID;
+  }
+
+  public String getUpdateType() {
+    return updateType;
+  }
+
+  public String getUpdateData() {
+    return updateData;
   }
 
 }

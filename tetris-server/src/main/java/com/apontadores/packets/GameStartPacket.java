@@ -13,6 +13,10 @@ public class GameStartPacket implements Packet {
   private long checksum;
   private String opponentName;
 
+  public GameStartPacket() {
+    packetID = PACKET_ID;
+  }
+
   public GameStartPacket(String opponentName) {
     packetID = PACKET_ID;
     this.opponentName = opponentName;
@@ -44,13 +48,13 @@ public class GameStartPacket implements Packet {
   }
 
   @Override
-  public Packet fromBytes(byte[] bytes, int length) throws PacketException {
+  public GameStartPacket fromBytes(byte[] bytes, int length) throws PacketException {
     String tokens[] = new String(bytes, 0, length).trim().split(",");
     return fromTokens(tokens);
   }
 
   @Override
-  public Packet fromTokens(String[] tokens) throws PacketException {
+  public GameStartPacket fromTokens(String[] tokens) throws PacketException {
     if (tokens.length != TOKEN_COUNT)
       throw new PacketException("Invalid packet length");
 
@@ -84,6 +88,10 @@ public class GameStartPacket implements Packet {
   @Override
   public void setTransactionID(int transactionID) {
     this.transactionID = transactionID;
+  }
+
+  public String getOpponentName() {
+    return opponentName;
   }
 
 }

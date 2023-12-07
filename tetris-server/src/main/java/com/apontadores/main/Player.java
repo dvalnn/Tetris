@@ -6,7 +6,7 @@ public class Player {
   public final String username;
   public final InetAddress address;
   public final int port;
-  public static final int MAX_PACKET_MISSES = 10;
+  public static final int MAX_PACKET_MISSES = 100;
 
   private boolean ready = false;
 

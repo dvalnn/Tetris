@@ -13,18 +13,22 @@ import static com.apontadores.utils.Constants.GameConstants.UPS_SET;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.net.InetAddress;
+import java.awt.geom.Point2D;
 import java.util.List;
+import java.util.StringJoiner;
 
 import com.apontadores.gameElements.Board;
 import com.apontadores.gameElements.boards.MPBoard;
 import com.apontadores.gameElements.boards.PlayerBoard;
+import com.apontadores.gameElements.gameplay.Levels;
+import com.apontadores.gameElements.gameplay.Score;
 import com.apontadores.gameElements.shapes.Shape;
 import com.apontadores.gameElements.shapes.ShapeMP;
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.main.Game;
+import com.apontadores.packets.PlayerUpdatePacket;
 import com.apontadores.settings.BoardSettings;
 import com.apontadores.ui.Frame;
 
@@ -38,7 +42,7 @@ public class PlayingMP extends GameState {
   private boolean opponentDisconnected = false;
 
   private int networkTick = 0;
-  private final int NETWORK_TICK_MAX = 2;
+  private final int NETWORK_TICK_MAX = 5;
   private int fullSyncTick = 0;
   private final int FULL_SYNC_TICK_MAX = 2 * UPS_SET;
 
@@ -64,8 +68,7 @@ public class PlayingMP extends GameState {
     frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/multiplayer.json");
   }
 
-  public void addBoardMP(final String username, final InetAddress address, final int port) {
-    System.out.println("[PlayingMP] Adding board for " + username);
+  private void addBoardMP() {
     opponentBoard = new MPBoard(
         new BoardSettings(
             BOARD_SQUARE,
@@ -83,81 +86,160 @@ public class PlayingMP extends GameState {
     matchOver = true;
   }
 
-  public void sendFullSync() {
-    // send current player tetromino to opponent
-    final Shape currentShape = playerBoard.getTetromino().getShape();
-    // Game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
-
-    // send current player board to opponent
-    for (int row = 0; row < BOARD_HEIGHT; row++) {
-      final PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
-      final List<Color> colors = line.getColorsCopy();
-      // Game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
-    }
-  }
-
-  public void sendPlayerState() {
-    // send current player tetromino to opponent
-    final Shape currentShape = playerBoard.getTetromino().getShape();
-    // Game.sendShapeUpdate(currentShape.getPoints(), currentShape.getColor());
-
-    // send current player board to opponent
-    for (int row = 0; row < BOARD_HEIGHT; row++) {
-      final PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
-      final List<Color> colors = line.getColorsCopyIfChanged();
-      if (colors != null) {
-        // Game.sendBoardUpdate(row, colors.toArray(new Color[colors.size()]));
-      }
-    }
-  }
-
   @Override
   public void update() {
     frame.update();
 
-    if (opponentBoard == null || opponentDisconnected) {
-      return;
+    if (opponentBoard == null) {
+      addBoardMP();
     }
 
-    fullSyncTick++;
+    PlayerUpdatePacket inPacket = null;
+    while ((inPacket = Game.getClient().getUpdate()) != null) {
+      parseUpdate(inPacket);
+    }
+
+    // if (opponentDisconnected) {
+    // matchOver = true;
+    // }
+
+    // fullSyncTick++;
+    // if (fullSyncTick >= FULL_SYNC_TICK_MAX) {
+    // sendFullSync();
+    // fullSyncTick = 0;
+    // } else if (networkTick >= NETWORK_TICK_MAX) {
+    // sendPlayerState();
+    // networkTick = 0;
+    // }
+
     networkTick++;
-    if (fullSyncTick >= FULL_SYNC_TICK_MAX) {
-      sendFullSync();
-      fullSyncTick = 0;
-    } else if (networkTick >= NETWORK_TICK_MAX) {
-      sendPlayerState();
+    if (networkTick >= NETWORK_TICK_MAX) {
       networkTick = 0;
+      sendPlayerState();
     }
 
     playerBoard.update();
   }
 
+  private void sendPlayerState() {
+    PlayerUpdatePacket tetrominoUpdate = getTetrominoUpdate();
+    Game.getClient().sendUpdate(tetrominoUpdate);
+
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+      final PlayerBoard.BoardLine line = playerBoard.getBoard().get(row);
+      final List<Color> colors = line.getColorsCopyIfChanged();
+      if (colors != null) {
+        PlayerUpdatePacket boardUpdate = getBoardUpdate(row, colors);
+        Game.getClient().sendUpdate(boardUpdate);
+      }
+    }
+
+    PlayerUpdatePacket scoreUpdate = getScoreUpdate();
+    Game.getClient().sendUpdate(scoreUpdate);
+  }
+
+  private PlayerUpdatePacket getScoreUpdate() {
+    StringJoiner joiner = new StringJoiner(";");
+    joiner.add(String.valueOf(Score.getScore()))
+        .add(String.valueOf(Levels.getTotalLinesCleared()))
+        .add(String.valueOf(Levels.getCurrentLevel()));
+
+    return new PlayerUpdatePacket("score", joiner.toString());
+  }
+
+  private PlayerUpdatePacket getBoardUpdate(int row, List<Color> colors) {
+    StringJoiner joiner = new StringJoiner(";");
+    joiner.add(String.valueOf(row));
+    joiner.add(String.valueOf(colors.size()));
+    for (Color color : colors) {
+      joiner.add(String.valueOf(color.getRGB()));
+    }
+
+    return new PlayerUpdatePacket("board", joiner.toString());
+  }
+
+  private PlayerUpdatePacket getTetrominoUpdate() {
+    StringJoiner joiner = new StringJoiner(";");
+
+    Shape shape = playerBoard.getTetromino().getShape();
+    Point2D points[] = shape.getPoints();
+    Color color = shape.getColor();
+
+    joiner.add(String.valueOf(color.getRGB()));
+    joiner.add(String.valueOf(points.length));
+    for (Point2D point : points) {
+      joiner.add(String.valueOf(point.getX()));
+      joiner.add(String.valueOf(point.getY()));
+    }
+
+    return new PlayerUpdatePacket("tetromino", joiner.toString());
+  }
+
+  private void parseUpdate(PlayerUpdatePacket inPacket) {
+    switch (inPacket.getUpdateType()) {
+      case "tetromino":
+        parseTetrominoUpdate(inPacket.getUpdateData());
+        break;
+
+      case "board":
+        parseBoardUpdate(inPacket.getUpdateData());
+        break;
+
+      case "score":
+        // parseScoreUpdate(inPacket.getUpdateData());
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private void parseScoreUpdate(String updateData) {
+    String tokens = updateData.split(";")[0];
+    int score = Integer.parseInt(tokens);
+    int linesCleared = Integer.parseInt(tokens);
+    int level = Integer.parseInt(tokens);
+
+    // opponentBoard.setScore(score);
+    // opponentBoard.setLinesCleared(linesCleared);
+    // opponentBoard.setLevel(level);
+  }
+
+  private void parseBoardUpdate(String updateData) {
+    String tokens[] = updateData.split(";");
+
+    int row = Integer.parseInt(tokens[0]);
+    int numColors = Integer.parseInt(tokens[1]);
+
+    Color[] colors = new Color[numColors];
+    for (int i = 0; i < numColors; i++) {
+      colors[i] = new Color(Integer.parseInt(tokens[i + 2]));
+    }
+
+    opponentBoard.update(row, colors);
+  }
+
+  private void parseTetrominoUpdate(String string) {
+    String tokens[] = string.split(";");
+    Color color = new Color(Integer.parseInt(tokens[0]));
+    int numPoints = Integer.parseInt(tokens[1]);
+    Point2D points[] = new Point2D[numPoints];
+
+    for (int i = 0; i < numPoints; i++) {
+      double x = Double.parseDouble(tokens[i * 2 + 2]);
+      double y = Double.parseDouble(tokens[i * 2 + 3]);
+      points[i] = new Point2D.Double(x, y);
+    }
+    shapeMP.update(points, color);
+  }
+
   @Override
   public void render(final Graphics g) {
     frame.render(g);
-
-    if (opponentBoard == null) {
-      // TODO: make this look nicer
-      g.setColor(Color.WHITE);
-      g.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-      g.setColor(Color.BLACK);
-      g.drawString("Waiting for opponent...", GAME_WIDTH / 2, GAME_HEIGHT / 2);
-    } else if (opponentDisconnected) {
-      g.setColor(Color.RED);
-      // draw message centered above both boards
-      // TODO: make this look nicer
-      g.drawString("Opponent disconnected!", GAME_WIDTH / 2, GAME_HEIGHT / 2);
-    } else {
-      // draw line separating the two boards
-      // g.setColor(Color.WHITE);
-      // g.drawLine(GAME_WIDTH / 2, 0, GAME_WIDTH / 2, GAME_HEIGHT);
-
-      // draw opponent board
-      opponentBoard.render(g);
-      // draw opponnent controled shape
-      shapeMP.render(g);
-    }
-
+    // draw opponent board
+    opponentBoard.render(g);
+    // draw opponnent controled shape
+    shapeMP.render(g);
     playerBoard.render(g);
   }
 

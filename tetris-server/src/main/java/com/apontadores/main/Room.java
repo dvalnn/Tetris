@@ -62,7 +62,7 @@ public class Room implements Runnable {
   }
 
   public static final int MAX_PLAYERS = 2;
-  public static final int MAX_MISSES = 5;
+  public static final int MAX_MISSES = 100;
 
   public final String name;
   public final int id;
@@ -177,7 +177,7 @@ public class Room implements Runnable {
               return;
             }
           }
-        }, 0, 50);
+        }, 0, 2);
 
     packetHandler = new Service(
         new TimerTask() {
@@ -199,7 +199,7 @@ public class Room implements Runnable {
                 inPacket.getAddress(),
                 inPacket.getPort());
           }
-        }, 0, 20);
+        }, 0, 2);
 
     packetHandler.start();
     playerRedirect.start();

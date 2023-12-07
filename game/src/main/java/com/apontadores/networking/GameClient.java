@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.commons.validator.routines.InetAddressValidator;
 
@@ -12,6 +15,8 @@ import com.apontadores.packets.HeartbeatPacket;
 import com.apontadores.packets.LoginPacket;
 import com.apontadores.packets.PacketException;
 import com.apontadores.packets.RedirectPacket;
+import com.apontadores.packets.GameStartPacket;
+import com.apontadores.packets.PlayerUpdatePacket;
 
 public class GameClient implements Runnable {
 
@@ -61,31 +66,65 @@ public class GameClient implements Runnable {
   private static final int MAX_ERRORS = 10;
   private static final int MAX_TIMEOUTS = 10;
 
-  private DatagramSocket socket;
-  private DatagramPacket inPacket;
+  private static ConnectionStage conStage = ConnectionStage.SERVER_LOGIN;
 
-  private ConnectionStage conStage;
+  public static boolean gameStarted() {
+    return ClientStatus.status == ClientStatus.OK &&
+        conStage == ConnectionStage.IN_GAME;
+  }
+
+  private DatagramSocket socket;
 
   private int transactionID = 0;
+
   private int serverPort = DEFAULT_SERVER_PORT;
-
   private String username;
+
   private String roomName;
-
   private int timeoutCount = 0;
-  private int consecutiveErrorCount = 0;
 
+  private int consecutiveErrorCount = 0;
   private InetAddress serverAddress;
+
   private boolean abortConnection = false;
+  private ArrayBlockingQueue<PlayerUpdatePacket> incomingUpdates;
+  private ArrayBlockingQueue<DatagramPacket> outgoingPacketQueue;
+
+  private String opponentName;
+
+  Timer packetTransmissionThread;
+
+  TimerTask packetTransmissionTask;
+
+  private int lastReceivedID;
 
   public GameClient() throws IOException {
     socket = new DatagramSocket();
     socket.setSoTimeout(1000);
-    inPacket = new DatagramPacket(
-        new byte[Server.MAX_PACKET_SIZE],
-        Server.MAX_PACKET_SIZE);
 
     conStage = ConnectionStage.SERVER_LOGIN;
+    incomingUpdates = new ArrayBlockingQueue<PlayerUpdatePacket>(100);
+    outgoingPacketQueue = new ArrayBlockingQueue<DatagramPacket>(1000);
+
+    packetTransmissionThread = new Timer();
+  }
+
+  public PlayerUpdatePacket getUpdate() {
+    return incomingUpdates.poll();
+  }
+
+  public void sendUpdate(PlayerUpdatePacket packet) {
+
+    packet.setTransactionID(++transactionID);
+    outgoingPacketQueue.add(new DatagramPacket(
+        packet.asBytes(),
+        packet.asBytes().length,
+        serverAddress,
+        serverPort));
+  }
+
+  public String getOpponentName() {
+    return opponentName;
   }
 
   public void setUsername(String username) {
@@ -128,6 +167,31 @@ public class GameClient implements Runnable {
 
   @Override
   public void run() {
+    DatagramPacket inPacket = new DatagramPacket(
+        new byte[Server.MAX_PACKET_SIZE],
+        Server.MAX_PACKET_SIZE);
+
+    packetTransmissionTask = new TimerTask() {
+      @Override
+      public void run() {
+        try {
+          DatagramPacket outPacket = outgoingPacketQueue.poll();
+          if (outPacket == null)
+            return;
+
+          socket.send(outPacket);
+          System.out.println("[CLIENT] Sent packet");
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    };
+
+    packetTransmissionThread.scheduleAtFixedRate(
+        packetTransmissionTask,
+        0,
+        1);
+
     while (true) {
       if (abortConnection) {
         ClientStatus.status = ClientStatus.CONNECTION_ABORTED;
@@ -151,9 +215,9 @@ public class GameClient implements Runnable {
       }
 
       try {
-        System.out.println("[CLIENT] Listening on port "
-            + socket.getLocalPort());
         socket.receive(inPacket);
+        System.out.println("[CLIENT] Received packet");
+        timeoutCount = 0;
         parsePacket(
             inPacket.getData(),
             inPacket.getLength(),
@@ -162,6 +226,7 @@ public class GameClient implements Runnable {
 
       } catch (java.net.SocketTimeoutException e) {
         try {
+          timeoutCount++;
           handleTimeout();
         } catch (IOException e1) {
           System.out.println("[CLIENT] socket error: "
@@ -180,41 +245,52 @@ public class GameClient implements Runnable {
     }
   }
 
+  public void sendHeartbeat() throws IOException {
+    HeartbeatPacket heartbeatPacket = new HeartbeatPacket();
+    heartbeatPacket.setTransactionID(++transactionID);
+    // System.out.println("[CLIENT] Sending heartbeat");
+    // System.out.println("[CLIENT] Heartbeat transaction ID: "
+    // + heartbeatPacket.getTransactionID());
+
+    outgoingPacketQueue.add(new DatagramPacket(
+        heartbeatPacket.asBytes(),
+        heartbeatPacket.asBytes().length,
+        serverAddress,
+        serverPort));
+  }
+
   private void handleTimeout() throws IOException {
     switch (conStage) {
       case SERVER_LOGIN:
         sendLoginRequest();
-        timeoutCount++;
         System.out.println("[CLIENT] Server Login timed out");
         break;
 
       case ROOM_LOGIN:
         sendLoginRequest();
-        timeoutCount++;
         System.out.println("[CLIENT] Room Login timed out");
         break;
 
       case WAITING_FOR_PLAYERS:
-        timeoutCount++;
         HeartbeatPacket heartbeatPacket = new HeartbeatPacket();
         heartbeatPacket.setTransactionID(++transactionID);
-        System.out.println("[CLIENT] Sending heartbeat");
-        System.out.println("[CLIENT] Heartbeat transaction ID: "
-            + heartbeatPacket.getTransactionID());
+        // System.out.println("[CLIENT] Sending heartbeat");
+        // System.out.println("[CLIENT] Heartbeat transaction ID: "
+        // + heartbeatPacket.getTransactionID());
 
-        socket.send(new DatagramPacket(
+        outgoingPacketQueue.add(new DatagramPacket(
             heartbeatPacket.asBytes(),
             heartbeatPacket.asBytes().length,
             serverAddress,
             serverPort));
         break;
 
-      case WAITING_FOR_START:
-        break;
       case IN_GAME:
         break;
+
       case POST_GAME:
         break;
+
       default:
         break;
     }
@@ -244,7 +320,6 @@ public class GameClient implements Runnable {
         break;
 
       case WAITING_FOR_PLAYERS:
-        System.out.println("[CLIENT] Waiting for players");
         handleWaitingPlayers(
             datagramData,
             datagramLength,
@@ -252,16 +327,13 @@ public class GameClient implements Runnable {
             datagramPort);
         break;
 
-      case WAITING_FOR_START:
-        System.out.println("[CLIENT] Waiting for start");
-        handleWaitingStart(
+      case IN_GAME:
+        handleUpdate(
             datagramData,
             datagramLength,
             datagramAddress,
             datagramPort);
-        break;
 
-      case IN_GAME:
         break;
 
       case POST_GAME:
@@ -272,12 +344,27 @@ public class GameClient implements Runnable {
     }
   }
 
-  private void handleWaitingStart(
+  private void handleUpdate(
       byte[] datagramData,
       int datagramLength,
       InetAddress datagramAddress,
-      int datagramPort) {
+      int datagramPort) throws IOException {
 
+    PlayerUpdatePacket updatePacket;
+    try {
+      updatePacket = new PlayerUpdatePacket().fromBytes(
+          datagramData,
+          datagramLength);
+
+    } catch (PacketException e) {
+      consecutiveErrorCount++;
+      System.out.println("[CLIENT-Handle-Update] Invalid packet");
+      System.out.println("[CLIENT-Handle-Update] Error: " + e.getMessage());
+      return;
+    }
+
+    lastReceivedID = updatePacket.getTransactionID();
+    incomingUpdates.add(updatePacket);
   }
 
   private void handleWaitingPlayers(
@@ -286,31 +373,42 @@ public class GameClient implements Runnable {
       InetAddress datagramAddress,
       int datagramPort) throws IOException {
 
+    PacketException e1 = null;
+    PacketException e2 = null;
+
     HeartbeatPacket heartbeatPacket;
     try {
       heartbeatPacket = new HeartbeatPacket().fromBytes(
-          inPacket.getData(),
-          inPacket.getLength());
-      System.out.println("[CLIENT] Received heartbeat");
-    } catch (PacketException e) {
-      consecutiveErrorCount++;
+          datagramData,
+          datagramLength);
+
+      if (heartbeatPacket.getTransactionID() != transactionID) {
+        consecutiveErrorCount++;
+        System.out.println("[CLIENT] Invalid transaction ID");
+      }
+      sendHeartbeat();
       return;
+    } catch (PacketException e) {
+      e1 = e;
     }
 
-    if (heartbeatPacket.getTransactionID() != transactionID) {
-      consecutiveErrorCount++;
-      System.out.println("[CLIENT] Invalid transaction ID");
+    try {
+      GameStartPacket gameStartPacket = new GameStartPacket().fromBytes(
+          datagramData,
+          datagramLength);
+
+      transactionID = gameStartPacket.getTransactionID();
+      opponentName = gameStartPacket.getOpponentName();
+      System.out.println("[CLIENT] Game starting");
+
+      conStage = ConnectionStage.IN_GAME;
+      return;
+    } catch (PacketException e) {
+      e2 = e;
     }
 
-    heartbeatPacket.setTransactionID(++transactionID);
-    System.out.println("[CLIENT] Sending heartbeat");
-    System.out.println("[CLIENT] Heartbeat transaction ID: "
-        + heartbeatPacket.getTransactionID());
-    socket.send(new DatagramPacket(
-        heartbeatPacket.asBytes(),
-        heartbeatPacket.asBytes().length,
-        serverAddress,
-        serverPort));
+    System.out.println("[CLIENT] Heartbeat error: " + e1.getMessage());
+    System.out.println("[CLIENT] Game start error: " + e2.getMessage());
   }
 
   private void handleRoomLogin(
@@ -322,8 +420,8 @@ public class GameClient implements Runnable {
     LoginPacket loginPacket;
     try {
       loginPacket = new LoginPacket().fromBytes(
-          inPacket.getData(),
-          inPacket.getLength());
+          datagramData,
+          datagramLength);
     } catch (PacketException e) {
       consecutiveErrorCount++;
       System.out.println("[CLIENT-Room-Login] Invalid packet");
@@ -350,7 +448,7 @@ public class GameClient implements Runnable {
         serverAddress,
         serverPort);
 
-    socket.send(outPacket);
+    outgoingPacketQueue.add(outPacket);
   }
 
   private boolean loginResponseIsValid(LoginPacket packet) {
@@ -362,17 +460,17 @@ public class GameClient implements Runnable {
   }
 
   private void handleServerLogin(
-      byte[] data,
-      int dataLenght,
-      InetAddress address,
-      int port)
+      byte[] datagramData,
+      int dataLength,
+      InetAddress datagramAddress,
+      int datagramPort)
       throws IOException {
 
     RedirectPacket redirectPacket;
     try {
       redirectPacket = new RedirectPacket().fromBytes(
-          inPacket.getData(),
-          inPacket.getLength());
+          datagramData,
+          dataLength);
     } catch (PacketException e) {
       consecutiveErrorCount++;
       System.out.println("[CLIENT-Server-Login] Invalid packet");
