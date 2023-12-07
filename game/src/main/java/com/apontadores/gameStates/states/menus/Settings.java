@@ -91,7 +91,6 @@ public class Settings extends GameState {
     ((ImageElement) frame.getElement("effectsMute"))
         .execIfClicked(e.getX(), e.getY(), effectMute, null);
 
-
     ((ImageElement) frame.getElement("returnToMainMenu"))
         .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MAIN_MENU);
 
