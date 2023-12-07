@@ -91,11 +91,11 @@ public class Sound implements Runnable {
         System.out.println("muted");
       }
 
-      if (newState.equals(GameStatesEnum.PLAYING)) {
+      if (!muteMusic && newState.equals(GameStatesEnum.PLAYING)) {
         menuMusic.stop();
         playMusic(gameMusic);
 
-      } else if (oldState.equals(GameStatesEnum.PLAYING)) {
+      } else if (!muteMusic && (oldState.equals(GameStatesEnum.PLAYING))) {
         gameMusic.stop();
         playMusic(menuMusic);
       }
@@ -152,9 +152,10 @@ public class Sound implements Runnable {
     float gain = (range * Sound.musicVolume / 100) + MIN_VOLUME;
 
     // if the value inserted is 0, then the sound is muted
-    if (Sound.musicVolume == 0 || muteMusic) {
-      gain = MUTE_VOLUME;
-    }
+    //if (Sound.musicVolume == 0 || muteMusic) {
+        //stops the music
+        //gain = MUTE_VOLUME;
+    //}
 
     gainControlGameMusic.setValue(gain);
     gainControlMenuMusic.setValue(gain);
