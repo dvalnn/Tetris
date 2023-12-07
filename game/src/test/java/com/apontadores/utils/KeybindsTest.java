@@ -36,6 +36,5 @@ public class KeybindsTest {
     Keybindings newKeybindings = new Keybindings();
     newKeybindings.movesLeft = 1;
     LoadSave.saveJson(file, newKeybindings);
-
   }
 }

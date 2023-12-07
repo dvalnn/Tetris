@@ -20,20 +20,44 @@ public class Settings extends GameState {
 
   private final SwitchStateAction switchState = new SwitchStateAction();
 
-  private final ButtonAction<String, Void> volumeManager = (String volume) -> {
-    int volumeInt = Integer.parseInt(volume);
-    Sound.setMusicVolume(volumeInt);
+  private static boolean muteEffect = false;
+  private static boolean muteMusic = false;
+
+  private final ButtonAction<Integer, Void> volumeManager = (Integer volume) -> {
+    Sound.setMusicVolume(volume);
     return null;
   };
-  private final ButtonAction<String, Void> effectManager = (String volume) -> {
-    int volumeInt = Integer.parseInt(volume);
-    Sound.setEffectVolume(volumeInt);
+  private final ButtonAction<Integer, Void> effectManager = (Integer volume) -> {
+    Sound.setEffectVolume(volume);
+    return null;
+  };
+  private final ButtonAction<Void, Void> volumeMute = (Void) -> {
+
+    muteMusic = !muteMusic;
+    Sound.setMuteMusic(muteMusic);
+    Sound.setMusicVolume(Sound.getMusicVolume()); 
+    return null;
+  };
+  private final ButtonAction<Void, Void> effectMute = (Void) -> {
+
+    muteEffect = !muteEffect;
+    Sound.setMuteEffect(muteEffect);
+    Sound.setEffectVolume(Sound.getEffectVolume());
     return null;
   };
 
   public Settings() {
     super(GameStatesEnum.SETTINGS);
     frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/settings.json");
+  }
+
+  @Override
+  public void render(final Graphics g) {
+    frame.render(g);
+  }
+
+  @Override
+  public void update() {
 
     ((ImageElement) frame.getElement("musicVolume"))
         .getTextElement()
@@ -44,46 +68,31 @@ public class Settings extends GameState {
         .getTextElement()
         .setText(
             new String(String.valueOf((Sound.getEffectVolume()))));
-
-
-  }
-
-  @Override
-  public void render(final Graphics g) {
-    frame.render(g);
   }
 
   @Override
   public void mouseClicked(final MouseEvent e) {
 
-    ImageElement volumeInputField = (ImageElement) frame.getElement("musicVolume");
-    volumeInputField.getTextElement().removeFocus();
+    ((ImageElement) frame.getElement("effectsVolumePlusButton"))
+        .execIfClicked(e.getX(), e.getY(), effectManager, 1);
 
-    ImageElement effectInputField = (ImageElement) frame.getElement("effectsVolume");
-    effectInputField.getTextElement().removeFocus();
+    ((ImageElement) frame.getElement("effectsVolumeMinusButton"))
+        .execIfClicked(e.getX(), e.getY(), effectManager, -1);
 
+    ((ImageElement) frame.getElement("musicVolumePlusButton"))
+        .execIfClicked(e.getX(), e.getY(), volumeManager, 1);
 
-    volumeManager.exec(volumeInputField.getTextElement().getText());
+    ((ImageElement) frame.getElement("musicVolumeMinusButton"))
+        .execIfClicked(e.getX(), e.getY(), volumeManager, -1);
 
-    effectManager.exec(effectInputField.getTextElement().getText());
- 
-    volumeInputField.execIfClicked(
-        e.getX(),
-        e.getY(),
-        (Void) -> {
-          volumeInputField.getTextElement().giveFocus();
-          return null;
-        },
-        null);
+    ((ImageElement) frame.getElement("musicMute"))
+        .execIfClicked(e.getX(), e.getY(), volumeMute, null);
 
-    effectInputField.execIfClicked(
-    e.getX(),
-    e.getY(),
-    (Void) -> {
-    effectInputField.getTextElement().giveFocus();
-    return null;
-    },
-    null);
+    ((ImageElement) frame.getElement("effectsMute"))
+        .execIfClicked(e.getX(), e.getY(), effectMute, null);
+
+    ((ImageElement) frame.getElement("returnToMainMenu"))
+        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MAIN_MENU);
 
     ((ImageElement) frame.getElement("returnToMainMenu"))
         .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MAIN_MENU);
