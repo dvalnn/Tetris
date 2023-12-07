@@ -127,13 +127,15 @@ public class Game implements Runnable {
     if (!gamePanel.hasFocus())
       gamePanel.requestFocus();
 
-    try {
+    /*try {
       GameStateHandler.getActiveState().update();
       LeaderBoard.update();
     } catch (IOException e) {
       e.printStackTrace();
       // System.out.println(GameStateHandler.getActiveStateID().name());
-    }
+    }*/
+      GameStateHandler.getActiveState().update();
+      LeaderBoard.update();
   }
 
   public void render(final Graphics g) {
