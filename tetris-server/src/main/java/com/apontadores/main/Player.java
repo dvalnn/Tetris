@@ -3,14 +3,15 @@ package com.apontadores.main;
 import java.net.InetAddress;
 
 public class Player {
+  public static final int MAX_PACKET_TIME = 3000;
+
   public final String username;
   public final InetAddress address;
   public final int port;
-  public static final int MAX_PACKET_MISSES = 100;
 
   private boolean ready = false;
 
-  private int packetMisses = 0;
+  private long lastPacketTime;
 
   public Player(
       final String username,
@@ -19,6 +20,7 @@ public class Player {
     this.username = username;
     this.address = address;
     this.port = port;
+    lastPacketTime = System.currentTimeMillis();
   }
 
   public Player clone() {
@@ -34,17 +36,11 @@ public class Player {
   }
 
   public boolean isAlive() {
-    return packetMisses < MAX_PACKET_MISSES;
-  }
-
-  public void packetMiss() {
-    packetMisses++;
+    return System.currentTimeMillis() - lastPacketTime <= MAX_PACKET_TIME;
   }
 
   public void packetHit() {
-    packetMisses--;
-    if (packetMisses < 0)
-      packetMisses = 0;
+    lastPacketTime = System.currentTimeMillis();
   }
 
 }

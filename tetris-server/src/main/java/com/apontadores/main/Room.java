@@ -292,6 +292,7 @@ public class Room implements Runnable {
         if (p1 != null) {
           System.out.println("[Room] Player 1 joined room " + name);
           state = RoomStatesEnum.WAITING_P2;
+          p1.packetHit();
           System.out.println("[Room] New state: " + state.name());
         }
         break;
@@ -307,7 +308,6 @@ public class Room implements Runnable {
           if (heartbeatPacket != null) {
             sendPacket(heartbeatPacket, p1);
             p1.packetHit();
-            p1.setReady(true);
             return;
           }
 
@@ -321,15 +321,11 @@ public class Room implements Runnable {
             System.out.println("[Room] Player 1 re-sent a login packet");
             System.out.println("[Room] Replying to " + p1.address + ":" + p1.port);
             sendPacket(packet, p1);
-            p1.packetMiss();
             return;
           }
 
-          p1.packetMiss();
           return;
         }
-
-        p1.packetMiss();
 
         p2 = handleLogin(
             datagramData,
@@ -355,6 +351,7 @@ public class Room implements Runnable {
           if (heartbeatPacket != null) {
             sendPacket(heartbeatPacket, p1);
             p1.packetHit();
+            p1.setReady(true);
           }
         }
 
@@ -395,7 +392,6 @@ public class Room implements Runnable {
               p2.port));
 
           p1.packetHit();
-          p2.packetMiss();
 
         } else if (datagramAddress.equals(p2.address) && datagramPort == p2.port) {
           outPacketQueue.add(new DatagramPacket(
@@ -405,12 +401,9 @@ public class Room implements Runnable {
               p1.port));
 
           p2.packetHit();
-          p1.packetMiss();
 
         } else {
           System.out.println("[Room] Invalid packet received");
-          p1.packetMiss();
-          p2.packetMiss();
         }
         break;
 
