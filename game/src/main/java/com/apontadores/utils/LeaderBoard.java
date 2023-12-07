@@ -10,6 +10,7 @@ import static com.apontadores.gameElements.gameplay.GameTime.getTimeStr;
 import static com.apontadores.gameElements.gameplay.Levels.getCurrentLevel;
 import static com.apontadores.gameElements.gameplay.Score.getScore;
 import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import java.util.ArrayList;
 
 public class LeaderBoard implements Serializable {
 
@@ -22,7 +23,12 @@ public class LeaderBoard implements Serializable {
     private String time_in_string;
   }
 
-  public static void saveScoreToLeaderBoard() {
+  public static void saveScoreToLeaderBoard(String username, int score, int level) {
+
+    ArrayList <Integer> scoreList = new ArrayList<Integer>();
+    scoreList.add(score);
+
+
     // saves new score to file and updates the leaderboard
     // if the score is better than the 10th best score
     // if not it does nothing
