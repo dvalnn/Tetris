@@ -52,9 +52,10 @@ public class Game implements Runnable {
   }
 
   private void startGameLoop() {
+    new Thread(new Sound()).start();
+
     gameThread = new Thread(this);
     gameThread.start();
-    new Thread(new Sound()).start();
   }
 
   public static void connectMultiplayer(final String ipAddress) {
