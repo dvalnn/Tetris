@@ -6,6 +6,7 @@ import java.io.File;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.BooleanControl;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
@@ -21,10 +22,16 @@ public class Sound implements Runnable {
   private static Clip menuMusic;
   private static Clip clipEffect;
 
+  // Set of variables that control the volume and mute of the music
   private static FloatControl gainControlGameMusic;
   private static FloatControl gainControlMenuMusic;
   private static FloatControl gainControlEffectMusic;
 
+  private static BooleanControl muteControlGameMusic;
+  private static BooleanControl muteControlMenuMusic;
+  private static BooleanControl muteControlEffectMusic;
+
+  // Set of variables that control the volume of the music
   private static int musicVolume; // musicVolume is a percentage and goes from 0 to 100
   private static int effectVolume; // effectMusic is a percentage and goes from 0 to 100
   private static boolean muteMusic = false; // if true, the music is muted
@@ -32,7 +39,6 @@ public class Sound implements Runnable {
 
   private final static float MAX_VOLUME = 6.0f;
   private final static float MIN_VOLUME = -20.0f;
-  private final static float MUTE_VOLUME = -80.0f;
 
   private int musicSound;
   private int effectSound;
@@ -69,6 +75,10 @@ public class Sound implements Runnable {
     gainControlMenuMusic = (FloatControl) menuMusic.getControl(FloatControl.Type.MASTER_GAIN);
     gainControlEffectMusic = (FloatControl) clipEffect.getControl(FloatControl.Type.MASTER_GAIN);
 
+    muteControlGameMusic = (BooleanControl) gameMusic.getControl(BooleanControl.Type.MUTE);
+    muteControlMenuMusic = (BooleanControl) menuMusic.getControl(BooleanControl.Type.MUTE);
+    muteControlEffectMusic = (BooleanControl) clipEffect.getControl(BooleanControl.Type.MUTE);
+
     setMusicVolume(musicVolume);
     setEffectVolume(effectVolume);
 
@@ -91,11 +101,11 @@ public class Sound implements Runnable {
         System.out.println("muted");
       }
 
-      if (!muteMusic && newState.equals(GameStatesEnum.PLAYING)) {
+      if (newState.equals(GameStatesEnum.PLAYING)) {
         menuMusic.stop();
         playMusic(gameMusic);
 
-      } else if (!muteMusic && (oldState.equals(GameStatesEnum.PLAYING))) {
+      } else if (oldState.equals(GameStatesEnum.PLAYING)) {
         gameMusic.stop();
         playMusic(menuMusic);
       }
@@ -140,25 +150,29 @@ public class Sound implements Runnable {
       // The value cant be higher than 100 or lower than 0
       if (Sound.musicVolume + musicVolume > 100) {
         Sound.musicVolume = 100;
-        
+
       } else if (Sound.musicVolume + musicVolume < 0) {
         Sound.musicVolume = 0;
 
-      } else Sound.musicVolume += musicVolume;
+      } else
+        Sound.musicVolume += musicVolume;
 
-    } else Sound.musicVolume = musicVolume;
+    } else
+      Sound.musicVolume = musicVolume;
 
     float range = MAX_VOLUME - (MIN_VOLUME);
     float gain = (range * Sound.musicVolume / 100) + MIN_VOLUME;
 
-    // if the value inserted is 0, then the sound is muted
-    //if (Sound.musicVolume == 0 || muteMusic) {
-        //stops the music
-        //gain = MUTE_VOLUME;
-    //}
-
     gainControlGameMusic.setValue(gain);
     gainControlMenuMusic.setValue(gain);
+
+    if (Sound.musicVolume == 0 || muteMusic) {
+      muteControlGameMusic.setValue(true);
+      muteControlMenuMusic.setValue(true);
+    } else {
+      muteControlGameMusic.setValue(false);
+      muteControlMenuMusic.setValue(false);
+    }
 
     // saves the volume in the json file
     Sound effect = new Sound();
@@ -173,7 +187,7 @@ public class Sound implements Runnable {
     // and then adds the minimum value to the result
 
     if (effectVolume == -1 || effectVolume == 1) {
-  
+
       // The value cant be higher than 100 or lower than 0
       if (Sound.effectVolume + effectVolume > 100) {
         Sound.effectVolume = 100;
@@ -181,17 +195,21 @@ public class Sound implements Runnable {
       } else if (Sound.effectVolume + effectVolume < 0) {
         Sound.effectVolume = 0;
 
-      } else Sound.effectVolume += effectVolume;
+      } else
+        Sound.effectVolume += effectVolume;
 
-    } else Sound.effectVolume = effectVolume;
+    } else
+      Sound.effectVolume = effectVolume;
 
     float range = MAX_VOLUME - (MIN_VOLUME);
     float gain = (range * Sound.effectVolume / 100) + MIN_VOLUME;
 
     // if the value inserted is 0, then the sound is muted
-    if (Sound.effectVolume == 0 || muteEffect) {
-      gain = MUTE_VOLUME;
-    }
+    if (Sound.effectVolume == 0 || muteEffect)
+      muteControlEffectMusic.setValue(true);
+
+    else
+      muteControlEffectMusic.setValue(false);
 
     gainControlEffectMusic.setValue(gain);
 
