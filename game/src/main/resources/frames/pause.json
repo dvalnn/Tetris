@@ -6,7 +6,7 @@
       "type": "image",
       "name": "bannerGamePaused2",
       "imagePath": "/buttonsV2/bannerGamePaused2.png",
-      "x": 12.95,
+      "x": 16.042, 
       "y": 0,
       "imageScale": 0.666,
       "renderPriority": 1
@@ -24,7 +24,7 @@
       "type": "image",
       "name": "resume",
       "imagePath": "/buttonsV2/resume.png",
-      "x": 20.083,
+      "x": 20.052,
       "y": 17.222,
       "imageScale": 0.666,
       "renderPriority": 1
