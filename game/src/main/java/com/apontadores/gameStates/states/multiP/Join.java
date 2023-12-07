@@ -62,11 +62,22 @@ public class Join extends GameState {
         },
         null);
 
+        
+    ImageElement inputRoomName = ((ImageElement) frame.getElement("roomName"));
+    inputRoomName.getTextElement().removeFocus();
+    inputRoomName.execIfClicked(x,y,
+        (Void) -> {
+          inputRoomName.getTextElement().giveFocus();
+          return null;
+        },
+        null);
   }
 
   @Override
   public void keyPressed(KeyEvent e) {
     ((ImageElement) frame.getElement("IP"))
         .getTextElement().keyboardInput(e);
+    ((ImageElement) frame.getElement("roomName"))
+    .getTextElement().keyboardInput(e);
   }
 }
