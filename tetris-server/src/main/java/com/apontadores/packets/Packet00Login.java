@@ -3,32 +3,31 @@ package com.apontadores.packets;
 import java.util.StringJoiner;
 import java.util.zip.CRC32;
 
-public class LoginPacket implements Packet {
+public class Packet00Login extends Packet {
 
   private static final int PACKET_ID = 0;
   private static final int TOKEN_COUNT = 5;
 
-  private int packetID;
-  private int transactionID;
   private long checksum;
   private String username;
   private String roomName;
 
   private CRC32 crc32 = new CRC32();
 
-  public LoginPacket(
+  public Packet00Login(
       final String username,
       final String roomName) {
 
-    packetID = PACKET_ID;
+    super(PACKET_ID);
+
     this.username = username;
     this.roomName = roomName;
     this.crc32.update((username + roomName).getBytes());
     this.checksum = crc32.getValue();
   }
 
-  public LoginPacket() {
-    packetID = PACKET_ID;
+  public Packet00Login() {
+    super(PACKET_ID);
   }
 
   @Override
@@ -63,29 +62,21 @@ public class LoginPacket implements Packet {
   }
 
   @Override
-  public LoginPacket fromBytes(byte[] bytes, int length) throws PacketException {
-    String data = new String(bytes, 0, length).trim();
-    String tokens[] = data.split(",");
-    return fromTokens(tokens);
-  }
-
-  @Override
-  public LoginPacket fromTokens(String[] tokens) throws PacketException {
+  public Packet00Login fromTokens(String[] tokens) throws PacketException {
     if (tokens.length != TOKEN_COUNT)
-      throw new PacketException("Invalid packet length");
-
-    int metadata[] = Packet.parseMetadata(tokens);
-
-    packetID = metadata[0];
-    transactionID = metadata[1];
-    if (packetID != PACKET_ID)
-      throw new PacketException("Invalid packet ID for LoginPacket");
+      throw new PacketException("[Packet00Login] Invalid packet length");
 
     try {
+      packetID = Integer.parseInt(tokens[0]);
+      transactionID = Integer.parseInt(tokens[1]);
       checksum = Long.parseLong(tokens[2]);
     } catch (NumberFormatException e) {
-      throw new PacketException("Invalid data");
+      throw new PacketException("[Packet00Login] Invalid data type");
     }
+
+    if (packetID != PACKET_ID)
+      throw new PacketException("[Packet00Login] Invalid packet ID. Expected: "
+          + PACKET_ID + " Got: " + packetID);
 
     username = tokens[3];
     roomName = tokens[4];
@@ -93,7 +84,7 @@ public class LoginPacket implements Packet {
     CRC32 crc32 = new CRC32();
     crc32.update((username + roomName).getBytes());
     if (checksum != crc32.getValue())
-      throw new PacketException("Invalid checksum");
+      throw new PacketException("[Packet00Login] Invalid checksum");
 
     return this;
   }

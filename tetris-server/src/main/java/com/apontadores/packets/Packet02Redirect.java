@@ -3,18 +3,16 @@ package com.apontadores.packets;
 import java.util.StringJoiner;
 import java.util.zip.CRC32;
 
-public class RedirectPacket implements Packet {
+public class Packet02Redirect extends Packet {
 
-  private static final int PACKET_ID = 0;
+  private static final int PACKET_ID = 2;
   private static final int TOKEN_COUNT = 4;
 
-  private int packetID;
-  private int transactionID;
   private long checksum;
   private int port;
 
-  public RedirectPacket(final int port) {
-    packetID = PACKET_ID;
+  public Packet02Redirect(final int port) {
+    super(PACKET_ID);
     transactionID = 0;
 
     this.port = port;
@@ -24,43 +22,34 @@ public class RedirectPacket implements Packet {
     checksum = crc32.getValue();
   }
 
-  public RedirectPacket() {
-    packetID = PACKET_ID;
+  public Packet02Redirect() {
+    super(PACKET_ID);
   }
 
   @Override
-  public RedirectPacket fromBytes(byte[] bytes, int length)
-      throws PacketException {
-
-    String data = new String(bytes, 0, length).trim();
-    String tokens[] = data.split(",");
-    return fromTokens(tokens);
-  }
-
-  @Override
-  public RedirectPacket fromTokens(String[] tokens)
+  public Packet02Redirect fromTokens(String[] tokens)
       throws PacketException {
 
     if (tokens.length != TOKEN_COUNT)
-      throw new PacketException("Invalid packet length");
-
-    int metadata[] = Packet.parseMetadata(tokens);
-    packetID = metadata[0];
-    transactionID = metadata[1];
-    if (packetID != PACKET_ID)
-      throw new PacketException("Invalid packet ID");
+      throw new PacketException("[Packet02Redirect] Invalid packet length");
 
     try {
+      packetID = Integer.parseInt(tokens[0]);
+      transactionID = Integer.parseInt(tokens[1]);
       checksum = Long.parseLong(tokens[2]);
       port = Integer.parseInt(tokens[3]);
     } catch (NumberFormatException e) {
-      throw new PacketException("Invalid data");
+      throw new PacketException("[Packet02Redirect] Invalid data");
     }
+
+    if (packetID != PACKET_ID)
+      throw new PacketException("[Packet02Redirect] Invalid packet ID. Expected "
+          + PACKET_ID + ", got " + packetID);
 
     CRC32 crc32 = new CRC32();
     crc32.update(String.valueOf(port).getBytes());
     if (checksum != crc32.getValue())
-      throw new PacketException("Invalid checksum");
+      throw new PacketException("[Packet02Redirect] Invalid checksum");
 
     return this;
   }

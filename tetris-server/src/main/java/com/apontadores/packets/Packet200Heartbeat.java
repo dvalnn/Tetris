@@ -2,15 +2,12 @@ package com.apontadores.packets;
 
 import java.util.StringJoiner;
 
-public class HeartbeatPacket implements Packet {
-  public static final int PACKET_ID = 2;
+public class Packet200Heartbeat extends Packet {
+  public static final int PACKET_ID = 200;
   private static final int TOKEN_COUNT = 2;
 
-  private int packetID;
-  private int transactionID;
-
-  public HeartbeatPacket() {
-    packetID = PACKET_ID;
+  public Packet200Heartbeat() {
+    super(PACKET_ID);
   }
 
   @Override
@@ -31,19 +28,16 @@ public class HeartbeatPacket implements Packet {
   }
 
   @Override
-  public HeartbeatPacket fromBytes(byte[] bytes, int length) throws PacketException {
-    String tokens[] = new String(bytes, 0, length).trim().split(",");
-    return fromTokens(tokens);
-  }
-
-  @Override
-  public HeartbeatPacket fromTokens(String[] tokens) throws PacketException {
+  public Packet200Heartbeat fromTokens(String[] tokens) throws PacketException {
     if (tokens.length != TOKEN_COUNT)
       throw new PacketException("Invalid packet length");
 
-    int metadata[] = Packet.parseMetadata(tokens);
-    packetID = metadata[0];
-    transactionID = metadata[1];
+    try {
+      packetID = Integer.parseInt(tokens[0]);
+      transactionID = Integer.parseInt(tokens[1]);
+    } catch (NumberFormatException e) {
+      throw new PacketException("Invalid data");
+    }
 
     if (packetID != PACKET_ID)
       throw new PacketException("Invalid packet ID");
@@ -63,4 +57,5 @@ public class HeartbeatPacket implements Packet {
   public void setTransactionID(int transactionID) {
     this.transactionID = transactionID;
   }
+
 }

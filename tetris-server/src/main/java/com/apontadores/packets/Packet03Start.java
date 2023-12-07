@@ -3,22 +3,20 @@ package com.apontadores.packets;
 import java.util.StringJoiner;
 import java.util.zip.CRC32;
 
-public class GameStartPacket implements Packet {
+public class Packet03Start extends Packet {
 
   public static final int PACKET_ID = 3;
   public static final int TOKEN_COUNT = 4;
 
-  private int packetID;
-  private int transactionID;
   private long checksum;
   private String opponentName;
 
-  public GameStartPacket() {
-    packetID = PACKET_ID;
+  public Packet03Start() {
+    super(PACKET_ID);
   }
 
-  public GameStartPacket(String opponentName) {
-    packetID = PACKET_ID;
+  public Packet03Start(String opponentName) {
+    super(PACKET_ID);
     this.opponentName = opponentName;
 
     CRC32 crc = new CRC32();
@@ -48,34 +46,28 @@ public class GameStartPacket implements Packet {
   }
 
   @Override
-  public GameStartPacket fromBytes(byte[] bytes, int length) throws PacketException {
-    String tokens[] = new String(bytes, 0, length).trim().split(",");
-    return fromTokens(tokens);
-  }
-
-  @Override
-  public GameStartPacket fromTokens(String[] tokens) throws PacketException {
+  public Packet03Start fromTokens(String[] tokens) throws PacketException {
     if (tokens.length != TOKEN_COUNT)
-      throw new PacketException("Invalid packet length");
+      throw new PacketException("[Packet03Start] Invalid packet length");
 
-    int metadata[] = Packet.parseMetadata(tokens);
-
-    packetID = metadata[0];
-    transactionID = metadata[1];
+    try {
+      packetID = Integer.parseInt(tokens[0]);
+      transactionID = Integer.parseInt(tokens[1]);
+      checksum = Long.parseLong(tokens[2]);
+    } catch (NumberFormatException e) {
+      throw new PacketException("[Packet03Start] Invalid data type");
+    }
 
     if (packetID != PACKET_ID)
-      throw new PacketException("Invalid packet ID");
+      throw new PacketException("[Packet03Start] Invalid packet ID. Expected "
+          + PACKET_ID + ", got " + packetID);
 
-    if (transactionID <= 0)
-      throw new PacketException("Invalid transaction ID");
-
-    checksum = Long.parseLong(tokens[2]);
     opponentName = tokens[3];
 
     CRC32 crc = new CRC32();
     crc.update(opponentName.getBytes());
     if (checksum != crc.getValue())
-      throw new PacketException("Invalid checksum");
+      throw new PacketException("[Packet03Start] Invalid checksum");
 
     return this;
   }

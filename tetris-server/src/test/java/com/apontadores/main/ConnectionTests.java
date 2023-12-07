@@ -1,5 +1,6 @@
 package com.apontadores.main;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -11,9 +12,11 @@ import java.net.InetAddress;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.apontadores.packets.RedirectPacket;
-import com.apontadores.packets.LoginPacket;
-import com.apontadores.packets.PacketException;
+import com.apontadores.packets.Packet02Redirect;
+import com.apontadores.packets.Packet.PacketException;
+import com.apontadores.packets.Packet.PacketTypesEnum;
+import com.apontadores.packets.Packet;
+import com.apontadores.packets.Packet00Login;
 
 public class ConnectionTests {
   private final static int PORT = 42069;
@@ -32,9 +35,10 @@ public class ConnectionTests {
     DatagramSocket mockClient = new DatagramSocket();
     mockClient.setSoTimeout(10000);
 
-    System.out.println("[TEST] mock client on port: " + mockClient.getLocalPort());
+    System.out.println("[TEST] mock client on port: "
+        + mockClient.getLocalPort());
 
-    LoginPacket loginPacket = new LoginPacket(playerName, roomName);
+    Packet00Login loginPacket = new Packet00Login(playerName, roomName);
     InetAddress serverInetAddress = InetAddress.getByName(ConnectionTests.ADDRESS);
 
     DatagramPacket outPacket = new DatagramPacket(
@@ -50,13 +54,18 @@ public class ConnectionTests {
         Server.MAX_PACKET_SIZE);
 
     mockClient.receive(inPacket);
-    assertNotEquals(0, inPacket.getLength(), "[TEST] Received packet should not be empty");
+    assertNotEquals(0, inPacket.getLength(),
+        "[TEST] Received packet should not be empty");
 
-    RedirectPacket redirectPacket;
+    Packet02Redirect redirectPacket;
+    String tokens[] = Packet.tokenize(inPacket.getData(), inPacket.getLength());
+    PacketTypesEnum packetType = Packet.lookupPacket(tokens);
+
+    assertEquals(PacketTypesEnum.REDIRECT, packetType,
+        "[TEST] Received packet should be a redirect packet");
+
     try {
-      redirectPacket = new RedirectPacket().fromBytes(
-          inPacket.getData(),
-          inPacket.getLength());
+      redirectPacket = new Packet02Redirect().fromTokens(tokens);
     } catch (PacketException e) {
       Assertions.fail(e.getMessage());
       mockClient.close();

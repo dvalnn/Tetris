@@ -3,11 +3,12 @@ package com.apontadores.packets;
 import java.util.StringJoiner;
 import java.util.zip.CRC32;
 
-public class PlayerUpdatePacket implements Packet {
+public class Packet105Update extends Packet {
 
-  public static final int PACKET_ID = 4;
+  public static final int PACKET_ID = 100;
   public static final int TOKEN_COUNT = 5;
 
+  // FIXME: change this to an enum
   public static final String[] updateTypes = {
       "tetromino",
       "board",
@@ -16,19 +17,16 @@ public class PlayerUpdatePacket implements Packet {
       "retransmit",
   };
 
-  private int packetID;
-  private int transactionID;
   private long checksum;
   private String updateType;
   private String updateData;
 
-  public PlayerUpdatePacket() {
-    packetID = PACKET_ID;
+  public Packet105Update() {
+    super(PACKET_ID);
   }
 
-  public PlayerUpdatePacket(String updateType, String updateData) {
-    packetID = PACKET_ID;
-    this.updateType = updateType;
+  public Packet105Update(String updateType, String updateData) {
+    super(PACKET_ID);
     this.updateData = updateData;
 
     CRC32 crc = new CRC32();
@@ -60,27 +58,25 @@ public class PlayerUpdatePacket implements Packet {
   }
 
   @Override
-  public PlayerUpdatePacket fromBytes(byte[] bytes, int length) throws PacketException {
-    return fromTokens(new String(bytes, 0, length).trim().split(","));
-  }
-
-  @Override
-  public PlayerUpdatePacket fromTokens(String[] tokens) throws PacketException {
+  public Packet105Update fromTokens(String[] tokens) throws PacketException {
 
     if (tokens.length != TOKEN_COUNT)
-      throw new PacketException("Invalid packet length");
+      throw new PacketException("[Packet100Update] Invalid packet length");
 
-    int[] metadata = Packet.parseMetadata(tokens);
-    packetID = metadata[0];
-    transactionID = metadata[1];
+    try {
+      packetID = Integer.parseInt(tokens[0]);
+      transactionID = Integer.parseInt(tokens[1]);
+      checksum = Long.parseLong(tokens[2]);
+    } catch (NumberFormatException e) {
+      throw new PacketException("[Packet100Update] Invalid data");
+    }
 
     if (packetID != PACKET_ID)
-      throw new PacketException("Invalid packet ID");
+      throw new PacketException("[Packet100Update] Invalid packet ID");
 
     if (transactionID <= 0)
-      throw new PacketException("Invalid transaction ID");
+      throw new PacketException("[Packet100Update] Invalid transaction ID");
 
-    checksum = Long.parseLong(tokens[2]);
     updateType = tokens[3];
     updateData = tokens[4];
 
