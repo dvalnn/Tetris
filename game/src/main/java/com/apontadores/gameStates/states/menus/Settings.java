@@ -35,14 +35,14 @@ public class Settings extends GameState {
 
     muteMusic = !muteMusic;
     Sound.setMuteMusic(muteMusic);
-    Sound.setMusicVolume(Sound.getMusicVolume()); 
+    Sound.setMusicVolume(0); 
     return null;
   };
   private final ButtonAction<Void, Void> effectMute = (Void) -> {
 
     muteEffect = !muteEffect;
     Sound.setMuteEffect(muteEffect);
-    Sound.setEffectVolume(Sound.getEffectVolume());
+    Sound.setEffectVolume(0);
     return null;
   };
 

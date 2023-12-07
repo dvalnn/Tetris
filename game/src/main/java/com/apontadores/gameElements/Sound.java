@@ -79,8 +79,8 @@ public class Sound implements Runnable {
     muteControlMenuMusic = (BooleanControl) menuMusic.getControl(BooleanControl.Type.MUTE);
     muteControlEffectMusic = (BooleanControl) clipEffect.getControl(BooleanControl.Type.MUTE);
 
-    setMusicVolume(musicVolume);
-    setEffectVolume(effectVolume);
+    setMusicVolume(0);
+    setEffectVolume(0);
 
     GameStatesEnum oldState = GameStateHandler.getActiveStateID();
 
@@ -145,20 +145,15 @@ public class Sound implements Runnable {
     // A relation that turns the range of -20.0f to 6.0f into a range of 0 to 100
     // and then adds the minimum value to the result
 
-    if (musicVolume == -1 || musicVolume == 1) {
+    // The value cant be higher than 100 or lower than 0
+    if (Sound.musicVolume + musicVolume > 100) {
+      Sound.musicVolume = 100;
 
-      // The value cant be higher than 100 or lower than 0
-      if (Sound.musicVolume + musicVolume > 100) {
-        Sound.musicVolume = 100;
-
-      } else if (Sound.musicVolume + musicVolume < 0) {
-        Sound.musicVolume = 0;
-
-      } else
-        Sound.musicVolume += musicVolume;
+    } else if (Sound.musicVolume + musicVolume < 0) {
+      Sound.musicVolume = 0;
 
     } else
-      Sound.musicVolume = musicVolume;
+      Sound.musicVolume += musicVolume;
 
     float range = MAX_VOLUME - (MIN_VOLUME);
     float gain = (range * Sound.musicVolume / 100) + MIN_VOLUME;
@@ -178,7 +173,6 @@ public class Sound implements Runnable {
     Sound effect = new Sound();
     effect.musicSound = Sound.musicVolume;
     effect.effectSound = Sound.effectVolume;
-
     LoadSave.saveJson(RESOURCES_PATH + "/config/sound.json", effect);
   }
 
@@ -186,20 +180,15 @@ public class Sound implements Runnable {
     // A relation that turns the range of -20.0f to 6.0206f into a range of 0 to 100
     // and then adds the minimum value to the result
 
-    if (effectVolume == -1 || effectVolume == 1) {
+    // The value cant be higher than 100 or lower than 0
+    if (Sound.effectVolume + effectVolume > 100) {
+      Sound.effectVolume = 100;
 
-      // The value cant be higher than 100 or lower than 0
-      if (Sound.effectVolume + effectVolume > 100) {
-        Sound.effectVolume = 100;
-
-      } else if (Sound.effectVolume + effectVolume < 0) {
-        Sound.effectVolume = 0;
-
-      } else
-        Sound.effectVolume += effectVolume;
+    } else if (Sound.effectVolume + effectVolume < 0) {
+      Sound.effectVolume = 0;
 
     } else
-      Sound.effectVolume = effectVolume;
+      Sound.effectVolume += effectVolume;
 
     float range = MAX_VOLUME - (MIN_VOLUME);
     float gain = (range * Sound.effectVolume / 100) + MIN_VOLUME;
