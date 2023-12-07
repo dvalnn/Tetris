@@ -2,11 +2,6 @@ package com.apontadores.utils;
 
 import java.io.*;
 import java.io.Serializable;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Formatter;
 
 import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
@@ -14,35 +9,23 @@ import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import static com.apontadores.gameElements.gameplay.GameTime.getTimeStr;
 import static com.apontadores.gameElements.gameplay.Levels.getCurrentLevel;
 import static com.apontadores.gameElements.gameplay.Score.getScore;
-import static com.apontadores.gameStates.GameStateHandler.GameStatesEnum.GAME_OVER;
-import static com.apontadores.gameStates.GameStateHandler.getActiveState;
 import static com.apontadores.utils.Constants.RESOURCES_PATH;
 
 public class LeaderBoard implements Serializable {
-  private static int index;
 
-  private int TotalScore;
-  private String TimePlayed;
-  private int LastLevel;
+  public static class TopScores extends LeaderBoard{
 
-  private static LeaderBoard[] TopScore = new LeaderBoard[10];
+    private String username;
+    private int score;
+    private int level;
 
-  static {
-    for (int i = 0; i < 10; i++) {
-      TopScore[i] = new LeaderBoard();
-    }
-
-    index = 0;
+    private String time_in_string;
   }
 
   public static void saveScoreToLeaderBoard() {
     // saves new score to file and updates the leaderboard
     // if the score is better than the 10th best score
     // if not it does nothing
-   // Arrays.sort(TopScore);
-   // for (LeaderBoard TotalScore : TopScore) {
-     // if (element > memberToCompare) {
-    //if (TopScore[i+1].TotalScore > TopScore[i].TotalScore)
 
 
 
@@ -52,29 +35,23 @@ public class LeaderBoard implements Serializable {
   public static String loadLeaderboard() {
     // loads the leaderboard from file
     // and returns a string with the leaderboard
+
     return null;
   }
 
   public static void update() throws IOException {
-
+    TopScores top =new TopScores();
     if (GameStateHandler.getActiveStateID().equals(GameStatesEnum.GAME_OVER)) {
 
-      if (index == 10) {
-        // FIXME: do something to not crash when index == 10
-        return; // FIXME: this is a temporary fix
-      }
-      TopScore[index].TotalScore = getScore();
-      TopScore[index].LastLevel = getCurrentLevel();// in progress
-      TopScore[index].TimePlayed = getTimeStr();// in progress
-
+      top.score = getScore();
+      top.level = getCurrentLevel();// in progress
+      top.time_in_string = getTimeStr();
+    }
       try {
         FileOutputStream f1 = new FileOutputStream(RESOURCES_PATH + "/Scores.txt");
         ObjectOutputStream out = new ObjectOutputStream(f1);
-        for (int i = 0; i < 10; i++) {
-          out.writeObject(TopScore[i]);
-        }
-        out.close();
-        index++;
+          out.writeObject(top);
+          out.close();
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -86,14 +63,14 @@ public class LeaderBoard implements Serializable {
           ObjectInputStream in = new ObjectInputStream(f2);
           in.close();
           LeaderBoard topScores = (LeaderBoard) in.readObject();
-          System.out.println(topScores.TotalScore);
-          System.out.println(topScores.LastLevel);
-          System.out.println(topScores.TimePlayed);
+          System.out.println(top.score);
+          System.out.println(top.level);
+          System.out.println(top.time_in_string);
         } catch (ClassNotFoundException | IOException e) {
-          throw new RuntimeException(e);
+          e.printStackTrace();
         }
       }
 
     }
   }
-}
+
