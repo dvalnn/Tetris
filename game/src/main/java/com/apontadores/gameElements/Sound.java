@@ -67,7 +67,6 @@ public class Sound implements Runnable {
 
     menuMusic = setFileMusic(RESOURCES_PATH + "/sounds/tetrisTheme.wav");
     gameMusic = setFileMusic(RESOURCES_PATH + "/sounds/tetrisThemeOld.wav");
-    // clipEffect = setFileMusic(RESOURCES_PATH +"/sounds/clickSound.wav");
 
     clipEffect = ImageElement.getClipEffect();
 

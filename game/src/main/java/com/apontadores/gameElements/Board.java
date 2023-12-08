@@ -26,7 +26,11 @@ public class Board {
         colors.add(set.backgroundColor);
       }
       recentlyChanged = true;
+      getLineCounter = 0;
     }
+
+    private int getLineCounter = 0;
+    private static final int GET_LINE_TRESHOLD = 1;
 
     public void setColor(final int index, final Color color) {
       setColor(index, color.getRGB());
@@ -35,6 +39,7 @@ public class Board {
     public void setColor(final int index, final int rgb) {
       colors.set(index, new Color(rgb));
       recentlyChanged = true;
+      getLineCounter = 0;
     }
 
     public int getIndexRGB(final int index) {
@@ -47,7 +52,13 @@ public class Board {
 
     public List<Color> getColorsCopyIfChanged() {
       if (recentlyChanged) {
-        recentlyChanged = false;
+        // recentlyChanged = false;
+        getLineCounter++;
+        if (getLineCounter > GET_LINE_TRESHOLD) {
+          recentlyChanged = false;
+          getLineCounter = 0;
+        }
+
         return getColorsCopy();
       }
 
@@ -60,6 +71,11 @@ public class Board {
         copy.add(new Color(color.getRGB()));
       }
       return copy;
+    }
+
+    public boolean isEmpty() {
+      return colors.stream()
+          .allMatch(color -> color.getRGB() == set.backgroundColor.getRGB());
     }
   }
 
