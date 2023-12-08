@@ -209,9 +209,16 @@ public class TetrisClient implements Runnable {
     packetProcessor.start();
 
     // TODO: start packet sender only after the game starts
-    packetSender.start();
+    // packetSender.start();
 
     while (true) {
+
+      System.out.println("[TetrisClient] incoming packets: " + receivedPackets.size());
+      System.out.println("[TetrisClient] incoming updates: " + receivedUpdates.size());
+      System.out.println("[TetrisClient] outgoing updates: " + outgoingUpdates.size());
+      System.out.println("[TetrisClient] outgoing packets: " + outgoingPackets.size());
+      System.out.println("[TetrisClient] --------------------");
+
       if (phase == ConnectionPhases.DISCONNECTED) {
         try {
           Thread.sleep(10);
@@ -254,17 +261,17 @@ public class TetrisClient implements Runnable {
         break;
       }
 
-      if (phase != ConnectionPhases.PLAYING) {
-        DatagramPacket packet = outgoingPackets.poll();
-        if (packet == null)
-          continue;
+      // if (phase != ConnectionPhases.PLAYING) {
+      DatagramPacket packet = outgoingPackets.poll();
+      if (packet == null)
+        continue;
 
-        try {
-          socket.send(packet);
-        } catch (IOException e) {
-          e.printStackTrace();
-          break;
-        }
+      try {
+        socket.send(packet);
+      } catch (IOException e) {
+        e.printStackTrace();
+        break;
+        // }
       }
     }
 

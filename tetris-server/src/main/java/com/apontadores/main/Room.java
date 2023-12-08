@@ -188,6 +188,10 @@ public class Room implements Runnable {
     System.out.println("[Room] Listening on port " + roomSocket.getLocalPort());
 
     while (true) {
+      System.out.println("[Room] outgoing queue size: " + outPacketQueue.size());
+      System.out.println("[Room] incoming queue size: " + inPacketQueue.size());
+      System.out.println("[Room] --------------------------");
+
       if (p1 != null && !p1.isAlive()) {
         System.out.println("[Room] Player 1 timed out");
         state = RoomStatesEnum.FINISHED;
@@ -405,9 +409,9 @@ public class Room implements Runnable {
   }
 
   private Player getPacketSender(InetAddress address, int port) {
-    if (p1 != null && p1.address.equals(address))
+    if (p1 != null && p1.address.equals(address) && p1.port == port)
       return p1;
-    else if (p2 != null && p2.address.equals(address))
+    else if (p2 != null && p2.address.equals(address) && p2.port == port)
       return p2;
     else
       return null;
