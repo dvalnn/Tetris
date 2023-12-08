@@ -87,6 +87,7 @@ public class TetrisClient implements Runnable {
   private ConnectionPhases phase;
 
   private TimerBasedService packetProcessor;
+  private TimerBasedService packetSender;
 
   private long lastReceivedPacketTime;
   private boolean connectionTimeout;
@@ -106,6 +107,8 @@ public class TetrisClient implements Runnable {
   private int maxTransactionErrorCount = 1000;
 
   private boolean connectionAborted = false;
+
+  private DatagramSocket outSocket;
 
   public TetrisClient(String username, String roomName) {
     this.state = ClientStates.INACTIVE;
@@ -160,6 +163,28 @@ public class TetrisClient implements Runnable {
             processConPhase();
           }
         }, 0, 5);
+
+    packetSender = new TimerBasedService(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (state != ClientStates.RUNNING)
+              this.cancel();
+
+            if (phase != ConnectionPhases.PLAYING)
+              return;
+
+            if (!outgoingPackets.isEmpty()) {
+              DatagramPacket packet = outgoingPackets.poll();
+              try {
+                outSocket.send(packet);
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
+            }
+          }
+        }, 0, 2);
+
   }
 
   @Override
@@ -168,6 +193,7 @@ public class TetrisClient implements Runnable {
 
     try {
       socket = new DatagramSocket();
+      outSocket = new DatagramSocket();
       socket.setSoTimeout(1);
     } catch (SocketException e) {
       e.printStackTrace();
@@ -181,6 +207,9 @@ public class TetrisClient implements Runnable {
 
     lastReceivedPacketTime = System.nanoTime();
     packetProcessor.start();
+
+    // TODO: start packet sender only after the game starts
+    packetSender.start();
 
     while (true) {
       if (phase == ConnectionPhases.DISCONNECTED) {
@@ -225,15 +254,17 @@ public class TetrisClient implements Runnable {
         break;
       }
 
-      DatagramPacket packet = outgoingPackets.poll();
-      if (packet == null)
-        continue;
+      if (phase != ConnectionPhases.PLAYING) {
+        DatagramPacket packet = outgoingPackets.poll();
+        if (packet == null)
+          continue;
 
-      try {
-        socket.send(packet);
-      } catch (IOException e) {
-        e.printStackTrace();
-        break;
+        try {
+          socket.send(packet);
+        } catch (IOException e) {
+          e.printStackTrace();
+          break;
+        }
       }
     }
 

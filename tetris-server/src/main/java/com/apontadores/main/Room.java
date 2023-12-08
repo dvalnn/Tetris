@@ -405,9 +405,9 @@ public class Room implements Runnable {
   }
 
   private Player getPacketSender(InetAddress address, int port) {
-    if (p1 != null && p1.address.equals(address) && p1.port == port)
+    if (p1 != null && p1.address.equals(address))
       return p1;
-    else if (p2 != null && p2.address.equals(address) && p2.port == port)
+    else if (p2 != null && p2.address.equals(address))
       return p2;
     else
       return null;
