@@ -14,6 +14,7 @@ import com.apontadores.packets.Packet.PacketTypesEnum;
 public class Server implements Runnable {
 
   public static final int MAX_PACKET_SIZE = 1024;
+  public static final int PUBLIC_PORT = 42069;
 
   private final int port;
 
@@ -33,7 +34,7 @@ public class Server implements Runnable {
             rooms.remove(r);
 
           roomsToRemove.clear();
-          if (!forceExit) {
+          if (forceExit) {
             System.out.println("[Server] Terminating room cleaner");
             this.cancel();
           }

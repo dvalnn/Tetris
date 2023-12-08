@@ -17,7 +17,7 @@ public abstract class Packet {
     READY(04),
 
     // Player Update Packets (Playing state only)
-    UPDATE(100), // player update (score, level, lines cleared, etc)
+    UPDATE(100), // player update
     BOARD(101), // current board state
     SHAPE(102), // player shape
     ELEMENTS(103), // next and hold UI elements

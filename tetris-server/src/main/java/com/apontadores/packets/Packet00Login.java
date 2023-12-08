@@ -30,6 +30,14 @@ public class Packet00Login extends Packet {
     super(PACKET_ID);
   }
 
+  public String getUsername() {
+    return username;
+  }
+
+  public String getRoomName() {
+    return roomName;
+  }
+
   @Override
   public byte[] asBytes() {
     StringJoiner joiner = new StringJoiner(",");
@@ -40,14 +48,6 @@ public class Packet00Login extends Packet {
         .add(roomName);
 
     return joiner.toString().getBytes();
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public String getRoomName() {
-    return roomName;
   }
 
   @Override

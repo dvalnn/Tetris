@@ -67,7 +67,7 @@ public class Room implements Runnable {
     this.id = id;
     this.name = roomName;
 
-    System.out.println("[Room] Created room: " + name + " with id: " + id);
+    System.out.println("[Room] Created room: \"" + name + "\" with id: " + id);
 
     roomSocket = new DatagramSocket();
     roomSocket.setSoTimeout(1000);
@@ -94,8 +94,6 @@ public class Room implements Runnable {
             }
 
             // send a packet with the room's private port to the player
-            System.out.println("[Room-playerRedirect] Sending redirect packet to player " + p.username);
-            System.out.println("[Room-playerRedirect] Redirecting to port: " + roomSocket.getLocalPort());
             byte data[] = new Packet02Redirect(roomSocket.getLocalPort()).asBytes();
             DatagramPacket packet = new DatagramPacket(
                 data,
@@ -104,11 +102,9 @@ public class Room implements Runnable {
                 p.port);
 
             try {
-              System.out.println("[Room] Sending redirect packet to player " + p.username);
-              System.out.println("[Room] Packet address : " + packet.getAddress());
-              System.out.println("[Room] Packet port : " + packet.getPort());
               outPacketQueue.add(packet);
-              System.out.println("[Room] Sent redirect packet to player " + p.username);
+              // System.out.println("[Room] Redirecting " + p.username +
+              // " to port: " + roomSocket.getLocalPort());
             } catch (Exception e) {
               System.out.println("[Room] Failed to send redirect packet");
               System.out.println("[Room] Terminating thread");
@@ -117,7 +113,7 @@ public class Room implements Runnable {
               return;
             }
           }
-        }, 200, 1000);
+        }, 5, 50);
 
     playerSync = new TimerBasedService(
         new TimerTask() {
@@ -297,6 +293,7 @@ public class Room implements Runnable {
               System.out.println("[Room-WaitingP2] : " + e.getMessage());
             }
             return;
+
           case HEARTBEAT:
             try {
               Packet200Heartbeat heartbeatPacket = new Packet200Heartbeat()
@@ -307,9 +304,11 @@ public class Room implements Runnable {
               System.out.println("[Room-WaitingP2] : " + e.getMessage());
             }
             return;
+
           case INVALID:
             System.out.println("[Room-WaitingP2] Invalid packet received");
             return;
+
           default:
             System.out.println("[Room-WaitingP2] Unexpected packet type: "
                 + packetType.name());

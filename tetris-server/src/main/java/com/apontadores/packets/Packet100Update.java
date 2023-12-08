@@ -3,7 +3,7 @@ package com.apontadores.packets;
 import java.util.StringJoiner;
 import java.util.zip.CRC32;
 
-public class Packet105Update extends Packet {
+public class Packet100Update extends Packet {
 
   public static final int PACKET_ID = 100;
   public static final int TOKEN_COUNT = 5;
@@ -21,11 +21,11 @@ public class Packet105Update extends Packet {
   private String updateType;
   private String updateData;
 
-  public Packet105Update() {
+  public Packet100Update() {
     super(PACKET_ID);
   }
 
-  public Packet105Update(String updateType, String updateData) {
+  public Packet100Update(String updateType, String updateData) {
     super(PACKET_ID);
     this.updateData = updateData;
 
@@ -58,7 +58,7 @@ public class Packet105Update extends Packet {
   }
 
   @Override
-  public Packet105Update fromTokens(String[] tokens) throws PacketException {
+  public Packet100Update fromTokens(String[] tokens) throws PacketException {
 
     if (tokens.length != TOKEN_COUNT)
       throw new PacketException("[Packet100Update] Invalid packet length");
