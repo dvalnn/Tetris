@@ -32,7 +32,7 @@
         "align": "LEFT",
         "editable": true,
         "clearDefaultText": true,
-        "maxLength": 10
+        "maxLength": 16
       }
     },
     {
