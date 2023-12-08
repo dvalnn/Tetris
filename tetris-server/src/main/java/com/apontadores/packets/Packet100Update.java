@@ -27,6 +27,7 @@ public class Packet100Update extends Packet {
 
   public Packet100Update(String updateType, String updateData) {
     super(PACKET_ID);
+    this.updateType = updateType;
     this.updateData = updateData;
 
     CRC32 crc = new CRC32();

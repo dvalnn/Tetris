@@ -103,11 +103,11 @@ public class Room implements Runnable {
 
             try {
               outPacketQueue.add(packet);
-              // System.out.println("[Room] Redirecting " + p.username +
-              // " to port: " + roomSocket.getLocalPort());
+              System.out.println("[Room - playerRedirect] " + p.username +
+                  " to port: " + roomSocket.getLocalPort());
             } catch (Exception e) {
-              System.out.println("[Room] Failed to send redirect packet");
-              System.out.println("[Room] Terminating thread");
+              System.out.println("[Room - playerRedirect] Failed to send redirect packet");
+              System.out.println("[Room - playerRedirect] Terminating thread");
               this.cancel();
               state = RoomStatesEnum.FINISHED;
               return;
@@ -264,6 +264,7 @@ public class Room implements Runnable {
       case WAITING_P2: {
         Player sender = getPacketSender(datagramAddress, datagramPort);
         if (sender == null) {
+          System.out.println("[Room-WaitingP2] Received packet from unknown origin");
           p2 = handleLogin(
               datagramData,
               dataLength,
@@ -382,11 +383,13 @@ public class Room implements Runnable {
           return;
         }
 
+        Player target = sender == p1 ? p2 : p1;
+
         outPacketQueue.add(new DatagramPacket(
             datagramData,
             dataLength,
-            sender.address,
-            sender.port));
+            target.address,
+            target.port));
 
         sender.packetHit();
         break;

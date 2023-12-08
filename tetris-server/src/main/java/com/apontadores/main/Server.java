@@ -70,6 +70,9 @@ public class Server implements Runnable {
     DatagramPacket loginDatagram = new DatagramPacket(recvBuf, MAX_PACKET_SIZE);
     roomCleaner.start();
 
+    String lastRoomName = "";
+    String lastUsername = "";
+
     while (true) {
       if (forceExit) {
         System.out.println("[Server] Terminating thread");
@@ -106,6 +109,15 @@ public class Server implements Runnable {
         System.out.println("[Server] Invalid Login packet");
         continue;
       }
+
+      if (loginPacket.getRoomName().equals(lastRoomName)
+          && loginPacket.getUsername().equals(lastUsername)) {
+        System.out.println("[Server] Duplicate login packet");
+        continue;
+      }
+
+      lastUsername = loginPacket.getUsername();
+      lastRoomName = loginPacket.getRoomName();
 
       loginPacketHandler(loginPacket, loginDatagram);
     }
