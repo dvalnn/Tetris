@@ -32,6 +32,9 @@ public class Join extends GameState {
 
   @Override
   public void update() {
+    // FIXME: implement user input for this field
+    Game.setRoomName("defaultRoom");
+
     if (Game.getClient() == null)
       try {
         Game.initClient();
@@ -53,7 +56,7 @@ public class Join extends GameState {
     ((ImageElement) frame.getElement("join"))
         .execIfClicked(x, y,
             (state) -> {
-              if (Game.getClient().setServerAddress(
+              if (Game.getClient().connectToServer(
                   ((ImageElement) frame.getElement("IP"))
                       .getTextElement()
                       .getText()))
@@ -66,7 +69,7 @@ public class Join extends GameState {
     ((ImageElement) frame.getElement("localHost"))
         .execIfClicked(x, y,
             (state) -> {
-              if (Game.getClient().setServerAddress("127.0.0.1"))
+              if (Game.getClient().connectToServer("127.0.0.1"))
                 switchState.exec(state);
               return null;
             },
@@ -85,7 +88,6 @@ public class Join extends GameState {
           return null;
         },
         null);
-
   }
 
   @Override

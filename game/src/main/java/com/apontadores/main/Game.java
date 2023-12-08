@@ -10,7 +10,7 @@ import com.apontadores.gameElements.Sound;
 import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.gameStates.states.multiP.PlayingMP;
-import com.apontadores.networking.GameClient;
+import com.apontadores.networking.TetrisClient;
 import com.apontadores.utils.Keybindings;
 import com.apontadores.utils.LoadSave;
 
@@ -18,19 +18,66 @@ public class Game implements Runnable {
 
   private static Keybindings keybinds;
 
-  private final GameWindow gameWindow;
-  private final GamePanel gamePanel;
-  private Thread gameThread;
-
-  private static GameClient client;
-
+  private static TetrisClient client;
   private static boolean exit = false;
-
   private static String username = null;
+
+  private static String roomName;
 
   static {
     keybinds = LoadSave.loadJson(RESOURCES_PATH + "/config/keybinds.json", Keybindings.class);
   }
+
+  public static void exit() {
+    exit = true;
+  }
+
+  public static void setUsername(final String username) {
+
+    Game.username = username;
+
+    // FIXME: fix this
+    ((PlayingMP) (GameStateHandler.getState(GameStatesEnum.PLAYING_MP)))
+        .getPlayerBoard().setUsername(username);
+  }
+
+  public static void setRoomName(final String roomName) {
+    Game.roomName = roomName;
+  }
+
+  public static final String getUsername() {
+    return username;
+  }
+
+  public static final String getRoomName() {
+    return roomName;
+  }
+
+  public static void initClient() {
+    client = new TetrisClient(username, roomName);
+  }
+
+  public static TetrisClient getClient() {
+    return client;
+  }
+
+  public static Keybindings getKeybinds() {
+    return keybinds;
+  }
+
+  public static void setKeybinds(Keybindings keybind) {
+    Game.keybinds = keybind;
+  }
+
+  public static void resetKeybind() {
+    Game.keybinds = new Keybindings();
+  }
+
+  private final GameWindow gameWindow;
+
+  private final GamePanel gamePanel;
+
+  private Thread gameThread;
 
   public Game() {
     GameStateHandler.init();
@@ -41,12 +88,6 @@ public class Game implements Runnable {
     gamePanel.requestFocus();
 
     startGameLoop();
-  }
-
-  private void startGameLoop() {
-    gameThread = new Thread(this);
-    gameThread.start();
-    // new Thread(new Sound()).start();
   }
 
   public void update() {
@@ -117,42 +158,9 @@ public class Game implements Runnable {
     System.exit(0);
   }
 
-  public static void exit() {
-    exit = true;
-  }
-
-  public static void setUsername(final String username) {
-
-    Game.username = username;
-
-    // TODO: remove this
-    ((PlayingMP) (GameStateHandler.getState(GameStatesEnum.PLAYING_MP)))
-        .getPlayerBoard().setUsername(username);
-  }
-
-  public static final String getUsername() {
-    return username;
-  }
-
-  public static void initClient() throws Exception {
-    client = new GameClient();
-    client.setUsername(username);
-    client.setRoomName("default");
-  }
-
-  public static GameClient getClient() {
-    return client;
-  }
-
-  public static Keybindings getKeybinds() {
-    return keybinds;
-  }
-
-  public static void setKeybinds(Keybindings keybind) {
-    Game.keybinds = keybind;
-  }
-
-  public static void resetKeybind() {
-    Game.keybinds = new Keybindings();
+  private void startGameLoop() {
+    gameThread = new Thread(this);
+    gameThread.start();
+    // new Thread(new Sound()).start();
   }
 }

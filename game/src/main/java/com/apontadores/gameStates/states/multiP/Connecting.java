@@ -9,7 +9,8 @@ import java.awt.event.MouseEvent;
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.main.Game;
-import com.apontadores.networking.GameClient;
+import com.apontadores.networking.NetworkControl.ClientStates;
+import com.apontadores.networking.NetworkControl.ConnectionPhases;
 import com.apontadores.ui.Frame;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
@@ -35,14 +36,15 @@ public class Connecting extends GameState {
   public void update() {
     frame.update();
 
-    if (GameClient.ClientStatus.getStatus() == GameClient.ClientStatus.INACTIVE)
+    if (Game.getClient().getState() == ClientStates.INACTIVE)
       Game.getClient().start();
 
-    if (GameClient.ClientStatus.getStatus() != GameClient.ClientStatus.OK)
+    if (Game.getClient().getState() != ClientStates.RUNNING)
+      // TODO: Displayer the error message on the screen
       switchState.exec(GameStatesEnum.JOIN);
 
-    if (GameClient.ClientStatus.getStatus() == GameClient.ClientStatus.OK)
-      if (GameClient.gameStarted())
+    if (Game.getClient().getState() == ClientStates.RUNNING)
+      if (Game.getClient().getPhase() == ConnectionPhases.PLAYING)
         switchState.exec(GameStatesEnum.PLAYING_MP);
   }
 
