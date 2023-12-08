@@ -79,7 +79,6 @@ public class PlayingMP extends GameState {
   }
 
   private void sendPlayerUpdates() {
-
     Packet100Update updatePacket = null;
     updatePacket = Game.getClient().getPlayerData().getScoreUpdate();
     if (updatePacket != null)

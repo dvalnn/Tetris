@@ -168,7 +168,7 @@ public class TetrisClient implements Runnable {
 
     try {
       socket = new DatagramSocket();
-      socket.setSoTimeout(5);
+      socket.setSoTimeout(1);
     } catch (SocketException e) {
       e.printStackTrace();
       return;
@@ -225,7 +225,6 @@ public class TetrisClient implements Runnable {
         break;
       }
 
-      // while (!outgoingPackets.isEmpty()) {
       DatagramPacket packet = outgoingPackets.poll();
       if (packet == null)
         continue;
@@ -236,7 +235,6 @@ public class TetrisClient implements Runnable {
         e.printStackTrace();
         break;
       }
-      // }
     }
 
     packetProcessor.stop();
