@@ -188,9 +188,9 @@ public class Room implements Runnable {
     System.out.println("[Room] Listening on port " + roomSocket.getLocalPort());
 
     while (true) {
-      System.out.println("[Room] outgoing queue size: " + outPacketQueue.size());
-      System.out.println("[Room] incoming queue size: " + inPacketQueue.size());
-      System.out.println("[Room] --------------------------");
+      // System.out.println("[Room] outgoing queue size: " + outPacketQueue.size());
+      // System.out.println("[Room] incoming queue size: " + inPacketQueue.size());
+      // System.out.println("[Room] --------------------------");
 
       if (p1 != null && !p1.isAlive()) {
         System.out.println("[Room] Player 1 timed out");
