@@ -21,8 +21,8 @@ public class Game implements Runnable {
   private static TetrisClient client;
   private static boolean exit = false;
   private static String username = null;
-
   private static String roomName;
+  private static String opponentName;
 
   static {
     keybinds = LoadSave.loadJson(RESOURCES_PATH + "/config/keybinds.json", Keybindings.class);
@@ -33,7 +33,6 @@ public class Game implements Runnable {
   }
 
   public static void setUsername(final String username) {
-
     Game.username = username;
 
     // FIXME: fix this
@@ -54,7 +53,8 @@ public class Game implements Runnable {
   }
 
   public static void initClient() {
-    client = new TetrisClient(username, roomName);
+    client = new TetrisClient();
+    client.start();
   }
 
   public static TetrisClient getClient() {
@@ -65,8 +65,8 @@ public class Game implements Runnable {
     return keybinds;
   }
 
-  public static void setKeybinds(Keybindings keybind) {
-    Game.keybinds = keybind;
+  public static void setKeybinds(Keybindings keys) {
+    Game.keybinds = keys;
   }
 
   public static void resetKeybind() {
@@ -162,5 +162,13 @@ public class Game implements Runnable {
     new Thread(new Sound()).start();
     gameThread = new Thread(this);
     gameThread.start();
+  }
+
+  public static void setOpponentName(String opponentName) {
+    Game.opponentName = opponentName;
+  }
+
+  public static String getOpponentName() {
+    return opponentName;
   }
 }

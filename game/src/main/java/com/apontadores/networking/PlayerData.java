@@ -3,7 +3,6 @@ package com.apontadores.networking;
 import java.util.List;
 import java.util.StringJoiner;
 
-import com.apontadores.gameElements.Board.BoardLine;
 import com.apontadores.gameElements.boards.MPBoard;
 import com.apontadores.gameElements.boards.PlayerBoard;
 import com.apontadores.gameElements.shapes.Shape;
@@ -110,7 +109,6 @@ public class PlayerData {
 
   public PlayerData setPlayerBoard(PlayerBoard playerBoard) {
     this.playerBoard = playerBoard;
-    syncBoardChanges = true;
     return this;
   }
 
@@ -173,7 +171,6 @@ public class PlayerData {
   }
 
   private boolean syncShape;
-  private boolean syncBoardChanges;
   private boolean syncScore;
   // private boolean syncElements; // TODO: Implement this
 

@@ -21,6 +21,7 @@ import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.main.Game;
+import com.apontadores.networking.PlayerData;
 import com.apontadores.packets.Packet100Update;
 import com.apontadores.settings.BoardSettings;
 import com.apontadores.ui.Frame;
@@ -33,6 +34,8 @@ public class PlayingMP extends GameState {
 
   private int networkTick = 0;
   private final int NETWORK_TICK_MAX = 2;
+
+  private PlayerData playerData;
 
   // calculate the offsets so that the boards are centered
   // and the player's board is on the left and the opponent's
@@ -52,11 +55,15 @@ public class PlayingMP extends GameState {
             boardColor,
             boardColor.brighter()));
 
+    playerData = new PlayerData();
+    setPlayerUpdates();
+
     frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/multiplayer.json");
   }
 
   @Override
   public void update() {
+
     frame.update();
     getUpdates();
 
@@ -75,28 +82,29 @@ public class PlayingMP extends GameState {
     if (updatePacket == null)
       return;
 
-    Game.getClient().getPlayerData().parsePacket(updatePacket);
+    playerData.parsePacket(updatePacket);
   }
 
   private void sendPlayerUpdates() {
     Packet100Update updatePacket = null;
-    updatePacket = Game.getClient().getPlayerData().getScoreUpdate();
+    updatePacket = playerData.getScoreUpdate();
     if (updatePacket != null)
       sendPacket(updatePacket);
 
-    updatePacket = Game.getClient().getPlayerData().getShapeUpdate();
+    updatePacket = playerData.getShapeUpdate();
     if (updatePacket != null)
       sendPacket(updatePacket);
 
-    final PlayerBoard board = Game.getClient().getPlayerData().getPlayerBoard();
+    final PlayerBoard board = playerData.getPlayerBoard();
     if (board != null) {
+
       final List<PlayerBoard.BoardLine> boardLines = board.getBoard();
       for (int row = 0; row < BOARD_HEIGHT; row++) {
         final List<Color> line = boardLines.get(row).getColorsCopyIfChanged();
         if (line == null)
           continue;
 
-        updatePacket = Game.getClient().getPlayerData().getBoardUpdate(row, line);
+        updatePacket = playerData.getBoardUpdate(row, line);
         if (updatePacket != null)
           sendPacket(updatePacket);
       }
@@ -108,15 +116,14 @@ public class PlayingMP extends GameState {
   }
 
   private void setPlayerUpdates() {
-    Game.getClient()
-        .getPlayerData()
+    playerData
         .setPlayerBoard(playerBoard)
         .setCurrentShape(playerBoard.getTetromino().getShape())
-        // .setNextShapes(playerBoard.getNextShapes())
-        // .setHoldShape(playerBoard.getHoldShape())
         .setScore(Score.getScore())
         .setLinesCleared(Levels.getTotalLinesCleared())
         .setLevel(Levels.getCurrentLevel());
+    // .setNextShapes(playerBoard.getNextShapes())
+    // .setHoldShape(playerBoard.getHoldShape())
   }
 
   @Override
@@ -124,9 +131,9 @@ public class PlayingMP extends GameState {
     frame.render(g);
 
     // draw opponent board
-    Game.getClient().getPlayerData().getOpponentBoard().render(g);
+    playerData.getOpponentBoard().render(g);
     // draw opponnent controled shape
-    Game.getClient().getPlayerData().getOpponentShape().render(g);
+    playerData.getOpponentShape().render(g);
 
     playerBoard.render(g);
   }

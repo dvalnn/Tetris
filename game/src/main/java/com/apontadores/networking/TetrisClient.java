@@ -1,21 +1,17 @@
 package com.apontadores.networking;
 
-import static com.apontadores.utils.Constants.GameConstants.BOARD_HEIGHT;
-
-import java.awt.Color;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.commons.validator.routines.InetAddressValidator;
 
-import com.apontadores.gameElements.boards.PlayerBoard;
+import com.apontadores.main.Game;
 import com.apontadores.main.TimerBasedService;
 import com.apontadores.networking.NetworkControl.ClientStates;
 import com.apontadores.networking.NetworkControl.ConnectionPhases;
@@ -81,13 +77,10 @@ public class TetrisClient implements Runnable {
   public static final int MAX_PACKET_SIZE = 1024;
   public static final long MAX_PACKET_DELTA = 2_500_000_000L;
 
-  private PlayerData playerData;
-
   private ClientStates state;
   private ConnectionPhases phase;
 
   private TimerBasedService packetProcessor;
-  private TimerBasedService packetSender;
 
   private long lastReceivedPacketTime;
   private boolean connectionTimeout;
@@ -108,19 +101,17 @@ public class TetrisClient implements Runnable {
 
   private boolean connectionAborted = false;
 
-  private DatagramSocket outSocket;
+  private String playerName;
+  private String roomName;
 
-  public TetrisClient(String username, String roomName) {
+  public TetrisClient() {
     this.state = ClientStates.INACTIVE;
     this.phase = ConnectionPhases.INACTIVE;
 
     // create a player data instance for local and remote players
-    playerData = new PlayerData()
-        .setPlayerName(username)
-        .setRoomName(roomName);
 
-    receivedPackets = new ArrayBlockingQueue<>(1000);
-    outgoingPackets = new ArrayBlockingQueue<>(1000);
+    receivedPackets = new ArrayBlockingQueue<>(100);
+    outgoingPackets = new ArrayBlockingQueue<>(100);
 
     receivedUpdates = new ArrayBlockingQueue<>(1000);
     outgoingUpdates = new ArrayBlockingQueue<>(1000);
@@ -163,28 +154,6 @@ public class TetrisClient implements Runnable {
             processConPhase();
           }
         }, 0, 5);
-
-    packetSender = new TimerBasedService(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (state != ClientStates.RUNNING)
-              this.cancel();
-
-            if (phase != ConnectionPhases.PLAYING)
-              return;
-
-            if (!outgoingPackets.isEmpty()) {
-              DatagramPacket packet = outgoingPackets.poll();
-              try {
-                outSocket.send(packet);
-              } catch (IOException e) {
-                e.printStackTrace();
-              }
-            }
-          }
-        }, 0, 2);
-
   }
 
   @Override
@@ -193,7 +162,6 @@ public class TetrisClient implements Runnable {
 
     try {
       socket = new DatagramSocket();
-      outSocket = new DatagramSocket();
       socket.setSoTimeout(1);
     } catch (SocketException e) {
       e.printStackTrace();
@@ -205,20 +173,10 @@ public class TetrisClient implements Runnable {
     state = ClientStates.RUNNING;
     phase = ConnectionPhases.DISCONNECTED;
 
-    lastReceivedPacketTime = System.nanoTime();
-    packetProcessor.start();
-
     // TODO: start packet sender only after the game starts
     // packetSender.start();
 
     while (true) {
-
-      System.out.println("[TetrisClient] incoming packets: " + receivedPackets.size());
-      System.out.println("[TetrisClient] incoming updates: " + receivedUpdates.size());
-      System.out.println("[TetrisClient] outgoing updates: " + outgoingUpdates.size());
-      System.out.println("[TetrisClient] outgoing packets: " + outgoingPackets.size());
-      System.out.println("[TetrisClient] --------------------");
-
       if (phase == ConnectionPhases.DISCONNECTED) {
         try {
           Thread.sleep(10);
@@ -261,7 +219,6 @@ public class TetrisClient implements Runnable {
         break;
       }
 
-      // if (phase != ConnectionPhases.PLAYING) {
       DatagramPacket packet = outgoingPackets.poll();
       if (packet == null)
         continue;
@@ -271,8 +228,13 @@ public class TetrisClient implements Runnable {
       } catch (IOException e) {
         e.printStackTrace();
         break;
-        // }
       }
+
+      System.out.println("[TetrisClient] incoming packets: " + receivedPackets.size());
+      System.out.println("[TetrisClient] incoming updates: " + receivedUpdates.size());
+      System.out.println("[TetrisClient] outgoing updates: " + outgoingUpdates.size());
+      System.out.println("[TetrisClient] outgoing packets: " + outgoingPackets.size());
+      System.out.println("[TetrisClient] --------------------");
     }
 
     packetProcessor.stop();
@@ -300,8 +262,8 @@ public class TetrisClient implements Runnable {
           String username = ((Packet00Login) receivedPacket).getUsername();
           String roomName = ((Packet00Login) receivedPacket).getRoomName();
 
-          if (username.equals(playerData.getPlayerName())
-              && roomName.equals(playerData.getRoomName())) {
+          if (username.equals(playerName)
+              && roomName.equals(roomName)) {
             phase = ConnectionPhases.WAITING_FOR_OPPONENT;
             System.out.println("[GameClient - CONNECTING] Login successful");
             System.out.println("[GameClient - CONNECTING] Waiting for opponent...");
@@ -321,7 +283,7 @@ public class TetrisClient implements Runnable {
         else if (packetType == PacketTypesEnum.HEARTBEAT) {
           ; // NOTE: Heartbeats are expected. Do nothing and continue
         } else if (packetType == PacketTypesEnum.START) {
-          playerData.setOpponentName(((Packet03Start) receivedPacket).getOpponentName());
+          Game.setOpponentName(((Packet03Start) receivedPacket).getOpponentName());
           phase = ConnectionPhases.PLAYING;
         } else {
           System.out.println("[GameClient - WAITING_FOR_OPPONENT] Unexpected packet type: " +
@@ -355,8 +317,8 @@ public class TetrisClient implements Runnable {
     switch (phase) {
       case CONNECTING: {
         sendPacket(new Packet00Login(
-            playerData.getPlayerName(),
-            playerData.getRoomName()));
+            playerName,
+            roomName));
       }
         break;
 
@@ -415,11 +377,18 @@ public class TetrisClient implements Runnable {
       System.out.println("[GameClient] Packet error: " + e.getMessage());
       return null;
     }
-
   }
 
-  public boolean connectToServer(String serverAddress) {
+  public boolean connectToServer(
+      String serverAddress,
+      String playerName,
+      String roomName) {
+
+    if (serverAddress == null || playerName == null || roomName == null)
+      return false;
+
     InetAddressValidator validator = new InetAddressValidator();
+
     if (!validator.isValidInet4Address(serverAddress))
       return false;
     try {
@@ -429,12 +398,14 @@ public class TetrisClient implements Runnable {
       return false;
     }
 
-    phase = ConnectionPhases.CONNECTING;
-    return true;
-  }
+    this.playerName = playerName;
+    this.roomName = roomName;
 
-  public PlayerData getPlayerData() {
-    return playerData;
+    packetProcessor.start();
+    phase = ConnectionPhases.CONNECTING;
+    lastReceivedPacketTime = System.nanoTime();
+
+    return true;
   }
 
   public ClientStates getState() {
@@ -446,10 +417,15 @@ public class TetrisClient implements Runnable {
   }
 
   public void start() {
+    if (state == ClientStates.RUNNING)
+      return;
+
+    phase = ConnectionPhases.DISCONNECTED;
     new Thread(this).start();
   }
 
   public void abortConnection() {
     connectionAborted = true;
   }
+
 }
