@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
+import com.apontadores.main.Game;
 import com.apontadores.ui.Frame;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
@@ -41,7 +42,19 @@ public class GameModeSelectMP extends GameState {
         .execIfClicked(x, y, switchState, GameStatesEnum.HOST);
 
     ((ImageElement) frame.getElement("join"))
-        .execIfClicked(x, y, switchState, GameStatesEnum.JOIN);
+        .execIfClicked(x, y,
+            (state) -> {
+              try {
+                Game.initClient();
+                switchState.exec(state);
+              } catch (Exception e1) {
+                e1.printStackTrace();
+                switchState.exec(GameStatesEnum.MAIN_MENU);
+              }
+
+              return null;
+            },
+            GameStatesEnum.JOIN);
 
     ((ImageElement) frame.getElement("return"))
         .execIfClicked(x, y, switchState, GameStatesEnum.MODE_SELECT);

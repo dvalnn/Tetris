@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import org.apache.commons.validator.routines.InetAddressValidator;
+
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.main.Game;
@@ -17,31 +19,34 @@ public class Join extends GameState {
   private Frame frame;
   SwitchStateAction switchState = new SwitchStateAction();
 
+  private InetAddressValidator validator;
+  private String roomName;
+  private String ip;
+
   public Join() {
     super(GameStatesEnum.JOIN);
     frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/joinMP.json");
+    validator = new InetAddressValidator();
   }
 
   @Override
   public void render(Graphics g) {
     frame.render(g);
-
-    // TODO: switch banner and toggle start button
-    // when a player connects to the server
   }
 
   @Override
   public void update() {
-    // FIXME: implement user input for this field
-    Game.setRoomName("defaultRoom");
+    roomName = ((ImageElement) frame.getElement("roomName"))
+        .getTextElement().getText();
 
-    if (Game.getClient() == null)
-      try {
-        Game.initClient();
-      } catch (Exception e) {
-        e.printStackTrace();
-        switchState.exec(GameStatesEnum.MAIN_MENU);
-      }
+    ip = ((ImageElement) frame.getElement("IP"))
+        .getTextElement().getText();
+
+    if (roomName.length() > 0 && ip.length() > 0
+        && validator.isValidInet4Address(ip))
+      ((ImageElement) frame.getElement("join")).enable();
+    else
+      ((ImageElement) frame.getElement("join")).disable();
 
     frame.update();
   }
@@ -52,6 +57,10 @@ public class Join extends GameState {
     int x = e.getX();
     int y = e.getY();
 
+    Game.setRoomName(((ImageElement) frame.getElement("roomName"))
+        .getTextElement()
+        .getText());
+
     // TODO: when join button is clicked, submit ip to client
     ((ImageElement) frame.getElement("join"))
         .execIfClicked(x, y,
@@ -59,7 +68,9 @@ public class Join extends GameState {
               if (Game.getClient().connectToServer(
                   ((ImageElement) frame.getElement("IP"))
                       .getTextElement()
-                      .getText()))
+                      .getText(),
+                  Game.getUsername(),
+                  Game.getRoomName()))
                 switchState.exec(state);
               return null;
             },
@@ -69,7 +80,10 @@ public class Join extends GameState {
     ((ImageElement) frame.getElement("localHost"))
         .execIfClicked(x, y,
             (state) -> {
-              if (Game.getClient().connectToServer("127.0.0.1"))
+              if (Game.getClient().connectToServer(
+                  "127.0.0.1",
+                  Game.getUsername(),
+                  Game.getRoomName()))
                 switchState.exec(state);
               return null;
             },
@@ -78,7 +92,6 @@ public class Join extends GameState {
     ((ImageElement) frame.getElement("return"))
         .execIfClicked(x, y, switchState, GameStatesEnum.MODE_SELECT_MP);
 
-    // TODO: check if ip is valid and toggle join button
     ImageElement ipField = ((ImageElement) frame.getElement("IP"));
     ipField.getTextElement().removeFocus();
     ipField.execIfClicked(
@@ -97,11 +110,23 @@ public class Join extends GameState {
           return null;
         },
         null);
-
   }
 
   @Override
   public void keyPressed(KeyEvent e) {
+    if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+      switchState.exec(GameStatesEnum.MODE_SELECT_MP);
+
+    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+      ((ImageElement) frame.getElement("IP"))
+          .getTextElement()
+          .removeFocus();
+
+      ((ImageElement) frame.getElement("roomName"))
+          .getTextElement()
+          .removeFocus();
+    }
+
     ((ImageElement) frame.getElement("IP"))
         .getTextElement().keyboardInput(e);
     ((ImageElement) frame.getElement("roomName"))
