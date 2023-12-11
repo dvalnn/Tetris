@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import java.util.TimerTask;
 
 import com.apontadores.gameElements.boards.PlayerBoard;
 import com.apontadores.gameElements.gameplay.Levels;
@@ -21,6 +22,7 @@ import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.main.Game;
+import com.apontadores.main.TimerBasedService;
 import com.apontadores.networking.PlayerData;
 import com.apontadores.packets.Packet100Update;
 import com.apontadores.settings.BoardSettings;
@@ -44,6 +46,8 @@ public class PlayingMP extends GameState {
 
   private Frame frame;
 
+  TimerBasedService updateProcessor;
+
   public PlayingMP() {
     super(GameStatesEnum.PLAYING_MP);
 
@@ -59,18 +63,24 @@ public class PlayingMP extends GameState {
     setPlayerUpdates();
 
     frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/multiplayer.json");
+
+    updateProcessor = new TimerBasedService(new TimerTask() {
+      @Override
+      public void run() {
+        getUpdates();
+        setPlayerUpdates();
+      }
+    }, 0, 5);
   }
 
   @Override
   public void update() {
-
     frame.update();
-    getUpdates();
 
+    updateProcessor.start();
     networkTick++;
     if (networkTick >= NETWORK_TICK_MAX) {
       networkTick = 0;
-      setPlayerUpdates();
       sendPlayerUpdates();
     }
 

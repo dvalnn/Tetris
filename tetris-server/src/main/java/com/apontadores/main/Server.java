@@ -21,6 +21,9 @@ public class Server implements Runnable {
   private ArrayList<Room> rooms;
   private ArrayList<Room> roomsToRemove;
 
+  private String lastRoomName = "";
+  private String lastUsername = "";
+
   private TimerBasedService roomCleaner = new TimerBasedService(
       new TimerTask() {
         @Override
@@ -70,9 +73,6 @@ public class Server implements Runnable {
     DatagramPacket loginDatagram = new DatagramPacket(recvBuf, MAX_PACKET_SIZE);
     roomCleaner.start();
 
-    String lastRoomName = "";
-    String lastUsername = "";
-
     while (true) {
       if (forceExit) {
         System.out.println("[Server] Terminating thread");
@@ -112,7 +112,7 @@ public class Server implements Runnable {
 
       if (loginPacket.getRoomName().equals(lastRoomName)
           && loginPacket.getUsername().equals(lastUsername)) {
-        System.out.println("[Server] Duplicate login packet");
+        // System.out.println("[Server] Duplicate login packet");
         continue;
       }
 
@@ -153,6 +153,9 @@ public class Server implements Runnable {
 
     rooms.add(room);
     new Thread(room).start();
+
+    lastRoomName = "";
+    lastUsername = "";
   }
 
   private void exitIfNoThreads() {
