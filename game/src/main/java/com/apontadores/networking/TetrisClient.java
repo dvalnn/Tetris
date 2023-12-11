@@ -296,7 +296,6 @@ public class TetrisClient implements Runnable {
       case PLAYING: {
         if (packetType == PacketTypesEnum.UPDATE) {
           receivedUpdates.add((Packet100Update) receivedPacket);
-          // playerData.parsePacket((Packet100Update) receivedPacket);
         }
       }
         break;

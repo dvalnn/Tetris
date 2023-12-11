@@ -1,7 +1,6 @@
 package com.apontadores.networking;
 
 public class NetworkControl {
-
   public static enum ClientStates {
     INACTIVE,
     USERNAME_TAKEN,
