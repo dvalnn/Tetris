@@ -230,11 +230,15 @@ public class TetrisClient implements Runnable {
         break;
       }
 
-      System.out.println("[TetrisClient] incoming packets: " + receivedPackets.size());
-      System.out.println("[TetrisClient] incoming updates: " + receivedUpdates.size());
-      System.out.println("[TetrisClient] outgoing updates: " + outgoingUpdates.size());
-      System.out.println("[TetrisClient] outgoing packets: " + outgoingPackets.size());
-      System.out.println("[TetrisClient] --------------------");
+      // System.out.println("[TetrisClient] incoming packets: " +
+      // receivedPackets.size());
+      // System.out.println("[TetrisClient] incoming updates: " +
+      // receivedUpdates.size());
+      // System.out.println("[TetrisClient] outgoing updates: " +
+      // outgoingUpdates.size());
+      // System.out.println("[TetrisClient] outgoing packets: " +
+      // outgoingPackets.size());
+      // System.out.println("[TetrisClient] --------------------");
     }
 
     packetProcessor.stop();
@@ -250,17 +254,24 @@ public class TetrisClient implements Runnable {
     }
 
     Packet receivedPacket = buildReceivedPacket(packetType, tokens);
-    if (receivedPacket == null)
+    if (receivedPacket == null) {
+      System.out.println("[GameClient] Packet error: " + tokens[0]);
       return -1;
+    }
 
     switch (phase) {
       case CONNECTING: {
         if (packetType == PacketTypesEnum.REDIRECT) {
           serverPort = ((Packet02Redirect) receivedPacket).getPort();
+          System.out.println("[GameClient - CONNECTING] Redirecting to port: " +
+              serverPort);
 
         } else if (packetType == PacketTypesEnum.LOGIN) {
           String username = ((Packet00Login) receivedPacket).getUsername();
           String roomName = ((Packet00Login) receivedPacket).getRoomName();
+
+          System.out.println("[GameClient - CONNECTING] Login echo: " +
+              username + " " + roomName);
 
           if (username.equals(playerName)
               && roomName.equals(roomName)) {
@@ -278,8 +289,16 @@ public class TetrisClient implements Runnable {
         break;
 
       case WAITING_FOR_OPPONENT: {
-        if (packetType == PacketTypesEnum.REDIRECT)
+        if (packetType == PacketTypesEnum.REDIRECT) {
           serverPort = ((Packet02Redirect) receivedPacket).getPort();
+          // System.out.println("[GameClient - WAITING_FOR_OPPONENT] Redirecting to port:
+          // " +
+          // serverPort);
+          // sendPacket(new Packet00Login(
+          // playerName,
+          // roomName));
+        }
+
         else if (packetType == PacketTypesEnum.HEARTBEAT) {
           ; // NOTE: Heartbeats are expected. Do nothing and continue
         } else if (packetType == PacketTypesEnum.START) {

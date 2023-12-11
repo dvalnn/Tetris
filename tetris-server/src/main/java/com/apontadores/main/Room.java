@@ -93,6 +93,16 @@ public class Room implements Runnable {
               return;
             }
 
+            if (p1 != null && p1.username.equals(p.username)) {
+              playerQueue.poll();
+              return;
+            }
+
+            if (p2 != null && p2.username.equals(p.username)) {
+              playerQueue.poll();
+              return;
+            }
+
             // send a packet with the room's private port to the player
             byte data[] = new Packet02Redirect(roomSocket.getLocalPort()).asBytes();
             DatagramPacket packet = new DatagramPacket(
