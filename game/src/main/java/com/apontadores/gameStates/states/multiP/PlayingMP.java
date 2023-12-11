@@ -14,6 +14,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.TimerTask;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import com.apontadores.gameElements.boards.PlayerBoard;
 import com.apontadores.gameElements.gameplay.Levels;
@@ -122,7 +123,10 @@ public class PlayingMP extends GameState {
   }
 
   private void sendPacket(final Packet100Update packet) {
-    Game.getClient().outgoingUpdates.add(packet);
+    ArrayBlockingQueue<Packet100Update> outQueue = Game.getClient().outgoingUpdates;
+    if (outQueue.remainingCapacity() == 0)
+      outQueue.poll();
+    outQueue.add(packet);
   }
 
   private void setPlayerUpdates() {

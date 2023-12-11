@@ -76,6 +76,7 @@ public class TetrisClient implements Runnable {
   public static final int SERVER_DEFAULT_PORT = 42069;
   public static final int MAX_PACKET_SIZE = 1024;
   public static final long MAX_PACKET_DELTA = 2_500_000_000L;
+  private static final int FULL_SYNC_THRESHOLD = 100;
 
   private ClientStates state;
   private ConnectionPhases phase;
@@ -94,10 +95,9 @@ public class TetrisClient implements Runnable {
   private InetAddress serverAddress;
   private int serverPort;
 
+  private int transactionErrorCount = 0;
   private int lastSentTransactionId = 0;
   private int lastReceivedTransactionId = 0;
-  private int transactionErrorCount = 0;
-  private int maxTransactionErrorCount = 1000;
 
   private boolean connectionAborted = false;
 
@@ -118,40 +118,51 @@ public class TetrisClient implements Runnable {
 
     packetProcessor = new TimerBasedService(
         new TimerTask() {
+          private int missedPackets;
+
           @Override
           public void run() {
             if (state != ClientStates.RUNNING)
               this.cancel();
 
-            if (transactionErrorCount > maxTransactionErrorCount) {
-              System.out.println("[TetrisClient] Too many transaction errors!");
-              connectionTimeout = true;
-              this.cancel();
-            }
-
-            int receivedTransactionId = -1;
-
-            if (!receivedPackets.isEmpty()) {
-              DatagramPacket received = receivedPackets.poll();
-              receivedTransactionId = processPacket(received);
-            }
-
-            if (receivedTransactionId == -1)
-              transactionErrorCount++;
-            else {
-              int transactionDelta = receivedTransactionId -
-                  lastReceivedTransactionId;
-              if (transactionDelta > 1) {
-                // TODO: NACK missing packets
-                // transactionErrorCount += transactionDelta - 1;
-                System.out.println("[TetrisClient] Missed " +
-                    (transactionDelta - 1) + "packets !");
-              } else
-                transactionErrorCount--;
-
-              lastReceivedTransactionId = receivedTransactionId;
-            }
             processConPhase();
+
+            if (receivedPackets.isEmpty())
+              return;
+
+            DatagramPacket received = receivedPackets.poll();
+            int receivedTransactionId = processPacket(received);
+
+            if (receivedTransactionId == -1) {
+              transactionErrorCount++;
+              if (transactionErrorCount < FULL_SYNC_THRESHOLD)
+                return;
+              else {
+                // TODO: request full sync instead of disconnecting
+                System.out.println("[TetrisClient] Too many transaction errors!");
+                connectionTimeout = true;
+                this.cancel();
+              }
+            }
+
+            transactionErrorCount = 0;
+
+            int transactionDelta = receivedTransactionId -
+                lastReceivedTransactionId;
+
+            missedPackets += transactionDelta - 1;
+
+            if (missedPackets > FULL_SYNC_THRESHOLD) {
+              System.out.println("[TetrisClient] Missed packet count: " + missedPackets);
+              System.out.println("[TetrisClient] Full sync threshold: " + FULL_SYNC_THRESHOLD);
+              if (phase == ConnectionPhases.PLAYING) {
+                missedPackets = 0;
+                System.out.println("[TetrisClient] Requesting full sync!");
+                // sendPacket(new Packet200Heartbeat());
+              }
+            }
+
+            lastReceivedTransactionId = receivedTransactionId;
           }
         }, 0, 5);
   }
@@ -189,7 +200,9 @@ public class TetrisClient implements Runnable {
       }
 
       long packetDelta = System.nanoTime() - lastReceivedPacketTime;
+      // System.out.println("[TetrisClient] Packet delta: " + packetDelta);
       if (packetDelta > MAX_PACKET_DELTA) {
+        System.out.println("[TetrisClient] Max packet delta surpassed!");
         connectionTimeout = true;
       }
 
@@ -230,18 +243,9 @@ public class TetrisClient implements Runnable {
         break;
       }
 
-      // System.out.println("[TetrisClient] incoming packets: " +
-      // receivedPackets.size());
-      // System.out.println("[TetrisClient] incoming updates: " +
-      // receivedUpdates.size());
-      // System.out.println("[TetrisClient] outgoing updates: " +
-      // outgoingUpdates.size());
-      // System.out.println("[TetrisClient] outgoing packets: " +
-      // outgoingPackets.size());
-      // System.out.println("[TetrisClient] --------------------");
     }
 
-    packetProcessor.stop();
+    // packetProcessor.stop();
     socket.close();
   }
 
@@ -275,6 +279,7 @@ public class TetrisClient implements Runnable {
 
           if (username.equals(playerName)
               && roomName.equals(roomName)) {
+
             phase = ConnectionPhases.WAITING_FOR_OPPONENT;
             System.out.println("[GameClient - CONNECTING] Login successful");
             System.out.println("[GameClient - CONNECTING] Waiting for opponent...");
@@ -291,12 +296,6 @@ public class TetrisClient implements Runnable {
       case WAITING_FOR_OPPONENT: {
         if (packetType == PacketTypesEnum.REDIRECT) {
           serverPort = ((Packet02Redirect) receivedPacket).getPort();
-          // System.out.println("[GameClient - WAITING_FOR_OPPONENT] Redirecting to port:
-          // " +
-          // serverPort);
-          // sendPacket(new Packet00Login(
-          // playerName,
-          // roomName));
         }
 
         else if (packetType == PacketTypesEnum.HEARTBEAT) {

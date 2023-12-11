@@ -191,6 +191,9 @@ public class TextElement implements FrameElement {
   }
 
   public String getText() {
+    if (text.endsWith("|"))
+      return text.substring(0, text.length() - 1);
+
     return text;
   }
 

@@ -11,6 +11,7 @@ import org.apache.commons.validator.routines.InetAddressValidator;
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.main.Game;
+import com.apontadores.networking.NetworkControl.ClientStates;
 import com.apontadores.ui.Frame;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
@@ -36,6 +37,9 @@ public class Join extends GameState {
 
   @Override
   public void update() {
+    if (Game.getClient().getState() != ClientStates.RUNNING)
+      Game.initClient();
+
     roomName = ((ImageElement) frame.getElement("roomName"))
         .getTextElement().getText();
 

@@ -26,9 +26,6 @@ public class Room implements Runnable {
     FINISHED;
   }
 
-  public static final int MAX_PLAYERS = 2;
-  public static final int MAX_MISSES = 100;
-
   private static final int MAX_SOCKET_TIMEOUTS = 5;
   public final String name;
 
@@ -198,10 +195,6 @@ public class Room implements Runnable {
     System.out.println("[Room] Listening on port " + roomSocket.getLocalPort());
 
     while (true) {
-      // System.out.println("[Room] outgoing queue size: " + outPacketQueue.size());
-      // System.out.println("[Room] incoming queue size: " + inPacketQueue.size());
-      // System.out.println("[Room] --------------------------");
-
       if (p1 != null && !p1.isAlive()) {
         System.out.println("[Room] Player 1 timed out");
         state = RoomStatesEnum.FINISHED;
@@ -378,9 +371,8 @@ public class Room implements Runnable {
           Packet03Start packet1 = new Packet03Start(p1.username);
           Packet03Start packet2 = new Packet03Start(p2.username);
 
-          // reset transaction ID's
           packet1.setTransactionID(1);
-          packet2.setTransactionID(1);
+          packet2.setTransactionID(2);
 
           sendPacket(packet2, p1);
           sendPacket(packet1, p2);
