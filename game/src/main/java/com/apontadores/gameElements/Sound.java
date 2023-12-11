@@ -42,6 +42,9 @@ public class Sound implements Runnable {
 
   private int musicSound;
   private int effectSound;
+  private boolean muteEffectsRead;
+  private boolean muteVolumeRead;  
+
 
   public static Sound loadSoundFromJson(String jsonPath) {
     Sound sound = new Sound();
@@ -51,6 +54,8 @@ public class Sound implements Runnable {
 
     sound.musicSound = json.get("musicSound").getAsInt();
     sound.effectSound = json.get("effectSound").getAsInt();
+    sound.muteEffectsRead = json.get("muteEffectsRead").getAsBoolean();
+    sound.muteVolumeRead = json.get("muteVolumeRead").getAsBoolean();
     return sound;
   }
 
@@ -61,9 +66,13 @@ public class Sound implements Runnable {
 
     musicVolume = sound.musicSound;
     effectVolume = sound.effectSound;
+    muteEffect = sound.muteEffectsRead;
+    muteMusic = sound.muteVolumeRead;
 
     System.out.println("musicVolume: " + musicVolume);
     System.out.println("effectVolume: " + effectVolume);
+    System.out.println("muteEffect: " + muteEffect);
+    System.out.println("muteMusic: " + muteMusic);
 
     menuMusic = setFileMusic(RESOURCES_PATH + "/sounds/tetrisTheme.wav");
     gameMusic = setFileMusic(RESOURCES_PATH + "/sounds/tetrisThemeOld.wav");
@@ -169,10 +178,12 @@ public class Sound implements Runnable {
     }
 
     // saves the volume in the json file
-    Sound effect = new Sound();
-    effect.musicSound = Sound.musicVolume;
-    effect.effectSound = Sound.effectVolume;
-    LoadSave.saveJson(RESOURCES_PATH + "/config/sound.json", effect);
+    Sound music = new Sound();
+    music.musicSound = Sound.musicVolume;
+    music.effectSound = Sound.effectVolume;
+    music.muteEffectsRead = Sound.muteEffect;
+    music.muteVolumeRead = Sound.muteMusic;
+    LoadSave.saveJson(RESOURCES_PATH + "/config/sound.json", music);
   }
 
   public static void setEffectVolume(int effectVolume) {
@@ -205,6 +216,8 @@ public class Sound implements Runnable {
     Sound effect = new Sound();
     effect.musicSound = Sound.musicVolume;
     effect.effectSound = Sound.effectVolume;
+    effect.muteEffectsRead = Sound.muteEffect;
+    effect.muteVolumeRead = Sound.muteMusic;
 
     LoadSave.saveJson(RESOURCES_PATH + "/config/sound.json", effect);
 
