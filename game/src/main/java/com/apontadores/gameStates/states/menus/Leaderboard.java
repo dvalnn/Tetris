@@ -55,22 +55,10 @@ public class Leaderboard extends GameState {
     // FIXME: This is not the best way to render the leaderboard
 //    if (entries != null)
 //      System.out.println(entries);
-//
 
     for (int i = 0; i < entries.size(); i++) {
       ((TextElement) frame.getElement("score" + (i + 1))).setText(createsScoreText(i));
     }
-    //((TextElement) frame.getElement("score1")).setText(createsScoreText(0));
-    //((TextElement) frame.getElement("score2")).setText(createsScoreText(1));
-    //((TextElement) frame.getElement("score3")).setText(createsScoreText(2));
-    //((TextElement) frame.getElement("score4")).setText(createsScoreText(3));
-    //((TextElement) frame.getElement("score5")).setText(createsScoreText(4));
-    //((TextElement) frame.getElement("score6")).setText(createsScoreText(5));
-    //((TextElement) frame.getElement("score7")).setText(createsScoreText(6));
-    //((TextElement) frame.getElement("score8")).setText(createsScoreText(7));
-    //((TextElement) frame.getElement("score9")).setText(createsScoreText(8));
-    //((TextElement) frame.getElement("score10")).setText(createsScoreText(9));
-
   }
 
   private String createsScoreText(final int index) {
