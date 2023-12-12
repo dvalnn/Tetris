@@ -5,6 +5,14 @@
   "assets": [
     {
       "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/buttonsV2/background2.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
       "name": "tryConnection",
       "imagePath": "/buttonsV2/bannerTryCon.png",
       "x": 3.9,

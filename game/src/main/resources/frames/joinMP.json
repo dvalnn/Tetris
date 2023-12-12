@@ -5,6 +5,14 @@
   "assets": [
     {
       "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/buttonsV2/background2.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
       "name": "banner",
       "imagePath": "/buttonsV2/bannerMultiJoin.png",
       "x": 27.9,

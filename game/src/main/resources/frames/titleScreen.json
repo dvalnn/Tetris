@@ -5,6 +5,15 @@
   "assets": [
     {
       "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/buttonsV2/background2.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+
+    {
+      "type": "image",
       "name": "title",
       "imagePath": "/buttonsV2/titleTotris.png",
       "x": 16.9,
