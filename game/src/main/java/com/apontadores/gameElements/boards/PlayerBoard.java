@@ -19,7 +19,7 @@ import com.apontadores.gameElements.shapes.JsonShape;
 import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.settings.BoardSettings;
-import com.apontadores.utils.JsonShapeParser;
+import com.apontadores.utils.LoadSave;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
 
@@ -49,7 +49,7 @@ public class PlayerBoard extends Board {
     Levels.reset();
     GameTime.reset();
 
-    shapeData = JsonShapeParser.parseAllJsonShapes(RESOURCES_PATH + "/shapes/");
+    shapeData = LoadSave.parseAllJsonShapes(RESOURCES_PATH + "/shapes/");
 
     activeTetro = tetrominoFactory(shapeData);
     nextTetro = tetrominoFactory(shapeData);
