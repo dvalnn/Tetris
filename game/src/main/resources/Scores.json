@@ -1,17 +1,17 @@
 [
   {
+    "name": "tiago",
+    "score": 404301,
+    "level": 10,
+    "lines": 478,
+    "timeString": "0:37:38"
+  },
+  {
     "name": "gui",
     "score": 2446,
     "level": 1,
     "lines": 11,
     "timeString": "0:2:27"
-  },
-  {
-    "name": "test",
-    "score": 226,
-    "level": 0,
-    "lines": 0,
-    "timeString": "0:0:3"
   },
   {
     "name": "No score yet",
@@ -70,3 +70,4 @@
     "timeString": "0:0:0"
   }
 ]
+
