@@ -11,9 +11,10 @@ import com.apontadores.gameElements.gameplay.Score;
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
+import com.apontadores.gameStates.states.menus.Leaderboard;
+import com.apontadores.main.Game;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.TextElement;
-import com.apontadores.utils.LeaderBoard;
 import com.apontadores.ui.SwitchStateAction;
 import com.apontadores.ui.ButtonAction;
 import com.apontadores.ui.Frame;
@@ -54,12 +55,18 @@ public class GameOver extends GameState {
   @Override
   public void update() {
     if (!isLeaderBoardUpdated) {
-      LeaderBoard.saveScoreToLeaderBoard();
+      Leaderboard.saveNewScore(
+          Game.getUsername(),
+          Score.getScore(),
+          Levels.getCurrentLevel(),
+          Levels.getTotalLinesCleared(),
+          GameTime.getTimeStr());
+
       isLeaderBoardUpdated = true;
     }
 
-    //((TextElement) frame.getElement("level"))
-    //    .setText(String.valueOf(Levels.getCurrentLevel()));
+    // ((TextElement) frame.getElement("level"))
+    // .setText(String.valueOf(Levels.getCurrentLevel()));
 
     ((TextElement) frame.getElement("totalScore"))
         .setText(String.valueOf(Score.getScore()));

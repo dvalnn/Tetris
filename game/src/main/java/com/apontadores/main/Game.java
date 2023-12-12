@@ -1,14 +1,12 @@
 package com.apontadores.main;
 
 import static com.apontadores.utils.Constants.KEYBINDINGS_PATH;
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
 import static com.apontadores.utils.Constants.GameConstants.FPS_SET;
 import static com.apontadores.utils.Constants.GameConstants.UPS_SET;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
-import java.io.IOException;
 import java.net.InetAddress;
 
 import com.apontadores.gameElements.Sound;
@@ -19,7 +17,6 @@ import com.apontadores.networking.GameClient;
 import com.apontadores.networking.GameServer;
 import com.apontadores.networking.packets.Packet00Login;
 import com.apontadores.utils.Keybindings;
-import com.apontadores.utils.LeaderBoard;
 import com.apontadores.utils.LoadSave;
 
 public class Game implements Runnable {
@@ -127,15 +124,7 @@ public class Game implements Runnable {
     if (!gamePanel.hasFocus())
       gamePanel.requestFocus();
 
-    /*try {
-      GameStateHandler.getActiveState().update();
-      LeaderBoard.update();
-    } catch (IOException e) {
-      e.printStackTrace();
-      // System.out.println(GameStateHandler.getActiveStateID().name());
-    }*/
-      GameStateHandler.getActiveState().update();
-      LeaderBoard.update();
+    GameStateHandler.getActiveState().update();
   }
 
   public void render(final Graphics g) {

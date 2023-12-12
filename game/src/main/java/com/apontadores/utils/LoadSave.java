@@ -27,21 +27,10 @@ public class LoadSave {
     return image;
   }
 
-  public static <T> T loadJson(final String path, final Class<T> classOfT) {
+  public static <T> T loadJson(final String path, Type typeOfT) {
     T json = null;
     try {
-      json = new Gson().fromJson(new FileReader(path), classOfT);
-    } catch (final Exception e) {
-      System.out.println("Failed to load json: " + path);
-      e.printStackTrace();
-    }
-    return json;
-  }
-
-  public static <T> T loadJsonList(final String path, Type type) {
-    T json = null;
-    try {
-      json = new Gson().fromJson(new FileReader(path), type);
+      json = new Gson().fromJson(new FileReader(path), typeOfT);
     } catch (final Exception e) {
       System.out.println("Failed to load json: " + path);
       e.printStackTrace();

@@ -1,5 +1,7 @@
 package com.apontadores.gameElements.gameplay;
 
+import static com.apontadores.utils.Constants.GameConstants.UPS_SET;
+
 public class GameTime {
   private static int seconds = 0;
   private static int minutes = 0;
@@ -10,7 +12,7 @@ public class GameTime {
   public static void tick() {
     tickCounter++;
 
-    if (tickCounter == 60) {
+    if (tickCounter == UPS_SET) {
       tickCounter = 0;
       seconds++;
     }
