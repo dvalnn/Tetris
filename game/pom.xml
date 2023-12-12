@@ -42,6 +42,12 @@
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>com.apontadores</groupId>
+      <artifactId>tetris-server</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   <build>

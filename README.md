@@ -24,12 +24,17 @@ Here is how you can do it:
 
 #### Compiling and Running the game:
 - Clone the repository's main (github) or master (gitlab) branch
-- Go to the project root folder run the following commands:
+- Go to the project root directory run the following commands:
 
 ```bash
-mvn compile
+mvn clean install
+```
+- Then go to game directory and run:
+
+```bash
 mvn exec:java
 ```
+
 The game should start up immediately after maven finished the build tasks.
 
 #### Compiling and running Unit Testing
@@ -40,6 +45,22 @@ mvn test
 ```
 The game tests should run immediately  after maven finished the build tasks.
 
+## Multiplayer
+
+The game counts with multiplayer, which means that players can play against each other.
+One player start as a server/host and the other join the server as a client.
+
+The host must select ```Host game``` in the Multiplayer section before the opponent select
+the ```Join game``` option, allowing the connection between the two players.
+The joining player can try to connect to the server after inserting the host's IP after
+selecting ```Join game```(or writting "localhost" if both players are connected to the same network).
+
+Once the client is connected to the server, the game will start automatically.
+
+### Disclaimer
+
+As of the most recent update (December, 3rd), the multiplayer is unavailable as we are in the midst of a major code refactoring.
+Multiplayer V2 will feature a multithreaded dedicated server as a hosting option.
 
 ## Controls:
 

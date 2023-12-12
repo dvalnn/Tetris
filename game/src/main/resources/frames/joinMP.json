@@ -5,6 +5,14 @@
   "assets": [
     {
       "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/buttonsV2/background2.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
       "name": "banner",
       "imagePath": "/buttonsV2/bannerMultiJoin.png",
       "x": 27.9,
@@ -16,13 +24,37 @@
       "name": "IP",
       "imagePath": "/buttonsV2/IPAddress.png",
       "x": 19.7,
-      "y": 44.9,
+      "y": 36.204,
       "imageScale": 0.666,
       "textElement": {
         "type": "text",
         "name": "inputText",
         "text": "Type the host IP address",
         "x": 24.8,
+        "y": 65,
+        "size": 26.6,
+        "anchorPoint": "parent",
+        "font": "SansSerif",
+        "fontType": "plain",
+        "color": [0, 0, 0],
+        "align": "LEFT",
+        "editable": true,
+        "clearDefaultText": true,
+        "maxLength": 16
+      }
+    },
+    {
+      "type": "image",
+      "name": "roomName",
+      "imagePath": "/buttonsV2/roomName.png",
+      "x": 19.7,
+      "y": 48.148,
+      "imageScale": 0.666,
+      "textElement": {
+        "type": "text",
+        "name": "roomName",
+        "text": "Type the host Room Name",
+        "x": 21.121,
         "y": 65,
         "size": 26.6,
         "anchorPoint": "parent",
@@ -57,7 +89,6 @@
       "imagePath": "/buttonsV2/join.png",
       "x": 77.1,
       "y": 87,
-      "enabled": false,
       "imageScale": 0.666
     }
   ]

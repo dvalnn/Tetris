@@ -92,14 +92,14 @@ public class ShapeLoadTest {
   @Test
   public void listFilesFindsFourJsonFiles() {
     final String dir = "src/test/resources/shapes/";
-    final Set<String> files = JsonShapeParser.listFiles(dir);
+    final Set<String> files = LoadSave.listFiles(dir);
     assertEquals(3, files.size());
   }
 
   @Test
   public void verifyJsonData() {
     final String dir = "src/test/resources/shapes/";
-    final ArrayList<JsonShape> shapes = JsonShapeParser.parseAllJsonShapes(dir);
+    final ArrayList<JsonShape> shapes = LoadSave.parseAllJsonShapes(dir);
     assertNotNull(shapes);
     assertShapeEquals(shapes.get(0), shapes.get(1));
   }

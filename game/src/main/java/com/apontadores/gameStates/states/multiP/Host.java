@@ -4,6 +4,7 @@ package com.apontadores.gameStates.states.multiP;
 import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import com.apontadores.gameStates.GameState;
@@ -91,5 +92,19 @@ public class Host extends GameState {
           },
           null);
 
+          ImageElement inputRoomName = ((ImageElement) frame.getElement("roomName"));
+          inputRoomName.getTextElement().removeFocus();
+          inputRoomName.execIfClicked(x,y,
+              (Void) -> {
+                inputRoomName.getTextElement().giveFocus();
+                return null;
+              },
+              null);
+  }
+
+  @Override
+  public void keyPressed(KeyEvent e) {
+    ((ImageElement) frame.getElement("roomName"))
+        .getTextElement().keyboardInput(e);
   }
 }

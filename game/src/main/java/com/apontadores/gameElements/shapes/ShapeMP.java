@@ -43,4 +43,8 @@ public class ShapeMP {
   public Point2D[] getPoints() {
     return points;
   }
+
+  public Color getColor() {
+    return color;
+  }
 }
