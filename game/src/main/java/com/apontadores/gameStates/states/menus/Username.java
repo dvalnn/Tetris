@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.menus;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -19,7 +19,7 @@ public class Username extends GameState {
 
   public Username() {
     super(GameStatesEnum.USERNAME);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/username.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "username.json");
   }
 
   SwitchStateAction switchAction = new SwitchStateAction();

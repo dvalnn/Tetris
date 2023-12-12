@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.multiP;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -26,7 +26,7 @@ public class Join extends GameState {
 
   public Join() {
     super(GameStatesEnum.JOIN);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/joinMP.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "joinMP.json");
     validator = new InetAddressValidator();
   }
 

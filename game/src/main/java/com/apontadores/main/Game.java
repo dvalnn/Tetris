@@ -1,6 +1,6 @@
 package com.apontadores.main;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.KEYBINDINGS_PATH;
 import static com.apontadores.utils.Constants.GameConstants.FPS_SET;
 import static com.apontadores.utils.Constants.GameConstants.UPS_SET;
 
@@ -25,7 +25,7 @@ public class Game implements Runnable {
   private static String opponentName;
 
   static {
-    keybinds = LoadSave.loadJson(RESOURCES_PATH + "/config/keybinds.json", Keybindings.class);
+    keybinds = LoadSave.loadJson(KEYBINDINGS_PATH + "keybinds.json", Keybindings.class);
   }
 
   public static void exit() {
@@ -91,8 +91,11 @@ public class Game implements Runnable {
   }
 
   public void update() {
+
+    if (!gamePanel.hasFocus())
+      gamePanel.requestFocus();
+
     GameStateHandler.getActiveState().update();
-    // System.out.println(GameStateHandler.getActiveStateID().name());
   }
 
   public void render(final Graphics g) {

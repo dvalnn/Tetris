@@ -1,7 +1,7 @@
 
 package com.apontadores.gameStates.states.multiP;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -21,7 +21,7 @@ public class Connecting extends GameState {
 
   public Connecting() {
     super(GameStatesEnum.CONNECTING);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/connecting.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "connecting.json");
   }
 
   @Override

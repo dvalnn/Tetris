@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.multiP;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 import static com.apontadores.utils.Constants.Directions.LEFT;
 import static com.apontadores.utils.Constants.Directions.RIGHT;
 import static com.apontadores.utils.Constants.GameConstants.BOARD_HEIGHT;
@@ -60,10 +60,11 @@ public class PlayingMP extends GameState {
             boardColor,
             boardColor.brighter()));
 
+
+    frame = Frame.loadFromJson(FRAMES_PATH + "multiplayer.json");
+
     playerData = new PlayerData();
     setPlayerUpdates();
-
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/multiplayer.json");
 
     updateProcessor = new TimerBasedService(new TimerTask() {
       @Override

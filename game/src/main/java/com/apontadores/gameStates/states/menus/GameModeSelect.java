@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.menus;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -26,7 +26,7 @@ public class GameModeSelect extends GameState {
 
   public GameModeSelect() {
     super(GameStatesEnum.MODE_SELECT);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/gameModeSelect.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "gameModeSelect.json");
   }
 
   @Override

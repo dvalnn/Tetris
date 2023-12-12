@@ -1,17 +1,19 @@
 package com.apontadores.utils;
 
-import static com.apontadores.utils.Constants.UI.BACKGROUND_PATH;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import java.lang.reflect.Type;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 
 import javax.imageio.ImageIO;
 
@@ -20,11 +22,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class LoadSave {
-
-  // TODO: REMOVE THIS
-  public static BufferedImage loadBackground(final String path) {
-    return loadImage(BACKGROUND_PATH + path);
-  }
 
   public static Set<String> listFiles(final String dir) {
     return Stream.of(new File(dir).listFiles())
@@ -46,10 +43,10 @@ public class LoadSave {
     return image;
   }
 
-  public static <T> T loadJson(final String path, final Class<T> classOfT) {
+  public static <T> T loadJson(final String path, Type typeOfT) {
     T json = null;
     try {
-      json = new Gson().fromJson(new FileReader(path), classOfT);
+      json = new Gson().fromJson(new FileReader(path), typeOfT);
     } catch (final Exception e) {
       System.out.println("Failed to load json: " + path);
       e.printStackTrace();

@@ -1,7 +1,7 @@
 
 package com.apontadores.gameStates.states.multiP;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -23,7 +23,7 @@ public class Host extends GameState {
 
   public Host() {
     super(GameStatesEnum.HOST);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/hostMP.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "hostMP.json");
   }
 
   @Override

@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.multiP;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -19,7 +19,7 @@ public class GameModeSelectMP extends GameState {
 
   public GameModeSelectMP() {
     super(GameStatesEnum.MODE_SELECT_MP);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/modeSelectMP.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "modeSelectMP.json");
   }
 
   @Override

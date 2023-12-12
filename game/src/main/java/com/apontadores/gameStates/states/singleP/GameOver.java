@@ -1,6 +1,6 @@
 package com.apontadores.gameStates.states.singleP;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.FRAMES_PATH;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -11,6 +11,8 @@ import com.apontadores.gameElements.gameplay.Score;
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
+import com.apontadores.gameStates.states.menus.Leaderboard;
+import com.apontadores.main.Game;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.TextElement;
 import com.apontadores.ui.SwitchStateAction;
@@ -21,6 +23,7 @@ public class GameOver extends GameState {
 
   private final Frame frame;
   SwitchStateAction switchState = new SwitchStateAction();
+  private boolean isLeaderBoardUpdated = false;
 
   ButtonAction<GameStatesEnum, Void> reloadAndSwitch = (state) -> {
     GameStateHandler.reloadState(state);
@@ -30,7 +33,7 @@ public class GameOver extends GameState {
 
   public GameOver() {
     super(GameStatesEnum.GAME_OVER);
-    frame = Frame.loadFromJson(RESOURCES_PATH + "/frames/gameOverSingle.json");
+    frame = Frame.loadFromJson(FRAMES_PATH + "gameOverSingle.json");
   }
 
   @Override
@@ -51,6 +54,19 @@ public class GameOver extends GameState {
 
   @Override
   public void update() {
+    if (!isLeaderBoardUpdated) {
+      Leaderboard.saveNewScore(
+          Game.getUsername(),
+          Score.getScore(),
+          Levels.getCurrentLevel(),
+          Levels.getTotalLinesCleared(),
+          GameTime.getTimeStr());
+
+      isLeaderBoardUpdated = true;
+    }
+
+    // ((TextElement) frame.getElement("level"))
+    // .setText(String.valueOf(Levels.getCurrentLevel()));
 
     ((TextElement) frame.getElement("totalScore"))
         .setText(String.valueOf(Score.getScore()));
