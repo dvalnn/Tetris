@@ -79,7 +79,7 @@ public class ImageElement implements FrameElement {
   private transient int yAbs;
   private transient Rectangle bounds;
   private transient BufferedImage image;
-  private transient static Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH +"/sounds/clickSound.wav");
+  private transient static Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH + "/sounds/clickSound.wav");
   private transient Image scaledImage;
 
   public <T, R> R execIfClicked(
@@ -163,8 +163,8 @@ public class ImageElement implements FrameElement {
 
     // draw the collision box
     // NOTE: debugging only
-    g.setColor(Color.RED);
-    g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    // g.setColor(Color.RED);
+    // g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
     g2d.setTransform(orig);
 
