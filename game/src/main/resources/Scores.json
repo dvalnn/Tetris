@@ -1,17 +1,73 @@
 [
   {
-    "score": 192,
-    "level": 0,
-    "time_in_string": "0:0:3"
+    "name": "tiago",
+    "score": 404301,
+    "level": 10,
+    "lines": 478,
+    "timeString": "0:37:38"
   },
   {
-    "score": 242,
-    "level": 0,
-    "time_in_string": "0:0:4"
+    "name": "gui",
+    "score": 2446,
+    "level": 1,
+    "lines": 11,
+    "timeString": "0:2:27"
   },
   {
-    "score": 194,
+    "name": "No score yet",
+    "score": 0,
     "level": 0,
-    "time_in_string": "0:0:3"
+    "lines": 0,
+    "timeString": "0:0:0"
+  },
+  {
+    "name": "No score yet",
+    "score": 0,
+    "level": 0,
+    "lines": 0,
+    "timeString": "0:0:0"
+  },
+  {
+    "name": "No score yet",
+    "score": 0,
+    "level": 0,
+    "lines": 0,
+    "timeString": "0:0:0"
+  },
+  {
+    "name": "No score yet",
+    "score": 0,
+    "level": 0,
+    "lines": 0,
+    "timeString": "0:0:0"
+  },
+  {
+    "name": "No score yet",
+    "score": 0,
+    "level": 0,
+    "lines": 0,
+    "timeString": "0:0:0"
+  },
+  {
+    "name": "No score yet",
+    "score": 0,
+    "level": 0,
+    "lines": 0,
+    "timeString": "0:0:0"
+  },
+  {
+    "name": "No score yet",
+    "score": 0,
+    "level": 0,
+    "lines": 0,
+    "timeString": "0:0:0"
+  },
+  {
+    "name": "No score yet",
+    "score": 0,
+    "level": 0,
+    "lines": 0,
+    "timeString": "0:0:0"
   }
 ]
+

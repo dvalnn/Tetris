@@ -58,7 +58,7 @@ public class GameOver extends GameState {
       Leaderboard.saveNewScore(
           Game.getUsername(),
           Score.getScore(),
-          Levels.getCurrentLevel(),
+          Levels.getCurrentLevel() + 1, // levels start at 0, so we add 1 to save
           Levels.getTotalLinesCleared(),
           GameTime.getTimeStr());
 
