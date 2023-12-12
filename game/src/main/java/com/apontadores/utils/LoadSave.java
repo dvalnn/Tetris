@@ -7,9 +7,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
+import com.apontadores.gameElements.shapes.JsonShape;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -18,6 +24,13 @@ public class LoadSave {
   // TODO: REMOVE THIS
   public static BufferedImage loadBackground(final String path) {
     return loadImage(BACKGROUND_PATH + path);
+  }
+
+  public static Set<String> listFiles(final String dir) {
+    return Stream.of(new File(dir).listFiles())
+        .filter(file -> !file.isDirectory())
+        .map(File::getName)
+        .collect(Collectors.toSet());
   }
 
   public static BufferedImage loadImage(final String path) {
@@ -57,4 +70,19 @@ public class LoadSave {
     }
   }
 
+  public static ArrayList<JsonShape> parseAllJsonShapes(final String dir) {
+
+    final Set<String> files = listFiles(dir);
+    ArrayList<JsonShape> shapes = new ArrayList<JsonShape>(files.size());
+
+    final String[] filesToRead = new String[files.size()];
+    files.toArray(filesToRead);
+    Arrays.sort(filesToRead);
+
+    for (final String filename : filesToRead) {
+      final JsonShape shape = loadJson(dir + filename, JsonShape.class);
+      shapes.add(shape);
+    }
+    return shapes;
+  }
 }
