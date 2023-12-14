@@ -33,24 +33,23 @@ import com.apontadores.ui.Frame;
 public class Playing extends GameState {
 
   private final PlayerBoard board;
-  private final Color boardColor = new Color(20, 20, 20);
-
-  private final int X_OFFSET = (GAME_WIDTH - BOARD_WIDTH * BOARD_SQUARE) / 2 + 10;
-  private final int Y_OFFSET = (GAME_HEIGHT - BOARD_HEIGHT * BOARD_SQUARE) / 2 + 18;
 
   private boolean mouseButton1Pressed = false;
   private boolean mouseButton3Pressed = false;
 
-  private Frame frame;
+  private final Frame frame;
 
   public Playing() {
     super(GameStatesEnum.PLAYING);
 
+    Color boardColor = new Color(20, 20, 20);
+    int x_OFFSET = (GAME_WIDTH - BOARD_WIDTH * BOARD_SQUARE) / 2 + 10;
+    int y_OFFSET = (GAME_HEIGHT - BOARD_HEIGHT * BOARD_SQUARE) / 2 + 18;
     BoardSettings set = new BoardSettings(
         BOARD_SQUARE,
-        X_OFFSET,
-        Y_OFFSET,
-        boardColor,
+            x_OFFSET,
+            y_OFFSET,
+            boardColor,
         boardColor.brighter());
 
     board = new PlayerBoard(set);
@@ -192,10 +191,8 @@ public class Playing extends GameState {
     }
     if (e.getKeyCode() == Game.getKeybinds().debugZShape) {
       board.setTetromino(Z);
-      return;
     }
 
-    return;
   }
 
   @Override
@@ -218,16 +215,11 @@ public class Playing extends GameState {
 
     if (e.getKeyCode() == Game.getKeybinds().hardDrop) {
       board.getTetromino().setDrop(false);
-      return;
     }
-    return;
   }
 
   @Override
   public void windowLostFocus() {
   }
 
-  public Board getBoard() {
-    return board;
-  }
 }

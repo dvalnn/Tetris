@@ -14,7 +14,7 @@ import com.apontadores.ui.SwitchStateAction;
 
 public class GameModeSelectMP extends GameState {
 
-  private Frame frame;
+  private final Frame frame;
   SwitchStateAction switchState = new SwitchStateAction();
 
   public GameModeSelectMP() {

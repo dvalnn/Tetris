@@ -10,8 +10,8 @@ public class Shape {
 
   protected Point2D center;
   protected Point2D[] points;
-  private String id;
-  private boolean rotates;
+  private final String id;
+  private final boolean rotates;
   protected Color color;
 
   protected int minX, maxX, minY, maxY;

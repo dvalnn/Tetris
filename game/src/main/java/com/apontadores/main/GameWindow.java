@@ -11,11 +11,10 @@ import javax.swing.JFrame;
 // itself, including the size, title, and close operation
 // Visual elements are handled by GamePanel, which represents the "picture"
 public class GameWindow extends JFrame {
-  private final JFrame jFrame;
-  protected GamePanel gamePanel;
+    protected GamePanel gamePanel;
 
   public GameWindow(final GamePanel gamePanel) {
-    jFrame = new JFrame("Tetris");
+      JFrame jFrame = new JFrame("Tetris");
     jFrame.setResizable(false);
 
     // closes the window when the user clicks the close button

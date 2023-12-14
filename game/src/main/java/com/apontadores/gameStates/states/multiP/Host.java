@@ -14,7 +14,7 @@ import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
 
 public class Host extends GameState {
-  private Frame frame;
+  private final Frame frame;
   private boolean displayIP = false;
   private boolean updateText = true;
   SwitchStateAction switchState = new SwitchStateAction();

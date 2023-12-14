@@ -12,7 +12,6 @@ public class Keybindings {
   public int restart = 82;
   public int pause = 80;
   public int toggleGrid = 71;
-  public int enterTitleScreen = 13;
   public int debugIShape = 49;
   public int debugJShape = 50;
   public int debugLShape = 51;

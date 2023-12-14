@@ -15,7 +15,6 @@ import com.apontadores.inputs.MouseInputs;
 // GamePanel is a JPanel -- a container for all visual elements in the game
 public class GamePanel extends JPanel {
 
-  private final MouseInputs mouseInputs;
   private final Game game;
 
   public GamePanel(final Game game) {
@@ -24,7 +23,7 @@ public class GamePanel extends JPanel {
 
     addKeyListener(new KeyboardInputs());
 
-    mouseInputs = new MouseInputs();
+    MouseInputs mouseInputs = new MouseInputs();
     addMouseListener(mouseInputs);
     addMouseMotionListener(mouseInputs);
   }

@@ -35,7 +35,7 @@ public class PlayerBoard extends Board {
   private Tetromino holdTetro; // hold
 
   private boolean debugMode = false;
-  private boolean paused = false;
+
   private boolean blockHoldTetromino = false;
 
   protected ArrayList<JsonShape> shapeData;
@@ -187,8 +187,8 @@ public class PlayerBoard extends Board {
     // it might be in the future
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
-        final int x1 = (int) (col * set.squareSize - set.squareSize / 2) + set.xOffset;
-        final int y1 = (int) (row * set.squareSize - set.squareSize / 2) + set.yOffset;
+        final int x1 = (col * set.squareSize - set.squareSize / 2) + set.xOffset;
+        final int y1 = (row * set.squareSize - set.squareSize / 2) + set.yOffset;
         final int x2 = x1 + set.squareSize;
         final int y2 = y1 + set.squareSize;
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
@@ -237,10 +237,7 @@ public class PlayerBoard extends Board {
 
     GameTime.tick();
 
-    // NOTE: This is only used for debugging purposes
-    // TODO: Remove this
-    if (paused)
-      return;
+
 
     activeTetro.update();
     if (!activeTetro.isActive()) {
@@ -291,10 +288,6 @@ public class PlayerBoard extends Board {
       g.setColor(Color.RED);
       g.drawString("Debug Mode", 10, 10);
     }
-    if (paused) {
-      g.setColor(Color.RED);
-      g.drawString("Paused", 10, 30);
-    }
   }
 
   // TODO: Obscure the debug mode activation
@@ -302,10 +295,6 @@ public class PlayerBoard extends Board {
   // to press a certain key combination
   public void toggleDebugMode() {
     debugMode = !debugMode;
-  }
-
-  public void togglePause() {
-    paused = !paused;
   }
 
   public Tetromino getTetromino() {

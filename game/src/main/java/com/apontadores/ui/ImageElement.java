@@ -1,28 +1,21 @@
 package com.apontadores.ui;
 
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
-import static com.apontadores.utils.Constants.GameConstants.GAME_HEIGHT;
-import static com.apontadores.utils.Constants.GameConstants.GAME_WIDTH;
+import com.apontadores.gameElements.Sound;
+import com.apontadores.utils.LoadSave;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import javax.sound.sampled.Clip;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-import javax.sound.sampled.Clip;
-
-import com.apontadores.gameElements.Sound;
-import com.apontadores.utils.LoadSave;
+import static com.apontadores.utils.Constants.GameConstants.GAME_HEIGHT;
+import static com.apontadores.utils.Constants.GameConstants.GAME_WIDTH;
+import static com.apontadores.utils.Constants.RESOURCES_PATH;
 
 public class ImageElement implements FrameElement {
 
   public static class Builder {
-    private ImageElement button;
+    private final ImageElement button;
 
     public Builder() {
       button = new ImageElement();
@@ -53,11 +46,6 @@ public class ImageElement implements FrameElement {
       return this;
     }
 
-    public Builder textElement(TextElement textElement) {
-      button.textElement = textElement;
-      return this;
-    }
-
     public ImageElement build() {
       return button;
     }
@@ -79,7 +67,7 @@ public class ImageElement implements FrameElement {
   private transient int yAbs;
   private transient Rectangle bounds;
   private transient BufferedImage image;
-  private transient static Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH + "/sounds/clickSound.wav");
+  private static final Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH + "/sounds/clickSound.wav");
   private transient Image scaledImage;
 
   public <T, R> R execIfClicked(
@@ -201,10 +189,6 @@ public class ImageElement implements FrameElement {
   @Override
   public void disable() {
     enabled = false;
-  }
-
-  public Rectangle getBounds() {
-    return bounds;
   }
 
   public TextElement getTextElement() {

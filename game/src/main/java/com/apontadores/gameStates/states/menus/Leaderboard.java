@@ -1,25 +1,22 @@
 package com.apontadores.gameStates.states.menus;
 
-import static com.apontadores.utils.Constants.FRAMES_PATH;
-import static com.apontadores.utils.Constants.RESOURCES_PATH;
-import static com.apontadores.utils.Constants.SYS_SEPARATOR;
-
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
+import com.apontadores.ui.Frame;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
 import com.apontadores.ui.TextElement;
+import com.apontadores.utils.LeaderboardEntry;
 import com.apontadores.utils.LoadSave;
 import com.google.gson.reflect.TypeToken;
-import com.apontadores.ui.Frame;
-import com.apontadores.utils.LeaderboardEntry;
+
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.apontadores.utils.Constants.*;
 
 public class Leaderboard extends GameState {
 
@@ -62,7 +59,9 @@ public class Leaderboard extends GameState {
   }
 
   private String createsScoreText(final int index) {
-    String score = entries.get(index).getName() +
+
+
+    return entries.get(index).getName() +
         " " + "-" + " " +
         entries.get(index).getScore() +
         " " + "-" + " " +
@@ -71,9 +70,6 @@ public class Leaderboard extends GameState {
 //        entries.get(index).getLines() +
 //        " " + "-" + " " +
         entries.get(index).getTimeString();
-
-
-    return score;
   }
 
   @Override
@@ -105,7 +101,7 @@ public class Leaderboard extends GameState {
     List<LeaderboardEntry> entries = loadEntries();
 
     if (entries == null) {
-      entries = new ArrayList<LeaderboardEntry>();
+      entries = new ArrayList<>();
       entries.add(newEntry);
       LoadSave.saveJson(SCORES_PATH, entries);
       isLeaderBoardLoaded = false;
@@ -114,7 +110,7 @@ public class Leaderboard extends GameState {
 
     if (entries.size() < 10) {
       entries.add(newEntry);
-      Collections.sort(entries, (a, b) -> b.getScore() - a.getScore());
+      entries.sort((a, b) -> b.getScore() - a.getScore());
       LoadSave.saveJson(SCORES_PATH, entries);
       isLeaderBoardLoaded = false;
       return;

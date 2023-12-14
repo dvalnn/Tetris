@@ -19,8 +19,6 @@ import com.apontadores.gameStates.GameStateHandler;
 public class Sound implements Runnable {
 
   private static Clip gameMusic;
-  private static Clip menuMusic;
-  private static Clip clipEffect;
 
   // Set of variables that control the volume and mute of the music
   private static FloatControl gainControlGameMusic;
@@ -74,10 +72,10 @@ public class Sound implements Runnable {
     System.out.println("muteEffect: " + muteEffect);
     System.out.println("muteMusic: " + muteMusic);
 
-    menuMusic = setFileMusic(RESOURCES_PATH + "/sounds/tetrisTheme.wav");
+    Clip menuMusic = setFileMusic(RESOURCES_PATH + "/sounds/tetrisTheme.wav");
     gameMusic = setFileMusic(RESOURCES_PATH + "/sounds/tetrisThemeOld.wav");
 
-    clipEffect = ImageElement.getClipEffect();
+    Clip clipEffect = ImageElement.getClipEffect();
 
     gainControlGameMusic = (FloatControl) gameMusic.getControl(FloatControl.Type.MASTER_GAIN);
     gainControlMenuMusic = (FloatControl) menuMusic.getControl(FloatControl.Type.MASTER_GAIN);
@@ -204,11 +202,7 @@ public class Sound implements Runnable {
     float gain = (range * Sound.effectVolume / 100) + MIN_VOLUME;
 
     // if the value inserted is 0, then the sound is muted
-    if (Sound.effectVolume == 0 || muteEffect)
-      muteControlEffectMusic.setValue(true);
-
-    else
-      muteControlEffectMusic.setValue(false);
+    muteControlEffectMusic.setValue(Sound.effectVolume == 0 || muteEffect);
 
     gainControlEffectMusic.setValue(gain);
 

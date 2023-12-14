@@ -37,11 +37,11 @@ public final class GameStateHandler {
     PLAYING,
     PLAYING_MP,
     PAUSE,
-    GAME_OVER;
+    GAME_OVER
   }
 
   private static GameStatesEnum activeState;
-  private static HashMap<GameStatesEnum, GameState> statesMap = new HashMap<GameStatesEnum, GameState>();
+  private static final HashMap<GameStatesEnum, GameState> statesMap = new HashMap<>();
 
   private static void addState(final GameState state) {
     statesMap.put(state.getStateID(), state);

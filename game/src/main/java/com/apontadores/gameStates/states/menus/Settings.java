@@ -62,12 +62,12 @@ public class Settings extends GameState {
     ((ImageElement) frame.getElement("musicVolume"))
         .getTextElement()
         .setText(
-            new String(String.valueOf((Sound.getMusicVolume()))));
+                String.valueOf((Sound.getMusicVolume())));
 
     ((ImageElement) frame.getElement("effectsVolume"))
         .getTextElement()
         .setText(
-            new String(String.valueOf((Sound.getEffectVolume()))));
+                String.valueOf((Sound.getEffectVolume())));
   }
 
   @Override

@@ -75,7 +75,7 @@ public class GameOver extends GameState {
         .setText(String.valueOf(Levels.getTotalLinesCleared()));
 
     ((TextElement) frame.getElement("timePlayed"))
-        .setText(String.valueOf(GameTime.getTimeStr()));
+        .setText(GameTime.getTimeStr());
 
   }
 }

@@ -11,7 +11,7 @@ public class Levels {
   public static int softDropMultiplier = 20;
   public static int hardDropMultiplier = 100;
 
-  private static int[] linesToNextLevel = {
+  private static final int[] linesToNextLevel = {
       10, 20, 30, 40, 50, 60, 70, 80, 90, // 0-8
       100, 100, 100, 100, 100, 100, 100, // 9-15
       110, 120, 130, 140, 150, 160, 170, 180, 190, // 16-24

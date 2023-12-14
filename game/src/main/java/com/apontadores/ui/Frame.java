@@ -25,9 +25,9 @@ public class Frame {
   private int[] color;
   private ArrayList<FrameElement> assets;
 
-  private static HashMap<String, Class<? extends FrameElement>> assetTypes;
+  private static final HashMap<String, Class<? extends FrameElement>> assetTypes;
   static {
-    assetTypes = new HashMap<String, Class<? extends FrameElement>>();
+    assetTypes = new HashMap<>();
     // Initialize assetTypes here
     assetTypes.put("image", ImageElement.class);
     assetTypes.put("text", TextElement.class);
@@ -56,7 +56,7 @@ public class Frame {
           frame.color[2]);
 
     JsonArray assetArray = json.get("assets").getAsJsonArray();
-    frame.assets = new ArrayList<FrameElement>(assetArray.size());
+    frame.assets = new ArrayList<>(assetArray.size());
 
     for (int i = 0; i < assetArray.size(); i++) {
       assetArray.get(i);
@@ -86,17 +86,6 @@ public class Frame {
     return null;
   }
 
-  public void addElement(final FrameElement asset) {
-    if (assets == null)
-      assets = new ArrayList<FrameElement>();
-
-    assets.add(asset);
-  }
-
-  public void removeElement(final String name) {
-    assets.removeIf((asset) -> asset.getName().equals(name));
-  }
-
   public void render(Graphics g) {
     if (backgroundImg != null) {
       g.drawImage(backgroundImg, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
@@ -118,14 +107,6 @@ public class Frame {
 
   public String getName() {
     return name;
-  }
-
-  public Color getBackgroundColor() {
-    return backgroundColor;
-  }
-
-  public BufferedImage getBackgroundImg() {
-    return backgroundImg;
   }
 
 }

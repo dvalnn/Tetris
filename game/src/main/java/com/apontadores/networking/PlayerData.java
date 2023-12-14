@@ -23,15 +23,6 @@ public class PlayerData {
 
   private String playerName;
 
-  public String getPlayerName() {
-    return playerName;
-  }
-
-  public PlayerData setPlayerName(String playerName) {
-    this.playerName = playerName;
-    return this;
-  }
-
   private String opponentName;
 
   public String getOpponentName() {
@@ -40,17 +31,6 @@ public class PlayerData {
 
   public PlayerData setOpponentName(String opponentName) {
     this.opponentName = opponentName;
-    return this;
-  }
-
-  private String roomName;
-
-  public String getRoomName() {
-    return roomName;
-  }
-
-  public PlayerData setRoomName(String roomName) {
-    this.roomName = roomName;
     return this;
   }
 
@@ -93,12 +73,6 @@ public class PlayerData {
 
   public int getOpponentLevel() {
     return opponentLevel;
-  }
-
-  private int opponentLinesCleared;
-
-  public int getOpponentLinesCleared() {
-    return opponentLinesCleared;
   }
 
   // NOTE: Player elements have setters and are updated by the local game logic
@@ -156,10 +130,9 @@ public class PlayerData {
 
   private int level;
 
-  public PlayerData setLevel(int level) {
+  public void setLevel(int level) {
     this.level = level;
     syncScore = true;
-    return this;
   }
 
   private int linesCleared;
@@ -214,28 +187,19 @@ public class PlayerData {
 
   public void parsePacket(Packet100Update inPacket) {
     switch (inPacket.getUpdateType()) {
-      case "tetromino":
-        parseTetrominoUpdate(inPacket.getUpdateData());
-        break;
-
-      case "board":
-        parseBoardUpdate(inPacket.getUpdateData());
-        break;
-
-      case "score":
-        parseScoreUpdate(inPacket.getUpdateData());
-        break;
-
-      default:
-        break;
+      case "tetromino" -> parseTetrominoUpdate(inPacket.getUpdateData());
+      case "board" -> parseBoardUpdate(inPacket.getUpdateData());
+      case "score" -> parseScoreUpdate(inPacket.getUpdateData());
+      default -> {
+      }
     }
   }
 
   private void parseTetrominoUpdate(String data) {
-    String tokens[] = data.split(";");
+    String[] tokens = data.split(";");
     Color color = new Color(Integer.parseInt(tokens[0]));
     int numPoints = Integer.parseInt(tokens[1]);
-    Point2D points[] = new Point2D[numPoints];
+    Point2D[] points = new Point2D[numPoints];
 
     for (int i = 0; i < numPoints; i++) {
       double x = Double.parseDouble(tokens[i * 2 + 2]);
@@ -249,12 +213,12 @@ public class PlayerData {
   public void parseScoreUpdate(String updateData) {
     String[] tokens = updateData.split(";");
     opponentScore = Integer.parseInt(tokens[0]);
-    opponentLinesCleared = Integer.parseInt(tokens[1]);
+    int opponentLinesCleared = Integer.parseInt(tokens[1]);
     opponentLevel = Integer.parseInt(tokens[2]);
   }
 
   public void parseBoardUpdate(String updateData) {
-    String tokens[] = updateData.split(";");
+    String[] tokens = updateData.split(";");
 
     int row = Integer.parseInt(tokens[0]);
     int numColors = Integer.parseInt(tokens[1]);

@@ -14,9 +14,9 @@ import com.apontadores.ui.Frame;
 
 public class MainMenu extends GameState {
 
-  private Frame frame;
+  private final Frame frame;
 
-  private SwitchStateAction switchState = new SwitchStateAction();
+  private final SwitchStateAction switchState = new SwitchStateAction();
 
   public MainMenu() {
     super(GameStatesEnum.MAIN_MENU);

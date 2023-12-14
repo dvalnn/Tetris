@@ -16,7 +16,7 @@ import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
 
 public class Connecting extends GameState {
-  private Frame frame;
+  private final Frame frame;
   SwitchStateAction switchState = new SwitchStateAction();
 
   public Connecting() {

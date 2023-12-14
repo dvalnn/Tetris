@@ -18,10 +18,10 @@ public class Board {
 
   public class BoardLine {
     private final List<Color> colors;
-    private boolean recentlyChanged = false;
+    private boolean recentlyChanged;
 
     public BoardLine() {
-      colors = new ArrayList<Color>(BOARD_WIDTH);
+      colors = new ArrayList<>(BOARD_WIDTH);
       for (int i = 0; i < BOARD_WIDTH; i++) {
         colors.add(set.backgroundColor);
       }
@@ -29,7 +29,7 @@ public class Board {
       getLineCounter = 0;
     }
 
-    private int getLineCounter = 0;
+    private int getLineCounter;
     private static final int GET_LINE_TRESHOLD = 1;
 
     public void setColor(final int index, final Color color) {
@@ -66,7 +66,7 @@ public class Board {
     }
 
     public List<Color> getColorsCopy() {
-      final List<Color> copy = new ArrayList<Color>(colors.size());
+      final List<Color> copy = new ArrayList<>(colors.size());
       for (final Color color : colors) {
         copy.add(new Color(color.getRGB()));
       }
@@ -95,7 +95,7 @@ public class Board {
     // board lines are created with
     // recentlyChanged = true
     // and with backgroundColor
-    board = new ArrayList<BoardLine>(BOARD_HEIGHT);
+    board = new ArrayList<>(BOARD_HEIGHT);
     for (int i = 0; i < BOARD_HEIGHT; i++) {
       board.add(new BoardLine());
     }
@@ -106,15 +106,17 @@ public class Board {
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
         g.setColor(board.get(row).getIndexColorCopy(col));
+        int x = (col * set.squareSize - set.squareSize / 2) + set.xOffset;
+        int y = (row * set.squareSize - set.squareSize / 2) + set.yOffset;
         g.fillRect(
-            (int) (col * set.squareSize - set.squareSize / 2) + set.xOffset,
-            (int) (row * set.squareSize - set.squareSize / 2) + set.yOffset,
+                x,
+                y,
             set.squareSize,
             set.squareSize);
         g.setColor(set.gridColor);
         g.drawRect(
-            (int) (col * set.squareSize - set.squareSize / 2) + set.xOffset,
-            (int) (row * set.squareSize - set.squareSize / 2) + set.yOffset,
+                x,
+                y,
             set.squareSize,
             set.squareSize);
       }
@@ -151,10 +153,6 @@ public class Board {
 
   public Color getBackgroundColor() {
     return set.backgroundColor;
-  }
-
-  public String getUsername() {
-    return username;
   }
 
   public void setUsername(final String username) {

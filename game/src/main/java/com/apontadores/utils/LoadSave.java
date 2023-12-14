@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,7 +25,7 @@ import com.google.gson.GsonBuilder;
 public class LoadSave {
 
   public static Set<String> listFiles(final String dir) {
-    return Stream.of(new File(dir).listFiles())
+    return Stream.of(Objects.requireNonNull(new File(dir).listFiles()))
         .filter(file -> !file.isDirectory())
         .map(File::getName)
         .collect(Collectors.toSet());
@@ -70,7 +71,7 @@ public class LoadSave {
   public static ArrayList<JsonShape> parseAllJsonShapes(final String dir) {
 
     final Set<String> files = listFiles(dir);
-    ArrayList<JsonShape> shapes = new ArrayList<JsonShape>(files.size());
+    ArrayList<JsonShape> shapes = new ArrayList<>(files.size());
 
     final String[] filesToRead = new String[files.size()];
     files.toArray(filesToRead);

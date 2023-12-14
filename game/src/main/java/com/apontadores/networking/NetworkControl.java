@@ -1,17 +1,14 @@
 package com.apontadores.networking;
 
 public class NetworkControl {
-  public static enum ClientStates {
+  public enum ClientStates {
     INACTIVE,
-    USERNAME_TAKEN,
-    ROOM_FULL,
     CONNECTION_TIMEOUT,
-    CONNECTION_ABORTED,
     SOCKET_ERROR,
-    RUNNING;
+    RUNNING
   }
 
-  public static enum ConnectionPhases {
+  public enum ConnectionPhases {
     INACTIVE,
     DISCONNECTED,
     CONNECTING,

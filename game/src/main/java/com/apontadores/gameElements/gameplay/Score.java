@@ -9,15 +9,15 @@ public class Score {
   private static boolean combo = false;
   private static Action prevAction = Action.NONE;
 
-  public static enum Action {
+  public enum Action {
     NONE, SINGLE, DOUBLE, TRIPLE, TETRIS, B2B_TETRIS, MINI_T_SPIN,
     MINI_T_SPIN_SINGLE, MINI_T_SPIN_DOUBLE, B2B_MINI_T_SPIN_DOUBLE, T_SPIN,
     T_SPIN_SINGLE, T_SPIN_DOUBLE, T_SPIN_TRIPLE, B2B_T_SPIN_SINGLE,
-    B2B_T_SPIN_DOUBLE, B2B_T_SPIN_TRIPLE;
+    B2B_T_SPIN_DOUBLE, B2B_T_SPIN_TRIPLE
 
   }
 
-  private static HashMap<Action, Integer> scoreMap = new HashMap<Action, Integer>();
+  private static final HashMap<Action, Integer> scoreMap = new HashMap<>();
 
   // TODO: implement action detection into the game for all actions
   static {
@@ -128,7 +128,7 @@ public class Score {
 
   public static void scoreSoftDrop() {
     score++;
-  };
+  }
 
   public static void scoreHardDrop() {
     score += 2;
