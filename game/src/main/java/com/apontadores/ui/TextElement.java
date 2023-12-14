@@ -208,7 +208,12 @@ public class TextElement implements FrameElement {
       return;
     }
 
-    if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED && text.length() < maxLength) {
+    char keyChar = e.getKeyChar();
+    if ((Character.isAlphabetic(keyChar) ||
+        Character.isDigit(keyChar) ||
+        keyChar == '.') // needs to be allowed for IPV4 address input
+        && text.length() < maxLength) {
+
       if (text.contains("|")) {
         text = text.substring(0, text.length() - 1) + e.getKeyChar() + "|";
         return;
