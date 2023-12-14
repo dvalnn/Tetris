@@ -5,7 +5,7 @@ import java.awt.geom.Point2D;
 
 public class GhostShape extends Shape {
 
-  public GhostShape(Shape MasterShape) {
+  public GhostShape(final Shape MasterShape) {
 
     super(
         MasterShape.getCenter(),
@@ -29,14 +29,14 @@ public class GhostShape extends Shape {
   public void initPosition() {
   }
 
-  public void goToMaster(Point2D masterCenter) {
-    double deltaX = masterCenter.getX() - center.getX();
-    double deltaY = masterCenter.getY() - center.getY();
+  public void goToMaster(final Point2D masterCenter) {
+    final double deltaX = masterCenter.getX() - center.getX();
+    final double deltaY = masterCenter.getY() - center.getY();
     move(deltaX, deltaY);
   }
 
-  private void move(double x, double y) {
-    for (Point2D point : points) {
+  private void move(final double x, final double y) {
+    for (final Point2D point : points) {
       point.setLocation(point.getX() + x, point.getY() + y);
     }
     center.setLocation(center.getX() + x, center.getY() + y);

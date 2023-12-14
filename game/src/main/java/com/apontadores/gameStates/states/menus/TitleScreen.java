@@ -35,10 +35,8 @@ public class TitleScreen extends GameState {
 
   @Override
   public void keyPressed(final KeyEvent e) {
-    switch (e.getKeyCode()) {
-      case KeyEvent.VK_ENTER:
-        action.exec(GameStatesEnum.USERNAME);
-        break;
+    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+      action.exec(GameStatesEnum.USERNAME);
     }
   }
 

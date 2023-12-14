@@ -12,7 +12,7 @@ public class LeaderboardEntry {
     return lines;
   }
 
-  public LeaderboardEntry setLines(int lines) {
+  public LeaderboardEntry setLines(final int lines) {
     this.lines = lines;
     return this;
   }
@@ -21,7 +21,7 @@ public class LeaderboardEntry {
     return name;
   }
 
-  public LeaderboardEntry setName(String username) {
+  public LeaderboardEntry setName(final String username) {
     this.name = username;
     return this;
   }
@@ -30,7 +30,7 @@ public class LeaderboardEntry {
     return score;
   }
 
-  public LeaderboardEntry setScore(Integer score) {
+  public LeaderboardEntry setScore(final Integer score) {
     this.score = score;
     return this;
   }
@@ -39,7 +39,7 @@ public class LeaderboardEntry {
     return level;
   }
 
-  public LeaderboardEntry setLevel(Integer level) {
+  public LeaderboardEntry setLevel(final Integer level) {
     this.level = level;
     return this;
   }
@@ -48,7 +48,7 @@ public class LeaderboardEntry {
     return timeString;
   }
 
-  public LeaderboardEntry setTimeString(String time_in_string) {
+  public LeaderboardEntry setTimeString(final String time_in_string) {
     this.timeString = time_in_string;
     return this;
   }

@@ -4,7 +4,6 @@ import static com.apontadores.utils.Constants.RESOURCES_PATH;
 import static com.apontadores.utils.Constants.GameConstants.GAME_HEIGHT;
 import static com.apontadores.utils.Constants.GameConstants.GAME_WIDTH;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -22,46 +21,46 @@ import com.apontadores.utils.LoadSave;
 public class ImageElement implements FrameElement {
 
   public static class Builder {
-    private ImageElement button;
+    private final ImageElement button;
 
     public Builder() {
       button = new ImageElement();
     }
 
-    public Builder name(String name) {
+    public Builder name(final String name) {
       button.name = name;
       return this;
     }
 
-    public Builder imagePath(String imagePath) {
+    public Builder imagePath(final String imagePath) {
       button.imagePath = imagePath;
       return this;
     }
 
-    public Builder x(int x) {
+    public Builder x(final int x) {
       button.x = x;
       return this;
     }
 
-    public Builder y(int y) {
+    public Builder y(final int y) {
       button.y = y;
       return this;
     }
 
-    public Builder imageScale(int imageScale) {
+    public Builder imageScale(final int imageScale) {
       button.imageScale = imageScale;
-      return this;
-    }
-
-    public Builder textElement(TextElement textElement) {
-      button.textElement = textElement;
       return this;
     }
 
     public ImageElement build() {
       return button;
     }
+  }
 
+  private static final Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH + "/sounds/clickSound.wav");
+
+  public static Clip getClipEffect() {
+    return clipEffect;
   }
 
   // NOTE: json fields
@@ -79,14 +78,17 @@ public class ImageElement implements FrameElement {
   private transient int yAbs;
   private transient Rectangle bounds;
   private transient BufferedImage image;
-  private transient static Clip clipEffect = Sound.setFileMusic(RESOURCES_PATH + "/sounds/clickSound.wav");
+
   private transient Image scaledImage;
+
+  public ImageElement() {
+  }
 
   public <T, R> R execIfClicked(
       final int x,
       final int y,
-      ButtonAction<T, R> lambda,
-      T args) {
+      final ButtonAction<T, R> lambda,
+      final T args) {
 
     if (!enabled)
       return null;
@@ -133,19 +135,19 @@ public class ImageElement implements FrameElement {
     if (!enabled)
       return;
 
-    Graphics2D g2d = (Graphics2D) g;
+    final Graphics2D g2d = (Graphics2D) g;
 
     g2d.setRenderingHint(
         RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
 
-    AffineTransform orig = g2d.getTransform();
+    final AffineTransform orig = g2d.getTransform();
 
     if (angle != 0)
       g2d.rotate(Math.toRadians(angle));
 
-    int scaledWidth = (int) (image.getWidth() * imageScale);
-    int scaledHeight = (int) (image.getHeight() * imageScale);
+    final int scaledWidth = (int) (image.getWidth() * imageScale);
+    final int scaledHeight = (int) (image.getHeight() * imageScale);
 
     if (imageScale != 1.0 && scaledImage == null) {
       scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
@@ -203,15 +205,11 @@ public class ImageElement implements FrameElement {
     enabled = false;
   }
 
-  public Rectangle getBounds() {
-    return bounds;
-  }
-
   public TextElement getTextElement() {
     return textElement;
   }
 
-  public void setTextElement(TextElement textElement) {
+  public void setTextElement(final TextElement textElement) {
     this.textElement = textElement;
   }
 
@@ -230,9 +228,5 @@ public class ImageElement implements FrameElement {
   @Override
   public double getRotation() {
     return angle;
-  }
-
-  public static Clip getClipEffect() {
-    return clipEffect;
   }
 }

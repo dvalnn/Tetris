@@ -25,24 +25,21 @@ import com.apontadores.utils.LoadSave;
 
 public class PlayerBoard extends Board {
 
-  // TODO: implement 6 Tetrominos
   private Tetromino activeTetro; // active
   private Tetromino nextTetro; // next
   private Tetromino nextTetro2; // next
   private Tetromino nextTetro3; // next
   private Tetromino nextTetro4; // next
-
   private Tetromino holdTetro; // hold
 
   private boolean debugMode = false;
-  private boolean paused = false;
   private boolean blockHoldTetromino = false;
-
-  protected ArrayList<JsonShape> shapeData;
 
   private final Random rand = new Random();
 
-  public PlayerBoard(BoardSettings set) {
+  protected ArrayList<JsonShape> shapeData;
+
+  public PlayerBoard(final BoardSettings set) {
     super(set);
 
     Score.reset();
@@ -56,29 +53,6 @@ public class PlayerBoard extends Board {
     nextTetro2 = tetrominoFactory(shapeData);
     nextTetro3 = tetrominoFactory(shapeData);
     nextTetro4 = tetrominoFactory(shapeData);
-  }
-
-  private Tetromino tetrominoFactory(ArrayList<JsonShape> shapeData) {
-
-    int shapeID = rand.nextInt(shapeData.size());
-    JsonShape shape = shapeData.get(shapeID);
-
-    return new Tetromino(
-        set.squareSize,
-        new Point2D.Double(set.xOffset, set.yOffset),
-        this,
-        shape,
-        shapeID);
-  }
-
-  private Tetromino tetrominoFactory(int shapeID) {
-    JsonShape shape = shapeData.get(shapeID);
-    return new Tetromino(
-        set.squareSize,
-        new Point2D.Double(set.xOffset, set.yOffset),
-        this,
-        shape,
-        shapeID);
   }
 
   public void holdTetromino() {
@@ -101,6 +75,149 @@ public class PlayerBoard extends Board {
     activeTetro = tetrominoFactory(holdTetro.getShapeID());
     holdTetro = tetrominoFactory(aux.getShapeID());
     blockHoldTetromino = true;
+  }
+
+  // NOTE: This method is only used for debugging purposes
+  public void addBlockOnMousePosition(final int x, final int y) {
+    if (!debugMode)
+      return;
+
+    toggleBlockOnMousePosition(x, y, true);
+  }
+
+  // NOTE: This method is only used for debugging purposes
+  public void removeBlockOnMousePosition(final int x, final int y) {
+    if (!debugMode)
+      return;
+
+    toggleBlockOnMousePosition(x, y, false);
+  }
+
+  // NOTE: This method is only used for debugging purposes
+  public void setTetromino(final int tetroID) {
+    if (!debugMode)
+      return;
+    activeTetro = tetrominoFactory(tetroID);
+  }
+
+  // NOTE: This method is only used for debugging purposes
+  public void reset() {
+    if (!debugMode)
+      return;
+
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+      for (int col = 0; col < BOARD_WIDTH; col++) {
+        board.get(row).setColor(col, set.backgroundColor);
+      }
+    }
+
+    activeTetro = tetrominoFactory(shapeData);
+    nextTetro = tetrominoFactory(shapeData);
+  }
+
+  public void update() {
+    // update the score. This is done in this class
+    // and not direcly on the parent class so that
+    // the player and the opponent can have different
+    // score values, as both PlayerBoard and BoardMP
+    // extend Board.
+    playerScore = Score.getScore();
+    playerLevel = Levels.getCurrentLevel() + 1;
+    playerLines = Levels.getTotalLinesCleared();
+
+    GameTime.tick();
+
+    activeTetro.update();
+    if (!activeTetro.isActive()) {
+
+      addTetrominoToPile();
+      checkLines();
+      activeTetro = nextTetro;
+      nextTetro = nextTetro2;
+      nextTetro2 = nextTetro3;
+      nextTetro3 = nextTetro4;
+      nextTetro4 = tetrominoFactory(shapeData);
+    }
+  }
+
+  public void render(final Graphics g) {
+    super.render(g);
+    activeTetro.render(g);
+
+    nextTetro.getShape().renderAt(
+        g,
+        set.nextRenderX,
+        set.nextRenderY);
+
+    nextTetro2.getShape().renderAt(
+        g,
+        set.nextRenderX,
+        set.nextRenderY + 100);
+
+    nextTetro3.getShape().renderAt(
+        g,
+        set.nextRenderX,
+        set.nextRenderY + 200);
+
+    nextTetro4.getShape().renderAt(
+        g,
+        set.nextRenderX,
+        set.nextRenderY + 300);
+
+    if (holdTetro != null)
+      holdTetro.getShape().renderAt(
+          g,
+          set.holdRenderX,
+          set.holdRenderY);
+
+    // NOTE: This is only used for debugging purposes
+    // TODO: Remove this
+    if (debugMode) {
+      g.setColor(Color.RED);
+      g.drawString("Debug Mode", 10, 10);
+    }
+  }
+
+  // TODO: Obscure the debug mode activation
+  // Maybe make it so that the user has
+  // to press a certain key combination
+  public void toggleDebugMode() {
+    debugMode = !debugMode;
+  }
+
+  public Tetromino getTetromino() {
+    return activeTetro;
+  }
+
+  public Tetromino getNextTetromino() {
+    return nextTetro;
+  }
+
+  public Tetromino getHoldTetromino() {
+    return holdTetro;
+  }
+
+  private Tetromino tetrominoFactory(final ArrayList<JsonShape> shapeData) {
+
+    final int shapeID = rand.nextInt(shapeData.size());
+    final JsonShape shape = shapeData.get(shapeID);
+
+    return new Tetromino(
+        set.squareSize,
+        new Point2D.Double(set.xOffset, set.yOffset),
+        this,
+        shape,
+        shapeID);
+  }
+
+  private Tetromino tetrominoFactory(final int shapeID) {
+    final JsonShape shape = shapeData.get(shapeID);
+    return new Tetromino(
+        set.squareSize,
+        new Point2D.Double(set.xOffset, set.yOffset),
+        this,
+        shape,
+        shapeID);
   }
 
   private void addTetrominoToPile() {
@@ -155,22 +272,6 @@ public class PlayerBoard extends Board {
   }
 
   // NOTE: This method is only used for debugging purposes
-  public void addBlockOnMousePosition(final int x, final int y) {
-    if (!debugMode)
-      return;
-
-    toggleBlockOnMousePosition(x, y, true);
-  }
-
-  // NOTE: This method is only used for debugging purposes
-  public void removeBlockOnMousePosition(final int x, final int y) {
-    if (!debugMode)
-      return;
-
-    toggleBlockOnMousePosition(x, y, false);
-  }
-
-  // NOTE: This method is only used for debugging purposes
   // it is not used in the actual game.
   // PERF: This method is very inefficient. It iterates over
   // the entire board every time the mouse is clicked.
@@ -187,8 +288,8 @@ public class PlayerBoard extends Board {
     // it might be in the future
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
-        final int x1 = (int) (col * set.squareSize - set.squareSize / 2) + set.xOffset;
-        final int y1 = (int) (row * set.squareSize - set.squareSize / 2) + set.yOffset;
+        final int x1 = (col * set.squareSize - set.squareSize / 2) + set.xOffset;
+        final int y1 = (row * set.squareSize - set.squareSize / 2) + set.yOffset;
         final int x2 = x1 + set.squareSize;
         final int y2 = y1 + set.squareSize;
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
@@ -201,122 +302,5 @@ public class PlayerBoard extends Board {
         }
       }
     }
-  }
-
-  // NOTE: This method is only used for debugging purposes
-  public void setTetromino(final int tetroID) {
-    if (!debugMode)
-      return;
-    activeTetro = tetrominoFactory(tetroID);
-  }
-
-  // NOTE: This method is only used for debugging purposes
-  public void reset() {
-    if (!debugMode)
-      return;
-
-    for (int row = 0; row < BOARD_HEIGHT; row++) {
-      for (int col = 0; col < BOARD_WIDTH; col++) {
-        board.get(row).setColor(col, set.backgroundColor);
-      }
-    }
-
-    activeTetro = tetrominoFactory(shapeData);
-    nextTetro = tetrominoFactory(shapeData);
-  }
-
-  public void update() {
-    // update the score. This is done in this class
-    // and not direcly on the parent class so that
-    // the player and the opponent can have different
-    // score values, as both PlayerBoard and BoardMP
-    // extend Board.
-    playerScore = Score.getScore();
-    playerLevel = Levels.getCurrentLevel() + 1;
-    playerLines = Levels.getTotalLinesCleared();
-
-    GameTime.tick();
-
-    // NOTE: This is only used for debugging purposes
-    // TODO: Remove this
-    if (paused)
-      return;
-
-    activeTetro.update();
-    if (!activeTetro.isActive()) {
-
-      addTetrominoToPile();
-      checkLines();
-      activeTetro = nextTetro;
-      nextTetro = nextTetro2;
-      nextTetro2 = nextTetro3;
-      nextTetro3 = nextTetro4;
-      nextTetro4 = tetrominoFactory(shapeData);
-    }
-  }
-
-  public void render(final Graphics g) {
-    super.render(g);
-    activeTetro.render(g);
-
-    nextTetro.getShape().renderAt(
-        g,
-        set.nextRenderX,
-        set.nextRenderY);
-
-    nextTetro2.getShape().renderAt(
-        g,
-        set.nextRenderX,
-        set.nextRenderY + 100);
-
-    nextTetro3.getShape().renderAt(
-        g,
-        set.nextRenderX,
-        set.nextRenderY + 200);
-
-    nextTetro4.getShape().renderAt(
-        g,
-        set.nextRenderX,
-        set.nextRenderY + 300);
-
-    if (holdTetro != null)
-      holdTetro.getShape().renderAt(
-          g,
-          set.holdRenderX,
-          set.holdRenderY);
-
-    // NOTE: This is only used for debugging purposes
-    // TODO: Remove this
-    if (debugMode) {
-      g.setColor(Color.RED);
-      g.drawString("Debug Mode", 10, 10);
-    }
-    if (paused) {
-      g.setColor(Color.RED);
-      g.drawString("Paused", 10, 30);
-    }
-  }
-
-  // TODO: Obscure the debug mode activation
-  // Maybe make it so that the user has
-  // to press a certain key combination
-  public void toggleDebugMode() {
-    debugMode = !debugMode;
-  }
-
-  public void togglePause() {
-    paused = !paused;
-  }
-
-  public Tetromino getTetromino() {
-    return activeTetro;
-  }
-
-  public Tetromino getNextTetromino() {
-    return nextTetro;
-  }
-
-  public Tetromino getHoldTetromino() {
-    return holdTetro;
   }
 }

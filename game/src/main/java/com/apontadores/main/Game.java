@@ -44,11 +44,11 @@ public class Game implements Runnable {
     Game.roomName = roomName;
   }
 
-  public static final String getUsername() {
+  public static String getUsername() {
     return username;
   }
 
-  public static final String getRoomName() {
+  public static String getRoomName() {
     return roomName;
   }
 
@@ -65,19 +65,21 @@ public class Game implements Runnable {
     return keybinds;
   }
 
-  public static void setKeybinds(Keybindings keys) {
-    Game.keybinds = keys;
-  }
-
   public static void resetKeybind() {
     Game.keybinds = new Keybindings();
+  }
+
+  public static void setOpponentName(final String opponentName) {
+    Game.opponentName = opponentName;
+  }
+
+  public static String getOpponentName() {
+    return opponentName;
   }
 
   private final GameWindow gameWindow;
 
   private final GamePanel gamePanel;
-
-  private Thread gameThread;
 
   public Game() {
     GameStateHandler.init();
@@ -109,8 +111,8 @@ public class Game implements Runnable {
   @Override
   public void run() {
     // time per frame and time per update in nanoseconds
-    final double timePerFrame = 1000000000 / FPS_SET;
-    final double timePerUpdate = 1000000000 / UPS_SET;
+    final double timePerFrame = 1000000000. / FPS_SET;
+    final double timePerUpdate = 1000000000. / UPS_SET;
 
     double deltaFrame = 0;
     double deltaUpdate = 0;
@@ -122,7 +124,7 @@ public class Game implements Runnable {
     // long lastCheck = System.currentTimeMillis();
 
     // Game Loop
-    while (true) {
+    do {
       final long currentTime = System.nanoTime();
 
       deltaFrame += (currentTime - previousTime) / timePerFrame;
@@ -153,9 +155,7 @@ public class Game implements Runnable {
 
       Thread.yield();
 
-      if (exit)
-        break;
-    }
+    } while (!exit);
 
     gameWindow.dispose();
     System.exit(0);
@@ -163,15 +163,7 @@ public class Game implements Runnable {
 
   private void startGameLoop() {
     new Thread(new Sound()).start();
-    gameThread = new Thread(this);
+    final Thread gameThread = new Thread(this);
     gameThread.start();
-  }
-
-  public static void setOpponentName(String opponentName) {
-    Game.opponentName = opponentName;
-  }
-
-  public static String getOpponentName() {
-    return opponentName;
   }
 }

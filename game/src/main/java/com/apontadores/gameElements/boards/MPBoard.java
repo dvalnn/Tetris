@@ -8,7 +8,7 @@ import com.apontadores.settings.BoardSettings;
 // Class to represent the board of a multiplayer opponent
 public class MPBoard extends Board {
 
-  public MPBoard(BoardSettings set) {
+  public MPBoard(final BoardSettings set) {
     super(set);
   }
 

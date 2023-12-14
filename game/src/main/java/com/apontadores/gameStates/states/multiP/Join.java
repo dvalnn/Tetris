@@ -17,12 +17,10 @@ import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
 
 public class Join extends GameState {
-  private Frame frame;
+  private final Frame frame;
   SwitchStateAction switchState = new SwitchStateAction();
 
-  private InetAddressValidator validator;
-  private String roomName;
-  private String ip;
+  private final InetAddressValidator validator;
 
   public Join() {
     super(GameStatesEnum.JOIN);
@@ -40,10 +38,10 @@ public class Join extends GameState {
     if (Game.getClient().getState() != ClientStates.RUNNING)
       Game.initClient();
 
-    roomName = ((ImageElement) frame.getElement("roomName"))
+    String roomName = ((ImageElement) frame.getElement("roomName"))
         .getTextElement().getText();
 
-    ip = ((ImageElement) frame.getElement("IP"))
+    String ip = ((ImageElement) frame.getElement("IP"))
         .getTextElement().getText();
 
     if (roomName.length() > 0 && ip.length() > 0

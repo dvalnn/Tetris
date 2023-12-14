@@ -38,12 +38,15 @@ public class GameModeSelect extends GameState {
   public void mouseClicked(final MouseEvent e) {
 
     ((ImageElement) frame.getElement("singleplayer"))
-        .execIfClicked(e.getX(), e.getY(), reloadAndSwitch, GameStatesEnum.PLAYING);
+        .execIfClicked(e.getX(), e.getY(),
+            reloadAndSwitch, GameStatesEnum.PLAYING);
 
     ((ImageElement) frame.getElement("multiplayer"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MODE_SELECT_MP);
+        .execIfClicked(e.getX(), e.getY(),
+            switchState, GameStatesEnum.MODE_SELECT_MP);
 
     ((ImageElement) frame.getElement("returnToMainMenu"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MAIN_MENU);
+        .execIfClicked(e.getX(), e.getY(),
+            switchState, GameStatesEnum.MAIN_MENU);
   }
 }

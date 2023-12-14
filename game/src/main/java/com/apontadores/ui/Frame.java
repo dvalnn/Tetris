@@ -10,35 +10,27 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.apontadores.utils.LoadSave;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.apontadores.utils.LoadSave;
 
 public class Frame {
 
-  private transient Color backgroundColor;
-  private transient BufferedImage backgroundImg;
-
-  private String name;
-  private String imagePath;
-  private int[] color;
-  private ArrayList<FrameElement> assets;
-
-  private static HashMap<String, Class<? extends FrameElement>> assetTypes;
+  private static final HashMap<String, Class<? extends FrameElement>> assetTypes;
   static {
-    assetTypes = new HashMap<String, Class<? extends FrameElement>>();
+    assetTypes = new HashMap<>();
     // Initialize assetTypes here
     assetTypes.put("image", ImageElement.class);
     assetTypes.put("text", TextElement.class);
   }
 
   // TODO: add better error handling, refactor this
-  public static Frame loadFromJson(String jsonPath) {
-    Gson gson = new Gson();
-    Frame frame = new Frame();
+  public static Frame loadFromJson(final String jsonPath) {
+    final Gson gson = new Gson();
+    final Frame frame = new Frame();
 
-    JsonObject json = LoadSave.loadJson(
+    final JsonObject json = LoadSave.loadJson(
         jsonPath,
         JsonObject.class);
 
@@ -55,19 +47,19 @@ public class Frame {
           frame.color[1],
           frame.color[2]);
 
-    JsonArray assetArray = json.get("assets").getAsJsonArray();
-    frame.assets = new ArrayList<FrameElement>(assetArray.size());
+    final JsonArray assetArray = json.get("assets").getAsJsonArray();
+    frame.assets = new ArrayList<>(assetArray.size());
 
     for (int i = 0; i < assetArray.size(); i++) {
       assetArray.get(i);
-      JsonObject asset = assetArray.get(i).getAsJsonObject();
-      String type = asset.get("type").getAsString();
+      final JsonObject asset = assetArray.get(i).getAsJsonObject();
+      final String type = asset.get("type").getAsString();
 
-      Class<? extends FrameElement> classOfT = assetTypes.get(type);
+      final Class<? extends FrameElement> classOfT = assetTypes.get(type);
       if (classOfT == null)
         continue;
 
-      FrameElement assetObj = gson.fromJson(asset, classOfT);
+      final FrameElement assetObj = gson.fromJson(asset, classOfT);
       assetObj.init();
       frame.assets.add(assetObj);
     }
@@ -75,29 +67,27 @@ public class Frame {
     return frame;
   }
 
-  public Object getElement(String name) {
+  private transient Color backgroundColor;
+  private transient BufferedImage backgroundImg;
+
+  private String name;
+  private String imagePath;
+  private int[] color;
+
+  private ArrayList<FrameElement> assets;
+
+  public Object getElement(final String name) {
     if (assets == null)
       return null;
 
-    for (FrameElement asset : assets) {
+    for (final FrameElement asset : assets) {
       if (asset.getName().equals(name))
         return asset;
     }
     return null;
   }
 
-  public void addElement(final FrameElement asset) {
-    if (assets == null)
-      assets = new ArrayList<FrameElement>();
-
-    assets.add(asset);
-  }
-
-  public void removeElement(final String name) {
-    assets.removeIf((asset) -> asset.getName().equals(name));
-  }
-
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     if (backgroundImg != null) {
       g.drawImage(backgroundImg, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
     } else if (backgroundColor != null) {
@@ -118,14 +108,6 @@ public class Frame {
 
   public String getName() {
     return name;
-  }
-
-  public Color getBackgroundColor() {
-    return backgroundColor;
-  }
-
-  public BufferedImage getBackgroundImg() {
-    return backgroundImg;
   }
 
 }

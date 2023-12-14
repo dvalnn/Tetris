@@ -10,12 +10,11 @@ public class Shape {
 
   protected Point2D center;
   protected Point2D[] points;
-  private String id;
-  private boolean rotates;
   protected Color color;
-
   protected int minX, maxX, minY, maxY;
 
+  private final String id;
+  private final boolean rotates;
   private final int renderSize;
   private final Point2D renderOffset;
 
@@ -45,7 +44,7 @@ public class Shape {
   }
 
   public Shape(
-      JsonShape shapeData,
+      final JsonShape shapeData,
       final int renderSize,
       final Point2D renderOrigin) {
 
@@ -85,20 +84,6 @@ public class Shape {
     move(BOARD_WIDTH / 2 - 1, 0);
   }
 
-  protected void calculateMinMaxCoords() {
-    minX = Integer.MAX_VALUE;
-    maxX = Integer.MIN_VALUE;
-    minY = Integer.MAX_VALUE;
-    maxY = Integer.MIN_VALUE;
-
-    for (Point2D point : points) {
-      minX = (int) Math.min(point.getX(), minX);
-      maxX = (int) Math.max(point.getX(), maxX);
-      minY = (int) Math.min(point.getY(), minY);
-      maxY = (int) Math.max(point.getY(), maxY);
-    }
-  }
-
   public void rotate(final double angle) {
     if (!rotates)
       return;
@@ -106,9 +91,12 @@ public class Shape {
     for (final Point2D point : points) {
       final double x = point.getX() - center.getX();
       final double y = point.getY() - center.getY();
-      final double newX = x * Math.cos(angle) - y * Math.sin(angle);
-      final double newY = x * Math.sin(angle) + y * Math.cos(angle);
-      point.setLocation(Math.round(newX + center.getX()), Math.round(newY + center.getY()));
+      final double rotatedX = x * Math.cos(angle) - y * Math.sin(angle);
+      final double rotatedY = x * Math.sin(angle) + y * Math.cos(angle);
+      final double newX = Math.round(rotatedX + center.getX());
+      final double newY = Math.round(rotatedY + center.getY());
+
+      point.setLocation(newX, newY);
     }
 
     calculateMinMaxCoords();
@@ -116,35 +104,28 @@ public class Shape {
 
   public void render(final Graphics g) {
     for (final Point2D point : points) {
+      int x = (int) (point.getX() * renderSize - renderSize / 2);
+      int y = (int) (point.getY() * renderSize - renderSize / 2);
+
+      x += (int) renderOffset.getX();
+      y += (int) renderOffset.getY();
+
       g.setColor(color);
-      g.fillRect(
-          (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),
-          (int) (point.getY() * renderSize - renderSize / 2) + (int) renderOffset.getY(),
-          renderSize,
-          renderSize);
+      g.fillRect(x, y, renderSize, renderSize);
       g.setColor(color.darker().darker());
-      g.drawRect(
-          (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),
-          (int) (point.getY() * renderSize - renderSize / 2) + (int) renderOffset.getY(),
-          renderSize,
-          renderSize);
+      g.drawRect(x, y, renderSize, renderSize);
     }
   }
 
   public void renderAt(final Graphics g, final int x, final int y) {
     for (final Point2D point : points) {
+      final int xCord = (int) (point.getX() * renderSize - renderSize / 2) + x;
+      final int yCord = (int) (point.getY() * renderSize - renderSize / 2) + y;
+
       g.setColor(color);
-      g.fillRect(
-          (int) (point.getX() * renderSize - renderSize / 2) + x,
-          (int) (point.getY() * renderSize - renderSize / 2) + y,
-          renderSize,
-          renderSize);
+      g.fillRect(xCord, yCord, renderSize, renderSize);
       g.setColor(color.darker().darker());
-      g.drawRect(
-          (int) (point.getX() * renderSize - renderSize / 2) + x,
-          (int) (point.getY() * renderSize - renderSize / 2) + y,
-          renderSize,
-          renderSize);
+      g.drawRect(xCord, yCord, renderSize, renderSize);
     }
   }
 
@@ -186,5 +167,19 @@ public class Shape {
 
   public int getMaxY() {
     return maxY;
+  }
+
+  protected void calculateMinMaxCoords() {
+    minX = Integer.MAX_VALUE;
+    maxX = Integer.MIN_VALUE;
+    minY = Integer.MAX_VALUE;
+    maxY = Integer.MIN_VALUE;
+
+    for (final Point2D point : points) {
+      minX = (int) Math.min(point.getX(), minX);
+      maxX = (int) Math.max(point.getX(), maxX);
+      minY = (int) Math.min(point.getY(), minY);
+      maxY = (int) Math.max(point.getY(), maxY);
+    }
   }
 }

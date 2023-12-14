@@ -16,30 +16,31 @@ import com.apontadores.ui.Frame;
 
 public class Settings extends GameState {
 
-  private final Frame frame;
-
-  private final SwitchStateAction switchState = new SwitchStateAction();
-
   private static boolean muteEffect = false;
+
   private static boolean muteMusic = false;
 
-  private final ButtonAction<Integer, Void> volumeManager = (Integer volume) -> {
+  private final Frame frame;
+  private final SwitchStateAction switchState = new SwitchStateAction();
+
+  private final ButtonAction<Integer, Void> volumeManager = (final Integer volume) -> {
     Sound.setMusicVolume(volume);
     return null;
   };
-  private final ButtonAction<Integer, Void> effectManager = (Integer volume) -> {
+
+  private final ButtonAction<Integer, Void> effectManager = (final Integer volume) -> {
     Sound.setEffectVolume(volume);
     return null;
   };
-  private final ButtonAction<Void, Void> volumeMute = (Void) -> {
 
+  private final ButtonAction<Void, Void> volumeMute = (Void) -> {
     muteMusic = !muteMusic;
     Sound.setMuteMusic(muteMusic);
-    Sound.setMusicVolume(0); 
+    Sound.setMusicVolume(0);
     return null;
   };
-  private final ButtonAction<Void, Void> effectMute = (Void) -> {
 
+  private final ButtonAction<Void, Void> effectMute = (Void) -> {
     muteEffect = !muteEffect;
     Sound.setMuteEffect(muteEffect);
     Sound.setEffectVolume(0);
@@ -62,12 +63,12 @@ public class Settings extends GameState {
     ((ImageElement) frame.getElement("musicVolume"))
         .getTextElement()
         .setText(
-            new String(String.valueOf((Sound.getMusicVolume()))));
+            String.valueOf((Sound.getMusicVolume())));
 
     ((ImageElement) frame.getElement("effectsVolume"))
         .getTextElement()
         .setText(
-            new String(String.valueOf((Sound.getEffectVolume()))));
+            String.valueOf((Sound.getEffectVolume())));
   }
 
   @Override
@@ -92,16 +93,20 @@ public class Settings extends GameState {
         .execIfClicked(e.getX(), e.getY(), effectMute, null);
 
     ((ImageElement) frame.getElement("returnToMainMenu"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MAIN_MENU);
+        .execIfClicked(e.getX(), e.getY(),
+            switchState, GameStatesEnum.MAIN_MENU);
 
     ((ImageElement) frame.getElement("returnToMainMenu"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MAIN_MENU);
+        .execIfClicked(e.getX(), e.getY(), switchState,
+            GameStatesEnum.MAIN_MENU);
 
     ((ImageElement) frame.getElement("changeKeybinds"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.CHANGE_KEYBINDS);
+        .execIfClicked(e.getX(), e.getY(), switchState,
+            GameStatesEnum.CHANGE_KEYBINDS);
 
     ((ImageElement) frame.getElement("changeUsername"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.USERNAME);
+        .execIfClicked(e.getX(), e.getY(), switchState,
+            GameStatesEnum.USERNAME);
   }
 
   @Override
@@ -110,7 +115,7 @@ public class Settings extends GameState {
         .getTextElement().keyboardInput(e);
 
     ((ImageElement) frame.getElement("effectsVolume"))
-    .getTextElement().keyboardInput(e);
+        .getTextElement().keyboardInput(e);
   }
 
 }

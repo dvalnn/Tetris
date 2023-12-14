@@ -7,7 +7,7 @@ public class SwitchStateAction implements
     ButtonAction<GameStatesEnum, Void> {
 
   @Override
-  public Void exec(GameStatesEnum state) {
+  public Void exec(final GameStatesEnum state) {
     GameStateHandler.switchState(state);
     return null;
   }

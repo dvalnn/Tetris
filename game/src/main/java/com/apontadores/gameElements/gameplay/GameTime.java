@@ -38,16 +38,4 @@ public class GameTime {
     return hours + ":" + minutes + ":" + seconds;
   }
 
-  public static int getSeconds() {
-    return seconds;
-  }
-
-  public static int getMinutes() {
-    return minutes;
-  }
-
-  public static int getHours() {
-    return hours;
-  }
-
 }

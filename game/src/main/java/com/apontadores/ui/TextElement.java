@@ -22,107 +22,93 @@ public class TextElement implements FrameElement {
   }
 
   public static class Builder {
-    private TextElement textAsset;
+    private final TextElement textAsset;
 
     public Builder() {
       textAsset = new TextElement();
     }
 
-    public Builder name(String name) {
+    public Builder name(final String name) {
       textAsset.name = name;
       return this;
     }
 
-    public Builder text(String text) {
+    public Builder text(final String text) {
       textAsset.text = text;
       return this;
     }
 
-    public Builder font(String font) {
+    public Builder font(final String font) {
       textAsset.font = font;
       return this;
     }
 
-    public Builder fontType(String fontType) {
+    public Builder fontType(final String fontType) {
       textAsset.fontType = fontType;
       switch (fontType) {
-        case "bold":
-          textAsset.fontTypeInt = Font.BOLD;
-          break;
-        case "italic":
-          textAsset.fontTypeInt = Font.ITALIC;
-          break;
-        case "plain":
-          textAsset.fontTypeInt = Font.PLAIN;
-          break;
-        default:
+        case "bold" -> textAsset.fontTypeInt = Font.BOLD;
+        case "italic" -> textAsset.fontTypeInt = Font.ITALIC;
+        case "plain" -> textAsset.fontTypeInt = Font.PLAIN;
+        default -> {
           textAsset.fontTypeInt = DEFAULT_TYPE;
           textAsset.fontType = DEFAULT_TYPE_NAME;
-          break;
+        }
       }
 
       return this;
     }
 
-    public Builder size(String size) {
+    public Builder size(final String size) {
       try {
         textAsset.size = Integer.parseInt(size);
-      } catch (NumberFormatException e) {
+      } catch (final NumberFormatException e) {
         textAsset.size = DEFAULT_SIZE;
       }
 
       return this;
     }
 
-    public Builder alignment(String alignment) {
+    public Builder alignment(final String alignment) {
       switch (alignment) {
-        case "left":
-          textAsset.align = Alignment.LEFT;
-          break;
-        case "center":
-          textAsset.align = Alignment.CENTER;
-          break;
-        case "right":
-          textAsset.align = Alignment.RIGHT;
-          break;
-        default:
-          textAsset.align = Alignment.DEFAULT_ALIGN;
-          break;
+        case "left" -> textAsset.align = Alignment.LEFT;
+        case "center" -> textAsset.align = Alignment.CENTER;
+        case "right" -> textAsset.align = Alignment.RIGHT;
+        default -> textAsset.align = Alignment.DEFAULT_ALIGN;
       }
       return this;
     }
 
-    public Builder x(String x) {
+    public Builder x(final String x) {
       try {
         textAsset.x = Integer.parseInt(x);
-      } catch (NumberFormatException e) {
+      } catch (final NumberFormatException e) {
         textAsset.x = 0;
       }
 
       return this;
     }
 
-    public Builder y(String y) {
+    public Builder y(final String y) {
       try {
         textAsset.y = Integer.parseInt(y);
-      } catch (NumberFormatException e) {
+      } catch (final NumberFormatException e) {
         textAsset.y = 0;
       }
 
       return this;
     }
 
-    public Builder size(int size) {
+    public Builder size(final int size) {
       textAsset.size = size;
       return this;
     }
 
-    public Builder x(int x) {
+    public Builder x(final int x) {
       textAsset.x = x;
       return this;
     }
 
-    public Builder y(int y) {
+    public Builder y(final int y) {
       textAsset.y = y;
       return this;
     }
@@ -166,10 +152,9 @@ public class TextElement implements FrameElement {
   private transient String[] fileLines;
 
   private transient int animationTick = 0;
-  private transient int animationSpeed = UPS_SET / 2;
   private transient boolean animationUp = true;
 
-  public void setParent(FrameElement parent) {
+  public void setParent(final FrameElement parent) {
     this.parent = parent;
   }
 
@@ -186,7 +171,7 @@ public class TextElement implements FrameElement {
       text = text.substring(0, text.length() - 1);
   }
 
-  public void setText(String text) {
+  public void setText(final String text) {
     this.text = text;
   }
 
@@ -197,15 +182,7 @@ public class TextElement implements FrameElement {
     return text;
   }
 
-  public int setMaxLength(int maxLength) {
-    return this.maxLength = maxLength;
-  }
-
-  public int getMaxLength() {
-    return maxLength;
-  }
-
-  public void keyboardInput(KeyEvent e) {
+  public void keyboardInput(final KeyEvent e) {
     if (!enabled | !hasFocus | !editable)
       return;
 
@@ -243,7 +220,6 @@ public class TextElement implements FrameElement {
       }
       text += e.getKeyChar();
 
-      return;
     }
   }
 
@@ -251,7 +227,8 @@ public class TextElement implements FrameElement {
   public void init() {
     if (text == null)
       text = "";
-    if (font == null | font.isEmpty())
+    assert font != null;
+    if (font.isEmpty())
       font = DEFAULT_FONT;
     if (size == 0)
       size = DEFAULT_SIZE;
@@ -259,18 +236,10 @@ public class TextElement implements FrameElement {
       align = Alignment.DEFAULT_ALIGN;
 
     switch (fontType) {
-      case "bold":
-        fontTypeInt = Font.BOLD;
-        break;
-      case "italic":
-        fontTypeInt = Font.ITALIC;
-        break;
-      case "plain":
-        fontTypeInt = Font.PLAIN;
-        break;
-      default:
-        fontTypeInt = DEFAULT_TYPE;
-        break;
+      case "bold" -> fontTypeInt = Font.BOLD;
+      case "italic" -> fontTypeInt = Font.ITALIC;
+      case "plain" -> fontTypeInt = Font.PLAIN;
+      default -> fontTypeInt = DEFAULT_TYPE;
     }
 
     if (anchorPoint.equals("game")) {
@@ -289,65 +258,44 @@ public class TextElement implements FrameElement {
     }
     // TODO: load text from file
     if (textFile != null && !textFile.isEmpty()) {
-      String loadedText = ""; // TODO: load text from file
+      final String loadedText = ""; // TODO: load text from file
       fileLines = loadedText.split("\n");
       textFromFile = true;
     }
   }
 
-  private void renderTextFile(Graphics2D g2d, int textHeight) {
-    int yLine = yAbs;
-
-    for (String line : fileLines) {
-      int textWidth = g2d.getFontMetrics().stringWidth(line);
-      drawAligned(g2d, line, textWidth, yLine);
-      yLine += textHeight;
-    }
-  }
-
-  private void renderText(Graphics2D g2d, int textHeight) {
-    int textWidth = g2d.getFontMetrics().stringWidth(text);
-    drawAligned(g2d, text, textWidth, yAbs);
-  }
-
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
 
-    Graphics2D g2d = (Graphics2D) g;
+    final Graphics2D g2d = (Graphics2D) g;
 
     g2d.setFont(new Font(font, fontTypeInt, size));
     g2d.setColor(textColor);
 
-    int textHeight = g2d.getFontMetrics().getHeight();
+    final int textHeight = g2d.getFontMetrics().getHeight();
 
     g2d.setRenderingHint(
         RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
 
-    AffineTransform orig = g2d.getTransform();
+    final AffineTransform orig = g2d.getTransform();
     if (angle != 0)
       g2d.rotate(Math.toRadians(angle));
 
     if (textFromFile) {
       renderTextFile(g2d, textHeight);
     } else {
-      renderText(g2d, textHeight);
+      renderText(g2d);
     }
 
     g2d.setTransform(orig);
   }
 
-  public void drawAligned(Graphics2D g2d, String line, int textWidth, int yLine) {
+  public void drawAligned(final Graphics2D g2d, final String line, final int textWidth, final int yLine) {
     switch (align) {
-      case LEFT:
-        g2d.drawString(line, xAbs, yLine);
-        break;
-      case CENTER:
-        g2d.drawString(line, xAbs - textWidth / 2, yLine);
-        break;
-      case RIGHT:
-        g2d.drawString(line, xAbs - textWidth, yLine);
-        break;
+      case LEFT -> g2d.drawString(line, xAbs, yLine);
+      case CENTER -> g2d.drawString(line, xAbs - textWidth / 2, yLine);
+      case RIGHT -> g2d.drawString(line, xAbs - textWidth, yLine);
     }
   }
 
@@ -360,6 +308,7 @@ public class TextElement implements FrameElement {
       return;
 
     animationTick++;
+    final int animationSpeed = UPS_SET / 2;
     if (animationTick >= animationSpeed) {
       animationTick = 0;
       animationUp = !animationUp;
@@ -409,5 +358,20 @@ public class TextElement implements FrameElement {
   @Override
   public double getRotation() {
     return angle;
+  }
+
+  private void renderTextFile(final Graphics2D g2d, final int textHeight) {
+    int yLine = yAbs;
+
+    for (final String line : fileLines) {
+      final int textWidth = g2d.getFontMetrics().stringWidth(line);
+      drawAligned(g2d, line, textWidth, yLine);
+      yLine += textHeight;
+    }
+  }
+
+  private void renderText(final Graphics2D g2d) {
+    final int textWidth = g2d.getFontMetrics().stringWidth(text);
+    drawAligned(g2d, text, textWidth, yAbs);
   }
 }

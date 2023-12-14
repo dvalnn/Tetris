@@ -14,7 +14,7 @@ import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
 
 public class Host extends GameState {
-  private Frame frame;
+  private final Frame frame;
   private boolean displayIP = false;
   private boolean updateText = true;
   SwitchStateAction switchState = new SwitchStateAction();
@@ -27,7 +27,7 @@ public class Host extends GameState {
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     frame.render(g);
 
     // TODO: switch banner and toggle start button
@@ -55,19 +55,21 @@ public class Host extends GameState {
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void mouseClicked(final MouseEvent e) {
 
-    int x = e.getX();
-    int y = e.getY();
+    final int x = e.getX();
+    final int y = e.getY();
 
     ((ImageElement) frame.getElement("start"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.PLAYING_MP);
+        .execIfClicked(e.getX(), e.getY(),
+            switchState, GameStatesEnum.PLAYING_MP);
 
     ((ImageElement) frame.getElement("return"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MODE_SELECT_MP);
+        .execIfClicked(e.getX(), e.getY(),
+            switchState, GameStatesEnum.MODE_SELECT_MP);
 
-    ImageElement showIP = (ImageElement) frame.getElement("showIP");
-    ImageElement hideIP = (ImageElement) frame.getElement("hideIP");
+    final ImageElement showIP = (ImageElement) frame.getElement("showIP");
+    final ImageElement hideIP = (ImageElement) frame.getElement("hideIP");
 
     if (!displayIP)
       showIP.execIfClicked(
@@ -92,18 +94,18 @@ public class Host extends GameState {
           },
           null);
 
-          ImageElement inputRoomName = ((ImageElement) frame.getElement("roomName"));
-          inputRoomName.getTextElement().removeFocus();
-          inputRoomName.execIfClicked(x,y,
-              (Void) -> {
-                inputRoomName.getTextElement().giveFocus();
-                return null;
-              },
-              null);
+    final ImageElement inputRoomName = ((ImageElement) frame.getElement("roomName"));
+    inputRoomName.getTextElement().removeFocus();
+    inputRoomName.execIfClicked(x, y,
+        (Void) -> {
+          inputRoomName.getTextElement().giveFocus();
+          return null;
+        },
+        null);
   }
 
   @Override
-  public void keyPressed(KeyEvent e) {
+  public void keyPressed(final KeyEvent e) {
     ((ImageElement) frame.getElement("roomName"))
         .getTextElement().keyboardInput(e);
   }

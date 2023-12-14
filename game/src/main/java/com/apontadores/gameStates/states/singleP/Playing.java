@@ -21,7 +21,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import com.apontadores.gameElements.Board;
 import com.apontadores.gameElements.boards.PlayerBoard;
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler;
@@ -33,23 +32,22 @@ import com.apontadores.ui.Frame;
 public class Playing extends GameState {
 
   private final PlayerBoard board;
-  private final Color boardColor = new Color(20, 20, 20);
-
-  private final int X_OFFSET = (GAME_WIDTH - BOARD_WIDTH * BOARD_SQUARE) / 2 + 10;
-  private final int Y_OFFSET = (GAME_HEIGHT - BOARD_HEIGHT * BOARD_SQUARE) / 2 + 18;
 
   private boolean mouseButton1Pressed = false;
   private boolean mouseButton3Pressed = false;
 
-  private Frame frame;
+  private final Frame frame;
 
   public Playing() {
     super(GameStatesEnum.PLAYING);
 
-    BoardSettings set = new BoardSettings(
+    final Color boardColor = new Color(20, 20, 20);
+    final int x_OFFSET = (GAME_WIDTH - BOARD_WIDTH * BOARD_SQUARE) / 2 + 10;
+    final int y_OFFSET = (GAME_HEIGHT - BOARD_HEIGHT * BOARD_SQUARE) / 2 + 18;
+    final BoardSettings set = new BoardSettings(
         BOARD_SQUARE,
-        X_OFFSET,
-        Y_OFFSET,
+        x_OFFSET,
+        y_OFFSET,
         boardColor,
         boardColor.brighter());
 
@@ -192,10 +190,8 @@ public class Playing extends GameState {
     }
     if (e.getKeyCode() == Game.getKeybinds().debugZShape) {
       board.setTetromino(Z);
-      return;
     }
 
-    return;
   }
 
   @Override
@@ -218,16 +214,11 @@ public class Playing extends GameState {
 
     if (e.getKeyCode() == Game.getKeybinds().hardDrop) {
       board.getTetromino().setDrop(false);
-      return;
     }
-    return;
   }
 
   @Override
   public void windowLostFocus() {
   }
 
-  public Board getBoard() {
-    return board;
-  }
 }

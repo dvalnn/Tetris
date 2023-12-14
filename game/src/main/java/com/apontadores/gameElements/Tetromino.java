@@ -24,8 +24,6 @@ public class Tetromino {
   private final GhostShape ghost;
   private final PlayerBoard board;
 
-  private final int HORIZONTAL_SPEED = 20;
-
   private int verticalMoveTick = 0;
   private int horizontalMoveTick = 0;
 
@@ -33,7 +31,7 @@ public class Tetromino {
   private int speedModifier = 1;
 
   private int rotationStatus = UP;
-  private int shapeID = 0;
+  private final int shapeID;
 
   private boolean softDrop = false;
   private boolean hardDrop = false;
@@ -44,7 +42,6 @@ public class Tetromino {
 
   private boolean deactivating;
   private int deactivationTickCounter;
-  private final int DEACTIVATION_TICKS = UPS_SET / 2; // 0.5 seconds
 
   public Tetromino(
       final int renderSize,
@@ -124,12 +121,8 @@ public class Tetromino {
     final int rotationStatusDelta = direction == RIGHT ? 1 : -1;
 
     switch (direction) {
-      case LEFT:
-        angle = -Math.PI / 2;
-        break;
-      case RIGHT:
-        angle = Math.PI / 2;
-        break;
+      case LEFT -> angle = -Math.PI / 2;
+      case RIGHT -> angle = Math.PI / 2;
     }
 
     shape.rotate(angle);
@@ -191,10 +184,12 @@ public class Tetromino {
       return;
     }
 
-    if (colision && deactivating) {
+    if (colision) {
       deactivationTickCounter++;
       // System.out.println("[Tetromino] Deactivation tick: " +
       // deactivationTickCounter);
+      // 0.5 seconds
+      int DEACTIVATION_TICKS = UPS_SET / 2;
       if (deactivationTickCounter >= DEACTIVATION_TICKS) {
         active = false;
       }
@@ -274,6 +269,7 @@ public class Tetromino {
       return;
 
     horizontalMoveTick++;
+    int HORIZONTAL_SPEED = 20;
     if (horizontalMoveTick * HORIZONTAL_SPEED >= UPS_SET) {
       horizontalMoveTick = 0;
       if (right && !left) {
@@ -307,10 +303,6 @@ public class Tetromino {
 
   public void setDrop(final boolean drop) {
     this.drop = drop;
-  }
-
-  public void setActive(final boolean active) {
-    this.active = active;
   }
 
   public boolean isActive() {

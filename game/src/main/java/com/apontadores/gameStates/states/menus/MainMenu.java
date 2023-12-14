@@ -14,19 +14,19 @@ import com.apontadores.ui.Frame;
 
 public class MainMenu extends GameState {
 
-  private Frame frame;
+  private final Frame frame;
 
-  private SwitchStateAction switchState = new SwitchStateAction();
+  private final SwitchStateAction switchState = new SwitchStateAction();
 
   public MainMenu() {
     super(GameStatesEnum.MAIN_MENU);
-    String path = FRAMES_PATH + "mainMenu.json";
+    final String path = FRAMES_PATH + "mainMenu.json";
     frame = Frame.loadFromJson(path);
 
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     frame.render(g);
   }
 
@@ -36,10 +36,10 @@ public class MainMenu extends GameState {
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void mouseClicked(final MouseEvent e) {
 
-    int x = e.getX();
-    int y = e.getY();
+    final int x = e.getX();
+    final int y = e.getY();
 
     ((ImageElement) frame.getElement("newGame"))
         .execIfClicked(x, y, switchState, GameStatesEnum.MODE_SELECT);

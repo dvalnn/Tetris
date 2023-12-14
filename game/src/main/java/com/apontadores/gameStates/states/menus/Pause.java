@@ -40,13 +40,16 @@ public class Pause extends GameState {
   public void mouseClicked(final MouseEvent e) {
 
     ((ImageElement) frame.getElement("resume"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.PLAYING);
+        .execIfClicked(e.getX(), e.getY(),
+            switchState, GameStatesEnum.PLAYING);
 
     ((ImageElement) frame.getElement("restart"))
-        .execIfClicked(e.getX(), e.getY(), reloadAndSwitch, GameStatesEnum.PLAYING);
+        .execIfClicked(e.getX(), e.getY(),
+            reloadAndSwitch, GameStatesEnum.PLAYING);
 
     ((ImageElement) frame.getElement("returnToMainMenu"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MAIN_MENU);
+        .execIfClicked(e.getX(), e.getY(),
+            switchState, GameStatesEnum.MAIN_MENU);
   }
 
 }

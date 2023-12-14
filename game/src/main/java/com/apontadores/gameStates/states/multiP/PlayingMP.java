@@ -20,7 +20,6 @@ import com.apontadores.gameElements.boards.PlayerBoard;
 import com.apontadores.gameElements.gameplay.Levels;
 import com.apontadores.gameElements.gameplay.Score;
 import com.apontadores.gameStates.GameState;
-import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.main.Game;
 import com.apontadores.main.TimerBasedService;
@@ -33,33 +32,29 @@ public class PlayingMP extends GameState {
 
   Color boardColor = new Color(20, 20, 20);
   PlayerBoard playerBoard;
-  private boolean matchOver = false;
 
   private int networkTick = 0;
-  private final int NETWORK_TICK_MAX = 2;
 
-  private PlayerData playerData;
+  private final PlayerData playerData;
 
-  // calculate the offsets so that the boards are centered
-  // and the player's board is on the left and the opponent's
-  private final int PLAYER_X_OFFSET = GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2 + 13;
-  private final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2 + 18;
-
-  private Frame frame;
+  private final Frame frame;
 
   TimerBasedService updateProcessor;
 
   public PlayingMP() {
     super(GameStatesEnum.PLAYING_MP);
 
+    // calculate the offsets so that the boards are centered
+    // and the player's board is on the left and the opponent's
+    final int PLAYER_X_OFFSET = GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2 + 13;
+    final int y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2 + 18;
     playerBoard = new PlayerBoard(
         new BoardSettings(
             BOARD_SQUARE,
             PLAYER_X_OFFSET,
-            Y_OFFSET,
+            y_OFFSET,
             boardColor,
             boardColor.brighter()));
-
 
     frame = Frame.loadFromJson(FRAMES_PATH + "multiplayer.json");
 
@@ -81,6 +76,7 @@ public class PlayingMP extends GameState {
 
     updateProcessor.start();
     networkTick++;
+    final int NETWORK_TICK_MAX = 2;
     if (networkTick >= NETWORK_TICK_MAX) {
       networkTick = 0;
       sendPlayerUpdates();
@@ -89,8 +85,53 @@ public class PlayingMP extends GameState {
     playerBoard.update();
   }
 
+  @Override
+  public void render(final Graphics g) {
+    frame.render(g);
+
+    // draw opponent board
+    playerData.getOpponentBoard().render(g);
+    // draw opponnent controled shape
+    playerData.getOpponentShape().render(g);
+
+    playerBoard.render(g);
+  }
+
+  @Override
+  public void keyPressed(final KeyEvent e) {
+    // same controls as playing.java
+    switch (e.getKeyCode()) {
+      case (KeyEvent.VK_Z) -> playerBoard.getTetromino().rotate(LEFT);
+      case (KeyEvent.VK_X) -> playerBoard.getTetromino().rotate(RIGHT);
+      case (KeyEvent.VK_LEFT) -> playerBoard.getTetromino().setLeft(true);
+      case (KeyEvent.VK_DOWN) -> playerBoard.getTetromino().setDown(true);
+      case (KeyEvent.VK_RIGHT) -> playerBoard.getTetromino().setRight(true);
+      case (KeyEvent.VK_SPACE) -> playerBoard.getTetromino().setDrop(true);
+    }
+  }
+
+  @Override
+  public void keyReleased(final KeyEvent e) {
+    switch (e.getKeyCode()) {
+      case (KeyEvent.VK_LEFT) -> playerBoard.getTetromino().setLeft(false);
+      case (KeyEvent.VK_DOWN) -> playerBoard.getTetromino().setDown(false);
+      case (KeyEvent.VK_RIGHT) -> playerBoard.getTetromino().setRight(false);
+      case (KeyEvent.VK_SPACE) -> playerBoard.getTetromino().setDrop(false);
+      default -> {
+      }
+    }
+  }
+
+  @Override
+  public void windowLostFocus() {
+  }
+
+  public PlayerBoard getPlayerBoard() {
+    return playerBoard;
+  }
+
   private void getUpdates() {
-    Packet100Update updatePacket = Game.getClient().receivedUpdates.poll();
+    final Packet100Update updatePacket = Game.getClient().receivedUpdates.poll();
     if (updatePacket == null)
       return;
 
@@ -98,7 +139,7 @@ public class PlayingMP extends GameState {
   }
 
   private void sendPlayerUpdates() {
-    Packet100Update updatePacket = null;
+    Packet100Update updatePacket;
     updatePacket = playerData.getScoreUpdate();
     if (updatePacket != null)
       sendPacket(updatePacket);
@@ -124,7 +165,7 @@ public class PlayingMP extends GameState {
   }
 
   private void sendPacket(final Packet100Update packet) {
-    ArrayBlockingQueue<Packet100Update> outQueue = Game.getClient().outgoingUpdates;
+    final ArrayBlockingQueue<Packet100Update> outQueue = Game.getClient().outgoingUpdates;
     if (outQueue.remainingCapacity() == 0)
       outQueue.poll();
     outQueue.add(packet);
@@ -139,83 +180,6 @@ public class PlayingMP extends GameState {
         .setLevel(Levels.getCurrentLevel());
     // .setNextShapes(playerBoard.getNextShapes())
     // .setHoldShape(playerBoard.getHoldShape())
-  }
-
-  @Override
-  public void render(final Graphics g) {
-    frame.render(g);
-
-    // draw opponent board
-    playerData.getOpponentBoard().render(g);
-    // draw opponnent controled shape
-    playerData.getOpponentShape().render(g);
-
-    playerBoard.render(g);
-  }
-
-  @Override
-  public void keyPressed(final KeyEvent e) {
-    if (matchOver) {
-      GameStateHandler.switchState(GameStatesEnum.GAME_OVER);
-      return;
-    }
-    // same controls as playing.java
-    switch (e.getKeyCode()) {
-      case (KeyEvent.VK_Z):
-        playerBoard.getTetromino().rotate(LEFT);
-        break;
-
-      case (KeyEvent.VK_X):
-        playerBoard.getTetromino().rotate(RIGHT);
-        break;
-      case (KeyEvent.VK_LEFT):
-        playerBoard.getTetromino().setLeft(true);
-        break;
-
-      case (KeyEvent.VK_DOWN):
-        playerBoard.getTetromino().setDown(true);
-        break;
-
-      case (KeyEvent.VK_RIGHT):
-        playerBoard.getTetromino().setRight(true);
-        break;
-
-      case (KeyEvent.VK_SPACE):
-        playerBoard.getTetromino().setDrop(true);
-        break;
-    }
-  }
-
-  @Override
-  public void keyReleased(final KeyEvent e) {
-    switch (e.getKeyCode()) {
-      case (KeyEvent.VK_LEFT):
-        playerBoard.getTetromino().setLeft(false);
-        break;
-
-      case (KeyEvent.VK_DOWN):
-        playerBoard.getTetromino().setDown(false);
-        break;
-
-      case (KeyEvent.VK_RIGHT):
-        playerBoard.getTetromino().setRight(false);
-        break;
-
-      case (KeyEvent.VK_SPACE):
-        playerBoard.getTetromino().setDrop(false);
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  @Override
-  public void windowLostFocus() {
-  }
-
-  public PlayerBoard getPlayerBoard() {
-    return playerBoard;
   }
 
 }
