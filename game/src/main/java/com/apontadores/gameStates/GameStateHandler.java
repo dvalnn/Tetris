@@ -43,16 +43,12 @@ public final class GameStateHandler {
   private static GameStatesEnum activeState;
   private static final HashMap<GameStatesEnum, GameState> statesMap = new HashMap<>();
 
-  private static void addState(final GameState state) {
-    statesMap.put(state.getStateID(), state);
-  }
-
   public static void reloadState(final GameStatesEnum state) {
     GameState newInstance;
     try {
       newInstance = statesMap.get(state).getClass().getDeclaredConstructor().newInstance();
       statesMap.replace(state, newInstance);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       System.err.println("Failed to reload state: " + state);
       e.printStackTrace();
       Game.exit();
@@ -93,6 +89,10 @@ public final class GameStateHandler {
 
   public static void switchState(final GameStatesEnum state) {
     activeState = state;
+  }
+
+  private static void addState(final GameState state) {
+    statesMap.put(state.getStateID(), state);
   }
 
 }

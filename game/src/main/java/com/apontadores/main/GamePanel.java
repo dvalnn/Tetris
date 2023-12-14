@@ -23,16 +23,9 @@ public class GamePanel extends JPanel {
 
     addKeyListener(new KeyboardInputs());
 
-    MouseInputs mouseInputs = new MouseInputs();
+    final MouseInputs mouseInputs = new MouseInputs();
     addMouseListener(mouseInputs);
     addMouseMotionListener(mouseInputs);
-  }
-
-  private void setPanelSize() {
-    final Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
-    setMinimumSize(size);
-    setMaximumSize(size);
-    setPreferredSize(size);
   }
 
   // paintComponent is called whenever the JPanel needs to be redrawn
@@ -47,5 +40,12 @@ public class GamePanel extends JPanel {
 
   public Game getGame() {
     return game;
+  }
+
+  private void setPanelSize() {
+    final Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
+    setMinimumSize(size);
+    setMaximumSize(size);
+    setPreferredSize(size);
   }
 }

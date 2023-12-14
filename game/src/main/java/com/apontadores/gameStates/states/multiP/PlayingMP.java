@@ -1,5 +1,21 @@
 package com.apontadores.gameStates.states.multiP;
 
+import static com.apontadores.utils.Constants.FRAMES_PATH;
+import static com.apontadores.utils.Constants.Directions.LEFT;
+import static com.apontadores.utils.Constants.Directions.RIGHT;
+import static com.apontadores.utils.Constants.GameConstants.BOARD_HEIGHT;
+import static com.apontadores.utils.Constants.GameConstants.BOARD_SQUARE;
+import static com.apontadores.utils.Constants.GameConstants.BOARD_WIDTH;
+import static com.apontadores.utils.Constants.GameConstants.GAME_HEIGHT;
+import static com.apontadores.utils.Constants.GameConstants.GAME_WIDTH;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.util.List;
+import java.util.TimerTask;
+import java.util.concurrent.ArrayBlockingQueue;
+
 import com.apontadores.gameElements.boards.PlayerBoard;
 import com.apontadores.gameElements.gameplay.Levels;
 import com.apontadores.gameElements.gameplay.Score;
@@ -11,17 +27,6 @@ import com.apontadores.networking.PlayerData;
 import com.apontadores.packets.Packet100Update;
 import com.apontadores.settings.BoardSettings;
 import com.apontadores.ui.Frame;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.List;
-import java.util.TimerTask;
-import java.util.concurrent.ArrayBlockingQueue;
-
-import static com.apontadores.utils.Constants.Directions.LEFT;
-import static com.apontadores.utils.Constants.Directions.RIGHT;
-import static com.apontadores.utils.Constants.FRAMES_PATH;
-import static com.apontadores.utils.Constants.GameConstants.*;
 
 public class PlayingMP extends GameState {
 
@@ -41,16 +46,15 @@ public class PlayingMP extends GameState {
 
     // calculate the offsets so that the boards are centered
     // and the player's board is on the left and the opponent's
-    int PLAYER_X_OFFSET = GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2 + 13;
-    int y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2 + 18;
+    final int PLAYER_X_OFFSET = GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2 + 13;
+    final int y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2 + 18;
     playerBoard = new PlayerBoard(
         new BoardSettings(
             BOARD_SQUARE,
-                PLAYER_X_OFFSET,
-                y_OFFSET,
+            PLAYER_X_OFFSET,
+            y_OFFSET,
             boardColor,
             boardColor.brighter()));
-
 
     frame = Frame.loadFromJson(FRAMES_PATH + "multiplayer.json");
 
@@ -72,65 +76,13 @@ public class PlayingMP extends GameState {
 
     updateProcessor.start();
     networkTick++;
-    int NETWORK_TICK_MAX = 2;
+    final int NETWORK_TICK_MAX = 2;
     if (networkTick >= NETWORK_TICK_MAX) {
       networkTick = 0;
       sendPlayerUpdates();
     }
 
     playerBoard.update();
-  }
-
-  private void getUpdates() {
-    Packet100Update updatePacket = Game.getClient().receivedUpdates.poll();
-    if (updatePacket == null)
-      return;
-
-    playerData.parsePacket(updatePacket);
-  }
-
-  private void sendPlayerUpdates() {
-    Packet100Update updatePacket;
-    updatePacket = playerData.getScoreUpdate();
-    if (updatePacket != null)
-      sendPacket(updatePacket);
-
-    updatePacket = playerData.getShapeUpdate();
-    if (updatePacket != null)
-      sendPacket(updatePacket);
-
-    final PlayerBoard board = playerData.getPlayerBoard();
-    if (board != null) {
-
-      final List<PlayerBoard.BoardLine> boardLines = board.getBoard();
-      for (int row = 0; row < BOARD_HEIGHT; row++) {
-        final List<Color> line = boardLines.get(row).getColorsCopyIfChanged();
-        if (line == null)
-          continue;
-
-        updatePacket = playerData.getBoardUpdate(row, line);
-        if (updatePacket != null)
-          sendPacket(updatePacket);
-      }
-    }
-  }
-
-  private void sendPacket(final Packet100Update packet) {
-    ArrayBlockingQueue<Packet100Update> outQueue = Game.getClient().outgoingUpdates;
-    if (outQueue.remainingCapacity() == 0)
-      outQueue.poll();
-    outQueue.add(packet);
-  }
-
-  private void setPlayerUpdates() {
-    playerData
-        .setPlayerBoard(playerBoard)
-        .setCurrentShape(playerBoard.getTetromino().getShape())
-        .setScore(Score.getScore())
-        .setLinesCleared(Levels.getTotalLinesCleared())
-        .setLevel(Levels.getCurrentLevel());
-    // .setNextShapes(playerBoard.getNextShapes())
-    // .setHoldShape(playerBoard.getHoldShape())
   }
 
   @Override
@@ -176,6 +128,58 @@ public class PlayingMP extends GameState {
 
   public PlayerBoard getPlayerBoard() {
     return playerBoard;
+  }
+
+  private void getUpdates() {
+    final Packet100Update updatePacket = Game.getClient().receivedUpdates.poll();
+    if (updatePacket == null)
+      return;
+
+    playerData.parsePacket(updatePacket);
+  }
+
+  private void sendPlayerUpdates() {
+    Packet100Update updatePacket;
+    updatePacket = playerData.getScoreUpdate();
+    if (updatePacket != null)
+      sendPacket(updatePacket);
+
+    updatePacket = playerData.getShapeUpdate();
+    if (updatePacket != null)
+      sendPacket(updatePacket);
+
+    final PlayerBoard board = playerData.getPlayerBoard();
+    if (board != null) {
+
+      final List<PlayerBoard.BoardLine> boardLines = board.getBoard();
+      for (int row = 0; row < BOARD_HEIGHT; row++) {
+        final List<Color> line = boardLines.get(row).getColorsCopyIfChanged();
+        if (line == null)
+          continue;
+
+        updatePacket = playerData.getBoardUpdate(row, line);
+        if (updatePacket != null)
+          sendPacket(updatePacket);
+      }
+    }
+  }
+
+  private void sendPacket(final Packet100Update packet) {
+    final ArrayBlockingQueue<Packet100Update> outQueue = Game.getClient().outgoingUpdates;
+    if (outQueue.remainingCapacity() == 0)
+      outQueue.poll();
+    outQueue.add(packet);
+  }
+
+  private void setPlayerUpdates() {
+    playerData
+        .setPlayerBoard(playerBoard)
+        .setCurrentShape(playerBoard.getTetromino().getShape())
+        .setScore(Score.getScore())
+        .setLinesCleared(Levels.getTotalLinesCleared())
+        .setLevel(Levels.getCurrentLevel());
+    // .setNextShapes(playerBoard.getNextShapes())
+    // .setHoldShape(playerBoard.getHoldShape())
   }
 
 }

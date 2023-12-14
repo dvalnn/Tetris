@@ -20,69 +20,10 @@ import static com.apontadores.utils.Constants.*;
 
 public class Leaderboard extends GameState {
 
-  private final Frame frame;
-  private final SwitchStateAction action = new SwitchStateAction();
-
-  private List<LeaderboardEntry> entries;
   private static boolean isLeaderBoardLoaded = false;
-
   private static final String SCORES_PATH = RESOURCES_PATH +
       SYS_SEPARATOR +
       "Scores.json";
-
-  public Leaderboard() {
-    super(GameStatesEnum.LEADERBOARD);
-    frame = Frame.loadFromJson(FRAMES_PATH + "leaderboard.json");
-    entries = loadEntries();
-    if (entries != null)
-      isLeaderBoardLoaded = true;
-  }
-
-  @Override
-  public void update() {
-    if (!isLeaderBoardLoaded) {
-      entries = loadEntries();
-      isLeaderBoardLoaded = true;
-    }
-  }
-
-  @Override
-  public void render(final Graphics g) {
-    frame.render(g);
-    // FIXME: This is not the best way to render the leaderboard
-//    if (entries != null)
-//      System.out.println(entries);
-
-    for (int i = 0; i < entries.size(); i++) {
-      ((TextElement) frame.getElement("score" + (i + 1))).setText(createsScoreText(i));
-    }
-  }
-
-  private String createsScoreText(final int index) {
-
-
-    return entries.get(index).getName() +
-        " " + "-" + " " +
-        entries.get(index).getScore() +
-        " " + "-" + " " +
-//        entries.get(index).getLevel() +
-//        " " + "-" + " " +
-//        entries.get(index).getLines() +
-//        " " + "-" + " " +
-        entries.get(index).getTimeString();
-  }
-
-  @Override
-  public void mouseClicked(final MouseEvent e) {
-    ((ImageElement) frame.getElement("returnToMainMenu"))
-        .execIfClicked(e.getX(), e.getY(), action, GameStatesEnum.MAIN_MENU);
-  }
-
-  private static List<LeaderboardEntry> loadEntries() {
-    final Type listType = new TypeToken<ArrayList<LeaderboardEntry>>() {
-    }.getType();
-    return LoadSave.loadJson(SCORES_PATH, listType);
-  }
 
   public static void saveNewScore(
       final String name,
@@ -124,5 +65,64 @@ public class Leaderboard extends GameState {
         return;
       }
     }
+  }
+
+  private static List<LeaderboardEntry> loadEntries() {
+    final Type listType = new TypeToken<ArrayList<LeaderboardEntry>>() {
+    }.getType();
+    return LoadSave.loadJson(SCORES_PATH, listType);
+  }
+
+  private final Frame frame;
+
+  private final SwitchStateAction action = new SwitchStateAction();
+
+  private List<LeaderboardEntry> entries;
+
+  public Leaderboard() {
+    super(GameStatesEnum.LEADERBOARD);
+    frame = Frame.loadFromJson(FRAMES_PATH + "leaderboard.json");
+    entries = loadEntries();
+    if (entries != null)
+      isLeaderBoardLoaded = true;
+  }
+
+  @Override
+  public void update() {
+    if (!isLeaderBoardLoaded) {
+      entries = loadEntries();
+      isLeaderBoardLoaded = true;
+    }
+  }
+
+  @Override
+  public void render(final Graphics g) {
+    frame.render(g);
+    // FIXME: This is not the best way to render the leaderboard
+    // if (entries != null)
+    // System.out.println(entries);
+
+    for (int i = 0; i < entries.size(); i++) {
+      ((TextElement) frame.getElement("score" + (i + 1))).setText(createsScoreText(i));
+    }
+  }
+
+  @Override
+  public void mouseClicked(final MouseEvent e) {
+    ((ImageElement) frame.getElement("returnToMainMenu"))
+        .execIfClicked(e.getX(), e.getY(), action, GameStatesEnum.MAIN_MENU);
+  }
+
+  private String createsScoreText(final int index) {
+
+    return entries.get(index).getName() +
+        " " + "-" + " " +
+        entries.get(index).getScore() +
+        " " + "-" + " " +
+        // entries.get(index).getLevel() +
+        // " " + "-" + " " +
+        // entries.get(index).getLines() +
+        // " " + "-" + " " +
+        entries.get(index).getTimeString();
   }
 }

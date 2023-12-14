@@ -41,8 +41,7 @@ public class Sound implements Runnable {
   private int musicSound;
   private int effectSound;
   private boolean muteEffectsRead;
-  private boolean muteVolumeRead;  
-
+  private boolean muteVolumeRead;
 
   public static Sound loadSoundFromJson(String jsonPath) {
     Sound sound = new Sound();

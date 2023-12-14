@@ -23,7 +23,7 @@ public class GameModeSelectMP extends GameState {
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     frame.render(g);
   }
 
@@ -33,10 +33,10 @@ public class GameModeSelectMP extends GameState {
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void mouseClicked(final MouseEvent e) {
 
-    int x = e.getX();
-    int y = e.getY();
+    final int x = e.getX();
+    final int y = e.getY();
 
     ((ImageElement) frame.getElement("host"))
         .execIfClicked(x, y, switchState, GameStatesEnum.HOST);
@@ -47,7 +47,7 @@ public class GameModeSelectMP extends GameState {
               try {
                 Game.initClient();
                 switchState.exec(state);
-              } catch (Exception e1) {
+              } catch (final Exception e1) {
                 e1.printStackTrace();
                 switchState.exec(GameStatesEnum.MAIN_MENU);
               }

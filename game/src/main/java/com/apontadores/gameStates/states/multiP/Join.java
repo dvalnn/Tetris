@@ -39,10 +39,10 @@ public class Join extends GameState {
       Game.initClient();
 
     String roomName = ((ImageElement) frame.getElement("roomName"))
-            .getTextElement().getText();
+        .getTextElement().getText();
 
     String ip = ((ImageElement) frame.getElement("IP"))
-            .getTextElement().getText();
+        .getTextElement().getText();
 
     if (roomName.length() > 0 && ip.length() > 0
         && validator.isValidInet4Address(ip))

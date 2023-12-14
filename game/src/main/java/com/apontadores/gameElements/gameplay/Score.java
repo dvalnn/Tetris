@@ -4,11 +4,6 @@ import java.util.HashMap;
 
 public class Score {
 
-  private static int score = 0;
-
-  private static boolean combo = false;
-  private static Action prevAction = Action.NONE;
-
   public enum Action {
     NONE, SINGLE, DOUBLE, TRIPLE, TETRIS, B2B_TETRIS, MINI_T_SPIN,
     MINI_T_SPIN_SINGLE, MINI_T_SPIN_DOUBLE, B2B_MINI_T_SPIN_DOUBLE, T_SPIN,
@@ -16,6 +11,11 @@ public class Score {
     B2B_T_SPIN_DOUBLE, B2B_T_SPIN_TRIPLE
 
   }
+
+  private static int score = 0;
+  private static boolean combo = false;
+
+  private static Action prevAction = Action.NONE;
 
   private static final HashMap<Action, Integer> scoreMap = new HashMap<>();
 
@@ -43,30 +43,17 @@ public class Score {
     scoreMap.put(Action.B2B_T_SPIN_TRIPLE, 2400); // TODO: implement
   }
 
-  public static void registerLinesCleared(int lines) {
+  public static void registerLinesCleared(final int lines) {
 
     Score.Action action = Score.Action.NONE;
 
     switch (lines) {
-      case 0:
-        break;
-
-      case 1:
-        action = Score.scoreAction(Score.Action.SINGLE);
-        break;
-
-      case 2:
-        action = Score.scoreAction(Score.Action.DOUBLE);
-        break;
-
-      case 3:
-        action = Score.scoreAction(Score.Action.TRIPLE);
-        break;
-
-      case 4:
-        action = Score.scoreAction(Score.Action.TETRIS);
-        break;
-
+      case 1 -> action = Score.scoreAction(Score.Action.SINGLE);
+      case 2 -> action = Score.scoreAction(Score.Action.DOUBLE);
+      case 3 -> action = Score.scoreAction(Score.Action.TRIPLE);
+      case 4 -> action = Score.scoreAction(Score.Action.TETRIS);
+      case 0 -> {
+      }
     }
 
     System.out.println("[SCORE] Score: " + score);
@@ -83,31 +70,40 @@ public class Score {
 
     boolean updatePreviousAction = true;
 
-    if (action == Action.TETRIS && prevAction == Action.TETRIS) {
+    if (action == Action.TETRIS &&
+        prevAction == Action.TETRIS) {
       action = Action.B2B_TETRIS;
       combo = true;
       updatePreviousAction = false;
-    } else if (action == Action.MINI_T_SPIN_DOUBLE && prevAction == Action.MINI_T_SPIN_DOUBLE) {
+
+    } else if (action == Action.MINI_T_SPIN_DOUBLE &&
+        prevAction == Action.MINI_T_SPIN_DOUBLE) {
       action = Action.B2B_MINI_T_SPIN_DOUBLE;
       combo = true;
       updatePreviousAction = false;
-    } else if (action == Action.T_SPIN_SINGLE && prevAction == Action.T_SPIN_SINGLE) {
+
+    } else if (action == Action.T_SPIN_SINGLE &&
+        prevAction == Action.T_SPIN_SINGLE) {
       action = Action.B2B_T_SPIN_SINGLE;
       combo = true;
       updatePreviousAction = false;
-    } else if (action == Action.T_SPIN_DOUBLE && prevAction == Action.T_SPIN_DOUBLE) {
+
+    } else if (action == Action.T_SPIN_DOUBLE &&
+        prevAction == Action.T_SPIN_DOUBLE) {
       action = Action.B2B_T_SPIN_DOUBLE;
       combo = true;
       updatePreviousAction = false;
-    } else if (action == Action.T_SPIN_TRIPLE && prevAction == Action.T_SPIN_TRIPLE) {
+
+    } else if (action == Action.T_SPIN_TRIPLE &&
+        prevAction == Action.T_SPIN_TRIPLE) {
       action = Action.B2B_T_SPIN_TRIPLE;
       combo = true;
       updatePreviousAction = false;
     }
 
-    int levelMultiplier = Levels.getCurrentLevel() + 1; // levels start at 0
-    int actionModifier = scoreMap.get(action);
-    int previousModifier = scoreMap.get(prevAction);
+    final int levelMultiplier = Levels.getCurrentLevel() + 1; // levels start at 0
+    final int actionModifier = scoreMap.get(action);
+    final int previousModifier = scoreMap.get(prevAction);
 
     if (2 * actionModifier < previousModifier) {
       combo = false;

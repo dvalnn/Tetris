@@ -21,7 +21,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import com.apontadores.gameElements.Board;
 import com.apontadores.gameElements.boards.PlayerBoard;
 import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler;
@@ -42,14 +41,14 @@ public class Playing extends GameState {
   public Playing() {
     super(GameStatesEnum.PLAYING);
 
-    Color boardColor = new Color(20, 20, 20);
-    int x_OFFSET = (GAME_WIDTH - BOARD_WIDTH * BOARD_SQUARE) / 2 + 10;
-    int y_OFFSET = (GAME_HEIGHT - BOARD_HEIGHT * BOARD_SQUARE) / 2 + 18;
-    BoardSettings set = new BoardSettings(
+    final Color boardColor = new Color(20, 20, 20);
+    final int x_OFFSET = (GAME_WIDTH - BOARD_WIDTH * BOARD_SQUARE) / 2 + 10;
+    final int y_OFFSET = (GAME_HEIGHT - BOARD_HEIGHT * BOARD_SQUARE) / 2 + 18;
+    final BoardSettings set = new BoardSettings(
         BOARD_SQUARE,
-            x_OFFSET,
-            y_OFFSET,
-            boardColor,
+        x_OFFSET,
+        y_OFFSET,
+        boardColor,
         boardColor.brighter());
 
     board = new PlayerBoard(set);

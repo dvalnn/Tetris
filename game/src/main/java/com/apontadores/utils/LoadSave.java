@@ -5,16 +5,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.lang.reflect.Type;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 import javax.imageio.ImageIO;
 
@@ -44,7 +41,7 @@ public class LoadSave {
     return image;
   }
 
-  public static <T> T loadJson(final String path, Type typeOfT) {
+  public static <T> T loadJson(final String path, final Type typeOfT) {
     T json = null;
     try {
       json = new Gson().fromJson(new FileReader(path), typeOfT);
@@ -55,7 +52,7 @@ public class LoadSave {
     return json;
   }
 
-  public static <T> void saveJson(String string, final T object) {
+  public static <T> void saveJson(final String string, final T object) {
     final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     final String json = gson.toJson(object);
     try {
@@ -71,7 +68,7 @@ public class LoadSave {
   public static ArrayList<JsonShape> parseAllJsonShapes(final String dir) {
 
     final Set<String> files = listFiles(dir);
-    ArrayList<JsonShape> shapes = new ArrayList<>(files.size());
+    final ArrayList<JsonShape> shapes = new ArrayList<>(files.size());
 
     final String[] filesToRead = new String[files.size()];
     files.toArray(filesToRead);

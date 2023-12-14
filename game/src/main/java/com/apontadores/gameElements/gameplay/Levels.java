@@ -45,7 +45,7 @@ public class Levels {
     return currentLevel;
   }
 
-  public static void registerLinesCleared(int lines) {
+  public static void registerLinesCleared(final int lines) {
     levelLinesCleared += lines;
     totalLinesCleared += lines;
 

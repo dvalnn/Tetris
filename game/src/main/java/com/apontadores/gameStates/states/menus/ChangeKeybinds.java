@@ -41,7 +41,7 @@ public class ChangeKeybinds extends GameState {
   private final Frame frame;
   private final SwitchStateAction switchState = new SwitchStateAction();
 
-  private final ButtonAction<keyAction, Void> changeKeyAction = (keyAction a) -> {
+  private final ButtonAction<keyAction, Void> changeKeyAction = (final keyAction a) -> {
     Action = a;
     return null;
   };
@@ -61,56 +61,56 @@ public class ChangeKeybinds extends GameState {
       ((ImageElement) frame.getElement("changeKeybindRotateLeft"))
           .getTextElement()
           .setText(
-                  String.valueOf((char) Game.getKeybinds().rotatesLeft));
+              String.valueOf((char) Game.getKeybinds().rotatesLeft));
     }
 
     if (!checksSpecialKeys(Game.getKeybinds().rotatesRight, "changeKeybindRotateRight")) {
       ((ImageElement) frame.getElement("changeKeybindRotateRight"))
           .getTextElement()
           .setText(
-                  String.valueOf((char) Game.getKeybinds().rotatesRight));
+              String.valueOf((char) Game.getKeybinds().rotatesRight));
     }
 
     if (!checksSpecialKeys(Game.getKeybinds().movesRight, "changeKeybindMoveRight")) {
       ((ImageElement) frame.getElement("changeKeybindMoveRight"))
           .getTextElement()
           .setText(
-                  String.valueOf((char) Game.getKeybinds().movesRight));
+              String.valueOf((char) Game.getKeybinds().movesRight));
     }
 
     if (!checksSpecialKeys(Game.getKeybinds().movesLeft, "changeKeybindMoveLeft")) {
       ((ImageElement) frame.getElement("changeKeybindMoveLeft"))
           .getTextElement()
           .setText(
-                  String.valueOf((char) Game.getKeybinds().movesLeft));
+              String.valueOf((char) Game.getKeybinds().movesLeft));
     }
 
     if (!checksSpecialKeys(Game.getKeybinds().softDrop, "changeKeybindSoftDrop")) {
       ((ImageElement) frame.getElement("changeKeybindSoftDrop"))
           .getTextElement()
           .setText(
-                  String.valueOf((char) Game.getKeybinds().softDrop));
+              String.valueOf((char) Game.getKeybinds().softDrop));
     }
 
     if (!checksSpecialKeys(Game.getKeybinds().hardDrop, "changeKeybindHardDrop")) {
       ((ImageElement) frame.getElement("changeKeybindHardDrop"))
           .getTextElement()
           .setText(
-                  String.valueOf((char) Game.getKeybinds().hardDrop));
+              String.valueOf((char) Game.getKeybinds().hardDrop));
     }
 
     if (!checksSpecialKeys(Game.getKeybinds().hold, "changeKeybindHold")) {
       ((ImageElement) frame.getElement("changeKeybindHold"))
           .getTextElement()
           .setText(
-                  String.valueOf((char) Game.getKeybinds().hold));
+              String.valueOf((char) Game.getKeybinds().hold));
     }
 
     if (!checksSpecialKeys(Game.getKeybinds().pause, "changeKeybindPause")) {
       ((ImageElement) frame.getElement("changeKeybindPause"))
           .getTextElement()
           .setText(
-                  String.valueOf((char) Game.getKeybinds().pause));
+              String.valueOf((char) Game.getKeybinds().pause));
     }
   }
 
@@ -122,8 +122,8 @@ public class ChangeKeybinds extends GameState {
   @Override
   public void mouseClicked(final MouseEvent e) {
 
-    int x = e.getX();
-    int y = e.getY();
+    final int x = e.getX();
+    final int y = e.getY();
 
     ((ImageElement) frame.getElement("changeKeybindRotateLeft"))
         .execIfClicked(x, y, changeKeyAction, keyAction.ROTATE_LEFT);
@@ -171,7 +171,7 @@ public class ChangeKeybinds extends GameState {
         ((ImageElement) frame.getElement("changeKeybindRotateLeft"))
             .getTextElement()
             .setText(
-                    String.valueOf((char) Game.getKeybinds().rotatesLeft));
+                String.valueOf((char) Game.getKeybinds().rotatesLeft));
 
         break;
 
@@ -200,7 +200,7 @@ public class ChangeKeybinds extends GameState {
         ((ImageElement) frame.getElement("changeKeybindMoveLeft"))
             .getTextElement()
             .setText(
-                    String.valueOf((char) Game.getKeybinds().movesLeft));
+                String.valueOf((char) Game.getKeybinds().movesLeft));
 
         break;
       case MOVE_RIGHT:
@@ -214,7 +214,7 @@ public class ChangeKeybinds extends GameState {
         ((ImageElement) frame.getElement("changeKeybindMoveRight"))
             .getTextElement()
             .setText(
-                    String.valueOf((char) Game.getKeybinds().movesRight));
+                String.valueOf((char) Game.getKeybinds().movesRight));
 
         break;
       case SOFT_DROP:
@@ -228,7 +228,7 @@ public class ChangeKeybinds extends GameState {
         ((ImageElement) frame.getElement("changeKeybindSoftDrop"))
             .getTextElement()
             .setText(
-                    String.valueOf((char) Game.getKeybinds().softDrop));
+                String.valueOf((char) Game.getKeybinds().softDrop));
 
         break;
       case HARD_DROP:
@@ -242,7 +242,7 @@ public class ChangeKeybinds extends GameState {
         ((ImageElement) frame.getElement("changeKeybindHardDrop"))
             .getTextElement()
             .setText(
-                    String.valueOf((char) Game.getKeybinds().hardDrop));
+                String.valueOf((char) Game.getKeybinds().hardDrop));
 
         break;
       case HOLD:
@@ -256,7 +256,7 @@ public class ChangeKeybinds extends GameState {
         ((ImageElement) frame.getElement("changeKeybindHold"))
             .getTextElement()
             .setText(
-                    String.valueOf((char) Game.getKeybinds().hold));
+                String.valueOf((char) Game.getKeybinds().hold));
 
         break;
       case PAUSE:
@@ -269,7 +269,7 @@ public class ChangeKeybinds extends GameState {
         ((ImageElement) frame.getElement("changeKeybindPause"))
             .getTextElement()
             .setText(
-                    String.valueOf((char) Game.getKeybinds().pause));
+                String.valueOf((char) Game.getKeybinds().pause));
 
         break;
       default:
@@ -285,12 +285,12 @@ public class ChangeKeybinds extends GameState {
     ((ImageElement) frame.getElement("changeKeybindRotateLeft"))
         .getTextElement()
         .setText(
-                String.valueOf((char) Game.getKeybinds().rotatesLeft));
+            String.valueOf((char) Game.getKeybinds().rotatesLeft));
 
     ((ImageElement) frame.getElement("changeKeybindRotateRight"))
         .getTextElement()
         .setText(
-                String.valueOf((char) Game.getKeybinds().rotatesRight));
+            String.valueOf((char) Game.getKeybinds().rotatesRight));
 
     ((ImageElement) frame.getElement("changeKeybindMoveRight"))
         .getTextElement()
@@ -311,16 +311,16 @@ public class ChangeKeybinds extends GameState {
     ((ImageElement) frame.getElement("changeKeybindHold"))
         .getTextElement()
         .setText(
-                String.valueOf((char) Game.getKeybinds().hold));
+            String.valueOf((char) Game.getKeybinds().hold));
 
     ((ImageElement) frame.getElement("changeKeybindPause"))
         .getTextElement()
         .setText(
-                String.valueOf((char) Game.getKeybinds().pause));
+            String.valueOf((char) Game.getKeybinds().pause));
   }
 
-  public boolean checksSpecialKeys(int keybind, String key) {
-    int leftArrow = 37;
+  public boolean checksSpecialKeys(final int keybind, final String key) {
+    final int leftArrow = 37;
     if (keybind == leftArrow) {
 
       ((ImageElement) frame.getElement(key))
@@ -329,7 +329,7 @@ public class ChangeKeybinds extends GameState {
 
       return true;
     }
-    int rightArrow = 39;
+    final int rightArrow = 39;
     if (keybind == rightArrow) {
 
       ((ImageElement) frame.getElement(key))
@@ -338,7 +338,7 @@ public class ChangeKeybinds extends GameState {
 
       return true;
     }
-    int downArrow = 40;
+    final int downArrow = 40;
     if (keybind == downArrow) {
 
       ((ImageElement) frame.getElement(key))
@@ -347,7 +347,7 @@ public class ChangeKeybinds extends GameState {
 
       return true;
     }
-    int spacebar = 32;
+    final int spacebar = 32;
     if (keybind == spacebar) {
 
       ((ImageElement) frame.getElement(key))
@@ -364,13 +364,13 @@ public class ChangeKeybinds extends GameState {
   public boolean checkDuplicateKeys(final KeyEvent e) {
 
     return (e.getKeyCode() != Game.getKeybinds().rotatesLeft)
-            && (e.getKeyCode() != Game.getKeybinds().rotatesRight)
-            && (e.getKeyCode() != Game.getKeybinds().movesLeft)
-            && (e.getKeyCode() != Game.getKeybinds().movesRight)
-            && (e.getKeyCode() != Game.getKeybinds().softDrop)
-            && (e.getKeyCode() != Game.getKeybinds().hardDrop)
-            && (e.getKeyCode() != Game.getKeybinds().hold)
-            && (e.getKeyCode() != Game.getKeybinds().pause);
+        && (e.getKeyCode() != Game.getKeybinds().rotatesRight)
+        && (e.getKeyCode() != Game.getKeybinds().movesLeft)
+        && (e.getKeyCode() != Game.getKeybinds().movesRight)
+        && (e.getKeyCode() != Game.getKeybinds().softDrop)
+        && (e.getKeyCode() != Game.getKeybinds().hardDrop)
+        && (e.getKeyCode() != Game.getKeybinds().hold)
+        && (e.getKeyCode() != Game.getKeybinds().pause);
   }
 
 }

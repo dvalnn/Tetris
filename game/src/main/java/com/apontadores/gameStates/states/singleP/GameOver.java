@@ -13,11 +13,11 @@ import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.gameStates.states.menus.Leaderboard;
 import com.apontadores.main.Game;
-import com.apontadores.ui.ImageElement;
-import com.apontadores.ui.TextElement;
-import com.apontadores.ui.SwitchStateAction;
 import com.apontadores.ui.ButtonAction;
 import com.apontadores.ui.Frame;
+import com.apontadores.ui.ImageElement;
+import com.apontadores.ui.SwitchStateAction;
+import com.apontadores.ui.TextElement;
 
 public class GameOver extends GameState {
 
@@ -46,10 +46,12 @@ public class GameOver extends GameState {
   @Override
   public void mouseClicked(final MouseEvent e) {
     ((ImageElement) frame.getElement("restart"))
-        .execIfClicked(e.getX(), e.getY(), reloadAndSwitch, GameStatesEnum.PLAYING);
+        .execIfClicked(e.getX(), e.getY(),
+            reloadAndSwitch, GameStatesEnum.PLAYING);
 
     ((ImageElement) frame.getElement("returnToMainMenu"))
-        .execIfClicked(e.getX(), e.getY(), switchState, GameStatesEnum.MAIN_MENU);
+        .execIfClicked(e.getX(), e.getY(),
+            switchState, GameStatesEnum.MAIN_MENU);
   }
 
   @Override

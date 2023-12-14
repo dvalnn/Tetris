@@ -69,6 +69,14 @@ public class Game implements Runnable {
     Game.keybinds = new Keybindings();
   }
 
+  public static void setOpponentName(final String opponentName) {
+    Game.opponentName = opponentName;
+  }
+
+  public static String getOpponentName() {
+    return opponentName;
+  }
+
   private final GameWindow gameWindow;
 
   private final GamePanel gamePanel;
@@ -155,15 +163,7 @@ public class Game implements Runnable {
 
   private void startGameLoop() {
     new Thread(new Sound()).start();
-    Thread gameThread = new Thread(this);
+    final Thread gameThread = new Thread(this);
     gameThread.start();
-  }
-
-  public static void setOpponentName(String opponentName) {
-    Game.opponentName = opponentName;
-  }
-
-  public static String getOpponentName() {
-    return opponentName;
   }
 }

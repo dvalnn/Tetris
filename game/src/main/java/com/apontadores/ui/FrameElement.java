@@ -5,24 +5,24 @@ import java.awt.Point;
 
 public interface FrameElement {
 
-   void render(Graphics g);
+  void render(Graphics g);
 
   void update();
 
-   void enable();
+  void enable();
 
-   void disable();
+  void disable();
 
-   String getName();
+  String getName();
 
-   String getType();
+  String getType();
 
-   void init();
+  void init();
 
-   Point getAnchorPoint();
+  Point getAnchorPoint();
 
-   Point getDimensions();
+  Point getDimensions();
 
-   double getRotation();
+  double getRotation();
 
 }

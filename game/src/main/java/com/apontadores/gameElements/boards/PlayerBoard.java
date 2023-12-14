@@ -25,24 +25,21 @@ import com.apontadores.utils.LoadSave;
 
 public class PlayerBoard extends Board {
 
-  // TODO: implement 6 Tetrominos
   private Tetromino activeTetro; // active
   private Tetromino nextTetro; // next
   private Tetromino nextTetro2; // next
   private Tetromino nextTetro3; // next
   private Tetromino nextTetro4; // next
-
   private Tetromino holdTetro; // hold
 
   private boolean debugMode = false;
-
   private boolean blockHoldTetromino = false;
-
-  protected ArrayList<JsonShape> shapeData;
 
   private final Random rand = new Random();
 
-  public PlayerBoard(BoardSettings set) {
+  protected ArrayList<JsonShape> shapeData;
+
+  public PlayerBoard(final BoardSettings set) {
     super(set);
 
     Score.reset();
@@ -56,29 +53,6 @@ public class PlayerBoard extends Board {
     nextTetro2 = tetrominoFactory(shapeData);
     nextTetro3 = tetrominoFactory(shapeData);
     nextTetro4 = tetrominoFactory(shapeData);
-  }
-
-  private Tetromino tetrominoFactory(ArrayList<JsonShape> shapeData) {
-
-    int shapeID = rand.nextInt(shapeData.size());
-    JsonShape shape = shapeData.get(shapeID);
-
-    return new Tetromino(
-        set.squareSize,
-        new Point2D.Double(set.xOffset, set.yOffset),
-        this,
-        shape,
-        shapeID);
-  }
-
-  private Tetromino tetrominoFactory(int shapeID) {
-    JsonShape shape = shapeData.get(shapeID);
-    return new Tetromino(
-        set.squareSize,
-        new Point2D.Double(set.xOffset, set.yOffset),
-        this,
-        shape,
-        shapeID);
   }
 
   public void holdTetromino() {
@@ -103,57 +77,6 @@ public class PlayerBoard extends Board {
     blockHoldTetromino = true;
   }
 
-  private void addTetrominoToPile() {
-    blockHoldTetromino = false;
-    for (final Point2D point : activeTetro.getShape().getPoints()) {
-      final int row = (int) point.getY();
-      final int col = (int) point.getX();
-      board.get(row).setColor(col, activeTetro.getShape().getColor());
-    }
-    if (activeTetro.getShape().getMinY() <= 0) {
-      System.out.println("[Board] Game Over!");
-      GameStateHandler.switchState(GameStatesEnum.GAME_OVER);
-    }
-
-  }
-
-  private void clearLine(final int row) {
-    for (int col = 0; col < BOARD_WIDTH; col++) {
-      board.get(row).setColor(col, set.backgroundColor);
-    }
-  }
-
-  private void shiftLineDown(final int row) {
-    for (int r = row; r > 0; r--) {
-      for (int col = 0; col < BOARD_WIDTH; col++) {
-        board.get(r).setColor(col, board.get(r - 1).getIndexRGB(col));
-      }
-    }
-  }
-
-  private void checkLines() {
-    int linesCleared = 0;
-
-    for (int row = 0; row < BOARD_HEIGHT; row++) {
-      boolean full = true;
-      for (int col = 0; col < BOARD_WIDTH; col++) {
-        if (board.get(row).getIndexRGB(col) == set.backgroundColor.getRGB()) {
-          full = false;
-          break;
-        }
-      }
-      if (full) {
-        linesCleared++;
-        clearLine(row);
-        shiftLineDown(row);
-      }
-    }
-
-    Score.registerLinesCleared(linesCleared);
-    Levels.registerLinesCleared(linesCleared);
-
-  }
-
   // NOTE: This method is only used for debugging purposes
   public void addBlockOnMousePosition(final int x, final int y) {
     if (!debugMode)
@@ -168,39 +91,6 @@ public class PlayerBoard extends Board {
       return;
 
     toggleBlockOnMousePosition(x, y, false);
-  }
-
-  // NOTE: This method is only used for debugging purposes
-  // it is not used in the actual game.
-  // PERF: This method is very inefficient. It iterates over
-  // the entire board every time the mouse is clicked.
-  private void toggleBlockOnMousePosition(
-      final int x,
-      final int y,
-      final boolean add) {
-
-    // NOTE: for each grid square, expand it fmom board coordinates
-    // to screen coordinates and check if the mouse is in it
-    // if it is, toggle the block.
-    // TODO: Make this more efficient somehow.
-    // Performance is not an issue right now, but
-    // it might be in the future
-    for (int row = 0; row < BOARD_HEIGHT; row++) {
-      for (int col = 0; col < BOARD_WIDTH; col++) {
-        final int x1 = (col * set.squareSize - set.squareSize / 2) + set.xOffset;
-        final int y1 = (row * set.squareSize - set.squareSize / 2) + set.yOffset;
-        final int x2 = x1 + set.squareSize;
-        final int y2 = y1 + set.squareSize;
-        if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
-          if (add) {
-            board.get(row).setColor(col, Color.PINK);
-          } else {
-            board.get(row).setColor(col, set.backgroundColor);
-          }
-          return;
-        }
-      }
-    }
   }
 
   // NOTE: This method is only used for debugging purposes
@@ -236,8 +126,6 @@ public class PlayerBoard extends Board {
     playerLines = Levels.getTotalLinesCleared();
 
     GameTime.tick();
-
-
 
     activeTetro.update();
     if (!activeTetro.isActive()) {
@@ -307,5 +195,112 @@ public class PlayerBoard extends Board {
 
   public Tetromino getHoldTetromino() {
     return holdTetro;
+  }
+
+  private Tetromino tetrominoFactory(final ArrayList<JsonShape> shapeData) {
+
+    final int shapeID = rand.nextInt(shapeData.size());
+    final JsonShape shape = shapeData.get(shapeID);
+
+    return new Tetromino(
+        set.squareSize,
+        new Point2D.Double(set.xOffset, set.yOffset),
+        this,
+        shape,
+        shapeID);
+  }
+
+  private Tetromino tetrominoFactory(final int shapeID) {
+    final JsonShape shape = shapeData.get(shapeID);
+    return new Tetromino(
+        set.squareSize,
+        new Point2D.Double(set.xOffset, set.yOffset),
+        this,
+        shape,
+        shapeID);
+  }
+
+  private void addTetrominoToPile() {
+    blockHoldTetromino = false;
+    for (final Point2D point : activeTetro.getShape().getPoints()) {
+      final int row = (int) point.getY();
+      final int col = (int) point.getX();
+      board.get(row).setColor(col, activeTetro.getShape().getColor());
+    }
+    if (activeTetro.getShape().getMinY() <= 0) {
+      System.out.println("[Board] Game Over!");
+      GameStateHandler.switchState(GameStatesEnum.GAME_OVER);
+    }
+
+  }
+
+  private void clearLine(final int row) {
+    for (int col = 0; col < BOARD_WIDTH; col++) {
+      board.get(row).setColor(col, set.backgroundColor);
+    }
+  }
+
+  private void shiftLineDown(final int row) {
+    for (int r = row; r > 0; r--) {
+      for (int col = 0; col < BOARD_WIDTH; col++) {
+        board.get(r).setColor(col, board.get(r - 1).getIndexRGB(col));
+      }
+    }
+  }
+
+  private void checkLines() {
+    int linesCleared = 0;
+
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+      boolean full = true;
+      for (int col = 0; col < BOARD_WIDTH; col++) {
+        if (board.get(row).getIndexRGB(col) == set.backgroundColor.getRGB()) {
+          full = false;
+          break;
+        }
+      }
+      if (full) {
+        linesCleared++;
+        clearLine(row);
+        shiftLineDown(row);
+      }
+    }
+
+    Score.registerLinesCleared(linesCleared);
+    Levels.registerLinesCleared(linesCleared);
+
+  }
+
+  // NOTE: This method is only used for debugging purposes
+  // it is not used in the actual game.
+  // PERF: This method is very inefficient. It iterates over
+  // the entire board every time the mouse is clicked.
+  private void toggleBlockOnMousePosition(
+      final int x,
+      final int y,
+      final boolean add) {
+
+    // NOTE: for each grid square, expand it fmom board coordinates
+    // to screen coordinates and check if the mouse is in it
+    // if it is, toggle the block.
+    // TODO: Make this more efficient somehow.
+    // Performance is not an issue right now, but
+    // it might be in the future
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+      for (int col = 0; col < BOARD_WIDTH; col++) {
+        final int x1 = (col * set.squareSize - set.squareSize / 2) + set.xOffset;
+        final int y1 = (row * set.squareSize - set.squareSize / 2) + set.yOffset;
+        final int x2 = x1 + set.squareSize;
+        final int y2 = y1 + set.squareSize;
+        if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
+          if (add) {
+            board.get(row).setColor(col, Color.PINK);
+          } else {
+            board.get(row).setColor(col, set.backgroundColor);
+          }
+          return;
+        }
+      }
+    }
   }
 }

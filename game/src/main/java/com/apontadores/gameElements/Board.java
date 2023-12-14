@@ -108,17 +108,9 @@ public class Board {
         g.setColor(board.get(row).getIndexColorCopy(col));
         int x = (col * set.squareSize - set.squareSize / 2) + set.xOffset;
         int y = (row * set.squareSize - set.squareSize / 2) + set.yOffset;
-        g.fillRect(
-                x,
-                y,
-            set.squareSize,
-            set.squareSize);
+        g.fillRect(x, y, set.squareSize, set.squareSize);
         g.setColor(set.gridColor);
-        g.drawRect(
-                x,
-                y,
-            set.squareSize,
-            set.squareSize);
+        g.drawRect(x, y, set.squareSize, set.squareSize);
       }
     }
 
