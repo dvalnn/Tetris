@@ -59,6 +59,10 @@ public class Playing extends GameState {
   public void update() {
     frame.update();
     board.update();
+
+    if (board.isGameOver()) {
+      GameStateHandler.switchState(GameStatesEnum.GAME_OVER);
+    }
   }
 
   @Override

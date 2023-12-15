@@ -20,11 +20,14 @@ import com.apontadores.gameElements.boards.PlayerBoard;
 import com.apontadores.gameElements.gameplay.Levels;
 import com.apontadores.gameElements.gameplay.Score;
 import com.apontadores.gameStates.GameState;
+import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.main.Game;
 import com.apontadores.main.TimerBasedService;
 import com.apontadores.networking.PlayerData;
+import com.apontadores.packets.Packet;
 import com.apontadores.packets.Packet100Update;
+import com.apontadores.packets.Packet.PacketTypesEnum;
 import com.apontadores.settings.BoardSettings;
 import com.apontadores.ui.Frame;
 
@@ -82,6 +85,10 @@ public class PlayingMP extends GameState {
       sendPlayerUpdates();
     }
 
+    if (playerBoard.isGameOver()) {
+      GameStateHandler.switchState(GameStatesEnum.GAME_OVER_MP);
+    }
+
     playerBoard.update();
   }
 
@@ -131,11 +138,19 @@ public class PlayingMP extends GameState {
   }
 
   private void getUpdates() {
-    final Packet100Update updatePacket = Game.getClient().receivedUpdates.poll();
-    if (updatePacket == null)
+    final Packet packet = Game.getClient().receivedUpdates.poll();
+    if (packet == null)
       return;
 
-    playerData.parsePacket(updatePacket);
+    final PacketTypesEnum packetType = Packet.lookupPacket(packet.asTokens());
+    switch (packetType) {
+      case UPDATE -> playerData.parsePacket((Packet100Update) packet);
+      case GAME_OVER -> {
+        GameStateHandler.switchState(GameStatesEnum.GAME_OVER_MP);
+      }
+      default -> {
+      }
+    }
   }
 
   private void sendPlayerUpdates() {
@@ -165,7 +180,7 @@ public class PlayingMP extends GameState {
   }
 
   private void sendPacket(final Packet100Update packet) {
-    final ArrayBlockingQueue<Packet100Update> outQueue = Game.getClient().outgoingUpdates;
+    final ArrayBlockingQueue<Packet> outQueue = Game.getClient().outgoingUpdates;
     if (outQueue.remainingCapacity() == 0)
       outQueue.poll();
     outQueue.add(packet);

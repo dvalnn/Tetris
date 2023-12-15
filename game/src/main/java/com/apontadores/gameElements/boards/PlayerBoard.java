@@ -16,14 +16,14 @@ import com.apontadores.gameElements.gameplay.GameTime;
 import com.apontadores.gameElements.gameplay.Levels;
 import com.apontadores.gameElements.gameplay.Score;
 import com.apontadores.gameElements.shapes.JsonShape;
-import com.apontadores.gameStates.GameStateHandler;
-import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.settings.BoardSettings;
 import com.apontadores.utils.LoadSave;
 
 // GamePanel is a JPanel -- a container for all visual elements in the game
 
 public class PlayerBoard extends Board {
+
+  private boolean gameOver;
 
   private Tetromino activeTetro; // active
   private Tetromino nextTetro; // next
@@ -197,6 +197,10 @@ public class PlayerBoard extends Board {
     return holdTetro;
   }
 
+  public boolean isGameOver() {
+    return gameOver;
+  }
+
   private Tetromino tetrominoFactory(final ArrayList<JsonShape> shapeData) {
 
     final int shapeID = rand.nextInt(shapeData.size());
@@ -229,7 +233,7 @@ public class PlayerBoard extends Board {
     }
     if (activeTetro.getShape().getMinY() <= 0) {
       System.out.println("[Board] Game Over!");
-      GameStateHandler.switchState(GameStatesEnum.GAME_OVER);
+      gameOver = true;
     }
 
   }

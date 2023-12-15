@@ -22,6 +22,7 @@ public abstract class Packet {
     SHAPE(102), // player shape
     ELEMENTS(103), // next and hold UI elements
     SCORE(104), // player score and level
+    GAME_OVER(105), // game over packet
 
     // Other Connection Control Packets
     HEARTBEAT(200), // keep alive packet

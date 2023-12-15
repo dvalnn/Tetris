@@ -21,6 +21,7 @@ import com.apontadores.packets.Packet00Login;
 import com.apontadores.packets.Packet02Redirect;
 import com.apontadores.packets.Packet03Start;
 import com.apontadores.packets.Packet100Update;
+import com.apontadores.packets.Packet105GameOver;
 import com.apontadores.packets.Packet200Heartbeat;
 
 //NOTE: Client - Server architecture overview
@@ -89,8 +90,8 @@ public class TetrisClient implements Runnable {
   private final ArrayBlockingQueue<DatagramPacket> receivedPackets;
   private final ArrayBlockingQueue<DatagramPacket> outgoingPackets;
 
-  public ArrayBlockingQueue<Packet100Update> receivedUpdates;
-  public ArrayBlockingQueue<Packet100Update> outgoingUpdates;
+  public ArrayBlockingQueue<Packet> receivedUpdates;
+  public ArrayBlockingQueue<Packet> outgoingUpdates;
 
   private InetAddress serverAddress;
   private int serverPort;
@@ -122,7 +123,8 @@ public class TetrisClient implements Runnable {
 
           @Override
           public void run() {
-            if (state != ClientStates.RUNNING)
+            if (state != ClientStates.RUNNING ||
+                phase == ConnectionPhases.FINISHED)
               this.cancel();
 
             processConPhase();
@@ -184,9 +186,6 @@ public class TetrisClient implements Runnable {
     state = ClientStates.RUNNING;
     phase = ConnectionPhases.DISCONNECTED;
 
-    // TODO: start packet sender only after the game starts
-    // packetSender.start();
-
     while (true) {
       if (phase == ConnectionPhases.DISCONNECTED) {
         try {
@@ -197,6 +196,10 @@ public class TetrisClient implements Runnable {
 
         lastReceivedPacketTime = System.nanoTime();
         continue;
+      }
+
+      if (phase == ConnectionPhases.FINISHED) {
+        break;
       }
 
       final long packetDelta = System.nanoTime() - lastReceivedPacketTime;
@@ -245,7 +248,7 @@ public class TetrisClient implements Runnable {
 
     }
 
-    // packetProcessor.stop();
+    packetProcessor.stop();
     socket.close();
   }
 
@@ -298,6 +301,10 @@ public class TetrisClient implements Runnable {
     connectionAborted = true;
   }
 
+  public void finishConnection() {
+    phase = ConnectionPhases.FINISHED;
+  }
+
   private int processPacket(final DatagramPacket packet) {
     final String[] tokens = Packet.tokenize(packet.getData(), packet.getLength());
     final PacketTypesEnum packetType = Packet.lookupPacket(tokens);
@@ -341,26 +348,38 @@ public class TetrisClient implements Runnable {
         // TODO: handle error packets
       }
       case WAITING_FOR_OPPONENT -> {
-        if (packetType == PacketTypesEnum.REDIRECT) {
-          serverPort = ((Packet02Redirect) receivedPacket).getPort();
-        } else if (packetType == PacketTypesEnum.HEARTBEAT) {
-          // NOTE: Heartbeats are expected. Do nothing and continue
-        } else if (packetType == PacketTypesEnum.START) {
-          Game.setOpponentName(((Packet03Start) receivedPacket).getOpponentName());
-          phase = ConnectionPhases.PLAYING;
-        } else {
-          System.out.println("[GameClient - WAITING_FOR_OPPONENT] Unexpected packet type: " +
-              packetType);
-          return -1;
+        switch (packetType) {
+          case REDIRECT -> {
+            serverPort = ((Packet02Redirect) receivedPacket).getPort();
+            System.out.println("[GameClient - WAITING_FOR_OPPONENT] Redirecting to port: " +
+                serverPort);
+          }
+          case START -> {
+            Game.setOpponentName(((Packet03Start) receivedPacket).getOpponentName());
+            phase = ConnectionPhases.PLAYING;
+          }
+          case HEARTBEAT -> {
+            // NOTE: Heartbeats are expected. Do nothing and continue
+          }
+          default -> {
+            System.out.println("[GameClient - WAITING_FOR_OPPONENT] Unexpected packet type: " +
+                packetType);
+            return -1;
+          }
         }
       }
       case PLAYING -> {
-        if (packetType == PacketTypesEnum.UPDATE) {
-          receivedUpdates.add((Packet100Update) receivedPacket);
+        switch (packetType) {
+          case GAME_OVER:
+          case UPDATE:
+            receivedUpdates.add(receivedPacket);
+            break;
+          default: {
+            System.out.println("[GameClient - PLAYING] Unexpected packet type: " +
+                packetType);
+            return -1;
+          }
         }
-      }
-      case GAME_OVER -> {
-        // TODO: handle game over packets
       }
       default -> {
       }
@@ -378,9 +397,6 @@ public class TetrisClient implements Runnable {
       case PLAYING -> {
         if (!outgoingUpdates.isEmpty())
           sendPacket(outgoingUpdates.poll());
-      }
-      case GAME_OVER -> {
-        // TODO: send game over packet
       }
       default -> {
       }
@@ -406,7 +422,10 @@ public class TetrisClient implements Runnable {
         case LOGIN -> new Packet00Login().fromTokens(tokens);
         case REDIRECT -> new Packet02Redirect().fromTokens(tokens);
         case START -> new Packet03Start().fromTokens(tokens);
+
         case UPDATE -> new Packet100Update().fromTokens(tokens);
+        case GAME_OVER -> new Packet105GameOver().fromTokens(tokens);
+
         case HEARTBEAT -> new Packet200Heartbeat().fromTokens(tokens);
         default -> null;
       };

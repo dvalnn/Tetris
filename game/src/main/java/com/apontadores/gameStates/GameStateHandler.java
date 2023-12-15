@@ -37,7 +37,8 @@ public final class GameStateHandler {
     PLAYING,
     PLAYING_MP,
     PAUSE,
-    GAME_OVER
+    GAME_OVER,
+    GAME_OVER_MP
   }
 
   private static GameStatesEnum activeState;

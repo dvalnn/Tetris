@@ -14,6 +14,6 @@ public class NetworkControl {
     CONNECTING,
     WAITING_FOR_OPPONENT,
     PLAYING,
-    GAME_OVER,
+    FINISHED
   }
 }
