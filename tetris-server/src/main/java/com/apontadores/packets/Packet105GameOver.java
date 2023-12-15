@@ -15,15 +15,18 @@ public class Packet105GameOver extends Packet {
     super(PACKET_ID);
   }
 
-  public Packet105GameOver(int lines, int score, int level, String time) {
+  public Packet105GameOver(int score, int lines, int level, String time) {
     super(PACKET_ID);
-    this.lines = String.valueOf(lines);
     this.score = String.valueOf(score);
+    this.lines = String.valueOf(lines);
     this.level = String.valueOf(level);
     this.time = time;
 
     final CRC32 crc = new CRC32();
-    crc.update((lines + score + level + time).getBytes());
+    crc.update((this.lines).getBytes());
+    crc.update((this.score).getBytes());
+    crc.update((this.level).getBytes());
+    crc.update((this.time).getBytes());
     checksum = crc.getValue();
   }
 
@@ -79,7 +82,10 @@ public class Packet105GameOver extends Packet {
     time = tokens[6];
 
     final CRC32 crc = new CRC32();
-    crc.update((lines + score + level + time).getBytes());
+    crc.update((lines).getBytes());
+    crc.update((score).getBytes());
+    crc.update((level).getBytes());
+    crc.update((time).getBytes());
     if (checksum != crc.getValue())
       throw new PacketException("Invalid checksum");
 

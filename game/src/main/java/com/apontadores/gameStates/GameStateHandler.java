@@ -13,6 +13,7 @@ import com.apontadores.gameStates.states.menus.TitleScreen;
 import com.apontadores.gameStates.states.menus.Username;
 import com.apontadores.gameStates.states.multiP.Connecting;
 import com.apontadores.gameStates.states.multiP.GameModeSelectMP;
+import com.apontadores.gameStates.states.multiP.GameOverMP;
 import com.apontadores.gameStates.states.multiP.Host;
 import com.apontadores.gameStates.states.multiP.Join;
 import com.apontadores.gameStates.states.multiP.PlayingMP;
@@ -74,6 +75,7 @@ public final class GameStateHandler {
     addState(new Join());
     addState(new Connecting());
     addState(new PlayingMP());
+    addState(new GameOverMP());
   }
 
   public static GameState getState(final GameStatesEnum stateID) {

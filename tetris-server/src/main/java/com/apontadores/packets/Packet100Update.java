@@ -28,6 +28,7 @@ public class Packet100Update extends Packet {
   public Packet100Update(final String updateType, final String updateData) {
     super(PACKET_ID);
 
+    this.updateType = updateType;
     this.updateData = updateData;
 
     final CRC32 crc = new CRC32();
@@ -37,14 +38,14 @@ public class Packet100Update extends Packet {
 
   @Override
   public byte[] asBytes() {
-    final StringJoiner joiner = new StringJoiner(",");
-    joiner.add(String.valueOf(packetID))
+    return new StringJoiner(",")
+        .add(String.valueOf(packetID))
         .add(String.valueOf(transactionID))
         .add(String.valueOf(checksum))
         .add(updateType)
-        .add(updateData);
-
-    return joiner.toString().getBytes();
+        .add(updateData)
+        .toString()
+        .getBytes();
   }
 
   @Override
