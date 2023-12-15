@@ -114,7 +114,7 @@ public class Server implements Runnable {
   private void loginPacketHandler(Packet00Login loginPacket, DatagramPacket loginDatagram) {
     Room room = findRoom(loginPacket.getRoomName());
     if (room != null && room.isFull()) {
-      System.out.println("[Server] Room is full");
+      System.out.println("[Server] Room \"" + room.name + "\" is full");
       // TODO: send a message to the client
       return;
     }

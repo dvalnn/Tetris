@@ -25,19 +25,19 @@ public class Packet100Update extends Packet {
     super(PACKET_ID);
   }
 
-  public Packet100Update(String updateType, String updateData) {
+  public Packet100Update(final String updateType, final String updateData) {
     super(PACKET_ID);
     this.updateType = updateType;
     this.updateData = updateData;
 
-    CRC32 crc = new CRC32();
+    final CRC32 crc = new CRC32();
     crc.update((updateType + updateData).getBytes());
     checksum = crc.getValue();
   }
 
   @Override
   public byte[] asBytes() {
-    StringJoiner joiner = new StringJoiner(",");
+    final StringJoiner joiner = new StringJoiner(",");
     joiner.add(String.valueOf(packetID))
         .add(String.valueOf(transactionID))
         .add(String.valueOf(checksum))
@@ -59,7 +59,7 @@ public class Packet100Update extends Packet {
   }
 
   @Override
-  public Packet100Update fromTokens(String[] tokens) throws PacketException {
+  public Packet100Update fromTokens(final String[] tokens) throws PacketException {
 
     if (tokens.length != TOKEN_COUNT)
       throw new PacketException("[Packet100Update] Invalid packet length");
@@ -68,7 +68,7 @@ public class Packet100Update extends Packet {
       packetID = Integer.parseInt(tokens[0]);
       transactionID = Integer.parseInt(tokens[1]);
       checksum = Long.parseLong(tokens[2]);
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       throw new PacketException("[Packet100Update] Invalid data");
     }
 
@@ -81,7 +81,7 @@ public class Packet100Update extends Packet {
     updateType = tokens[3];
     updateData = tokens[4];
 
-    CRC32 crc = new CRC32();
+    final CRC32 crc = new CRC32();
     crc.update((updateType + updateData).getBytes());
     if (checksum != crc.getValue())
       throw new PacketException("Invalid checksum");
@@ -95,7 +95,7 @@ public class Packet100Update extends Packet {
   }
 
   @Override
-  public void setTransactionID(int transactionID) {
+  public void setTransactionID(final int transactionID) {
     this.transactionID = transactionID;
   }
 

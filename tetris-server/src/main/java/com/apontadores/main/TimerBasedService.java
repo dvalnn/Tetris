@@ -4,10 +4,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimerBasedService {
-  private Timer timer;
-  private TimerTask task;
-  private int delay;
-  private int period;
+  private final Timer timer;
+  private final TimerTask task;
+  private final int delay;
+  private final int period;
   private boolean active = false;
 
   public TimerBasedService(

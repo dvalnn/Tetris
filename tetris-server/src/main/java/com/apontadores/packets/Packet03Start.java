@@ -15,18 +15,18 @@ public class Packet03Start extends Packet {
     super(PACKET_ID);
   }
 
-  public Packet03Start(String opponentName) {
+  public Packet03Start(final String opponentName) {
     super(PACKET_ID);
     this.opponentName = opponentName;
 
-    CRC32 crc = new CRC32();
+    final CRC32 crc = new CRC32();
     crc.update(opponentName.getBytes());
     checksum = crc.getValue();
   }
 
   @Override
   public byte[] asBytes() {
-    StringJoiner joiner = new StringJoiner(",");
+    final StringJoiner joiner = new StringJoiner(",");
     joiner.add(String.valueOf(packetID))
         .add(String.valueOf(transactionID))
         .add(String.valueOf(checksum))
@@ -46,7 +46,7 @@ public class Packet03Start extends Packet {
   }
 
   @Override
-  public Packet03Start fromTokens(String[] tokens) throws PacketException {
+  public Packet03Start fromTokens(final String[] tokens) throws PacketException {
     if (tokens.length != TOKEN_COUNT)
       throw new PacketException("[Packet03Start] Invalid packet length");
 
@@ -54,7 +54,7 @@ public class Packet03Start extends Packet {
       packetID = Integer.parseInt(tokens[0]);
       transactionID = Integer.parseInt(tokens[1]);
       checksum = Long.parseLong(tokens[2]);
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       throw new PacketException("[Packet03Start] Invalid data type");
     }
 
@@ -64,7 +64,7 @@ public class Packet03Start extends Packet {
 
     opponentName = tokens[3];
 
-    CRC32 crc = new CRC32();
+    final CRC32 crc = new CRC32();
     crc.update(opponentName.getBytes());
     if (checksum != crc.getValue())
       throw new PacketException("[Packet03Start] Invalid checksum");
@@ -78,7 +78,7 @@ public class Packet03Start extends Packet {
   }
 
   @Override
-  public void setTransactionID(int transactionID) {
+  public void setTransactionID(final int transactionID) {
     this.transactionID = transactionID;
   }
 

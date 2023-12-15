@@ -17,7 +17,7 @@ public class Packet02Redirect extends Packet {
 
     this.port = port;
 
-    CRC32 crc32 = new CRC32();
+    final CRC32 crc32 = new CRC32();
     crc32.update(String.valueOf(port).getBytes());
     checksum = crc32.getValue();
   }
@@ -27,7 +27,7 @@ public class Packet02Redirect extends Packet {
   }
 
   @Override
-  public Packet02Redirect fromTokens(String[] tokens)
+  public Packet02Redirect fromTokens(final String[] tokens)
       throws PacketException {
 
     if (tokens.length != TOKEN_COUNT)
@@ -38,7 +38,7 @@ public class Packet02Redirect extends Packet {
       transactionID = Integer.parseInt(tokens[1]);
       checksum = Long.parseLong(tokens[2]);
       port = Integer.parseInt(tokens[3]);
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       throw new PacketException("[Packet02Redirect] Invalid data");
     }
 
@@ -46,7 +46,7 @@ public class Packet02Redirect extends Packet {
       throw new PacketException("[Packet02Redirect] Invalid packet ID. Expected "
           + PACKET_ID + ", got " + packetID);
 
-    CRC32 crc32 = new CRC32();
+    final CRC32 crc32 = new CRC32();
     crc32.update(String.valueOf(port).getBytes());
     if (checksum != crc32.getValue())
       throw new PacketException("[Packet02Redirect] Invalid checksum");
@@ -56,7 +56,7 @@ public class Packet02Redirect extends Packet {
 
   @Override
   public byte[] asBytes() {
-    StringJoiner joiner = new StringJoiner(",");
+    final StringJoiner joiner = new StringJoiner(",");
     joiner.add(String.valueOf(packetID))
         .add(String.valueOf(transactionID))
         .add(String.valueOf(checksum))
@@ -81,7 +81,7 @@ public class Packet02Redirect extends Packet {
   }
 
   @Override
-  public void setTransactionID(int transactionID) {
+  public void setTransactionID(final int transactionID) {
     this.transactionID = transactionID;
   }
 

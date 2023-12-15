@@ -12,7 +12,7 @@ public class Packet200Heartbeat extends Packet {
 
   @Override
   public byte[] asBytes() {
-    StringJoiner joiner = new StringJoiner(",");
+    final StringJoiner joiner = new StringJoiner(",");
     joiner.add(String.valueOf(packetID))
         .add(String.valueOf(transactionID));
 
@@ -28,14 +28,15 @@ public class Packet200Heartbeat extends Packet {
   }
 
   @Override
-  public Packet200Heartbeat fromTokens(String[] tokens) throws PacketException {
+  public Packet200Heartbeat fromTokens(final String[] tokens)
+      throws PacketException {
     if (tokens.length != TOKEN_COUNT)
       throw new PacketException("Invalid packet length");
 
     try {
       packetID = Integer.parseInt(tokens[0]);
       transactionID = Integer.parseInt(tokens[1]);
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       throw new PacketException("Invalid data");
     }
 
@@ -54,7 +55,7 @@ public class Packet200Heartbeat extends Packet {
   }
 
   @Override
-  public void setTransactionID(int transactionID) {
+  public void setTransactionID(final int transactionID) {
     this.transactionID = transactionID;
   }
 

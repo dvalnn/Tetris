@@ -31,7 +31,7 @@ public class Player {
     return ready;
   }
 
-  public void setReady(boolean ready) {
+  public void setReady(final boolean ready) {
     this.ready = ready;
   }
 

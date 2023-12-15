@@ -12,7 +12,7 @@ public class Packet00Login extends Packet {
   private String username;
   private String roomName;
 
-  private CRC32 crc32 = new CRC32();
+  private final CRC32 crc32 = new CRC32();
 
   public Packet00Login(
       final String username,
@@ -40,7 +40,7 @@ public class Packet00Login extends Packet {
 
   @Override
   public byte[] asBytes() {
-    StringJoiner joiner = new StringJoiner(",");
+    final StringJoiner joiner = new StringJoiner(",");
     joiner.add(String.valueOf(packetID))
         .add(String.valueOf(transactionID))
         .add(String.valueOf(checksum))
@@ -52,7 +52,7 @@ public class Packet00Login extends Packet {
 
   @Override
   public String[] asTokens() {
-    String tokens[] = new String[TOKEN_COUNT];
+    final String tokens[] = new String[TOKEN_COUNT];
     tokens[0] = String.valueOf(packetID);
     tokens[1] = String.valueOf(transactionID);
     tokens[2] = String.valueOf(checksum);
@@ -62,7 +62,7 @@ public class Packet00Login extends Packet {
   }
 
   @Override
-  public Packet00Login fromTokens(String[] tokens) throws PacketException {
+  public Packet00Login fromTokens(final String[] tokens) throws PacketException {
     if (tokens.length != TOKEN_COUNT)
       throw new PacketException("[Packet00Login] Invalid packet length");
 
@@ -70,7 +70,7 @@ public class Packet00Login extends Packet {
       packetID = Integer.parseInt(tokens[0]);
       transactionID = Integer.parseInt(tokens[1]);
       checksum = Long.parseLong(tokens[2]);
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       throw new PacketException("[Packet00Login] Invalid data type");
     }
 
@@ -81,7 +81,7 @@ public class Packet00Login extends Packet {
     username = tokens[3];
     roomName = tokens[4];
 
-    CRC32 crc32 = new CRC32();
+    final CRC32 crc32 = new CRC32();
     crc32.update((username + roomName).getBytes());
     if (checksum != crc32.getValue())
       throw new PacketException("[Packet00Login] Invalid checksum");
@@ -95,7 +95,7 @@ public class Packet00Login extends Packet {
   }
 
   @Override
-  public void setTransactionID(int transactionID) {
+  public void setTransactionID(final int transactionID) {
     this.transactionID = transactionID;
   }
 

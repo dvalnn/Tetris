@@ -46,7 +46,7 @@ public abstract class Packet {
       super();
     }
 
-    public PacketException(String message) {
+    public PacketException(final String message) {
       super(message);
     }
   }
@@ -57,15 +57,15 @@ public abstract class Packet {
     return tokenize(new String(bytes, 0, length).trim());
   }
 
-  public static String[] tokenize(String packet) {
-    String tokens[] = packet.split(",");
+  public static String[] tokenize(final String packet) {
+    final String tokens[] = packet.split(",");
     if (tokens.length < MIN_TOKENS) {
       return null;
     }
     return tokens;
   }
 
-  public static PacketTypesEnum lookupPacket(String[] packetTokens) {
+  public static PacketTypesEnum lookupPacket(final String[] packetTokens) {
     return lookupPacket(packetTokens[0]);
   }
 
@@ -89,7 +89,7 @@ public abstract class Packet {
   protected int packetID;
   protected int transactionID;
 
-  public Packet(int packetID) {
+  public Packet(final int packetID) {
     this.packetID = packetID;
   }
 

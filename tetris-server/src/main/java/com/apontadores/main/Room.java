@@ -8,13 +8,13 @@ import java.net.SocketTimeoutException;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import com.apontadores.packets.Packet02Redirect;
+import com.apontadores.packets.Packet;
 import com.apontadores.packets.Packet.PacketException;
 import com.apontadores.packets.Packet.PacketTypesEnum;
+import com.apontadores.packets.Packet00Login;
+import com.apontadores.packets.Packet02Redirect;
 import com.apontadores.packets.Packet03Start;
 import com.apontadores.packets.Packet200Heartbeat;
-import com.apontadores.packets.Packet00Login;
-import com.apontadores.packets.Packet;
 
 public class Room implements Runnable {
 
@@ -26,15 +26,15 @@ public class Room implements Runnable {
     FINISHED;
   }
 
-  private static final int MAX_SOCKET_TIMEOUTS = 5;
+  private final int MAX_PACKET_SIZE = 1024;
   public final String name;
-
   public final int id;
-  private boolean full;
-  private Player p1;
 
+  private Player p1;
   private Player p2;
-  private int timeoutCount = 0;
+  private boolean full;
+
+  private RoomStatesEnum state = RoomStatesEnum.WAITING_P1;
 
   // Player waiting list for the room
   private ArrayBlockingQueue<Player> playerQueue;
@@ -45,16 +45,8 @@ public class Room implements Runnable {
   // outgoing packets from the server to the players
   private ArrayBlockingQueue<DatagramPacket> outPacketQueue;
 
-  private RoomStatesEnum state = RoomStatesEnum.WAITING_P1;
   private DatagramSocket roomSocket;
-
   private DatagramSocket outSocket;
-  private final int MAX_PACKET_SIZE = 1024;
-
-  private final int QUEUE_SIZE = 100;
-  private TimerBasedService playerRedirect;
-  private TimerBasedService playerSync;
-  private TimerBasedService packetHandler;
 
   public Room(
       final int id,
@@ -66,15 +58,16 @@ public class Room implements Runnable {
 
     System.out.println("[Room] Created room: \"" + name + "\" with id: " + id);
 
+    outSocket = new DatagramSocket();
     roomSocket = new DatagramSocket();
     roomSocket.setSoTimeout(1000);
-    outSocket = new DatagramSocket();
 
+    final int QUEUE_SIZE = 100;
     playerQueue = new ArrayBlockingQueue<Player>(QUEUE_SIZE);
     outPacketQueue = new ArrayBlockingQueue<DatagramPacket>(QUEUE_SIZE);
     inPacketQueue = new ArrayBlockingQueue<DatagramPacket>(QUEUE_SIZE);
 
-    playerRedirect = new TimerBasedService(
+    TimerBasedService playerRedirect = new TimerBasedService(
         new TimerTask() {
           @Override
           public void run() {
@@ -85,7 +78,7 @@ public class Room implements Runnable {
               return;
             }
 
-            Player p = playerQueue.peek();
+            final Player p = playerQueue.peek();
             if (p == null) {
               return;
             }
@@ -101,8 +94,8 @@ public class Room implements Runnable {
             }
 
             // send a packet with the room's private port to the player
-            byte data[] = new Packet02Redirect(roomSocket.getLocalPort()).asBytes();
-            DatagramPacket packet = new DatagramPacket(
+            final byte data[] = new Packet02Redirect(roomSocket.getLocalPort()).asBytes();
+            final DatagramPacket packet = new DatagramPacket(
                 data,
                 data.length,
                 p.address,
@@ -112,7 +105,7 @@ public class Room implements Runnable {
               outPacketQueue.add(packet);
               System.out.println("[Room - playerRedirect] " + p.username +
                   " to port: " + roomSocket.getLocalPort());
-            } catch (Exception e) {
+            } catch (final Exception e) {
               System.out.println("[Room - playerRedirect] Failed to send redirect packet");
               System.out.println("[Room - playerRedirect] Terminating thread");
               this.cancel();
@@ -122,7 +115,7 @@ public class Room implements Runnable {
           }
         }, 5, 50);
 
-    playerSync = new TimerBasedService(
+    TimerBasedService playerSync = new TimerBasedService(
         new TimerTask() {
           @Override
           public void run() {
@@ -131,14 +124,14 @@ public class Room implements Runnable {
               return;
             }
 
-            DatagramPacket outPacket = outPacketQueue.poll();
+            final DatagramPacket outPacket = outPacketQueue.poll();
             if (outPacket == null) {
               return;
             }
 
             try {
               outSocket.send(outPacket);
-            } catch (Exception e) {
+            } catch (final Exception e) {
               this.cancel();
               state = RoomStatesEnum.FINISHED;
               return;
@@ -146,7 +139,7 @@ public class Room implements Runnable {
           }
         }, 0, 2);
 
-    packetHandler = new TimerBasedService(
+    TimerBasedService packetHandler = new TimerBasedService(
         new TimerTask() {
           @Override
           public void run() {
@@ -155,7 +148,7 @@ public class Room implements Runnable {
               return;
             }
 
-            DatagramPacket inPacket = inPacketQueue.poll();
+            final DatagramPacket inPacket = inPacketQueue.poll();
             if (inPacket == null) {
               return;
             }
@@ -194,6 +187,8 @@ public class Room implements Runnable {
   public void run() {
     System.out.println("[Room] Listening on port " + roomSocket.getLocalPort());
 
+    int timeoutCount = 0;
+
     while (true) {
       if (p1 != null && !p1.isAlive()) {
         System.out.println("[Room] Player 1 timed out");
@@ -205,6 +200,7 @@ public class Room implements Runnable {
         state = RoomStatesEnum.FINISHED;
       }
 
+      final int MAX_SOCKET_TIMEOUTS = 5;
       if (timeoutCount >= MAX_SOCKET_TIMEOUTS) {
         System.out.println("[Room] Socket timed out " + timeoutCount + " times");
         System.out.println("[Room] Terminating thread");
@@ -217,12 +213,12 @@ public class Room implements Runnable {
       }
 
       try {
-        DatagramPacket packet = new DatagramPacket(
+        final DatagramPacket packet = new DatagramPacket(
             new byte[MAX_PACKET_SIZE],
             MAX_PACKET_SIZE);
         roomSocket.receive(packet);
         inPacketQueue.add(packet);
-      } catch (SocketTimeoutException t) {
+      } catch (final SocketTimeoutException t) {
         timeoutCount++;
         continue;
       } catch (final Exception e) {
@@ -238,7 +234,7 @@ public class Room implements Runnable {
     return name;
   }
 
-  private void sendPacket(Packet p, Player player) {
+  private void sendPacket(final Packet p, final Player player) {
     outPacketQueue.add(new DatagramPacket(
         p.asBytes(),
         p.asBytes().length,
@@ -247,10 +243,10 @@ public class Room implements Runnable {
   }
 
   private void parsePacket(
-      byte[] datagramData,
-      int dataLength,
-      InetAddress datagramAddress,
-      int datagramPort) {
+      final byte[] datagramData,
+      final int dataLength,
+      final InetAddress datagramAddress,
+      final int datagramPort) {
 
     switch (state) {
       case WAITING_P1:
@@ -269,7 +265,7 @@ public class Room implements Runnable {
         break;
 
       case WAITING_P2: {
-        Player sender = getPacketSender(datagramAddress, datagramPort);
+        final Player sender = getPacketSender(datagramAddress, datagramPort);
         if (sender == null) {
           System.out.println("[Room-WaitingP2] Received packet from unknown origin");
           p2 = handleLogin(
@@ -288,27 +284,27 @@ public class Room implements Runnable {
 
         // if the privous condition was not hit then the packet was sent by p1,
         // handle it
-        String tokens[] = Packet.tokenize(datagramData, dataLength);
-        PacketTypesEnum packetType = Packet.lookupPacket(tokens);
+        final String tokens[] = Packet.tokenize(datagramData, dataLength);
+        final PacketTypesEnum packetType = Packet.lookupPacket(tokens);
 
         switch (packetType) {
           case LOGIN:
             try {
-              Packet00Login loginPacket = new Packet00Login()
+              final Packet00Login loginPacket = new Packet00Login()
                   .fromTokens(tokens);
               sendPacket(loginPacket, p1);
-            } catch (PacketException e) {
+            } catch (final PacketException e) {
               System.out.println("[Room-WaitingP2] : " + e.getMessage());
             }
             return;
 
           case HEARTBEAT:
             try {
-              Packet200Heartbeat heartbeatPacket = new Packet200Heartbeat()
+              final Packet200Heartbeat heartbeatPacket = new Packet200Heartbeat()
                   .fromTokens(tokens);
               sendPacket(heartbeatPacket, p1);
               p1.packetHit();
-            } catch (PacketException e) {
+            } catch (final PacketException e) {
               System.out.println("[Room-WaitingP2] : " + e.getMessage());
             }
             return;
@@ -325,9 +321,9 @@ public class Room implements Runnable {
       }
 
       case STARTING: {
-        String tokens[] = Packet.tokenize(datagramData, dataLength);
-        PacketTypesEnum packetType = Packet.lookupPacket(tokens);
-        Player sender = getPacketSender(datagramAddress, datagramPort);
+        final String tokens[] = Packet.tokenize(datagramData, dataLength);
+        final PacketTypesEnum packetType = Packet.lookupPacket(tokens);
+        final Player sender = getPacketSender(datagramAddress, datagramPort);
         if (sender == null) {
           System.out.println("[Room-WaitingP2] Received packet from unknown origin");
           return;
@@ -336,21 +332,21 @@ public class Room implements Runnable {
         switch (packetType) {
           case LOGIN:
             try {
-              Packet00Login loginPacket = new Packet00Login()
+              final Packet00Login loginPacket = new Packet00Login()
                   .fromTokens(tokens);
               sendPacket(loginPacket, sender);
-            } catch (PacketException e) {
+            } catch (final PacketException e) {
               System.out.println("[Room-WaitingP2] : " + e.getMessage());
             }
             return;
           case HEARTBEAT:
             try {
-              Packet200Heartbeat heartbeatPacket = new Packet200Heartbeat()
+              final Packet200Heartbeat heartbeatPacket = new Packet200Heartbeat()
                   .fromTokens(tokens);
               sendPacket(heartbeatPacket, sender);
               sender.packetHit();
               sender.setReady(true);
-            } catch (PacketException e) {
+            } catch (final PacketException e) {
               System.out.println("[Room-WaitingP2] : " + e.getMessage());
             }
             break;
@@ -368,8 +364,8 @@ public class Room implements Runnable {
         if (p1.isReady() && p2.isReady()) {
           System.out.println("[Room] Both players ready");
           // send game start packet
-          Packet03Start packet1 = new Packet03Start(p1.username);
-          Packet03Start packet2 = new Packet03Start(p2.username);
+          final Packet03Start packet1 = new Packet03Start(p1.username);
+          final Packet03Start packet2 = new Packet03Start(p2.username);
 
           packet1.setTransactionID(1);
           packet2.setTransactionID(2);
@@ -383,13 +379,13 @@ public class Room implements Runnable {
       }
 
       case PLAYING: {
-        Player sender = getPacketSender(datagramAddress, datagramPort);
+        final Player sender = getPacketSender(datagramAddress, datagramPort);
         if (sender == null) {
           System.out.println("[Room-Playing] Received packet from unknown origin");
           return;
         }
 
-        Player target = sender == p1 ? p2 : p1;
+        final Player target = sender == p1 ? p2 : p1;
 
         outPacketQueue.add(new DatagramPacket(
             datagramData,
@@ -410,7 +406,7 @@ public class Room implements Runnable {
 
   }
 
-  private Player getPacketSender(InetAddress address, int port) {
+  private Player getPacketSender(final InetAddress address, final int port) {
     if (p1 != null && p1.address.equals(address) && p1.port == port)
       return p1;
     else if (p2 != null && p2.address.equals(address) && p2.port == port)
@@ -420,13 +416,13 @@ public class Room implements Runnable {
   }
 
   private Player handleLogin(
-      byte[] datagramData,
-      int dataLenght,
-      InetAddress datagramAddress,
-      int datagramPort) {
+      final byte[] datagramData,
+      final int dataLenght,
+      final InetAddress datagramAddress,
+      final int datagramPort) {
 
-    String tokens[] = Packet.tokenize(datagramData, dataLenght);
-    PacketTypesEnum packetType = Packet.lookupPacket(tokens);
+    final String tokens[] = Packet.tokenize(datagramData, dataLenght);
+    final PacketTypesEnum packetType = Packet.lookupPacket(tokens);
     if (packetType != PacketTypesEnum.LOGIN) {
       System.out.println("[Room - handleLogin] Unexpected packet type: " + packetType.name());
       return null;
@@ -435,12 +431,12 @@ public class Room implements Runnable {
     Packet00Login packet;
     try {
       packet = new Packet00Login().fromTokens(tokens);
-    } catch (PacketException e) {
+    } catch (final PacketException e) {
       System.out.println("[Room - handleLogin] : " + e.getMessage());
       return null;
     }
 
-    Player player = playerQueue.poll();
+    final Player player = playerQueue.poll();
     if (player == null) {
       return null;
     }
