@@ -18,6 +18,7 @@ import com.apontadores.packets.Packet105GameOver;
 import com.apontadores.ui.Frame;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
+import com.apontadores.ui.TextElement;
 
 public class GameOverMP extends GameState {
 
@@ -42,6 +43,24 @@ public class GameOverMP extends GameState {
   public void update() {
     frame.update();
 
+    ((TextElement) frame.getElement("scorePlayer1"))
+        .setText(String.valueOf(Score.getScore()));
+
+    ((TextElement) frame.getElement("linesClearedPlayer1"))
+        .setText(String.valueOf(String.valueOf(Levels.getTotalLinesCleared())));
+
+    ((TextElement) frame.getElement("scoreTimePlayer1"))
+        .setText(String.valueOf(GameTime.getTimeStr()));
+
+    ((TextElement) frame.getElement("scorePlayer2"))
+        .setText(String.valueOf(Score.getScore()));
+
+    ((TextElement) frame.getElement("linesClearedPlayer2"))
+        .setText(String.valueOf(String.valueOf(Levels.getTotalLinesCleared())));
+
+    ((TextElement) frame.getElement("scoreTimePlayer2"))
+        .setText(String.valueOf(GameTime.getTimeStr()));
+        
     networkTick++;
     final int NETWORK_TICK_MAX = 2;
     if (networkTick >= NETWORK_TICK_MAX) {
