@@ -21,12 +21,7 @@ import com.apontadores.settings.BoardSettings;
 public class PlayerData {
 
   public static final int OPPONENT_X_OFFSET = 3 * GAME_WIDTH / 4 - BOARD_WIDTH * BOARD_SQUARE / 2 + 10;
-
   public static final int Y_OFFSET = GAME_HEIGHT / 2 - BOARD_HEIGHT * BOARD_SQUARE / 2 + 18;
-
-  private String playerName;
-
-  private String opponentName;
 
   // NOTE: MP elements have getters methods and are updated by the client
   // with packets received from the server
@@ -34,12 +29,7 @@ public class PlayerData {
   // opponent's board, score, etc. on the screen
 
   MPBoard opponentBoard;
-
   private final ShapeMP opponentShape;
-
-  private int opponentScore;
-
-  private int opponentLevel;
 
   // private ShapeMP holdShapeMP;
   //
@@ -53,22 +43,15 @@ public class PlayerData {
   // return nextShapesMP;
   // }
 
-  PlayerBoard playerBoard;
-
-  private Shape currentShape;
-
-  private int score;
-
-  private int level;
-
   // NOTE: Player elements have setters and are updated by the local game logic
   // the client then sends packets to the server with the local data to be
   // relayed to the opponent's cient and displayed on the screen
-
+  PlayerBoard playerBoard;
+  private Shape currentShape;
+  private int score;
+  private int level;
   private int linesCleared;
-
   private boolean syncShape;
-
   private boolean syncScore;
   // private boolean syncElements; // TODO: Implement this
 
@@ -97,10 +80,6 @@ public class PlayerData {
     // nextShapesMP[5] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
   }
 
-  public String getOpponentName() {
-    return opponentName;
-  }
-
   // TODO: Implement this
 
   // private Shape holdShape;
@@ -122,7 +101,7 @@ public class PlayerData {
   // }
 
   public PlayerData setOpponentName(final String opponentName) {
-    this.opponentName = opponentName;
+    opponentBoard.setPlayerName(opponentName);
     return this;
   }
 
@@ -132,14 +111,6 @@ public class PlayerData {
 
   public ShapeMP getOpponentShape() {
     return opponentShape;
-  }
-
-  public int getOpponentScore() {
-    return opponentScore;
-  }
-
-  public int getOpponentLevel() {
-    return opponentLevel;
   }
 
   public PlayerData setPlayerBoard(final PlayerBoard playerBoard) {
@@ -176,16 +147,6 @@ public class PlayerData {
     return this;
   }
 
-  @Override
-  public String toString() {
-    return "PlayerData {" +
-        "username='" + playerName + '\'' +
-        ", score=" + score +
-        ", level=" + level +
-        ", linesCleared=" + linesCleared +
-        '}';
-  }
-
   public void parsePacket(final Packet100Update inPacket) {
     switch (inPacket.getUpdateType()) {
       case "tetromino" -> parseTetrominoUpdate(inPacket.getUpdateData());
@@ -198,9 +159,20 @@ public class PlayerData {
 
   public void parseScoreUpdate(final String updateData) {
     final String[] tokens = updateData.split(";");
-    opponentScore = Integer.parseInt(tokens[0]);
-    final int opponentLinesCleared = Integer.parseInt(tokens[1]);
-    opponentLevel = Integer.parseInt(tokens[2]);
+
+    try {
+      final int opponentScore = Integer.parseInt(tokens[0]);
+      final int opponentLinesCleared = Integer.parseInt(tokens[1]);
+      final int opponentLevel = Integer.parseInt(tokens[2]);
+
+      opponentBoard.updateInfo(
+          opponentLinesCleared,
+          opponentLevel,
+          opponentScore);
+    } catch (final NumberFormatException e) {
+      System.err.println("Error parsing score update packet");
+      return;
+    }
   }
 
   public void parseBoardUpdate(final String updateData) {

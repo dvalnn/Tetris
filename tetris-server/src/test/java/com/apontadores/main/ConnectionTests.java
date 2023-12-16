@@ -12,11 +12,11 @@ import java.net.InetAddress;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.apontadores.packets.Packet02Redirect;
-import com.apontadores.packets.Packet.PacketException;
-import com.apontadores.packets.Packet.PacketTypesEnum;
 import com.apontadores.packets.Packet;
+import com.apontadores.packets.Packet.PacketTypesEnum;
 import com.apontadores.packets.Packet00Login;
+import com.apontadores.packets.Packet02Redirect;
+import com.apontadores.packets.PacketException;
 
 public class ConnectionTests {
   private final static int PORT = 42069;

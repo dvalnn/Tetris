@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.apontadores.gameElements.gameplay.GameTime;
-import com.apontadores.main.Game;
 import com.apontadores.settings.BoardSettings;
 
 public class Board {
@@ -85,8 +84,7 @@ public class Board {
   protected int playerScore = 0;
   protected int playerLevel = 0;
   protected int playerLines = 0;
-
-  private String username = Game.getUsername();
+  protected String username;
 
   public Board(BoardSettings settings) {
     this.set = settings;
@@ -102,7 +100,6 @@ public class Board {
   }
 
   public void render(final Graphics g) {
-
     for (int row = 0; row < BOARD_HEIGHT; row++) {
       for (int col = 0; col < BOARD_WIDTH; col++) {
         g.setColor(board.get(row).getIndexColorCopy(col));
@@ -115,9 +112,9 @@ public class Board {
     }
 
     // text elements rendering (score and level)
-    g.setColor(Color.WHITE);
-    g.setFont(g.getFont().deriveFont(30f));
     Graphics2D g2 = (Graphics2D) g;
+    g2.setColor(Color.WHITE);
+    g2.setFont(g2.getFont().deriveFont(30f));
 
     g2.setRenderingHint(
         RenderingHints.KEY_ANTIALIASING,
@@ -147,7 +144,4 @@ public class Board {
     return set.backgroundColor;
   }
 
-  public void setUsername(final String username) {
-    this.username = username;
-  }
 }

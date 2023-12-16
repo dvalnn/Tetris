@@ -18,4 +18,14 @@ public class MPBoard extends Board {
     }
   }
 
+  public void updateInfo(final int lines, final int level, final int score) {
+    playerLines = lines;
+    playerLevel = level;
+    playerScore = score;
+  }
+
+  public void setPlayerName(final String name) {
+    username = name;
+  }
+
 }

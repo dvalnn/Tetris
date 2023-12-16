@@ -5,6 +5,9 @@ public class NetworkControl {
     INACTIVE,
     CONNECTION_TIMEOUT,
     SOCKET_ERROR,
+    ROOM_FULL,
+    USERNAME_IN_USE,
+    ERROR,
     RUNNING
   }
 

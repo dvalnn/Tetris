@@ -6,6 +6,12 @@ public class MainClass {
 
   public static void main(final String[] args) {
     System.out.println("Hello World!");
-    new Thread(new Server(MainClass.defaultPort)).start();
+    Thread serverThread = new Thread(new Server(MainClass.defaultPort));
+    serverThread.start();
+    try {
+      serverThread.join();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 }

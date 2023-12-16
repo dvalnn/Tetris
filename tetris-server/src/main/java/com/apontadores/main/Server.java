@@ -1,5 +1,6 @@
 package com.apontadores.main;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
@@ -7,9 +8,10 @@ import java.util.ArrayList;
 import java.util.TimerTask;
 
 import com.apontadores.packets.Packet;
-import com.apontadores.packets.Packet00Login;
-import com.apontadores.packets.Packet.PacketException;
 import com.apontadores.packets.Packet.PacketTypesEnum;
+import com.apontadores.packets.Packet00Login;
+import com.apontadores.packets.Packet201Error;
+import com.apontadores.packets.PacketException;
 
 public class Server implements Runnable {
 
@@ -43,6 +45,8 @@ public class Server implements Runnable {
 
   private boolean forceExit = false;
 
+  private DatagramSocket socket;
+
   Server(final int port) {
     this.port = port;
     rooms = new ArrayList<>(100);
@@ -60,15 +64,17 @@ public class Server implements Runnable {
   public void run() {
     // configurantion for the connection listener loop
     byte recvBuf[] = new byte[MAX_PACKET_SIZE];
-    DatagramSocket connectionSocket;
     try {
-      connectionSocket = new DatagramSocket(port);
+      socket = new DatagramSocket(port);
     } catch (SocketException e) {
       System.out.println("[Server] Failed to open socket");
       return;
     }
+
     DatagramPacket loginDatagram = new DatagramPacket(recvBuf, MAX_PACKET_SIZE);
     roomCleaner.start();
+
+    System.out.println("[Server] Listening on port " + port);
 
     while (true) {
       if (forceExit) {
@@ -77,11 +83,9 @@ public class Server implements Runnable {
       }
 
       try {
-        System.out.println("[Server] Listening on port " + port);
-        System.out.flush();
-        connectionSocket.receive(loginDatagram);
+        socket.receive(loginDatagram);
       } catch (Exception e) {
-        connectionSocket.close();
+        socket.close();
         System.out.println("[Server] Connection closed");
         exitIfNoThreads();
       }
@@ -107,15 +111,31 @@ public class Server implements Runnable {
         continue;
       }
 
-      loginPacketHandler(loginPacket, loginDatagram);
+      try {
+        loginPacketHandler(loginPacket, loginDatagram);
+      } catch (IOException e) {
+        System.out.println("[Server] Failed to send error packet");
+        exitIfNoThreads();
+      }
     }
   }
 
-  private void loginPacketHandler(Packet00Login loginPacket, DatagramPacket loginDatagram) {
+  private void loginPacketHandler(
+      Packet00Login loginPacket,
+      DatagramPacket loginDatagram)
+      throws IOException {
     Room room = findRoom(loginPacket.getRoomName());
     if (room != null && room.isFull()) {
       System.out.println("[Server] Room \"" + room.name + "\" is full");
-      // TODO: send a message to the client
+      Packet201Error errorPacket = new Packet201Error(
+          Packet201Error.ErrorType.ROOM_FULL);
+
+      socket.send(new DatagramPacket(
+          errorPacket.asBytes(),
+          errorPacket.asBytes().length,
+          loginDatagram.getAddress(),
+          loginDatagram.getPort()));
+
       return;
     }
 
@@ -145,7 +165,7 @@ public class Server implements Runnable {
 
   private void exitIfNoThreads() {
     if (rooms.size() == 0) {
-      System.out.println("[Server] No rooms left");
+      System.out.println("[Server] No rooms left - exiting");
       System.exit(0);
     }
   }

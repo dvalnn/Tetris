@@ -9,12 +9,13 @@ import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import com.apontadores.packets.Packet;
-import com.apontadores.packets.Packet.PacketException;
 import com.apontadores.packets.Packet.PacketTypesEnum;
 import com.apontadores.packets.Packet00Login;
 import com.apontadores.packets.Packet02Redirect;
 import com.apontadores.packets.Packet03Start;
 import com.apontadores.packets.Packet200Heartbeat;
+import com.apontadores.packets.Packet201Error;
+import com.apontadores.packets.PacketException;
 
 public class Room implements Runnable {
 
@@ -85,6 +86,9 @@ public class Room implements Runnable {
 
             if (p1 != null && p1.username.equals(p.username)) {
               playerQueue.poll();
+              sendPacket(
+                  new Packet201Error(Packet201Error.ErrorType.USERNAME_IN_USE),
+                  p);
               return;
             }
 
@@ -93,16 +97,10 @@ public class Room implements Runnable {
               return;
             }
 
-            // send a packet with the room's private port to the player
-            final byte data[] = new Packet02Redirect(roomSocket.getLocalPort()).asBytes();
-            final DatagramPacket packet = new DatagramPacket(
-                data,
-                data.length,
-                p.address,
-                p.port);
-
             try {
-              outPacketQueue.add(packet);
+              // send a packet with the room's private port to the player
+              final Packet packet = new Packet02Redirect(roomSocket.getLocalPort());
+              sendPacket(packet, p);
               System.out.println("[Room - playerRedirect] " + p.username +
                   " to port: " + roomSocket.getLocalPort());
             } catch (final Exception e) {
@@ -167,7 +165,18 @@ public class Room implements Runnable {
   }
 
   public void addPlayerToQueue(final Player p) {
-    System.out.println("[Room] Adding player to queue");
+    Player player = playerQueue.peek();
+
+    if (player != null &&
+        player.address.equals(p.address) &&
+        player.port == p.port) {
+      return;
+    }
+
+    if (playerQueue.size() >= 2) {
+      return;
+    }
+
     playerQueue.add(p);
   }
 
@@ -300,13 +309,19 @@ public class Room implements Runnable {
 
           case HEARTBEAT:
             try {
-              final Packet200Heartbeat heartbeatPacket = new Packet200Heartbeat()
+              final Packet heartbeatPacket = new Packet200Heartbeat()
                   .fromTokens(tokens);
               sendPacket(heartbeatPacket, p1);
               p1.packetHit();
             } catch (final PacketException e) {
               System.out.println("[Room-WaitingP2] : " + e.getMessage());
             }
+            return;
+
+          case DISCONNECT:
+            System.out.println("[Room-WaitingP2] Room terminated by player "
+                + sender.username);
+            state = RoomStatesEnum.FINISHED;
             return;
 
           case INVALID:
@@ -341,7 +356,7 @@ public class Room implements Runnable {
             return;
           case HEARTBEAT:
             try {
-              final Packet200Heartbeat heartbeatPacket = new Packet200Heartbeat()
+              final Packet heartbeatPacket = new Packet200Heartbeat()
                   .fromTokens(tokens);
               sendPacket(heartbeatPacket, sender);
               sender.packetHit();
@@ -387,6 +402,25 @@ public class Room implements Runnable {
 
         final Player target = sender == p1 ? p2 : p1;
 
+        PacketTypesEnum packetType = Packet.lookupPacket(
+            Packet.tokenize(datagramData, dataLength));
+        switch (packetType) {
+          case INVALID -> {
+            System.out.println("[Room-Playing] Invalid packet received");
+            return;
+          }
+
+          case DISCONNECT -> {
+            System.out.println("[Room-Playing] Room terminated by player "
+                + sender.username);
+            state = RoomStatesEnum.FINISHED;
+            return;
+          }
+
+          default -> {
+          }
+        }
+
         outPacketQueue.add(new DatagramPacket(
             datagramData,
             dataLength,
@@ -424,7 +458,8 @@ public class Room implements Runnable {
     final String tokens[] = Packet.tokenize(datagramData, dataLenght);
     final PacketTypesEnum packetType = Packet.lookupPacket(tokens);
     if (packetType != PacketTypesEnum.LOGIN) {
-      System.out.println("[Room - handleLogin] Unexpected packet type: " + packetType.name());
+      System.out.println("[Room - handleLogin] Unexpected packet type: "
+          + packetType.name());
       return null;
     }
 
@@ -451,7 +486,10 @@ public class Room implements Runnable {
 
     if (p1 != null && packet.getUsername().equals(p1.username)) {
       System.out.println("[Room - handleLogin] Username already in use");
-      // TODO: send error packet
+      Packet201Error errorPacket = new Packet201Error(
+          Packet201Error.ErrorType.USERNAME_IN_USE);
+
+      sendPacket(errorPacket, player);
       return null;
     }
 

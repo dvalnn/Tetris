@@ -26,13 +26,13 @@ public class Packet03Start extends Packet {
 
   @Override
   public byte[] asBytes() {
-    final StringJoiner joiner = new StringJoiner(",");
-    joiner.add(String.valueOf(packetID))
+    return new StringJoiner(",")
+        .add(String.valueOf(packetID))
         .add(String.valueOf(transactionID))
         .add(String.valueOf(checksum))
-        .add(opponentName);
-
-    return joiner.toString().getBytes();
+        .add(opponentName)
+        .toString()
+        .getBytes();
   }
 
   @Override

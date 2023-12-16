@@ -8,8 +8,6 @@ import java.awt.Graphics;
 
 import com.apontadores.gameElements.Sound;
 import com.apontadores.gameStates.GameStateHandler;
-import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
-import com.apontadores.gameStates.states.multiP.PlayingMP;
 import com.apontadores.networking.TetrisClient;
 import com.apontadores.utils.Keybindings;
 import com.apontadores.utils.LoadSave;
@@ -25,7 +23,8 @@ public class Game implements Runnable {
   private static String opponentName;
 
   static {
-    keybinds = LoadSave.loadJson(KEYBINDINGS_PATH + "keybinds.json", Keybindings.class);
+    keybinds = LoadSave.loadJson(KEYBINDINGS_PATH + "keybinds.json",
+        Keybindings.class);
   }
 
   public static void exit() {
@@ -34,10 +33,10 @@ public class Game implements Runnable {
 
   public static void setUsername(final String username) {
     Game.username = username;
+  }
 
-    // FIXME: fix this
-    ((PlayingMP) (GameStateHandler.getState(GameStatesEnum.PLAYING_MP)))
-        .getPlayerBoard().setUsername(username);
+  public static void setOpponentName(final String opponentName) {
+    Game.opponentName = opponentName;
   }
 
   public static void setRoomName(final String roomName) {
@@ -46,6 +45,10 @@ public class Game implements Runnable {
 
   public static String getUsername() {
     return username;
+  }
+
+  public static String getOpponentName() {
+    return opponentName;
   }
 
   public static String getRoomName() {
@@ -67,14 +70,6 @@ public class Game implements Runnable {
 
   public static void resetKeybind() {
     Game.keybinds = new Keybindings();
-  }
-
-  public static void setOpponentName(final String opponentName) {
-    Game.opponentName = opponentName;
-  }
-
-  public static String getOpponentName() {
-    return opponentName;
   }
 
   private final GameWindow gameWindow;
@@ -153,7 +148,7 @@ public class Game implements Runnable {
       // updates = 0;
       // }
 
-      Thread.yield();
+      // Thread.yield();
 
     } while (!exit);
 

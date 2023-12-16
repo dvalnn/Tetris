@@ -1,11 +1,13 @@
 package com.apontadores.packets;
 
+import java.util.StringJoiner;
+
 // generic packet structure:
 // first token is the packet type
 // second token is the transaction ID
 // third token is the checksum
 // rest of the tokens are packet specific
-public abstract class Packet {
+public class Packet implements PacketMethods {
   public static enum PacketTypesEnum {
     INVALID(-1),
 
@@ -39,16 +41,6 @@ public abstract class Packet {
 
     public int getId() {
       return packetId;
-    }
-  }
-
-  public static class PacketException extends Exception {
-    public PacketException() {
-      super();
-    }
-
-    public PacketException(final String message) {
-      super(message);
     }
   }
 
@@ -94,13 +86,54 @@ public abstract class Packet {
     this.packetID = packetID;
   }
 
-  public abstract byte[] asBytes();
+  @Override
+  public byte[] asBytes() {
+    return new StringJoiner(",")
+        .add(String.valueOf(packetID))
+        .add(String.valueOf(transactionID))
+        .toString()
+        .getBytes();
+  }
 
-  public abstract String[] asTokens();
+  @Override
+  public String[] asTokens() {
+    return new String[] {
+        String.valueOf(packetID),
+        String.valueOf(transactionID)
+    };
+  }
 
-  public abstract Packet fromTokens(String[] tokens) throws PacketException;
+  @Override
+  public Packet fromTokens(String[] tokens) throws PacketException {
+    if (tokens.length != MIN_TOKENS)
+      throw new PacketException("Invalid packet length");
 
-  public abstract int getTransactionID();
+    int packetID;
+    try {
+      packetID = Integer.parseInt(tokens[0]);
+      transactionID = Integer.parseInt(tokens[1]);
+    } catch (final NumberFormatException e) {
+      throw new PacketException("Invalid data");
+    }
 
-  public abstract void setTransactionID(int transactionID);
+    if (packetID != this.packetID)
+      throw new PacketException("Invalid packet ID");
+
+    this.packetID = packetID;
+
+    if (transactionID <= 0)
+      throw new PacketException("Invalid transaction ID");
+
+    return this;
+  }
+
+  @Override
+  public int getTransactionID() {
+    return transactionID;
+  }
+
+  @Override
+  public void setTransactionID(int transactionID) {
+    this.transactionID = transactionID;
+  }
 }

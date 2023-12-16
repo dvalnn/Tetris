@@ -115,6 +115,10 @@ public class PlayerBoard extends Board {
     nextTetro = tetrominoFactory(shapeData);
   }
 
+  public void setPlayerName(final String name) {
+    username = name;
+  }
+
   public void update() {
     // update the score. This is done in this class
     // and not direcly on the parent class so that

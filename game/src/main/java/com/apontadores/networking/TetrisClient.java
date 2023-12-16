@@ -17,12 +17,16 @@ import com.apontadores.networking.NetworkControl.ClientStates;
 import com.apontadores.networking.NetworkControl.ConnectionPhases;
 import com.apontadores.packets.Packet;
 import com.apontadores.packets.Packet.PacketTypesEnum;
+import com.apontadores.packets.Packet201Error.ErrorType;
 import com.apontadores.packets.Packet00Login;
+import com.apontadores.packets.Packet01Disconnect;
 import com.apontadores.packets.Packet02Redirect;
 import com.apontadores.packets.Packet03Start;
 import com.apontadores.packets.Packet100Update;
 import com.apontadores.packets.Packet105GameOver;
 import com.apontadores.packets.Packet200Heartbeat;
+import com.apontadores.packets.Packet201Error;
+import com.apontadores.packets.PacketException;
 
 //NOTE: Client - Server architecture overview
 //      Client: TetrisClient class
@@ -124,8 +128,10 @@ public class TetrisClient implements Runnable {
           @Override
           public void run() {
             if (state != ClientStates.RUNNING ||
-                phase == ConnectionPhases.FINISHED)
+                phase == ConnectionPhases.FINISHED) {
+              System.out.println("[TetrisClient] Packet processor stopped!");
               this.cancel();
+            }
 
             processConPhase();
 
@@ -155,12 +161,14 @@ public class TetrisClient implements Runnable {
             missedPackets += transactionDelta - 1;
 
             if (missedPackets > FULL_SYNC_THRESHOLD) {
-              System.out.println("[TetrisClient] Missed packet count: " + missedPackets);
-              System.out.println("[TetrisClient] Full sync threshold: " + FULL_SYNC_THRESHOLD);
+              System.out.println("[TetrisClient] Missed packet count: " +
+                  missedPackets);
+              System.out.println("[TetrisClient] Full sync threshold: " +
+                  FULL_SYNC_THRESHOLD);
               if (phase == ConnectionPhases.PLAYING) {
                 missedPackets = 0;
                 System.out.println("[TetrisClient] Requesting full sync!");
-                // sendPacket(new Packet200Heartbeat());
+                // TODO: send full sync request
               }
             }
 
@@ -198,12 +206,16 @@ public class TetrisClient implements Runnable {
         continue;
       }
 
+      if (state != ClientStates.RUNNING) {
+        System.out.println("[TetrisClient] Exiting with Client state: " + state);
+        break;
+      }
+
       if (phase == ConnectionPhases.FINISHED) {
         break;
       }
 
       final long packetDelta = System.nanoTime() - lastReceivedPacketTime;
-      // System.out.println("[TetrisClient] Packet delta: " + packetDelta);
       if (packetDelta > MAX_PACKET_DELTA) {
         System.out.println("[TetrisClient] Max packet delta surpassed!");
         connectionTimeout = true;
@@ -249,6 +261,18 @@ public class TetrisClient implements Runnable {
     }
 
     packetProcessor.stop();
+
+    Packet packet = new Packet01Disconnect();
+    try {
+      socket.send(new DatagramPacket(
+          packet.asBytes(),
+          packet.asBytes().length,
+          serverAddress,
+          serverPort));
+    } catch (IOException e) {
+      System.out.println("[TetrisClient] Failed to send disconnect packet!");
+    }
+
     socket.close();
   }
 
@@ -321,39 +345,45 @@ public class TetrisClient implements Runnable {
 
     switch (phase) {
       case CONNECTING -> {
-        if (packetType == PacketTypesEnum.REDIRECT) {
-          serverPort = ((Packet02Redirect) receivedPacket).getPort();
-          System.out.println("[GameClient - CONNECTING] Redirecting to port: " +
-              serverPort);
-
-        } else if (packetType == PacketTypesEnum.LOGIN) {
-          final String username = ((Packet00Login) receivedPacket).getUsername();
-          final String roomName = ((Packet00Login) receivedPacket).getRoomName();
-
-          System.out.println("[GameClient - CONNECTING] Login echo: " +
-              username + " " + roomName);
-
-          if (username.equals(playerName)
-              && roomName.equals(roomName)) {
-
-            phase = ConnectionPhases.WAITING_FOR_OPPONENT;
-            System.out.println("[GameClient - CONNECTING] Login successful");
-            System.out.println("[GameClient - CONNECTING] Waiting for opponent...");
+        switch (packetType) {
+          case REDIRECT -> serverPort = ((Packet02Redirect) receivedPacket).getPort();
+          case ERROR -> {
+            ErrorType errorType = ((Packet201Error) receivedPacket).getErrorType();
+            switch (errorType) {
+              case ROOM_FULL -> state = ClientStates.ROOM_FULL;
+              case USERNAME_IN_USE -> state = ClientStates.USERNAME_IN_USE;
+              default -> state = ClientStates.ERROR;
+            }
+            return -1;
           }
-        } else {
-          System.out.println("[GameClient - CONNECTING] Unexpected packet type: " +
-              packetType);
-          return -1;
+          case LOGIN -> {
+            final String username = ((Packet00Login) receivedPacket).getUsername();
+            final String roomName = ((Packet00Login) receivedPacket).getRoomName();
+
+            System.out.println("[GameClient - CONNECTING] Login echo: " +
+                username + " " + roomName);
+
+            if (username.equals(playerName)
+                && roomName.equals(roomName)) {
+
+              phase = ConnectionPhases.WAITING_FOR_OPPONENT;
+              System.out.println("[GameClient - CONNECTING] Login successful");
+              System.out.println("[GameClient - CONNECTING] Waiting for opponent...");
+            }
+          }
+
+          default -> {
+            System.out.println("[GameClient - CONNECTING] Unexpected packet type: " +
+                packetType);
+            return -1;
+          }
         }
-        // TODO: handle error packets
       }
+
       case WAITING_FOR_OPPONENT -> {
         switch (packetType) {
-          case REDIRECT -> {
+          case REDIRECT ->
             serverPort = ((Packet02Redirect) receivedPacket).getPort();
-            System.out.println("[GameClient - WAITING_FOR_OPPONENT] Redirecting to port: " +
-                serverPort);
-          }
           case START -> {
             Game.setOpponentName(((Packet03Start) receivedPacket).getOpponentName());
             phase = ConnectionPhases.PLAYING;
@@ -370,15 +400,15 @@ public class TetrisClient implements Runnable {
       }
       case PLAYING -> {
         switch (packetType) {
+          // NOTE: intentional fallthrough
           case GAME_OVER:
           case UPDATE:
             receivedUpdates.add(receivedPacket);
             break;
-          default: {
+          default:
             System.out.println("[GameClient - PLAYING] Unexpected packet type: " +
                 packetType);
             return -1;
-          }
         }
       }
       default -> {
@@ -390,20 +420,18 @@ public class TetrisClient implements Runnable {
 
   private void processConPhase() {
     switch (phase) {
-      case CONNECTING -> sendPacket(new Packet00Login(
-          playerName,
-          roomName));
+      case CONNECTING -> sendPacket(new Packet00Login(playerName, roomName));
       case WAITING_FOR_OPPONENT -> sendPacket(new Packet200Heartbeat());
-      case PLAYING -> {
-        if (!outgoingUpdates.isEmpty())
-          sendPacket(outgoingUpdates.poll());
-      }
+      case PLAYING -> sendPacket(outgoingUpdates.poll());
       default -> {
       }
     }
   }
 
   private void sendPacket(final Packet packet) {
+    if (packet == null)
+      return;
+
     packet.setTransactionID(++lastSentTransactionId);
     outgoingPackets.add(
         new DatagramPacket(
@@ -419,17 +447,23 @@ public class TetrisClient implements Runnable {
 
     try {
       return switch (packetType) {
+        // NOTE: Login phase packets
         case LOGIN -> new Packet00Login().fromTokens(tokens);
+        case DISCONNECT -> new Packet01Disconnect().fromTokens(tokens);
         case REDIRECT -> new Packet02Redirect().fromTokens(tokens);
         case START -> new Packet03Start().fromTokens(tokens);
 
+        // NOTE: Game phase packets
         case UPDATE -> new Packet100Update().fromTokens(tokens);
         case GAME_OVER -> new Packet105GameOver().fromTokens(tokens);
 
+        // NOTE: Connection Control Packets
         case HEARTBEAT -> new Packet200Heartbeat().fromTokens(tokens);
+        case ERROR -> new Packet201Error().fromTokens(tokens);
+
         default -> null;
       };
-    } catch (final Packet.PacketException e) {
+    } catch (final PacketException e) {
       System.out.println("[GameClient] Packet error: " + e.getMessage());
       return null;
     }

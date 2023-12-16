@@ -33,14 +33,15 @@ import com.apontadores.ui.Frame;
 
 public class PlayingMP extends GameState {
 
+  private final Frame frame;
+  private final PlayerData playerData;
+
   Color boardColor = new Color(20, 20, 20);
   PlayerBoard playerBoard;
 
+  private boolean usernameSet = false;
+
   private int networkTick = 0;
-
-  private final PlayerData playerData;
-
-  private final Frame frame;
 
   TimerBasedService updateProcessor;
 
@@ -75,9 +76,19 @@ public class PlayingMP extends GameState {
 
   @Override
   public void update() {
+    if (!usernameSet) {
+      playerBoard.setPlayerName(Game.getUsername());
+      playerData.setOpponentName(Game.getOpponentName());
+      usernameSet = true;
+    }
+
+    // NOTE:
+    // starting the packet processor in the update loop is ok
+    // since the method only starts the timer if it is not already running
+    updateProcessor.start();
+
     frame.update();
 
-    updateProcessor.start();
     networkTick++;
     final int NETWORK_TICK_MAX = 2;
     if (networkTick >= NETWORK_TICK_MAX) {
@@ -96,9 +107,7 @@ public class PlayingMP extends GameState {
   public void render(final Graphics g) {
     frame.render(g);
 
-    // draw opponent board
     playerData.getOpponentBoard().render(g);
-    // draw opponnent controled shape
     playerData.getOpponentShape().render(g);
 
     playerBoard.render(g);
