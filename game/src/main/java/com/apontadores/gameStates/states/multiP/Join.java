@@ -63,7 +63,6 @@ public class Join extends GameState {
         .getTextElement()
         .getText());
 
-    // TODO: when join button is clicked, submit ip to client
     ((ImageElement) frame.getElement("join"))
         .execIfClicked(x, y,
             (state) -> {
@@ -78,7 +77,6 @@ public class Join extends GameState {
             },
             GameStatesEnum.CONNECTING);
 
-    // TODO: when make localhost button transition submit ip to client
     ((ImageElement) frame.getElement("localHost"))
         .execIfClicked(x, y,
             (state) -> {

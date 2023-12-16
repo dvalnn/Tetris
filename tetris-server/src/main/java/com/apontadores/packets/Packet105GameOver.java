@@ -6,28 +6,38 @@ import java.util.zip.CRC32;
 public class Packet105GameOver extends Packet {
 
   public static final int PACKET_ID = 105;
-  public static final int TOKEN_COUNT = 7;
+  public static final int TOKEN_COUNT = 6;
 
-  private String lines, score, level, time;
+  private String lines, score, level;
   private long checksum;
 
   public Packet105GameOver() {
     super(PACKET_ID);
   }
 
-  public Packet105GameOver(int score, int lines, int level, String time) {
+  public Packet105GameOver(int score, int lines, int level) {
     super(PACKET_ID);
     this.score = String.valueOf(score);
     this.lines = String.valueOf(lines);
     this.level = String.valueOf(level);
-    this.time = time;
 
     final CRC32 crc = new CRC32();
     crc.update((this.lines).getBytes());
     crc.update((this.score).getBytes());
     crc.update((this.level).getBytes());
-    crc.update((this.time).getBytes());
     checksum = crc.getValue();
+  }
+
+  public String getLines() {
+    return lines;
+  }
+
+  public String getScore() {
+    return score;
+  }
+
+  public String getLevel() {
+    return level;
   }
 
   @Override
@@ -39,7 +49,6 @@ public class Packet105GameOver extends Packet {
         .add(lines)
         .add(score)
         .add(level)
-        .add(time)
         .toString()
         .getBytes();
   }
@@ -53,7 +62,6 @@ public class Packet105GameOver extends Packet {
         lines,
         score,
         level,
-        time
     };
   }
 
@@ -79,13 +87,11 @@ public class Packet105GameOver extends Packet {
     lines = tokens[3];
     score = tokens[4];
     level = tokens[5];
-    time = tokens[6];
 
     final CRC32 crc = new CRC32();
     crc.update((lines).getBytes());
     crc.update((score).getBytes());
     crc.update((level).getBytes());
-    crc.update((time).getBytes());
     if (checksum != crc.getValue())
       throw new PacketException("Invalid checksum");
 

@@ -15,6 +15,7 @@ import com.apontadores.main.Game;
 import com.apontadores.packets.Packet;
 import com.apontadores.packets.Packet.PacketTypesEnum;
 import com.apontadores.packets.Packet105GameOver;
+import com.apontadores.packets.PacketException;
 import com.apontadores.ui.Frame;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
@@ -24,6 +25,8 @@ public class GameOverMP extends GameState {
 
   private static final GameStatesEnum stateID = GameStatesEnum.GAME_OVER_MP;
   private final Frame frame;
+
+  private String scorePlayer2, linesPlayer2;
 
   SwitchStateAction switchState = new SwitchStateAction();
 
@@ -53,14 +56,14 @@ public class GameOverMP extends GameState {
         .setText(String.valueOf(GameTime.getTimeStr()));
 
     ((TextElement) frame.getElement("scorePlayer2"))
-        .setText(String.valueOf(Score.getScore()));
+        .setText(String.valueOf(scorePlayer2));
 
     ((TextElement) frame.getElement("linesClearedPlayer2"))
-        .setText(String.valueOf(String.valueOf(Levels.getTotalLinesCleared())));
+        .setText(String.valueOf(linesPlayer2));
 
     ((TextElement) frame.getElement("scoreTimePlayer2"))
         .setText(String.valueOf(GameTime.getTimeStr()));
-        
+
     networkTick++;
     final int NETWORK_TICK_MAX = 2;
     if (networkTick >= NETWORK_TICK_MAX) {
@@ -98,8 +101,14 @@ public class GameOverMP extends GameState {
     final PacketTypesEnum packetType = Packet.lookupPacket(tokens);
     switch (packetType) {
       case GAME_OVER -> {
-        System.out.println("GAME OVER");
-        System.out.println("Score: " + tokens[4]);
+        try {
+          Packet105GameOver packet105 = (Packet105GameOver) new Packet105GameOver().fromTokens(tokens);
+          scorePlayer2 = packet105.getScore();
+          linesPlayer2 = packet105.getLines();
+        } catch (PacketException e) {
+          System.err.println("Invalid packet: " + e.getMessage());
+          return;
+        }
       }
       default -> {
       }
@@ -110,8 +119,7 @@ public class GameOverMP extends GameState {
     final Packet105GameOver packet = new Packet105GameOver(
         Score.getScore(),
         Levels.getTotalLinesCleared(),
-        Levels.getCurrentLevel(),
-        GameTime.getTimeStr());
+        Levels.getCurrentLevel());
 
     final ArrayBlockingQueue<Packet> outQueue = Game.getClient().outgoingUpdates;
     if (outQueue.remainingCapacity() == 0)

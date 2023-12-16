@@ -80,7 +80,6 @@ public class Connecting extends GameState {
     int x = e.getX();
     int y = e.getY();
 
-    // TODO: the return button should shutdown the client
     ((ImageElement) frame.getElement("return"))
         .execIfClicked(x, y,
             (state) -> {
