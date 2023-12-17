@@ -25,18 +25,31 @@ public class ShapeMP {
       return;
 
     for (final Point2D point : points) {
+      int x = (int) (point.getX() * renderSize - renderSize / 2);
+      int y = (int) (point.getY() * renderSize - renderSize / 2);
+
+      x += (int) renderOffset.getX();
+      y += (int) renderOffset.getY();
+
       g.setColor(color);
-      g.fillRect(
-          (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),
-          (int) (point.getY() * renderSize - renderSize / 2) + (int) renderOffset.getY(),
-          renderSize,
-          renderSize);
+      g.fillRect(x, y, renderSize, renderSize);
       g.setColor(color.darker().darker());
-      g.drawRect(
-          (int) (point.getX() * renderSize - renderSize / 2) + (int) renderOffset.getX(),
-          (int) (point.getY() * renderSize - renderSize / 2) + (int) renderOffset.getY(),
-          renderSize,
-          renderSize);
+      g.drawRect(x, y, renderSize, renderSize);
+    }
+  }
+
+  public void renderAt(final Graphics g, final int x, final int y) {
+    if (points == null)
+      return;
+
+    for (final Point2D point : points) {
+      final int xCord = (int) (point.getX() * renderSize - renderSize / 2) + x;
+      final int yCord = (int) (point.getY() * renderSize - renderSize / 2) + y;
+
+      g.setColor(color);
+      g.fillRect(xCord, yCord, renderSize, renderSize);
+      g.setColor(color.darker().darker());
+      g.drawRect(xCord, yCord, renderSize, renderSize);
     }
   }
 

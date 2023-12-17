@@ -17,15 +17,16 @@ import com.apontadores.networking.NetworkControl.ClientStates;
 import com.apontadores.networking.NetworkControl.ConnectionPhases;
 import com.apontadores.packets.Packet;
 import com.apontadores.packets.Packet.PacketTypesEnum;
-import com.apontadores.packets.Packet201Error.ErrorType;
+import com.apontadores.packets.Packet201Error.ErrorTypesEnum;
 import com.apontadores.packets.Packet00Login;
 import com.apontadores.packets.Packet01Disconnect;
 import com.apontadores.packets.Packet02Redirect;
 import com.apontadores.packets.Packet03Start;
 import com.apontadores.packets.Packet100Update;
-import com.apontadores.packets.Packet105GameOver;
+import com.apontadores.packets.Packet101GameOver;
 import com.apontadores.packets.Packet200Heartbeat;
 import com.apontadores.packets.Packet201Error;
+import com.apontadores.packets.Packet202RSync;
 import com.apontadores.packets.PacketException;
 
 //NOTE: Client - Server architecture overview
@@ -73,15 +74,12 @@ import com.apontadores.packets.PacketException;
 //        - Afterwards the server acts as a relay service, forwarding the packets
 //        from one client to the other.
 //        - The server also handles player disconnect detection.
-//        - The server also implements a buffer for each client to store the most
-//        recent packets in case retransmission is needed.
 //
 public class TetrisClient implements Runnable {
 
   public static final int SERVER_DEFAULT_PORT = 42069;
   public static final int MAX_PACKET_SIZE = 1024;
   public static final long MAX_PACKET_DELTA = 2_500_000_000L;
-  private static final int FULL_SYNC_THRESHOLD = 100;
 
   private ClientStates state;
   private ConnectionPhases phase;
@@ -100,7 +98,7 @@ public class TetrisClient implements Runnable {
   private InetAddress serverAddress;
   private int serverPort;
 
-  private int transactionErrorCount = 0;
+  private int consecutiveErrorCount = 0;
   private int lastSentTransactionId = 0;
   private int lastReceivedTransactionId = 0;
 
@@ -114,7 +112,6 @@ public class TetrisClient implements Runnable {
     this.phase = ConnectionPhases.INACTIVE;
 
     // create a player data instance for local and remote players
-
     receivedPackets = new ArrayBlockingQueue<>(100);
     outgoingPackets = new ArrayBlockingQueue<>(100);
 
@@ -141,34 +138,30 @@ public class TetrisClient implements Runnable {
             final DatagramPacket received = receivedPackets.poll();
             final int receivedTransactionId = processPacket(received);
 
+            final int ERROR_THRESHOLD = 10;
             if (receivedTransactionId == -1) {
-              transactionErrorCount++;
-              if (transactionErrorCount < FULL_SYNC_THRESHOLD)
+              consecutiveErrorCount++;
+              if (consecutiveErrorCount < ERROR_THRESHOLD)
                 return;
-              else {
-                // TODO: request full sync instead of disconnecting
-                System.out.println("[TetrisClient] Too many transaction errors!");
-                connectionTimeout = true;
-                this.cancel();
-              }
+              System.out.println("[TetrisClient] Too many transaction errors!");
+              connectionTimeout = true;
+              this.cancel();
             }
-
-            transactionErrorCount = 0;
+            consecutiveErrorCount = 0;
 
             final int transactionDelta = receivedTransactionId -
                 lastReceivedTransactionId;
 
             missedPackets += transactionDelta - 1;
 
+            final int FULL_SYNC_THRESHOLD = 10;
             if (missedPackets > FULL_SYNC_THRESHOLD) {
               System.out.println("[TetrisClient] Missed packet count: " +
                   missedPackets);
-              System.out.println("[TetrisClient] Full sync threshold: " +
-                  FULL_SYNC_THRESHOLD);
               if (phase == ConnectionPhases.PLAYING) {
                 missedPackets = 0;
                 System.out.println("[TetrisClient] Requesting full sync!");
-                // TODO: send full sync request
+                sendPacket(new Packet202RSync());
               }
             }
 
@@ -348,7 +341,7 @@ public class TetrisClient implements Runnable {
         switch (packetType) {
           case REDIRECT -> serverPort = ((Packet02Redirect) receivedPacket).getPort();
           case ERROR -> {
-            ErrorType errorType = ((Packet201Error) receivedPacket).getErrorType();
+            ErrorTypesEnum errorType = ((Packet201Error) receivedPacket).getErrorType();
             switch (errorType) {
               case ROOM_FULL -> state = ClientStates.ROOM_FULL;
               case USERNAME_IN_USE -> state = ClientStates.USERNAME_IN_USE;
@@ -455,11 +448,12 @@ public class TetrisClient implements Runnable {
 
         // NOTE: Game phase packets
         case UPDATE -> new Packet100Update().fromTokens(tokens);
-        case GAME_OVER -> new Packet105GameOver().fromTokens(tokens);
+        case GAME_OVER -> new Packet101GameOver().fromTokens(tokens);
 
         // NOTE: Connection Control Packets
         case HEARTBEAT -> new Packet200Heartbeat().fromTokens(tokens);
         case ERROR -> new Packet201Error().fromTokens(tokens);
+        case RSYNC -> new Packet202RSync().fromTokens(tokens);
 
         default -> null;
       };

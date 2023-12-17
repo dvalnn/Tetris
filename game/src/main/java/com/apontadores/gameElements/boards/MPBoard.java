@@ -12,7 +12,7 @@ public class MPBoard extends Board {
     super(set);
   }
 
-  public void update(final int row, final Color[] colorLine) {
+  public void updateState(final int row, final Color[] colorLine) {
     for (int x = 0; x < colorLine.length; x++) {
       board.get(row).setColor(x, colorLine[x]);
     }

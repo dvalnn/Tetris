@@ -20,17 +20,13 @@ public class Packet implements PacketMethods {
 
     // Player Update Packets (Playing state only)
     UPDATE(100), // player update
-    BOARD(101), // current board state
-    SHAPE(102), // player shape
-    ELEMENTS(103), // next and hold UI elements
-    SCORE(104), // player score and level
-    GAME_OVER(105), // game over packet
+    GAME_OVER(101), // game over packet
+    // RESTART(102), // restart game packet
 
     // Other Connection Control Packets
     HEARTBEAT(200), // keep alive packet
     ERROR(201), // error packet
-    ACK(202), // acknowledge packet (used for handshakes)
-    NACK(203), // negative acknowledge packet (retransmission request)
+    RSYNC(202), // resync packet -- used to resync the board state
     ;
 
     private final int packetId;

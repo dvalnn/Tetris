@@ -128,7 +128,7 @@ public class Server implements Runnable {
     if (room != null && room.isFull()) {
       System.out.println("[Server] Room \"" + room.name + "\" is full");
       Packet201Error errorPacket = new Packet201Error(
-          Packet201Error.ErrorType.ROOM_FULL);
+          Packet201Error.ErrorTypesEnum.ROOM_FULL);
 
       socket.send(new DatagramPacket(
           errorPacket.asBytes(),

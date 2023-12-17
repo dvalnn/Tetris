@@ -7,7 +7,7 @@ public class Packet201Error extends Packet {
   public static final int PACKET_ID = 201;
   public static final int TOKEN_COUNT = 4;
 
-  public static enum ErrorType {
+  public static enum ErrorTypesEnum {
     INVALID(-1),
     ROOM_FULL(0),
     USERNAME_IN_USE(1),
@@ -16,7 +16,7 @@ public class Packet201Error extends Packet {
 
     private final int errorId;
 
-    ErrorType(final int errorId) {
+    ErrorTypesEnum(final int errorId) {
       this.errorId = errorId;
     }
 
@@ -32,7 +32,7 @@ public class Packet201Error extends Packet {
   private int errorId;
   private long checksum;
 
-  public Packet201Error(final ErrorType errorType) {
+  public Packet201Error(final ErrorTypesEnum errorType) {
     super(PACKET_ID);
     this.errorId = errorType.getId();
 
@@ -87,11 +87,11 @@ public class Packet201Error extends Packet {
     return this;
   }
 
-  public ErrorType getErrorType() {
-    for (final ErrorType errorType : ErrorType.values())
+  public ErrorTypesEnum getErrorType() {
+    for (final ErrorTypesEnum errorType : ErrorTypesEnum.values())
       if (errorType.getId() == errorId)
         return errorType;
 
-    return ErrorType.INVALID;
+    return ErrorTypesEnum.INVALID;
   }
 }

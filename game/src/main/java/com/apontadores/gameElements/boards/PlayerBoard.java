@@ -16,10 +16,9 @@ import com.apontadores.gameElements.gameplay.GameTime;
 import com.apontadores.gameElements.gameplay.Levels;
 import com.apontadores.gameElements.gameplay.Score;
 import com.apontadores.gameElements.shapes.JsonShape;
+import com.apontadores.gameElements.shapes.Shape;
 import com.apontadores.settings.BoardSettings;
 import com.apontadores.utils.LoadSave;
-
-// GamePanel is a JPanel -- a container for all visual elements in the game
 
 public class PlayerBoard extends Board {
 
@@ -39,6 +38,8 @@ public class PlayerBoard extends Board {
 
   protected ArrayList<JsonShape> shapeData;
 
+  private boolean holdChanged;
+
   public PlayerBoard(final BoardSettings set) {
     super(set);
 
@@ -48,16 +49,18 @@ public class PlayerBoard extends Board {
 
     shapeData = LoadSave.parseAllJsonShapes(RESOURCES_PATH + "/shapes/");
 
-    activeTetro = tetrominoFactory(shapeData);
-    nextTetro = tetrominoFactory(shapeData);
-    nextTetro2 = tetrominoFactory(shapeData);
-    nextTetro3 = tetrominoFactory(shapeData);
-    nextTetro4 = tetrominoFactory(shapeData);
+    activeTetro = tetrominoFactory();
+    nextTetro = tetrominoFactory();
+    nextTetro2 = tetrominoFactory();
+    nextTetro3 = tetrominoFactory();
+    nextTetro4 = tetrominoFactory();
   }
 
   public void holdTetromino() {
     if (blockHoldTetromino)
       return;
+
+    holdChanged = true;
 
     if (holdTetro == null) {
       holdTetro = tetrominoFactory(activeTetro.getShapeID());
@@ -65,7 +68,7 @@ public class PlayerBoard extends Board {
       nextTetro = nextTetro2;
       nextTetro2 = nextTetro3;
       nextTetro3 = nextTetro4;
-      nextTetro4 = tetrominoFactory(shapeData);
+      nextTetro4 = tetrominoFactory();
 
       blockHoldTetromino = true;
       return;
@@ -111,8 +114,8 @@ public class PlayerBoard extends Board {
       }
     }
 
-    activeTetro = tetrominoFactory(shapeData);
-    nextTetro = tetrominoFactory(shapeData);
+    activeTetro = tetrominoFactory();
+    nextTetro = tetrominoFactory();
   }
 
   public void setPlayerName(final String name) {
@@ -140,7 +143,7 @@ public class PlayerBoard extends Board {
       nextTetro = nextTetro2;
       nextTetro2 = nextTetro3;
       nextTetro3 = nextTetro4;
-      nextTetro4 = tetrominoFactory(shapeData);
+      nextTetro4 = tetrominoFactory();
     }
   }
 
@@ -201,11 +204,19 @@ public class PlayerBoard extends Board {
     return holdTetro;
   }
 
+  public Shape getHoldIfChanged() {
+    if (holdChanged) {
+      holdChanged = false;
+      return holdTetro.getShape();
+    }
+    return null;
+  }
+
   public boolean isGameOver() {
     return gameOver;
   }
 
-  private Tetromino tetrominoFactory(final ArrayList<JsonShape> shapeData) {
+  private Tetromino tetrominoFactory() {
 
     final int shapeID = rand.nextInt(shapeData.size());
     final JsonShape shape = shapeData.get(shapeID);
@@ -288,7 +299,7 @@ public class PlayerBoard extends Board {
       final int y,
       final boolean add) {
 
-    // NOTE: for each grid square, expand it fmom board coordinates
+    // NOTE: for each grid square, expand it from board coordinates
     // to screen coordinates and check if the mouse is in it
     // if it is, toggle the block.
     // TODO: Make this more efficient somehow.

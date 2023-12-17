@@ -16,6 +16,7 @@ import com.apontadores.gameElements.boards.PlayerBoard;
 import com.apontadores.gameElements.shapes.Shape;
 import com.apontadores.gameElements.shapes.ShapeMP;
 import com.apontadores.packets.Packet100Update;
+import com.apontadores.packets.Packet100Update.UpdateTypesEnum;
 import com.apontadores.settings.BoardSettings;
 
 public class PlayerData {
@@ -30,33 +31,26 @@ public class PlayerData {
 
   MPBoard opponentBoard;
   private final ShapeMP opponentShape;
-
-  // private ShapeMP holdShapeMP;
-  //
-  // public ShapeMP getHoldShapeMP() {
-  // return holdShapeMP;
-  // }
-  //
-  // private ShapeMP[] nextShapesMP;
-  //
-  // public ShapeMP[] getNextShapesMP() {
-  // return nextShapesMP;
-  // }
+  private ShapeMP opponentHoldShape;
+  private ShapeMP[] opponentNextShapes;
 
   // NOTE: Player elements have setters and are updated by the local game logic
   // the client then sends packets to the server with the local data to be
   // relayed to the opponent's cient and displayed on the screen
   PlayerBoard playerBoard;
+
   private Shape currentShape;
+  private Shape holdShape;
+  private Shape[] nextShapes;
+
   private int score;
   private int level;
   private int linesCleared;
   private boolean syncShape;
   private boolean syncScore;
-  // private boolean syncElements; // TODO: Implement this
+  private boolean syncHold;
 
   public PlayerData() {
-
     final Color boardColor = new Color(20, 20, 20);
 
     // Initializing the opponent player board and shapes
@@ -69,36 +63,38 @@ public class PlayerData {
             boardColor.brighter()));
 
     opponentShape = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
-    // holdShapeMP = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
+    opponentHoldShape = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
     //
-    // nextShapesMP = new ShapeMP[6];
-    // nextShapesMP[0] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
-    // nextShapesMP[1] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
-    // nextShapesMP[2] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
-    // nextShapesMP[3] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
-    // nextShapesMP[4] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
-    // nextShapesMP[5] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
+    opponentNextShapes = new ShapeMP[4];
+    opponentNextShapes[0] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
+    opponentNextShapes[1] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
+    opponentNextShapes[2] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
+    opponentNextShapes[3] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
   }
 
-  // TODO: Implement this
+  public ShapeMP getOpponentHoldShape() {
+    return opponentHoldShape;
+  }
 
-  // private Shape holdShape;
-  //
-  // public PlayerData setHoldShape(Shape holdShape) {
-  // this.holdShape = holdShape;
-  // syncElements = true;
-  // return this;
-  // }
+  public ShapeMP[] getOpponentNextShapes() {
+    return opponentNextShapes;
+  }
 
-  // TODO: Implement this
-  //
-  // private Shape[] nextShapes;
+  public PlayerData setHoldShape(Shape holdShape) {
+    if (holdShape == null) {
+      return this;
+    }
 
-  // public PlayerData setNextShapes(Shape[] nextShapes) {
-  // this.nextShapes = nextShapes;
-  // syncElements = true;
-  // return this;
-  // }
+    this.holdShape = holdShape;
+    syncHold = true;
+    return this;
+  }
+
+  public PlayerData setNextShapes(ShapeMP[] nextShapesMP) {
+    this.opponentNextShapes = nextShapesMP;
+    syncHold = true;
+    return this;
+  }
 
   public PlayerData setOpponentName(final String opponentName) {
     opponentBoard.setPlayerName(opponentName);
@@ -136,9 +132,10 @@ public class PlayerData {
     return this;
   }
 
-  public void setLevel(final int level) {
+  public PlayerData setLevel(final int level) {
     this.level = level;
     syncScore = true;
+    return this;
   }
 
   public PlayerData setLinesCleared(final int linesCleared) {
@@ -149,9 +146,14 @@ public class PlayerData {
 
   public void parsePacket(final Packet100Update inPacket) {
     switch (inPacket.getUpdateType()) {
-      case "tetromino" -> parseTetrominoUpdate(inPacket.getUpdateData());
-      case "board" -> parseBoardUpdate(inPacket.getUpdateData());
-      case "score" -> parseScoreUpdate(inPacket.getUpdateData());
+      case TETROMINO -> parseShapeUpdate(
+          inPacket.getUpdateData(),
+          opponentShape, ";");
+      case HOLD -> parseShapeUpdate(
+          inPacket.getUpdateData(),
+          opponentHoldShape, ";");
+      case BOARD -> parseBoardUpdate(inPacket.getUpdateData());
+      case SCORE -> parseScoreUpdate(inPacket.getUpdateData());
       default -> {
       }
     }
@@ -186,7 +188,7 @@ public class PlayerData {
       colors[i] = new Color(Integer.parseInt(tokens[i + 2]));
     }
 
-    opponentBoard.update(row, colors);
+    opponentBoard.updateState(row, colors);
   }
 
   public Packet100Update getShapeUpdate() {
@@ -196,19 +198,12 @@ public class PlayerData {
 
     syncShape = false;
 
-    final StringJoiner joiner = new StringJoiner(";");
-    final Point2D[] points = currentShape.getPoints();
-    final Color color = currentShape.getColor();
-
-    joiner.add(String.valueOf(color.getRGB()));
-    joiner.add(String.valueOf(points.length));
-
-    for (final Point2D point : points) {
-      joiner.add(String.valueOf(point.getX()));
-      joiner.add(String.valueOf(point.getY()));
-    }
-
-    return new Packet100Update("tetromino", joiner.toString());
+    return new Packet100Update(
+        UpdateTypesEnum.TETROMINO,
+        getShapeAsString(
+            currentShape.getPoints(),
+            currentShape.getColor(),
+            ";"));
   }
 
   public Packet100Update getScoreUpdate() {
@@ -223,7 +218,7 @@ public class PlayerData {
         .add(String.valueOf(linesCleared))
         .add(String.valueOf(level));
 
-    return new Packet100Update("score", joiner.toString());
+    return new Packet100Update(UpdateTypesEnum.SCORE, joiner.toString());
   }
 
   public Packet100Update getBoardUpdate(final int row, final List<Color> colors) {
@@ -234,11 +229,42 @@ public class PlayerData {
       joiner.add(String.valueOf(color.getRGB()));
     }
 
-    return new Packet100Update("board", joiner.toString());
+    return new Packet100Update(UpdateTypesEnum.BOARD, joiner.toString());
   }
 
-  private void parseTetrominoUpdate(final String data) {
-    final String[] tokens = data.split(";");
+  public Packet100Update getHoldUpdate() {
+    if (!syncHold) {
+      return null;
+    }
+    syncHold = false;
+    return new Packet100Update(
+        UpdateTypesEnum.HOLD,
+        getShapeAsString(
+            holdShape.getPoints(),
+            holdShape.getColor(),
+            ";"));
+  }
+
+  private String getShapeAsString(
+      final Point2D[] points,
+      final Color color,
+      final String separator) {
+
+    final StringJoiner joiner = new StringJoiner(separator);
+    joiner.add(String.valueOf(color.getRGB()));
+    joiner.add(String.valueOf(points.length));
+    for (final Point2D point : points) {
+      joiner.add(String.valueOf(point.getX()));
+      joiner.add(String.valueOf(point.getY()));
+    }
+    return joiner.toString();
+  }
+
+  private void parseShapeUpdate(
+      final String data,
+      final ShapeMP shapeMP,
+      final String separator) {
+    final String[] tokens = data.split(separator);
     final Color color = new Color(Integer.parseInt(tokens[0]));
     final int numPoints = Integer.parseInt(tokens[1]);
     final Point2D[] points = new Point2D[numPoints];
@@ -249,6 +275,14 @@ public class PlayerData {
       points[i] = new Point2D.Double(x, y);
     }
 
-    opponentShape.update(points, color);
+    shapeMP.update(points, color);
   }
+
+  private void parseExtrasUpdate(final String data) {
+    final String[] shapes = data.split(";");
+    for (int i = 0; i < 4; i++) {
+      parseShapeUpdate(shapes[i + 1], opponentNextShapes[i], ":");
+    }
+  }
+
 }

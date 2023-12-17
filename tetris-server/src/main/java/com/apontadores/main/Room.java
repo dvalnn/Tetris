@@ -87,7 +87,7 @@ public class Room implements Runnable {
             if (p1 != null && p1.username.equals(p.username)) {
               playerQueue.poll();
               sendPacket(
-                  new Packet201Error(Packet201Error.ErrorType.USERNAME_IN_USE),
+                  new Packet201Error(Packet201Error.ErrorTypesEnum.USERNAME_IN_USE),
                   p);
               return;
             }
@@ -291,8 +291,8 @@ public class Room implements Runnable {
           return;
         }
 
-        // if the privous condition was not hit then the packet was sent by p1,
-        // handle it
+        // if the previous condition was not hit then the packet was sent by p1,
+        // and needs to be processed
         final String tokens[] = Packet.tokenize(datagramData, dataLength);
         final PacketTypesEnum packetType = Packet.lookupPacket(tokens);
 
@@ -487,7 +487,7 @@ public class Room implements Runnable {
     if (p1 != null && packet.getUsername().equals(p1.username)) {
       System.out.println("[Room - handleLogin] Username already in use");
       Packet201Error errorPacket = new Packet201Error(
-          Packet201Error.ErrorType.USERNAME_IN_USE);
+          Packet201Error.ErrorTypesEnum.USERNAME_IN_USE);
 
       sendPacket(errorPacket, player);
       return null;

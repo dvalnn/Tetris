@@ -13,8 +13,8 @@ import com.apontadores.gameStates.GameState;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
 import com.apontadores.main.Game;
 import com.apontadores.packets.Packet;
+import com.apontadores.packets.Packet101GameOver;
 import com.apontadores.packets.Packet.PacketTypesEnum;
-import com.apontadores.packets.Packet105GameOver;
 import com.apontadores.packets.PacketException;
 import com.apontadores.ui.Frame;
 import com.apontadores.ui.ImageElement;
@@ -38,7 +38,7 @@ public class GameOverMP extends GameState {
   }
 
   @Override
-  public void render(Graphics g) {
+  public void render(final Graphics g) {
     frame.render(g);
   }
 
@@ -97,15 +97,16 @@ public class GameOverMP extends GameState {
     if (packet == null)
       return;
 
-    String tokens[] = packet.asTokens();
+    final String tokens[] = packet.asTokens();
     final PacketTypesEnum packetType = Packet.lookupPacket(tokens);
     switch (packetType) {
       case GAME_OVER -> {
         try {
-          Packet105GameOver packet105 = (Packet105GameOver) new Packet105GameOver().fromTokens(tokens);
-          scorePlayer2 = packet105.getScore();
-          linesPlayer2 = packet105.getLines();
-        } catch (PacketException e) {
+          final Packet101GameOver packet101;
+          packet101 = (Packet101GameOver) new Packet101GameOver().fromTokens(tokens);
+          scorePlayer2 = packet101.getScore();
+          linesPlayer2 = packet101.getLines();
+        } catch (final PacketException e) {
           System.err.println("Invalid packet: " + e.getMessage());
           return;
         }
@@ -116,7 +117,7 @@ public class GameOverMP extends GameState {
   }
 
   private void sendPlayerUpdates() {
-    final Packet105GameOver packet = new Packet105GameOver(
+    final Packet101GameOver packet = new Packet101GameOver(
         Score.getScore(),
         Levels.getTotalLinesCleared(),
         Levels.getCurrentLevel());

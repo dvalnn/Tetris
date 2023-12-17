@@ -8,31 +8,44 @@ public class Packet100Update extends Packet {
   public static final int PACKET_ID = 100;
   public static final int TOKEN_COUNT = 5;
 
-  // FIXME: change this to an enum
-  public static final String[] updateTypes = {
-      "tetromino",
-      "board",
-      "score",
-      "gameover",
-      "retransmit",
-  };
+  public static enum UpdateTypesEnum {
+    INVALID(-1),
+    TETROMINO(0),
+    BOARD(1),
+    SCORE(2),
+    HOLD(3),
+    NEXT(4);
+
+    private final int updateId;
+
+    UpdateTypesEnum(final int updateId) {
+      this.updateId = updateId;
+    }
+
+    public int getId() {
+      return updateId;
+    }
+  }
 
   private long checksum;
-  private String updateType;
+  private int updateID;
   private String updateData;
 
   public Packet100Update() {
     super(PACKET_ID);
   }
 
-  public Packet100Update(final String updateType, final String updateData) {
+  public Packet100Update(
+      final UpdateTypesEnum updateType,
+      final String updateData) {
     super(PACKET_ID);
 
-    this.updateType = updateType;
+    updateID = updateType.getId();
     this.updateData = updateData;
 
     final CRC32 crc = new CRC32();
-    crc.update((updateType + updateData).getBytes());
+    crc.update(updateID);
+    crc.update((updateData).getBytes());
     checksum = crc.getValue();
   }
 
@@ -42,7 +55,7 @@ public class Packet100Update extends Packet {
         .add(String.valueOf(packetID))
         .add(String.valueOf(transactionID))
         .add(String.valueOf(checksum))
-        .add(updateType)
+        .add(String.valueOf(updateID))
         .add(updateData)
         .toString()
         .getBytes();
@@ -54,7 +67,7 @@ public class Packet100Update extends Packet {
         String.valueOf(packetID),
         String.valueOf(transactionID),
         String.valueOf(checksum),
-        String.valueOf(updateType),
+        String.valueOf(updateID),
         String.valueOf(updateData),
     };
   }
@@ -69,6 +82,7 @@ public class Packet100Update extends Packet {
       packetID = Integer.parseInt(tokens[0]);
       transactionID = Integer.parseInt(tokens[1]);
       checksum = Long.parseLong(tokens[2]);
+      updateID = Integer.parseInt(tokens[3]);
     } catch (final NumberFormatException e) {
       throw new PacketException("[Packet100Update] Invalid data");
     }
@@ -79,11 +93,11 @@ public class Packet100Update extends Packet {
     if (transactionID <= 0)
       throw new PacketException("[Packet100Update] Invalid transaction ID");
 
-    updateType = tokens[3];
     updateData = tokens[4];
 
     final CRC32 crc = new CRC32();
-    crc.update((updateType + updateData).getBytes());
+    crc.update(updateID);
+    crc.update(updateData.getBytes());
     if (checksum != crc.getValue())
       throw new PacketException("Invalid checksum");
 
@@ -100,8 +114,11 @@ public class Packet100Update extends Packet {
     this.transactionID = transactionID;
   }
 
-  public String getUpdateType() {
-    return updateType;
+  public UpdateTypesEnum getUpdateType() {
+    for (final UpdateTypesEnum updateType : UpdateTypesEnum.values())
+      if (updateType.getId() == updateID)
+        return updateType;
+    return UpdateTypesEnum.INVALID;
   }
 
   public String getUpdateData() {

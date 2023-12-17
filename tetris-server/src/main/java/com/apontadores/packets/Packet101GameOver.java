@@ -3,19 +3,19 @@ package com.apontadores.packets;
 import java.util.StringJoiner;
 import java.util.zip.CRC32;
 
-public class Packet105GameOver extends Packet {
+public class Packet101GameOver extends Packet {
 
-  public static final int PACKET_ID = 105;
+  public static final int PACKET_ID = 101;
   public static final int TOKEN_COUNT = 6;
 
   private String lines, score, level;
   private long checksum;
 
-  public Packet105GameOver() {
+  public Packet101GameOver() {
     super(PACKET_ID);
   }
 
-  public Packet105GameOver(int score, int lines, int level) {
+  public Packet101GameOver(int score, int lines, int level) {
     super(PACKET_ID);
     this.score = String.valueOf(score);
     this.lines = String.valueOf(lines);

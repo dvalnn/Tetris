@@ -39,14 +39,22 @@ public class PlayingMP extends GameState {
   Color boardColor = new Color(20, 20, 20);
   PlayerBoard playerBoard;
 
-  private boolean usernameSet = false;
+  private boolean usernameSet;
+  private boolean resyncBoard;
 
+  BoardSettings opponentBoardSettings;
   private int networkTick = 0;
 
   TimerBasedService updateProcessor;
 
   public PlayingMP() {
     super(GameStatesEnum.PLAYING_MP);
+    opponentBoardSettings = new BoardSettings(
+        BOARD_SQUARE,
+        PlayerData.OPPONENT_X_OFFSET,
+        PlayerData.Y_OFFSET,
+        boardColor,
+        boardColor.brighter());
 
     // calculate the offsets so that the boards are centered
     // and the player's board is on the left and the opponent's
@@ -109,6 +117,16 @@ public class PlayingMP extends GameState {
 
     playerData.getOpponentBoard().render(g);
     playerData.getOpponentShape().render(g);
+
+    playerData.getOpponentHoldShape().renderAt(g,
+        opponentBoardSettings.holdRenderX,
+        opponentBoardSettings.holdRenderY);
+
+    for (int i = 0; i < 4; i++) {
+      playerData.getOpponentNextShapes()[i].renderAt(g,
+          opponentBoardSettings.nextRenderX,
+          opponentBoardSettings.nextRenderY + i * 4 * BOARD_SQUARE);
+    }
 
     playerBoard.render(g);
   }
@@ -180,6 +198,7 @@ public class PlayingMP extends GameState {
     final PacketTypesEnum packetType = Packet.lookupPacket(packet.asTokens());
     switch (packetType) {
       case UPDATE -> playerData.parsePacket((Packet100Update) packet);
+      case RSYNC -> resyncBoard = true;
       case GAME_OVER -> {
         GameStateHandler.switchState(GameStatesEnum.GAME_OVER_MP);
       }
@@ -198,20 +217,32 @@ public class PlayingMP extends GameState {
     if (updatePacket != null)
       sendPacket(updatePacket);
 
+    updatePacket = playerData.getHoldUpdate();
+    if (updatePacket != null)
+      sendPacket(updatePacket);
+
     final PlayerBoard board = playerData.getPlayerBoard();
-    if (board != null) {
+    if (board == null)
+      return;
 
-      final List<PlayerBoard.BoardLine> boardLines = board.getBoard();
-      for (int row = 0; row < BOARD_HEIGHT; row++) {
-        final List<Color> line = boardLines.get(row).getColorsCopyIfChanged();
-        if (line == null)
-          continue;
-
-        updatePacket = playerData.getBoardUpdate(row, line);
-        if (updatePacket != null)
-          sendPacket(updatePacket);
+    final List<PlayerBoard.BoardLine> boardLines = board.getBoard();
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+      List<Color> line;
+      if (resyncBoard && !boardLines.isEmpty()) {
+        line = boardLines.get(row).getColorsCopy();
+      } else {
+        line = boardLines.get(row).getColorsCopyIfChanged();
       }
+
+      if (line == null)
+        continue;
+
+      updatePacket = playerData.getBoardUpdate(row, line);
+      if (updatePacket != null)
+        sendPacket(updatePacket);
     }
+
+    resyncBoard = false;
   }
 
   private void sendPacket(final Packet100Update packet) {
@@ -225,11 +256,10 @@ public class PlayingMP extends GameState {
     playerData
         .setPlayerBoard(playerBoard)
         .setCurrentShape(playerBoard.getTetromino().getShape())
+        .setHoldShape(playerBoard.getHoldIfChanged())
         .setScore(Score.getScore())
         .setLinesCleared(Levels.getTotalLinesCleared())
         .setLevel(Levels.getCurrentLevel());
-    // .setNextShapes(playerBoard.getNextShapes())
-    // .setHoldShape(playerBoard.getHoldShape())
   }
 
 }
