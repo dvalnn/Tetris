@@ -36,14 +36,6 @@
       "imageScale": 0.666
     },
     {
-      "type": "image",
-      "name": "restart",
-      "imagePath": "/buttonsV2/restartGameOver.png",
-      "x": 60.1,
-      "y": 90.3,
-      "imageScale": 0.666
-    },
-    {
       "type": "text",
       "name": "scorePlayer1",
       "text": "",
