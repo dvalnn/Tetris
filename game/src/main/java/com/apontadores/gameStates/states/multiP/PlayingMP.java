@@ -133,31 +133,31 @@ public class PlayingMP extends GameState {
 
   @Override
   public void keyPressed(final KeyEvent e) {
-    if (e.getKeyCode() == Game.getKeybinds().rotatesLeft) {
+    if (e.getKeyCode() == Game.getKeybindings().rotatesLeft) {
       playerBoard.getTetromino().rotate(LEFT);
       return;
     }
-    if (e.getKeyCode() == Game.getKeybinds().rotatesRight) {
+    if (e.getKeyCode() == Game.getKeybindings().rotatesRight) {
       playerBoard.getTetromino().rotate(RIGHT);
       return;
     }
-    if (e.getKeyCode() == Game.getKeybinds().movesLeft) {
+    if (e.getKeyCode() == Game.getKeybindings().movesLeft) {
       playerBoard.getTetromino().setLeft(true);
       return;
     }
-    if (e.getKeyCode() == Game.getKeybinds().movesRight) {
+    if (e.getKeyCode() == Game.getKeybindings().movesRight) {
       playerBoard.getTetromino().setRight(true);
       return;
     }
-    if (e.getKeyCode() == Game.getKeybinds().softDrop) {
+    if (e.getKeyCode() == Game.getKeybindings().softDrop) {
       playerBoard.getTetromino().setDown(true);
       return;
     }
-    if (e.getKeyCode() == Game.getKeybinds().hardDrop) {
+    if (e.getKeyCode() == Game.getKeybindings().hardDrop) {
       playerBoard.getTetromino().setDrop(true);
       return;
     }
-    if (e.getKeyCode() == Game.getKeybinds().hold) {
+    if (e.getKeyCode() == Game.getKeybindings().hold) {
       playerBoard.holdTetromino();
       return;
     }
@@ -165,19 +165,19 @@ public class PlayingMP extends GameState {
 
   @Override
   public void keyReleased(final KeyEvent e) {
-    if (e.getKeyCode() == Game.getKeybinds().movesLeft) {
+    if (e.getKeyCode() == Game.getKeybindings().movesLeft) {
       playerBoard.getTetromino().setLeft(false);
       return;
     }
-    if (e.getKeyCode() == Game.getKeybinds().softDrop) {
+    if (e.getKeyCode() == Game.getKeybindings().softDrop) {
       playerBoard.getTetromino().setDown(false);
       return;
     }
-    if (e.getKeyCode() == Game.getKeybinds().movesRight) {
+    if (e.getKeyCode() == Game.getKeybindings().movesRight) {
       playerBoard.getTetromino().setRight(false);
       return;
     }
-    if (e.getKeyCode() == Game.getKeybinds().hardDrop) {
+    if (e.getKeyCode() == Game.getKeybindings().hardDrop) {
       playerBoard.getTetromino().setDrop(false);
     }
   }
