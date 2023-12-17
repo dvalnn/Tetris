@@ -36,6 +36,10 @@ public class Connecting extends GameState {
   public void update() {
     frame.update();
 
+    ((ImageElement) frame.getElement("connectionInfoBanner"))
+        .getTextElement()
+        .setText("Room Name: " + Game.getRoomName());
+
     switch (Game.getClient().getState()) {
       case RUNNING -> {
         if (Game.getClient().getPhase() == ConnectionPhases.PLAYING) {
