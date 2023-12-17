@@ -39,6 +39,7 @@ public class PlayerBoard extends Board {
   protected ArrayList<JsonShape> shapeData;
 
   private boolean holdChanged;
+  private boolean nextShapesChanged;
 
   public PlayerBoard(final BoardSettings set) {
     super(set);
@@ -70,6 +71,7 @@ public class PlayerBoard extends Board {
       nextTetro3 = nextTetro4;
       nextTetro4 = tetrominoFactory();
 
+      nextShapesChanged = true;
       blockHoldTetromino = true;
       return;
     }
@@ -144,6 +146,7 @@ public class PlayerBoard extends Board {
       nextTetro2 = nextTetro3;
       nextTetro3 = nextTetro4;
       nextTetro4 = tetrominoFactory();
+      nextShapesChanged = true;
     }
   }
 
@@ -159,17 +162,17 @@ public class PlayerBoard extends Board {
     nextTetro2.getShape().renderAt(
         g,
         set.nextRenderX,
-        set.nextRenderY + 100);
+        set.next2RenderY);
 
     nextTetro3.getShape().renderAt(
         g,
         set.nextRenderX,
-        set.nextRenderY + 200);
+        set.next3RenderY);
 
     nextTetro4.getShape().renderAt(
         g,
         set.nextRenderX,
-        set.nextRenderY + 300);
+        set.next4RenderY);
 
     if (holdTetro != null)
       holdTetro.getShape().renderAt(
@@ -205,11 +208,23 @@ public class PlayerBoard extends Board {
   }
 
   public Shape getHoldIfChanged() {
-    if (holdChanged) {
-      holdChanged = false;
-      return holdTetro.getShape();
-    }
-    return null;
+    if (!holdChanged)
+      return null;
+
+    holdChanged = false;
+    return holdTetro.getShape();
+  }
+
+  public Shape[] getNextIfChanged() {
+    if (!nextShapesChanged)
+      return null;
+
+    nextShapesChanged = false;
+    return new Shape[] {
+        nextTetro.getShape(),
+        nextTetro2.getShape(),
+        nextTetro3.getShape(),
+        nextTetro4.getShape() };
   }
 
   public boolean isGameOver() {

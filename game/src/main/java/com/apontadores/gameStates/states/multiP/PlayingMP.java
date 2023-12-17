@@ -125,7 +125,7 @@ public class PlayingMP extends GameState {
     for (int i = 0; i < 4; i++) {
       playerData.getOpponentNextShapes()[i].renderAt(g,
           opponentBoardSettings.nextRenderX,
-          opponentBoardSettings.nextRenderY + i * 4 * BOARD_SQUARE);
+          opponentBoardSettings.nextRenderY + i * 100);
     }
 
     playerBoard.render(g);
@@ -221,6 +221,10 @@ public class PlayingMP extends GameState {
     if (updatePacket != null)
       sendPacket(updatePacket);
 
+    updatePacket = playerData.getNextShapesUpdate();
+    if (updatePacket != null)
+      sendPacket(updatePacket);
+
     final PlayerBoard board = playerData.getPlayerBoard();
     if (board == null)
       return;
@@ -257,6 +261,7 @@ public class PlayingMP extends GameState {
         .setPlayerBoard(playerBoard)
         .setCurrentShape(playerBoard.getTetromino().getShape())
         .setHoldShape(playerBoard.getHoldIfChanged())
+        .setNextShapes(playerBoard.getNextIfChanged())
         .setScore(Score.getScore())
         .setLinesCleared(Levels.getTotalLinesCleared())
         .setLevel(Levels.getCurrentLevel());

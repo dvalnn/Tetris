@@ -49,6 +49,7 @@ public class PlayerData {
   private boolean syncShape;
   private boolean syncScore;
   private boolean syncHold;
+  private boolean syncNextShapes;
 
   public PlayerData() {
     final Color boardColor = new Color(20, 20, 20);
@@ -64,7 +65,7 @@ public class PlayerData {
 
     opponentShape = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
     opponentHoldShape = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
-    //
+
     opponentNextShapes = new ShapeMP[4];
     opponentNextShapes[0] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
     opponentNextShapes[1] = new ShapeMP(BOARD_SQUARE, OPPONENT_X_OFFSET, Y_OFFSET);
@@ -80,33 +81,17 @@ public class PlayerData {
     return opponentNextShapes;
   }
 
-  public PlayerData setHoldShape(Shape holdShape) {
-    if (holdShape == null) {
-      return this;
-    }
-
-    this.holdShape = holdShape;
-    syncHold = true;
-    return this;
-  }
-
-  public PlayerData setNextShapes(ShapeMP[] nextShapesMP) {
-    this.opponentNextShapes = nextShapesMP;
-    syncHold = true;
-    return this;
-  }
-
-  public PlayerData setOpponentName(final String opponentName) {
-    opponentBoard.setPlayerName(opponentName);
-    return this;
-  }
-
   public MPBoard getOpponentBoard() {
     return opponentBoard;
   }
 
   public ShapeMP getOpponentShape() {
     return opponentShape;
+  }
+
+  public PlayerData setOpponentName(final String opponentName) {
+    opponentBoard.setPlayerName(opponentName);
+    return this;
   }
 
   public PlayerData setPlayerBoard(final PlayerBoard playerBoard) {
@@ -123,6 +108,26 @@ public class PlayerData {
   public PlayerData setCurrentShape(final Shape currentShape) {
     this.currentShape = currentShape;
     syncShape = true;
+    return this;
+  }
+
+  public PlayerData setHoldShape(Shape holdShape) {
+    if (holdShape == null) {
+      return this;
+    }
+
+    this.holdShape = holdShape;
+    syncHold = true;
+    return this;
+  }
+
+  public PlayerData setNextShapes(Shape[] nextShapes) {
+    if (nextShapes == null) {
+      return this;
+    }
+
+    this.nextShapes = nextShapes;
+    syncNextShapes = true;
     return this;
   }
 
@@ -152,43 +157,12 @@ public class PlayerData {
       case HOLD -> parseShapeUpdate(
           inPacket.getUpdateData(),
           opponentHoldShape, ";");
+      case NEXT -> parseNextShapesUpdate(inPacket.getUpdateData());
       case BOARD -> parseBoardUpdate(inPacket.getUpdateData());
       case SCORE -> parseScoreUpdate(inPacket.getUpdateData());
       default -> {
       }
     }
-  }
-
-  public void parseScoreUpdate(final String updateData) {
-    final String[] tokens = updateData.split(";");
-
-    try {
-      final int opponentScore = Integer.parseInt(tokens[0]);
-      final int opponentLinesCleared = Integer.parseInt(tokens[1]);
-      final int opponentLevel = Integer.parseInt(tokens[2]);
-
-      opponentBoard.updateInfo(
-          opponentLinesCleared,
-          opponentLevel,
-          opponentScore);
-    } catch (final NumberFormatException e) {
-      System.err.println("Error parsing score update packet");
-      return;
-    }
-  }
-
-  public void parseBoardUpdate(final String updateData) {
-    final String[] tokens = updateData.split(";");
-
-    final int row = Integer.parseInt(tokens[0]);
-    final int numColors = Integer.parseInt(tokens[1]);
-
-    final Color[] colors = new Color[numColors];
-    for (int i = 0; i < numColors; i++) {
-      colors[i] = new Color(Integer.parseInt(tokens[i + 2]));
-    }
-
-    opponentBoard.updateState(row, colors);
   }
 
   public Packet100Update getShapeUpdate() {
@@ -245,6 +219,55 @@ public class PlayerData {
             ";"));
   }
 
+  public Packet100Update getNextShapesUpdate() {
+    if (!syncNextShapes) {
+      return null;
+    }
+
+    syncNextShapes = false;
+    StringJoiner joiner = new StringJoiner(";");
+    joiner.add(String.valueOf(nextShapes.length));
+    for (final Shape shape : nextShapes) {
+      joiner.add(getShapeAsString(
+          shape.getPoints(),
+          shape.getColor(),
+          ":"));
+    }
+    return new Packet100Update(UpdateTypesEnum.NEXT, joiner.toString());
+  }
+
+  private void parseScoreUpdate(final String updateData) {
+    final String[] tokens = updateData.split(";");
+
+    try {
+      final int opponentScore = Integer.parseInt(tokens[0]);
+      final int opponentLinesCleared = Integer.parseInt(tokens[1]);
+      final int opponentLevel = Integer.parseInt(tokens[2]);
+
+      opponentBoard.updateInfo(
+          opponentLinesCleared,
+          opponentLevel,
+          opponentScore);
+    } catch (final NumberFormatException e) {
+      System.err.println("Error parsing score update packet");
+      return;
+    }
+  }
+
+  private void parseBoardUpdate(final String updateData) {
+    final String[] tokens = updateData.split(";");
+
+    final int row = Integer.parseInt(tokens[0]);
+    final int numColors = Integer.parseInt(tokens[1]);
+
+    final Color[] colors = new Color[numColors];
+    for (int i = 0; i < numColors; i++) {
+      colors[i] = new Color(Integer.parseInt(tokens[i + 2]));
+    }
+
+    opponentBoard.updateState(row, colors);
+  }
+
   private String getShapeAsString(
       final Point2D[] points,
       final Color color,
@@ -278,9 +301,10 @@ public class PlayerData {
     shapeMP.update(points, color);
   }
 
-  private void parseExtrasUpdate(final String data) {
+  private void parseNextShapesUpdate(final String data) {
     final String[] shapes = data.split(";");
-    for (int i = 0; i < 4; i++) {
+    int numShapes = Integer.parseInt(shapes[0]);
+    for (int i = 0; i < numShapes; i++) {
       parseShapeUpdate(shapes[i + 1], opponentNextShapes[i], ":");
     }
   }

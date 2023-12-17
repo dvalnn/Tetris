@@ -22,6 +22,9 @@ public class BoardSettings {
 
   public final int nextRenderX;
   public final int nextRenderY;
+  public final int next2RenderY;
+  public final int next3RenderY;
+  public final int next4RenderY;
 
   public final int holdRenderX;
   public final int holdRenderY;
@@ -59,6 +62,9 @@ public class BoardSettings {
 
     this.nextRenderX = xOffset + 210;
     this.nextRenderY = yOffset + 40;
+    this.next2RenderY = this.nextRenderY + 100;
+    this.next3RenderY = this.nextRenderY + 200;
+    this.next4RenderY = this.nextRenderY + 300;
 
     this.holdRenderX = xOffset - 220;
     this.holdRenderY = yOffset + 40;
