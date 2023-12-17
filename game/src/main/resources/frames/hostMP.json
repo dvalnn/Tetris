@@ -43,7 +43,7 @@
         "y": 65,
         "size": 26.6,
         "anchorPoint": "parent",
-        "font": "SansSerif",
+        "font": "CascadiaCode-BoldItalic.ttf",
         "fontType": "plain",
         "color": [0, 0, 0],
         "align": "LEFT"
@@ -64,7 +64,7 @@
         "y": 65,
         "size": 26.6,
         "anchorPoint": "parent",
-        "font": "SansSerif",
+        "font": "CascadiaCode-BoldItalic.ttf",
         "fontType": "plain",
         "color": [0, 0, 0],
         "align": "LEFT",

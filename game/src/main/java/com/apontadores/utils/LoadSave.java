@@ -1,5 +1,11 @@
 package com.apontadores.utils;
 
+import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.SYS_SEPARATOR;
+
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
@@ -20,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class LoadSave {
+  public static Font customFont;
 
   public static Set<String> listFiles(final String dir) {
     return Stream.of(Objects.requireNonNull(new File(dir).listFiles()))
@@ -79,5 +86,29 @@ public class LoadSave {
       shapes.add(shape);
     }
     return shapes;
+  }
+
+  public static Font loadFont(String font) {
+    if (font == null)
+      return null;
+
+    if (customFont != null)
+      return customFont;
+
+    try {
+      final String fontPath = RESOURCES_PATH
+          + SYS_SEPARATOR
+          + "fonts"
+          + SYS_SEPARATOR
+          + font;
+
+      GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+      customFont = Font.createFont(Font.TRUETYPE_FONT, new File(fontPath));
+      ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(fontPath)));
+    } catch (IOException | FontFormatException e) {
+      e.printStackTrace();
+    }
+
+    return customFont;
   }
 }

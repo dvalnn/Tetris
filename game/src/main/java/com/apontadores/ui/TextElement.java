@@ -13,6 +13,8 @@ import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 
+import com.apontadores.utils.LoadSave;
+
 public class TextElement implements FrameElement {
 
   public enum Alignment {
@@ -150,6 +152,7 @@ public class TextElement implements FrameElement {
   private transient boolean hasFocus;
   private transient boolean textFromFile;
   private transient String[] fileLines;
+  private transient Font fontObj;
 
   private transient int animationTick = 0;
   private transient boolean animationUp = true;
@@ -230,9 +233,13 @@ public class TextElement implements FrameElement {
   public void init() {
     if (text == null)
       text = "";
-    assert font != null;
-    if (font.isEmpty())
-      font = DEFAULT_FONT;
+
+    if (font.contains(".ttf"))
+      fontObj = LoadSave.loadFont(font);
+
+    if (fontObj == null)
+      fontObj = new Font(DEFAULT_FONT, DEFAULT_TYPE, DEFAULT_SIZE);
+
     if (size == 0)
       size = DEFAULT_SIZE;
     if (align == null)
@@ -244,6 +251,8 @@ public class TextElement implements FrameElement {
       case "plain" -> fontTypeInt = Font.PLAIN;
       default -> fontTypeInt = DEFAULT_TYPE;
     }
+
+    fontObj = fontObj.deriveFont(fontTypeInt, size);
 
     if (anchorPoint.equals("game")) {
       xAbs = (int) (x / 100 * GAME_WIDTH);
@@ -272,7 +281,7 @@ public class TextElement implements FrameElement {
 
     final Graphics2D g2d = (Graphics2D) g;
 
-    g2d.setFont(new Font(font, fontTypeInt, size));
+    g2d.setFont(fontObj);
     g2d.setColor(textColor);
 
     final int textHeight = g2d.getFontMetrics().getHeight();

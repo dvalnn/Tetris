@@ -75,6 +75,9 @@ public class Game implements Runnable {
   }
 
   public static void stopServer() {
+    if (!serverActive)
+      return;
+
     server.close();
     serverActive = false;
   }
