@@ -36,6 +36,10 @@ public class Connecting extends GameState {
   public void update() {
     frame.update();
 
+    ((ImageElement) frame.getElement("connectionInfoBanner"))
+        .getTextElement()
+        .setText("Room Name: " + Game.getRoomName());
+
     if (Game.getClient().getState() != ClientStates.RUNNING)
       // TODO: Displayer the error message on the screen
       switchState.exec(GameStatesEnum.JOIN);
