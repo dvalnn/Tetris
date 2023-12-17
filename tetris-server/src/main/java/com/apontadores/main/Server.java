@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
@@ -18,7 +19,9 @@ public class Server implements Runnable {
   public static final int MAX_PACKET_SIZE = 1024;
   public static final int PUBLIC_PORT = 42069;
 
-  private final int port;
+  private final int port = PUBLIC_PORT;
+  public boolean calledFromMain = false;
+  private boolean exitWhenEmpty = false;
 
   private ArrayList<Room> rooms;
   private ArrayList<Room> roomsToRemove;
@@ -32,6 +35,11 @@ public class Server implements Runnable {
               roomsToRemove.add(r);
             }
           }
+
+          if (roomsToRemove.size() == 0) {
+            return;
+          }
+
           for (final Room r : roomsToRemove)
             rooms.remove(r);
 
@@ -47,8 +55,7 @@ public class Server implements Runnable {
 
   private DatagramSocket socket;
 
-  Server(final int port) {
-    this.port = port;
+  Server() {
     rooms = new ArrayList<>(100);
     roomsToRemove = new ArrayList<>(100);
   }
@@ -66,6 +73,7 @@ public class Server implements Runnable {
     byte recvBuf[] = new byte[MAX_PACKET_SIZE];
     try {
       socket = new DatagramSocket(port);
+      socket.setSoTimeout(1000);
     } catch (SocketException e) {
       System.out.println("[Server] Failed to open socket");
       return;
@@ -74,20 +82,29 @@ public class Server implements Runnable {
     DatagramPacket loginDatagram = new DatagramPacket(recvBuf, MAX_PACKET_SIZE);
     roomCleaner.start();
 
+    System.out.println("[Server] Running from main: " + calledFromMain);
     System.out.println("[Server] Listening on port " + port);
 
     while (true) {
       if (forceExit) {
         System.out.println("[Server] Terminating thread");
+        socket.close();
+        return;
+      }
+
+      if (exitWhenEmpty && rooms.size() == 0) {
+        System.out.println("[Server] No rooms left - exiting");
+        socket.close();
         return;
       }
 
       try {
         socket.receive(loginDatagram);
+      } catch (SocketTimeoutException et) {
+        continue; // NOTE: timeouts are expected
       } catch (Exception e) {
-        socket.close();
-        System.out.println("[Server] Connection closed");
-        exitIfNoThreads();
+        forceExit = true;
+        continue;
       }
 
       String tokens[] = Packet.tokenize(
@@ -115,7 +132,7 @@ public class Server implements Runnable {
         loginPacketHandler(loginPacket, loginDatagram);
       } catch (IOException e) {
         System.out.println("[Server] Failed to send error packet");
-        exitIfNoThreads();
+        exitWhenEmpty = true;
       }
     }
   }
@@ -147,6 +164,20 @@ public class Server implements Runnable {
       return;
     }
 
+    if (exitWhenEmpty) {
+      System.out.println("[Server] Blocking further room creation");
+      Packet201Error errorPacket = new Packet201Error(
+          Packet201Error.ErrorTypesEnum.ERROR);
+
+      socket.send(new DatagramPacket(
+          errorPacket.asBytes(),
+          errorPacket.asBytes().length,
+          loginDatagram.getAddress(),
+          loginDatagram.getPort()));
+
+      return;
+    }
+
     try {
       room = new Room(rooms.size(), loginPacket.getRoomName());
     } catch (SocketException e) {
@@ -160,14 +191,12 @@ public class Server implements Runnable {
         loginDatagram.getPort()));
 
     rooms.add(room);
-    new Thread(room).start();
-  }
 
-  private void exitIfNoThreads() {
-    if (rooms.size() == 0) {
-      System.out.println("[Server] No rooms left - exiting");
-      System.exit(0);
+    if (!calledFromMain) {
+      exitWhenEmpty = true;
     }
+
+    new Thread(room).start();
   }
 
   private Room findRoom(final String roomName) {

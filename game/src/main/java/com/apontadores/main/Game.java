@@ -14,16 +14,20 @@ import com.apontadores.utils.LoadSave;
 
 public class Game implements Runnable {
 
-  private static Keybindings keybinds;
+  private static Keybindings keybindings;
 
   private static TetrisClient client;
+  private static Server server;
+
   private static boolean exit = false;
   private static String username = null;
   private static String roomName;
   private static String opponentName;
 
+  private static boolean serverActive;
+
   static {
-    keybinds = LoadSave.loadJson(KEYBINDINGS_PATH + "keybinds.json",
+    keybindings = LoadSave.loadJson(KEYBINDINGS_PATH + "keybinds.json",
         Keybindings.class);
   }
 
@@ -60,16 +64,35 @@ public class Game implements Runnable {
     client.start();
   }
 
+  public static void initServer() {
+    if (serverActive)
+      return;
+
+    server = new Server();
+    Thread serverThread = new Thread(server);
+    serverThread.start();
+    serverActive = true;
+  }
+
+  public static void stopServer() {
+    server.close();
+    serverActive = false;
+  }
+
   public static TetrisClient getClient() {
     return client;
   }
 
-  public static Keybindings getKeybinds() {
-    return keybinds;
+  public static Server getServer() {
+    return server;
+  }
+
+  public static Keybindings getKeybindings() {
+    return keybindings;
   }
 
   public static void resetKeybind() {
-    Game.keybinds = new Keybindings();
+    Game.keybindings = new Keybindings();
   }
 
   private final GameWindow gameWindow;

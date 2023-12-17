@@ -17,6 +17,7 @@
       "imagePath": "/buttonsV2/bannerWaitingForPlayer.png",
       "x": 27.9,
       "y": 5.6,
+      "enabled": false,
       "imageScale": 0.666
     },
     {
@@ -110,9 +111,9 @@
       "type": "image",
       "name": "start",
       "imagePath": "/buttonsV2/start.png",
+      "enabled": false,
       "x": 77.1,
       "y": 87,
-      "enabled": false,
       "imageScale": 0.666
     }
   ]

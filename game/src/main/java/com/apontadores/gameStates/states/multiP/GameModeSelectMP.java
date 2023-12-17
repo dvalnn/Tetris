@@ -39,7 +39,18 @@ public class GameModeSelectMP extends GameState {
     final int y = e.getY();
 
     ((ImageElement) frame.getElement("host"))
-        .execIfClicked(x, y, switchState, GameStatesEnum.HOST);
+        .execIfClicked(x, y,
+            (state) -> {
+              try {
+                Game.initClient();
+                switchState.exec(state);
+              } catch (final Exception e1) {
+                e1.printStackTrace();
+                switchState.exec(GameStatesEnum.MAIN_MENU);
+              }
+              return null;
+            },
+            GameStatesEnum.HOST);
 
     ((ImageElement) frame.getElement("join"))
         .execIfClicked(x, y,
@@ -51,7 +62,6 @@ public class GameModeSelectMP extends GameState {
                 e1.printStackTrace();
                 switchState.exec(GameStatesEnum.MAIN_MENU);
               }
-
               return null;
             },
             GameStatesEnum.JOIN);

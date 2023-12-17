@@ -6,9 +6,15 @@ import static com.apontadores.utils.Constants.FRAMES_PATH;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import com.apontadores.gameStates.GameState;
+import com.apontadores.gameStates.GameStateHandler;
 import com.apontadores.gameStates.GameStateHandler.GameStatesEnum;
+import com.apontadores.main.Game;
+import com.apontadores.networking.TetrisClient;
+import com.apontadores.networking.NetworkControl.ClientStates;
 import com.apontadores.ui.Frame;
 import com.apontadores.ui.ImageElement;
 import com.apontadores.ui.SwitchStateAction;
@@ -18,6 +24,7 @@ public class Host extends GameState {
   private boolean displayIP = false;
   private boolean updateText = true;
   SwitchStateAction switchState = new SwitchStateAction();
+  private String roomName = "";
 
   String ip = "XXX.XXX.XXX.XXX";
 
@@ -29,14 +36,43 @@ public class Host extends GameState {
   @Override
   public void render(final Graphics g) {
     frame.render(g);
-
-    // TODO: switch banner and toggle start button
-    // when a player connects to the server
   }
 
   @Override
   public void update() {
     frame.update();
+
+    TetrisClient client = Game.getClient();
+    if (client.getState() == ClientStates.INACTIVE) {
+      Game.initClient();
+    }
+
+    roomName = ((ImageElement) frame.getElement("roomName"))
+        .getTextElement().getText();
+
+    switch (client.getPhase()) {
+      case DISCONNECTED -> {
+        if (roomName.length() > 0)
+          ((ImageElement) frame.getElement("start"))
+              .enable();
+        else
+          ((ImageElement) frame.getElement("start"))
+              .disable();
+
+      }
+      case WAITING_FOR_OPPONENT -> {
+        ((ImageElement) frame.getElement("bannerWait"))
+            .enable();
+        ((ImageElement) frame.getElement("start"))
+            .disable();
+      }
+      case PLAYING -> {
+        GameStateHandler.reloadState(GameStatesEnum.PLAYING_MP);
+        switchState.exec(GameStatesEnum.PLAYING_MP);
+      }
+      default -> {
+      }
+    }
 
     if (!updateText)
       return;
@@ -44,8 +80,11 @@ public class Host extends GameState {
     if (!displayIP)
       ip = "XXX.XXX.XXX.XXX";
     else
-      // TODO:
-      ip = "127.0.0.1 -- placeholder";
+      try {
+        ip = InetAddress.getLocalHost().getHostAddress();
+      } catch (UnknownHostException e) {
+        ip = "Error getting local host IP";
+      }
 
     ((ImageElement) frame.getElement("IP"))
         .getTextElement()
@@ -62,11 +101,23 @@ public class Host extends GameState {
 
     ((ImageElement) frame.getElement("start"))
         .execIfClicked(e.getX(), e.getY(),
-            switchState, GameStatesEnum.PLAYING_MP);
+            (Void) -> {
+              Game.initServer();
+              Game.getClient().connectToServer(
+                  "127.0.0.1",
+                  Game.getUsername(),
+                  roomName);
+              return null;
+            }, null);
 
     ((ImageElement) frame.getElement("return"))
         .execIfClicked(e.getX(), e.getY(),
-            switchState, GameStatesEnum.MODE_SELECT_MP);
+            (state) -> {
+              Game.stopServer();
+              Game.getClient().finishConnection();
+              switchState.exec(state);
+              return null;
+            }, GameStatesEnum.MODE_SELECT_MP);
 
     final ImageElement showIP = (ImageElement) frame.getElement("showIP");
     final ImageElement hideIP = (ImageElement) frame.getElement("hideIP");

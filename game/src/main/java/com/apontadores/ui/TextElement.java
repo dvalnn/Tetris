@@ -176,6 +176,9 @@ public class TextElement implements FrameElement {
   }
 
   public String getText() {
+    if (clearDefaultText)
+      return "";
+
     if (text.endsWith("|"))
       return text.substring(0, text.length() - 1);
 

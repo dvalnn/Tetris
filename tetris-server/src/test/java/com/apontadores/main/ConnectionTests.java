@@ -21,7 +21,7 @@ import com.apontadores.packets.PacketException;
 public class ConnectionTests {
   private final static int PORT = 42069;
   private final static String ADDRESS = "127.0.0.1";
-  private final static Server server = new Server(ConnectionTests.PORT);
+  private final static Server server = new Server();
 
   static {
     new Thread(server).start();
