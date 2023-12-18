@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background2.png",
+      "imagePath": "/images/background2.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -14,7 +14,7 @@
     {
       "type": "image",
       "name": "banner",
-      "imagePath": "/buttonsV2/bannerChooseName.png",
+      "imagePath": "/images/bannerChooseName.png",
       "x": 27.1,
       "y": 5.5,
       "imageScale": 0.666
@@ -22,11 +22,10 @@
     {
       "type": "image",
       "name": "inputField",
-      "imagePath": "/buttonsV2/insertUsername.png",
+      "imagePath": "/images/insertUsername.png",
       "x": 14.8,
       "y": 45.37,
       "imageScale": 0.666,
-      "renderPriority": 1,
       "textElement": {
         "type": "text",
         "name": "inputText",
@@ -47,7 +46,7 @@
     {
       "type": "image",
       "name": "startButton",
-      "imagePath": "/buttonsV2/start.png",
+      "imagePath": "/images/start.png",
       "x": 77.1,
       "y": 87.04,
       "imageScale": 0.666

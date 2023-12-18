@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background3.png",
+      "imagePath": "/images/background3.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -14,11 +14,10 @@
     {
       "type": "image",
       "name": "gameUI",
-      "imagePath": "/buttonsV2/singlePlayerGame.png",
+      "imagePath": "/images/singlePlayerGame.png",
       "x": 26.25,
       "y": 15.185,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     }
   ]
 }

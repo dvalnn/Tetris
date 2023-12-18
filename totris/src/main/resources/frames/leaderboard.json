@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background2.png",
+      "imagePath": "/images/background2.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -14,29 +14,26 @@
     {
       "type": "image",
       "name": "leaderboard",
-      "imagePath": "/buttonsV2/bannerLeaderboard.png",
+      "imagePath": "/images/bannerLeaderboard.png",
       "x": 27.9,
       "y": 5.6,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "topScores",
-      "imagePath": "/buttonsV2/topScores.png",
+      "imagePath": "/images/topScores.png",
       "x": 25.6,
       "y": 22.1,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "returnToMainMenu",
-      "imagePath": "/buttonsV2/return.png",
+      "imagePath": "/images/return.png",
       "x": 2.6,
       "y": 87.0,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "text",
@@ -190,4 +187,3 @@
     }
   ]
 }
-

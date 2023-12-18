@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background3.png",
+      "imagePath": "/images/background3.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -14,7 +14,7 @@
     {
       "type": "image",
       "name": "background",
-      "imagePath": "/buttonsV2/multiGameOverBG.png",
+      "imagePath": "/images/multiGameOverBG.png",
       "x": 14.8,
       "y": 0,
       "imageScale": 0.666
@@ -22,7 +22,7 @@
     {
       "type": "image",
       "name": "banner",
-      "imagePath": "/buttonsV2/bannerGameOverMulti.png",
+      "imagePath": "/images/bannerGameOverMulti.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -30,7 +30,7 @@
     {
       "type": "image",
       "name": "exit",
-      "imagePath": "/buttonsV2/exitRoom.png",
+      "imagePath": "/images/exitRoom.png",
       "x": 16.6,
       "y": 90.3,
       "imageScale": 0.666

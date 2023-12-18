@@ -5,7 +5,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background3.png",
+      "imagePath": "/images/background3.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -13,38 +13,34 @@
     {
       "type": "image",
       "name": "stats",
-      "imagePath": "/buttonsV2/stats.png",
+      "imagePath": "/images/stats.png",
       "x": 7.14,
       "y": 0,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "bannerSingleGameOver",
-      "imagePath": "/buttonsV2/bannerSingleGameOver.png",
+      "imagePath": "/images/bannerSingleGameOver.png",
       "x": 0,
       "y": 0,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "restart",
-      "imagePath": "/buttonsV2/restartGameOver.png",
+      "imagePath": "/images/restartGameOver.png",
       "x": 10.47,
       "y": 80.09,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "returnToMainMenu",
-      "imagePath": "/buttonsV2/exit.png",
+      "imagePath": "/images/exit.png",
       "x": 10.47,
       "y": 91.2,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "text",
@@ -78,7 +74,7 @@
       "type": "text",
       "name": "timePlayed",
       "text": "",
-      "x": 22.40,
+      "x": 22.4,
       "y": 54.63,
       "size": 26.6,
       "anchorPoint": "game",

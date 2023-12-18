@@ -1,157 +1,144 @@
 {
-    "name": "SETTINGS",
-    "imagePath": "",
-    "color": [0, 0, 0],
-    "assets": [
-      {
-        "type": "image",
-        "name": "staticBackground",
-        "imagePath": "/buttonsV2/background2.png",
-        "x": 0,
-        "y": 0,
-        "imageScale": 0.666
-      },
-      {
-        "type": "image",
-        "name": "settings",
-        "imagePath": "/buttonsV2/bannerSettings.png",
-        "x": 27.9,
-        "y": 5.6,
-        "imageScale": 0.666,
-        "renderPriority": 1
-      },
-      {
-        "type": "image",
-        "name": "musicVolume",
-        "imagePath": "/buttonsV2/musicVol.png",
-        "x": 2.6,
-        "y": 25.6,
-        "imageScale": 0.666,
-        "renderPriority": 1,
-        "textElement": {
-          "type": "text",
-          "name": "inputTextVolume",
-          "text": "1",
-          "x": 70,
-          "y": 64,
-          "size": 26.6,
-          "anchorPoint": "parent",
-          "font": "CascadiaCode-BoldItalic.ttf",
-          "fontType": "plain",
-          "color": [0, 0, 0],
-          "align": "LEFT",
-          "editable": true,
-          "clearDefaultText": true,
-          "maxLength": 3
-        }
+  "name": "SETTINGS",
+  "imagePath": "",
+  "color": [0, 0, 0],
+  "assets": [
+    {
+      "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/images/background2.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "settings",
+      "imagePath": "/images/bannerSettings.png",
+      "x": 27.9,
+      "y": 5.6,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "musicVolume",
+      "imagePath": "/images/musicVol.png",
+      "x": 2.6,
+      "y": 25.6,
+      "imageScale": 0.666,
+      "textElement": {
+        "type": "text",
+        "name": "inputTextVolume",
+        "text": "1",
+        "x": 70,
+        "y": 64,
+        "size": 26.6,
+        "anchorPoint": "parent",
+        "font": "CascadiaCode-BoldItalic.ttf",
+        "fontType": "plain",
+        "color": [0, 0, 0],
+        "align": "LEFT",
+        "editable": true,
+        "clearDefaultText": true,
+        "maxLength": 3
       }
-      ,
-      {
-        "type": "image",
-        "name": "effectsVolume",
-        "imagePath": "/buttonsV2/effectsVol.png",
-        "x": 2.6,
-        "y": 39.8,
-        "imageScale": 0.666,
-        "renderPriority": 1,
-        "textElement": {
-          "type": "text",
-          "name": "inputTextVolume",
-          "text": "1",
-          "x": 70,
-          "y": 64,
-          "size": 26.6,
-          "anchorPoint": "parent",
-          "font": "CascadiaCode-BoldItalic.ttf",
-          "fontType": "plain",
-          "color": [0, 0, 0],
-          "align": "LEFT",
-          "editable": true,
-          "clearDefaultText": true,
-          "maxLength": 3
-        }
-      },
-      {
-        "type": "image",
-        "name": "musicVolumePlusButton",
-        "imagePath": "/buttonsV2/plus.png",
-        "x": 32.9,
-        "y": 24.1,
-        "imageScale": 0.666,
-        "renderPriority": 1
-      },
-      {
-        "type": "image",
-        "name": "musicVolumeMinusButton",
-        "imagePath": "/buttonsV2/minus.png",
-        "x": 42.1,
-        "y": 24.1,
-        "imageScale": 0.666,
-        "renderPriority": 1
-      },
-      {
-        "type": "image",
-        "name": "effectsVolumePlusButton",
-        "imagePath": "/buttonsV2/plus.png",
-        "x": 32.9,
-        "y": 38.4,
-        "imageScale": 0.666,
-        "renderPriority": 1
-      },
-      {
-        "type": "image",
-        "name": "effectsVolumeMinusButton",
-        "imagePath": "/buttonsV2/minus.png",
-        "x": 42.1,
-        "y": 38.4,
-        "imageScale": 0.666,
-        "renderPriority": 1
-      },
-      {
-        "type": "image",
-        "name": "musicMute",
-        "imagePath": "/buttonsV2/muteMusic.png",
-        "x": 52.0,
-        "y": 26.7,
-        "imageScale": 0.666,
-        "renderPriority": 1
-      },
-      {
-        "type": "image",
-        "name": "effectsMute",
-        "imagePath": "/buttonsV2/muteEffects.png",
-        "x": 52.0,
-        "y": 41.2,
-        "imageScale": 0.666,
-        "renderPriority": 1
-      },
-      {
-        "type": "image",
-        "name": "changeKeybinds",
-        "imagePath": "/buttonsV2/changeKeybinds.png",
-        "x": 2.6,
-        "y": 54,
-        "imageScale": 0.666,
-        "renderPriority": 1
-      },
-      {
-        "type": "image",
-        "name": "changeUsername",
-        "imagePath": "/buttonsV2/changeUsername.png",
-        "x": 2.6,
-        "y": 65.6,
-        "imageScale": 0.666,
-        "renderPriority": 1
-      },
-      {
-        "type": "image",
-        "name": "returnToMainMenu",
-        "imagePath": "/buttonsV2/return.png",
-        "x": 2.6,
-        "y": 87.0,
-        "imageScale": 0.666,
-        "renderPriority": 1
+    },
+    {
+      "type": "image",
+      "name": "effectsVolume",
+      "imagePath": "/images/effectsVol.png",
+      "x": 2.6,
+      "y": 39.8,
+      "imageScale": 0.666,
+      "textElement": {
+        "type": "text",
+        "name": "inputTextVolume",
+        "text": "1",
+        "x": 70,
+        "y": 64,
+        "size": 26.6,
+        "anchorPoint": "parent",
+        "font": "CascadiaCode-BoldItalic.ttf",
+        "fontType": "plain",
+        "color": [0, 0, 0],
+        "align": "LEFT",
+        "editable": true,
+        "clearDefaultText": true,
+        "maxLength": 3
       }
-    ]
-  }
-  
+    },
+    {
+      "type": "image",
+      "name": "musicVolumePlusButton",
+      "imagePath": "/images/plus.png",
+      "x": 32.9,
+      "y": 24.1,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "musicVolumeMinusButton",
+      "imagePath": "/images/minus.png",
+      "x": 42.1,
+      "y": 24.1,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "effectsVolumePlusButton",
+      "imagePath": "/images/plus.png",
+      "x": 32.9,
+      "y": 38.4,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "effectsVolumeMinusButton",
+      "imagePath": "/images/minus.png",
+      "x": 42.1,
+      "y": 38.4,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "musicMute",
+      "imagePath": "/images/muteMusic.png",
+      "x": 52.0,
+      "y": 26.7,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "effectsMute",
+      "imagePath": "/images/muteEffects.png",
+      "x": 52.0,
+      "y": 41.2,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "changeKeybinds",
+      "imagePath": "/images/changeKeybinds.png",
+      "x": 2.6,
+      "y": 54,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "changeUsername",
+      "imagePath": "/images/changeUsername.png",
+      "x": 2.6,
+      "y": 65.6,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "returnToMainMenu",
+      "imagePath": "/images/return.png",
+      "x": 2.6,
+      "y": 87.0,
+      "imageScale": 0.666
+    }
+  ]
+}
+

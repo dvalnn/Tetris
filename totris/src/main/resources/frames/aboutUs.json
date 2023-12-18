@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background2.png",
+      "imagePath": "/images/background2.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -14,38 +14,34 @@
     {
       "type": "image",
       "name": "bannerAboutUs",
-      "imagePath": "/buttonsV2/bannerAboutUs.png",
+      "imagePath": "/images/bannerAboutUs.png",
       "x": 27.9,
       "y": 5.6,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "returnToMainMenu",
-      "imagePath": "/buttonsV2/return.png",
+      "imagePath": "/images/return.png",
       "x": 2.6,
       "y": 87.0,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "feupLogo",
-      "imagePath": "/buttonsV2/feupLogotipo.png",
+      "imagePath": "/images/feupLogotipo.png",
       "x": 2.6,
       "y": 40.74,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "aboutUsBG",
-      "imagePath": "/buttonsV2/aboutUsBG.png",
+      "imagePath": "/images/aboutUsBG.png",
       "x": 32.0,
       "y": 21.0,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     }
   ]
 }

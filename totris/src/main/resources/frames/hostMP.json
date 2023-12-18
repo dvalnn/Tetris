@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background2.png",
+      "imagePath": "/images/background2.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -14,7 +14,7 @@
     {
       "type": "image",
       "name": "bannerWait",
-      "imagePath": "/buttonsV2/bannerWaitingForPlayer.png",
+      "imagePath": "/images/bannerWaitingForPlayer.png",
       "x": 27.9,
       "y": 5.6,
       "enabled": false,
@@ -23,7 +23,7 @@
     {
       "type": "image",
       "name": "bannerConnect",
-      "imagePath": "/buttonsV2/bannerConnectionEstablished.png",
+      "imagePath": "/images/bannerConnectionEstablished.png",
       "x": 27.9,
       "y": 5.6,
       "imageScale": 0.666,
@@ -32,7 +32,7 @@
     {
       "type": "image",
       "name": "IP",
-      "imagePath": "/buttonsV2/IPAddress.png",
+      "imagePath": "/images/IPAddress.png",
       "x": 19.7,
       "y": 36.204,
       "imageScale": 0.666,
@@ -52,7 +52,7 @@
     {
       "type": "image",
       "name": "roomName",
-      "imagePath": "/buttonsV2/roomName.png",
+      "imagePath": "/images/roomName.png",
       "x": 19.7,
       "y": 48.148,
       "imageScale": 0.666,
@@ -76,7 +76,7 @@
     {
       "type": "image",
       "name": "showIP",
-      "imagePath": "/buttonsV2/showIP.png",
+      "imagePath": "/images/showIP.png",
       "x": 19.7,
       "y": 59.9,
       "imageScale": 0.666
@@ -84,7 +84,7 @@
     {
       "type": "image",
       "name": "hideIP",
-      "imagePath": "/buttonsV2/hideIP.png",
+      "imagePath": "/images/hideIP.png",
       "x": 19.7,
       "y": 59.9,
       "enabled": false,
@@ -93,7 +93,7 @@
     {
       "type": "image",
       "name": "playerConnected",
-      "imagePath": "/buttonsV2/playerConnected.png",
+      "imagePath": "/images/playerConnected.png",
       "x": 39.9,
       "y": 59.9,
       "enabled": false,
@@ -102,7 +102,7 @@
     {
       "type": "image",
       "name": "return",
-      "imagePath": "/buttonsV2/return.png",
+      "imagePath": "/images/return.png",
       "x": 2.6,
       "y": 87,
       "imageScale": 0.666
@@ -110,7 +110,7 @@
     {
       "type": "image",
       "name": "start",
-      "imagePath": "/buttonsV2/start.png",
+      "imagePath": "/images/start.png",
       "enabled": false,
       "x": 77.1,
       "y": 87,

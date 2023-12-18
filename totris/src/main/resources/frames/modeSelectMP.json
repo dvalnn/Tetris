@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background2.png",
+      "imagePath": "/images/background2.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -14,7 +14,7 @@
     {
       "type": "image",
       "name": "banner",
-      "imagePath": "/buttonsV2/bannerMulti.png",
+      "imagePath": "/images/bannerMulti.png",
       "x": 27.9,
       "y": 5.6,
       "imageScale": 0.666
@@ -22,7 +22,7 @@
     {
       "type": "image",
       "name": "join",
-      "imagePath": "/buttonsV2/joinGame.png",
+      "imagePath": "/images/joinGame.png",
       "x": 52.5,
       "y": 44.9,
       "imageScale": 0.666
@@ -30,7 +30,7 @@
     {
       "type": "image",
       "name": "host",
-      "imagePath": "/buttonsV2/hostGame.png",
+      "imagePath": "/images/hostGame.png",
       "x": 19.7,
       "y": 44.9,
       "imageScale": 0.666
@@ -38,7 +38,7 @@
     {
       "type": "image",
       "name": "return",
-      "imagePath": "/buttonsV2/return.png",
+      "imagePath": "/images/return.png",
       "x": 2.6,
       "y": 87,
       "imageScale": 0.666

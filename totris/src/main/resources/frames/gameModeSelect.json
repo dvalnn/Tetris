@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background2.png",
+      "imagePath": "/images/background2.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -14,39 +14,34 @@
     {
       "type": "image",
       "name": "bannerSelectGM",
-      "imagePath": "/buttonsV2/bannerSelectGM.png",
+      "imagePath": "/images/bannerSelectGM.png",
       "x": 27.92,
       "y": 5.6,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "singleplayer",
-      "imagePath": "/buttonsV2/singlePlayer.png",
+      "imagePath": "/images/singlePlayer.png",
       "x": 19.69,
       "y": 44.91,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "multiplayer",
-      "imagePath": "/buttonsV2/multiplayer.png",
+      "imagePath": "/images/multiplayer.png",
       "x": 52.5,
       "y": 44.91,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "returnToMainMenu",
-      "imagePath": "/buttonsV2/return.png",
+      "imagePath": "/images/return.png",
       "x": 2.6,
       "y": 87.0,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     }
-  
   ]
 }

@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background2.png",
+      "imagePath": "/images/background2.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -14,7 +14,7 @@
     {
       "type": "image",
       "name": "banner",
-      "imagePath": "/buttonsV2/bannerMultiJoin.png",
+      "imagePath": "/images/bannerMultiJoin.png",
       "x": 27.9,
       "y": 5.6,
       "imageScale": 0.666
@@ -22,7 +22,7 @@
     {
       "type": "image",
       "name": "IP",
-      "imagePath": "/buttonsV2/IPAddress.png",
+      "imagePath": "/images/IPAddress.png",
       "x": 19.7,
       "y": 36.204,
       "imageScale": 0.666,
@@ -46,7 +46,7 @@
     {
       "type": "image",
       "name": "roomName",
-      "imagePath": "/buttonsV2/roomName.png",
+      "imagePath": "/images/roomName.png",
       "x": 19.7,
       "y": 48.148,
       "imageScale": 0.666,
@@ -70,7 +70,7 @@
     {
       "type": "image",
       "name": "localHost",
-      "imagePath": "/buttonsV2/localHost.png",
+      "imagePath": "/images/localHost.png",
       "x": 19.7,
       "y": 59.9,
       "imageScale": 0.666
@@ -78,7 +78,7 @@
     {
       "type": "image",
       "name": "return",
-      "imagePath": "/buttonsV2/return.png",
+      "imagePath": "/images/return.png",
       "x": 2.6,
       "y": 87,
       "imageScale": 0.666
@@ -86,7 +86,7 @@
     {
       "type": "image",
       "name": "join",
-      "imagePath": "/buttonsV2/join.png",
+      "imagePath": "/images/join.png",
       "x": 77.1,
       "y": 87,
       "imageScale": 0.666

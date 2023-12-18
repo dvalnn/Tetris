@@ -5,7 +5,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background3.png",
+      "imagePath": "/images/background3.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -13,47 +13,42 @@
     {
       "type": "image",
       "name": "bannerGamePaused2",
-      "imagePath": "/buttonsV2/bannerGamePaused2.png",
-      "x": 16.042, 
+      "imagePath": "/images/bannerGamePaused2.png",
+      "x": 16.042,
       "y": 0,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "bannerGamePaused",
-      "imagePath": "/buttonsV2/bannerGamePaused.png",
+      "imagePath": "/images/bannerGamePaused.png",
       "x": 0,
       "y": 0,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "resume",
-      "imagePath": "/buttonsV2/resume.png",
+      "imagePath": "/images/resume.png",
       "x": 20.052,
       "y": 17.222,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "restart",
-      "imagePath": "/buttonsV2/restart.png",
+      "imagePath": "/images/restart.png",
       "x": 30.395,
       "y": 45.093,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     },
     {
       "type": "image",
       "name": "returnToMainMenu",
-      "imagePath": "/buttonsV2/quit.png",
+      "imagePath": "/images/quit.png",
       "x": 17.531,
       "y": 70.556,
-      "imageScale": 0.666,
-      "renderPriority": 1
+      "imageScale": 0.666
     }
   ]
 }

@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "staticBackground",
-      "imagePath": "/buttonsV2/background2.png",
+      "imagePath": "/images/background2.png",
       "x": 0,
       "y": 0,
       "imageScale": 0.666
@@ -15,7 +15,7 @@
     {
       "type": "image",
       "name": "title",
-      "imagePath": "/buttonsV2/titleTotris.png",
+      "imagePath": "/images/titleTotris.png",
       "x": 16.9,
       "y": 22.6,
       "imageScale": 0.666
@@ -23,7 +23,7 @@
     {
       "type": "image",
       "name": "enterButton",
-      "imagePath": "/buttonsV2/enterButton.png",
+      "imagePath": "/images/enterButton.png",
       "x": 14.8,
       "y": 72.8,
       "imageScale": 0.666
