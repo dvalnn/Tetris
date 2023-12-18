@@ -254,7 +254,7 @@ public class PlayerBoard extends Board {
   }
 
   private Tetromino tetrominoFactory() {
-    System.out.println("[Board] Generating new tetromino");
+    //System.out.println("[Board] Generating new tetromino");
 
     final int shapeID = generateShapeID();
     final JsonShape shape = shapeData.get(shapeID);
@@ -296,11 +296,11 @@ public class PlayerBoard extends Board {
       } else {
         shapeStocks[i] += stockIncrease;
       }
-      System.out.println("ShapeID: " + i + " stock: " + shapeStocks[i]);
+      //System.out.println("ShapeID: " + i + " stock: " + shapeStocks[i]);
     }
 
-    System.out.println("Selected shapeID: " + shapeID);
-    System.out.println("----");
+    //System.out.println("Selected shapeID: " + shapeID);
+    //System.out.println("----");
 
     return shapeID;
   }

@@ -42,9 +42,11 @@ public class Constants {
   static {
     RESOURCES_PATH = USER_DIR;
 
-    if (!RESOURCES_PATH.contains("game")) {
-      RESOURCES_PATH += SYS_SEPARATOR + "game";
-    }
+    //if (!RESOURCES_PATH.contains("game")) {
+    //  RESOURCES_PATH += SYS_SEPARATOR + "game";
+    //}
+
+    //totris/src/main/resources/config/keybinds.json
 
     RESOURCES_PATH += SYS_SEPARATOR +
         "src" +
@@ -54,7 +56,7 @@ public class Constants {
         "resources" +
         SYS_SEPARATOR;
 
-    KEYBINDINGS_PATH = RESOURCES_PATH + "config" + SYS_SEPARATOR;
+    KEYBINDINGS_PATH = RESOURCES_PATH + "config"+ SYS_SEPARATOR;
     FRAMES_PATH = RESOURCES_PATH + "frames" + SYS_SEPARATOR;
 
     System.out.println("USER_DIR: " + USER_DIR);
