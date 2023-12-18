@@ -93,25 +93,27 @@ public class GameOverMP extends GameState {
   }
 
   private void getUpdates() {
-    final Packet packet = Game.getClient().receivedUpdates.poll();
-    if (packet == null)
-      return;
+    while (!Game.getClient().receivedUpdates.isEmpty()) {
+      final Packet packet = Game.getClient().receivedUpdates.poll();
+      if (packet == null)
+        return;
 
-    final String tokens[] = packet.asTokens();
-    final PacketTypesEnum packetType = Packet.lookupPacket(tokens);
-    switch (packetType) {
-      case GAME_OVER -> {
-        try {
-          final Packet101GameOver packet101;
-          packet101 = (Packet101GameOver) new Packet101GameOver().fromTokens(tokens);
-          scorePlayer2 = packet101.getScore();
-          linesPlayer2 = packet101.getLines();
-        } catch (final PacketException e) {
-          System.err.println("Invalid packet: " + e.getMessage());
-          return;
+      final String tokens[] = packet.asTokens();
+      final PacketTypesEnum packetType = Packet.lookupPacket(tokens);
+      switch (packetType) {
+        case GAME_OVER -> {
+          try {
+            final Packet101GameOver packet101;
+            packet101 = (Packet101GameOver) new Packet101GameOver().fromTokens(tokens);
+            scorePlayer2 = packet101.getScore();
+            linesPlayer2 = packet101.getLines();
+          } catch (final PacketException e) {
+            System.err.println("Invalid packet: " + e.getMessage());
+            return;
+          }
         }
-      }
-      default -> {
+        default -> {
+        }
       }
     }
   }

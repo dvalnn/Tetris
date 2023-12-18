@@ -56,9 +56,9 @@ public class Score {
       }
     }
 
-    System.out.println("[SCORE] Score: " + score);
-    System.out.println("[SCORE] Action: " + action);
-    System.out.println("[SCORE] Combo: " + combo);
+    // System.out.println("[SCORE] Score: " + score);
+    // System.out.println("[SCORE] Action: " + action);
+    // System.out.println("[SCORE] Combo: " + combo);
   }
 
   public static Action scoreAction(Action action) {

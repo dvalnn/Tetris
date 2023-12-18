@@ -21,12 +21,11 @@ public class Packet implements PacketMethods {
     // Player Update Packets (Playing state only)
     UPDATE(100), // player update
     GAME_OVER(101), // game over packet
-    // RESTART(102), // restart game packet
 
     // Other Connection Control Packets
     HEARTBEAT(200), // keep alive packet
     ERROR(201), // error packet
-    RSYNC(202), // resync packet -- used to resync the board state
+    RESYNC(202), // resync packet -- used to resync the board state
     ;
 
     private final int packetId;

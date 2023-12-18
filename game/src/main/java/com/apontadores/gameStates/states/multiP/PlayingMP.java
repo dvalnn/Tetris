@@ -27,6 +27,7 @@ import com.apontadores.main.TimerBasedService;
 import com.apontadores.networking.PlayerData;
 import com.apontadores.packets.Packet;
 import com.apontadores.packets.Packet100Update;
+import com.apontadores.packets.Packet101GameOver;
 import com.apontadores.packets.Packet.PacketTypesEnum;
 import com.apontadores.settings.BoardSettings;
 import com.apontadores.ui.Frame;
@@ -41,6 +42,8 @@ public class PlayingMP extends GameState {
 
   private boolean usernameSet;
   private boolean resyncBoard;
+
+  private boolean opponentGameOver;
 
   BoardSettings opponentBoardSettings;
   private int networkTick = 0;
@@ -90,6 +93,10 @@ public class PlayingMP extends GameState {
       usernameSet = true;
     }
 
+    if (playerBoard.isGameOver() && opponentGameOver) {
+      GameStateHandler.switchState(GameStatesEnum.GAME_OVER_MP);
+    }
+
     // NOTE:
     // starting the packet processor in the update loop is ok
     // since the method only starts the timer if it is not already running
@@ -102,10 +109,6 @@ public class PlayingMP extends GameState {
     if (networkTick >= NETWORK_TICK_MAX) {
       networkTick = 0;
       sendPlayerUpdates();
-    }
-
-    if (playerBoard.isGameOver()) {
-      GameStateHandler.switchState(GameStatesEnum.GAME_OVER_MP);
     }
 
     playerBoard.update();
@@ -198,9 +201,9 @@ public class PlayingMP extends GameState {
     final PacketTypesEnum packetType = Packet.lookupPacket(packet.asTokens());
     switch (packetType) {
       case UPDATE -> playerData.parsePacket((Packet100Update) packet);
-      case RSYNC -> resyncBoard = true;
+      case RESYNC -> resyncBoard = true;
       case GAME_OVER -> {
-        GameStateHandler.switchState(GameStatesEnum.GAME_OVER_MP);
+        opponentGameOver = true;
       }
       default -> {
       }
@@ -208,6 +211,14 @@ public class PlayingMP extends GameState {
   }
 
   private void sendPlayerUpdates() {
+    if (playerBoard.isGameOver()) {
+      sendPacket(new Packet101GameOver(
+          Score.getScore(),
+          Levels.getTotalLinesCleared(),
+          Levels.getCurrentLevel()));
+      return;
+    }
+
     Packet100Update updatePacket;
     updatePacket = playerData.getScoreUpdate();
     if (updatePacket != null)
@@ -249,7 +260,7 @@ public class PlayingMP extends GameState {
     resyncBoard = false;
   }
 
-  private void sendPacket(final Packet100Update packet) {
+  private void sendPacket(final Packet packet) {
     final ArrayBlockingQueue<Packet> outQueue = Game.getClient().outgoingUpdates;
     if (outQueue.remainingCapacity() == 0)
       outQueue.poll();

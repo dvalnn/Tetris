@@ -396,6 +396,7 @@ public class TetrisClient implements Runnable {
           // NOTE: intentional fallthrough
           case GAME_OVER:
           case UPDATE:
+          case RESYNC:
             receivedUpdates.add(receivedPacket);
             break;
           default:
@@ -453,7 +454,7 @@ public class TetrisClient implements Runnable {
         // NOTE: Connection Control Packets
         case HEARTBEAT -> new Packet200Heartbeat().fromTokens(tokens);
         case ERROR -> new Packet201Error().fromTokens(tokens);
-        case RSYNC -> new Packet202RSync().fromTokens(tokens);
+        case RESYNC -> new Packet202RSync().fromTokens(tokens);
 
         default -> null;
       };

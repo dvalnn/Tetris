@@ -1,6 +1,7 @@
 package com.apontadores.gameElements.boards;
 
 import static com.apontadores.utils.Constants.RESOURCES_PATH;
+import static com.apontadores.utils.Constants.SYS_SEPARATOR;
 import static com.apontadores.utils.Constants.GameConstants.BOARD_HEIGHT;
 import static com.apontadores.utils.Constants.GameConstants.BOARD_WIDTH;
 
@@ -36,6 +37,10 @@ public class PlayerBoard extends Board {
 
   private final Random rand = new Random();
 
+  private int[] shapeStocks;
+  private final int numShapes;
+  private final int maxRand;
+
   protected ArrayList<JsonShape> shapeData;
 
   private boolean holdChanged;
@@ -48,7 +53,21 @@ public class PlayerBoard extends Board {
     Levels.reset();
     GameTime.reset();
 
-    shapeData = LoadSave.parseAllJsonShapes(RESOURCES_PATH + "/shapes/");
+    final String dirPath = RESOURCES_PATH
+        + SYS_SEPARATOR
+        + "shapes"
+        + SYS_SEPARATOR;
+
+    shapeData = LoadSave.parseAllJsonShapes(dirPath);
+
+    numShapes = shapeData.size();
+    shapeStocks = new int[numShapes];
+    for (int i = 0; i < numShapes; i++) {
+      shapeStocks[i] = (numShapes - 1) * 10;
+    }
+    maxRand = numShapes * (numShapes - 1) * 10;
+
+    System.out.println("[Board] MaxRand: " + maxRand);
 
     activeTetro = tetrominoFactory();
     nextTetro = tetrominoFactory();
@@ -125,6 +144,9 @@ public class PlayerBoard extends Board {
   }
 
   public void update() {
+    if (gameOver)
+      return;
+
     // update the score. This is done in this class
     // and not direcly on the parent class so that
     // the player and the opponent can have different
@@ -232,8 +254,9 @@ public class PlayerBoard extends Board {
   }
 
   private Tetromino tetrominoFactory() {
+    System.out.println("[Board] Generating new tetromino");
 
-    final int shapeID = rand.nextInt(shapeData.size());
+    final int shapeID = generateShapeID();
     final JsonShape shape = shapeData.get(shapeID);
 
     return new Tetromino(
@@ -242,6 +265,44 @@ public class PlayerBoard extends Board {
         this,
         shape,
         shapeID);
+  }
+
+  private int generateShapeID() {
+    int shapeID = -1;
+    int randValue = rand.nextInt(maxRand);
+
+    // find shapeID
+    if (randValue < shapeStocks[0]) {
+      shapeID = 0;
+    }
+
+    int accumulator = shapeStocks[0];
+    if (shapeID == -1)
+      for (int i = 1; i < numShapes; i++) {
+        accumulator += shapeStocks[i];
+
+        if (randValue < accumulator) {
+          shapeID = i;
+          break;
+        }
+      }
+
+    // update shape stocks
+    final int stockIncrease = 3;
+    final int stockReduction = (numShapes - 1) * stockIncrease;
+    for (int i = 0; i < numShapes; i++) {
+      if (i == shapeID) {
+        shapeStocks[i] -= stockReduction;
+      } else {
+        shapeStocks[i] += stockIncrease;
+      }
+      System.out.println("ShapeID: " + i + " stock: " + shapeStocks[i]);
+    }
+
+    System.out.println("Selected shapeID: " + shapeID);
+    System.out.println("----");
+
+    return shapeID;
   }
 
   private Tetromino tetrominoFactory(final int shapeID) {
