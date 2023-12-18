@@ -6,7 +6,7 @@
     {
       "type": "image",
       "name": "logo",
-      "imagePath": "/buttonsV2/smallTotris.png",
+      "imagePath": "/images/smallTotris.png",
       "x": 33,
       "y": 16,
       "imageScale": 0.666
@@ -14,7 +14,7 @@
     {
       "type": "image",
       "name": "newGame",
-      "imagePath": "/buttonsV2/newGame.png",
+      "imagePath": "/images/newGame.png",
       "x": 33,
       "y": 224,
       "imageScale": 0.666
@@ -22,7 +22,7 @@
     {
       "type": "image",
       "name": "aboutUs",
-      "imagePath": "/buttonsV2/aboutUs.png",
+      "imagePath": "/images/aboutUs.png",
       "x": 33,
       "y": 472,
       "imageScale": 0.666
@@ -30,7 +30,7 @@
     {
       "type": "image",
       "name": "settings",
-      "imagePath": "/buttonsV2/settings.png",
+      "imagePath": "/images/settings.png",
       "x": 33,
       "y": 389,
       "imageScale": 0.666
@@ -38,7 +38,7 @@
     {
       "type": "image",
       "name": "leaderboard",
-      "imagePath": "/buttonsV2/leaderboard.png",
+      "imagePath": "/images/leaderboard.png",
       "x": 33,
       "y": 306,
       "imageScale": 0.666
@@ -46,7 +46,7 @@
     {
       "type": "image",
       "name": "exitGame",
-      "imagePath": "/buttonsV2/exitGame.png",
+      "imagePath": "/images/exitGame.png",
       "x": 33,
       "y": 627,
       "imageScale": 0.666

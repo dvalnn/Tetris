@@ -1,11 +1,14 @@
 {
   "name": "mockText",
-  "x": 10,
-  "y": 19,
-  "size": 20,
   "text": "mockText",
-  "align": "LEFT",
+  "x": 10.0,
+  "y": 19.0,
+  "angle": 0.0,
   "font": "mockFont",
   "fontType": "bold",
-  "renderPriority": 0
+  "size": 20,
+  "align": "LEFT",
+  "editable": false,
+  "clearDefaultText": false,
+  "maxLength": 0
 }

@@ -31,6 +31,7 @@ import com.apontadores.totris.main.Game;
 import com.apontadores.totris.networking.PlayerData;
 import com.apontadores.totris.settings.BoardSettings;
 import com.apontadores.totris.ui.Frame;
+import com.apontadores.totris.ui.ImageElement;
 
 public class PlayingMP extends GameState {
 
@@ -132,6 +133,22 @@ public class PlayingMP extends GameState {
     }
 
     playerBoard.render(g);
+
+    if (playerBoard.isGameOver()) {
+      ImageElement gameOver;
+      gameOver = (ImageElement) frame.getElement("playerGameOver");
+      gameOver.enable();
+      gameOver.render(g);
+      gameOver.disable();
+    }
+
+    if (opponentGameOver) {
+      ImageElement gameOver;
+      gameOver = (ImageElement) frame.getElement("opponentGameOver");
+      gameOver.enable();
+      gameOver.render(g);
+      gameOver.disable();
+    }
   }
 
   @Override

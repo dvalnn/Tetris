@@ -18,7 +18,7 @@ public class ButtonTest {
   public void test() {
     ImageElement mockButton = new ImageElement.Builder()
         .name("testButton")
-        .imagePath("/buttonsV2/newGame.png")
+        .imagePath("/images/newGame.png")
         .x(0)
         .y(0)
         .imageScale(1)
