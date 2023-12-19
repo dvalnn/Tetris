@@ -1,0 +1,55 @@
+{
+  "name": "USERNAME",
+  "imagePath": "",
+  "color": [0, 0, 0],
+  "assets": [
+    {
+      "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/images/background2.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "banner",
+      "imagePath": "/images/bannerChooseName.png",
+      "x": 27.1,
+      "y": 5.5,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "inputField",
+      "imagePath": "/images/insertUsername.png",
+      "x": 14.8,
+      "y": 45.37,
+      "imageScale": 0.666,
+      "textElement": {
+        "type": "text",
+        "name": "inputText",
+        "text": "Type your name here",
+        "x": 24.8,
+        "y": 65,
+        "size": 26.6,
+        "anchorPoint": "parent",
+        "font": "CascadiaCode-BoldItalic.ttf",
+        "fontType": "plain",
+        "color": [0, 0, 0],
+        "align": "LEFT",
+        "editable": true,
+        "clearDefaultText": true,
+        "maxLength": 10
+      }
+    },
+    {
+      "type": "image",
+      "name": "startButton",
+      "imagePath": "/images/start.png",
+      "x": 77.1,
+      "y": 87.04,
+      "imageScale": 0.666
+    }
+  ]
+}

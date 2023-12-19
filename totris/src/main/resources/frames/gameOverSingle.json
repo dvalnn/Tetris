@@ -1,0 +1,88 @@
+{
+  "name": "GAME_OVER_SINGLE",
+  "imagePath": "",
+  "assets": [
+    {
+      "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/images/background3.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "stats",
+      "imagePath": "/images/stats.png",
+      "x": 7.14,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "bannerSingleGameOver",
+      "imagePath": "/images/bannerSingleGameOver.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "restart",
+      "imagePath": "/images/restartGameOver.png",
+      "x": 10.47,
+      "y": 80.09,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "returnToMainMenu",
+      "imagePath": "/images/exit.png",
+      "x": 10.47,
+      "y": 91.2,
+      "imageScale": 0.666
+    },
+    {
+      "type": "text",
+      "name": "totalScore",
+      "text": "Dahyunnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "x": 22.396,
+      "y": 39.079,
+      "size": 26.6,
+      "anchorPoint": "game",
+      "font": "CascadiaCode-BoldItalic.ttf",
+      "fontType": "plain",
+      "color": [0, 0, 0],
+      "align": "LEFT",
+      "maxLength": 10
+    },
+    {
+      "type": "text",
+      "name": "linesCleared",
+      "text": "",
+      "x": 24.635,
+      "y": 46.852,
+      "size": 26.6,
+      "anchorPoint": "game",
+      "font": "CascadiaCode-BoldItalic.ttf",
+      "fontType": "plain",
+      "color": [0, 0, 0],
+      "align": "LEFT",
+      "maxLength": 10
+    },
+    {
+      "type": "text",
+      "name": "timePlayed",
+      "text": "",
+      "x": 22.4,
+      "y": 54.63,
+      "size": 26.6,
+      "anchorPoint": "game",
+      "font": "CascadiaCode-BoldItalic.ttf",
+      "fontType": "plain",
+      "color": [0, 0, 0],
+      "align": "LEFT",
+      "maxLength": 10
+    }
+  ]
+}

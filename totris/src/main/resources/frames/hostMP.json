@@ -1,0 +1,120 @@
+{
+  "name": "HOST",
+  "imagePath": "",
+  "color": [0, 0, 0],
+  "assets": [
+    {
+      "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/images/background2.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "bannerWait",
+      "imagePath": "/images/bannerWaitingForPlayer.png",
+      "x": 27.9,
+      "y": 5.6,
+      "enabled": false,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "bannerConnect",
+      "imagePath": "/images/bannerConnectionEstablished.png",
+      "x": 27.9,
+      "y": 5.6,
+      "imageScale": 0.666,
+      "enabled": false
+    },
+    {
+      "type": "image",
+      "name": "IP",
+      "imagePath": "/images/IPAddress.png",
+      "x": 19.7,
+      "y": 36.204,
+      "imageScale": 0.666,
+      "textElement": {
+        "type": "text",
+        "name": "ipText",
+        "x": 24.8,
+        "y": 65,
+        "size": 26.6,
+        "anchorPoint": "parent",
+        "font": "CascadiaCode-BoldItalic.ttf",
+        "fontType": "plain",
+        "color": [0, 0, 0],
+        "align": "LEFT"
+      }
+    },
+    {
+      "type": "image",
+      "name": "roomName",
+      "imagePath": "/images/roomName.png",
+      "x": 19.7,
+      "y": 48.148,
+      "imageScale": 0.666,
+      "textElement": {
+        "type": "text",
+        "name": "roomName",
+        "text": "Type the host Room Name",
+        "x": 21.121,
+        "y": 65,
+        "size": 26.6,
+        "anchorPoint": "parent",
+        "font": "CascadiaCode-BoldItalic.ttf",
+        "fontType": "plain",
+        "color": [0, 0, 0],
+        "align": "LEFT",
+        "editable": true,
+        "clearDefaultText": true,
+        "maxLength": 10
+      }
+    },
+    {
+      "type": "image",
+      "name": "showIP",
+      "imagePath": "/images/showIP.png",
+      "x": 19.7,
+      "y": 59.9,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "hideIP",
+      "imagePath": "/images/hideIP.png",
+      "x": 19.7,
+      "y": 59.9,
+      "enabled": false,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "playerConnected",
+      "imagePath": "/images/playerConnected.png",
+      "x": 39.9,
+      "y": 59.9,
+      "enabled": false,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "return",
+      "imagePath": "/images/return.png",
+      "x": 2.6,
+      "y": 87,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "start",
+      "imagePath": "/images/start.png",
+      "enabled": false,
+      "x": 77.1,
+      "y": 87,
+      "imageScale": 0.666
+    }
+  ]
+}

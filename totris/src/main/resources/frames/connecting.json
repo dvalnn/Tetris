@@ -1,0 +1,75 @@
+{
+  "name": "CONNECTING",
+  "imagePath": "",
+  "color": [0, 0, 0],
+  "assets": [
+    {
+      "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/images/background2.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "tryConnection",
+      "imagePath": "/images/bannerTryCon.png",
+      "x": 3.9,
+      "y": 57.778,
+      "imageScale": 0.666,
+      "enable": false
+    },
+    {
+      "type": "image",
+      "name": "conInterrupted",
+      "imagePath": "/images/bannerConInterrupted.png",
+      "x": 3.9,
+      "y": 57.778,
+      "imageScale": 0.666,
+      "enable": false
+    },
+    {
+      "type": "image",
+      "name": "waitingStart",
+      "imagePath": "/images/bannerWaitingForGameStart.png",
+      "x": 3.9,
+      "y": 57.778,
+      "imageScale": 0.666,
+      "enable": false
+    },
+    {
+      "type": "image",
+      "name": "connectionInfoBanner",
+      "imagePath": "/images/connectedTo.png",
+      "x": 27.92,
+      "y": 36.11,
+      "imageScale": 0.666,
+      "enable": false,
+      "textElement": {
+        "type": "text",
+        "name": "connectionInfo",
+        "text": "",
+        "x": 46.1,
+        "y": 24.87,
+        "size": 26.6,
+        "anchorPoint": "parent",
+        "font": "CascadiaCode-BoldItalic.ttf",
+        "fontType": "plain",
+        "color": [0, 0, 0],
+        "align": "LEFT",
+        "editable": true,
+        "clearDefaultText": true,
+        "maxLength": 10
+      }
+    },
+    {
+      "type": "image",
+      "name": "return",
+      "imagePath": "/images/return.png",
+      "x": 2.6,
+      "y": 87,
+      "imageScale": 0.666
+    }
+  ]
+}

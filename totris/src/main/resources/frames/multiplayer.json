@@ -1,0 +1,41 @@
+{
+  "name": "PLAYING_MP",
+  "imagePath": "",
+  "color": [0, 0, 0],
+  "assets": [
+    {
+      "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/images/background3.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "overlay",
+      "imagePath": "/images/multiplayerGame.png",
+      "x": 1.3,
+      "y": 15.3,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "playerGameOver",
+      "imagePath": "/images/playerLost.png",
+      "x": 1.4,
+      "y": 37.3,
+      "imageScale": 0.666,
+      "enabled": false
+    },
+    {
+      "type": "image",
+      "name": "opponentGameOver",
+      "imagePath": "/images/playerLost.png",
+      "x": 51.6,
+      "y": 37.3,
+      "imageScale": 0.666,
+      "enabled": false
+    }
+  ]
+}

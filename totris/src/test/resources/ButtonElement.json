@@ -1,0 +1,23 @@
+{
+  "name": "testButton",
+  "imagePath": "/images/newGame.png",
+  "x": 0.0,
+  "y": 0.0,
+  "imageScale": 1.0,
+  "angle": 0.0,
+  "enabled": true,
+  "textElement": {
+    "name": "mockText",
+    "text": "mockText",
+    "x": 10.0,
+    "y": 19.0,
+    "angle": 0.0,
+    "font": "mockFont",
+    "fontType": "bold",
+    "size": 20,
+    "align": "LEFT",
+    "editable": false,
+    "clearDefaultText": false,
+    "maxLength": 0
+  }
+}

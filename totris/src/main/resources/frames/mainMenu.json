@@ -1,0 +1,63 @@
+{
+  "name": "MAIN_MENU",
+  "imagePath": "",
+  "color": [0, 0, 0],
+  "assets": [
+    {
+      "type": "image",
+      "name": "staticBackground",
+      "imagePath": "/images/background2.png",
+      "x": 0,
+      "y": 0,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "logo",
+      "imagePath": "/images/smallTotris.png",
+      "x": 2.6,
+      "y": 2.2,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "newGame",
+      "imagePath": "/images/newGame.png",
+      "x": 2.6,
+      "y": 31.1,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "aboutUs",
+      "imagePath": "/images/aboutUs.png",
+      "x": 2.6,
+      "y": 65.56,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "settings",
+      "imagePath": "/images/settings.png",
+      "x": 2.6,
+      "y": 54.1,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "leaderboard",
+      "imagePath": "/images/leaderboard.png",
+      "x": 2.6,
+      "y": 42.6,
+      "imageScale": 0.666
+    },
+    {
+      "type": "image",
+      "name": "exitGame",
+      "imagePath": "/images/exitGame.png",
+      "x": 2.6,
+      "y": 87.04,
+      "imageScale": 0.666
+    }
+  ]
+}
