@@ -27,6 +27,7 @@ public class GameOverMP extends GameState {
   private final Frame frame;
 
   private String scorePlayer2, linesPlayer2;
+  private String winner;
 
   SwitchStateAction switchState = new SwitchStateAction();
 
@@ -45,6 +46,13 @@ public class GameOverMP extends GameState {
   @Override
   public void update() {
     frame.update();
+
+    ((TextElement) frame.getElement("p1Name")).setText(Game.getUsername());
+    ((TextElement) frame.getElement("p2Name")).setText(Game.getOpponentName());
+
+    String winner = getWinner();
+    if (winner != null)
+      ((TextElement) frame.getElement("winner")).setText(winner);
 
     ((TextElement) frame.getElement("scorePlayer1"))
         .setText(String.valueOf(Score.getScore()));
@@ -72,6 +80,24 @@ public class GameOverMP extends GameState {
       sendPlayerUpdates();
     }
 
+  }
+
+  private String getWinner() {
+    if (winner != null)
+      return winner;
+
+    if (scorePlayer2 == null)
+      return null;
+
+    int score2 = Integer.parseInt(scorePlayer2);
+    if (Score.getScore() > score2)
+      winner = Game.getUsername() + " wins!";
+    else if (score2 > Score.getScore())
+      winner = Game.getOpponentName() + " wins!";
+    else
+      winner = "Draw";
+
+    return winner;
   }
 
   @Override
